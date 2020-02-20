@@ -578,7 +578,7 @@ export class AttributesManagerService {
     }
 
     /**
-     * Generates text file describing dependencies between attribute modules.  The format of text file can be specified by parameter. Modules that  has no dependency relations are omitted. 
+     * Generates text file describing dependencies between attribute modules. The format of text file can be specified by parameter. Modules that has no dependency relations are omitted. 
      * @param format Currently supported formats are DOT and TGF.
      * @param attrName Attribute name which dependencies will be found.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -643,7 +643,7 @@ export class AttributesManagerService {
     }
 
     /**
-     * Generates text file describing dependencies between attribute modules.  The format of text file can be specified by parameter. Modules that  has no dependency relations are omitted. 
+     * Generates text file describing dependencies between attribute modules. The format of text file can be specified by parameter. Modules that has no dependency relations are omitted. 
      * @param format Currently supported formats are DOT and TGF.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

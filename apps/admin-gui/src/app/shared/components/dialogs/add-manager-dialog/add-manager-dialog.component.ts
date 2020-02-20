@@ -4,9 +4,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {NotificatorService} from '../../../../core/services/common/notificator.service';
 import {SelectionModel} from '@angular/cdk/collections';
 import {ActivatedRoute, Router} from '@angular/router';
-import { Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
+import { AuthzResolverService, Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
 import { Role } from '@perun-web-apps/perun/models';
-import { AuthzService, UsersService } from '@perun-web-apps/perun/services';
+import { UsersService } from '@perun-web-apps/perun/services';
 
 export interface AddManagerDialogData {
   complementaryObject: Vo | Group | Facility;
@@ -25,7 +25,7 @@ export class AddManagerDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<AddManagerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: AddManagerDialogData,
-    private authzService: AuthzService,
+    private authzService: AuthzResolverService,
     private usersService: UsersService,
     private translate: TranslateService,
     private notificator: NotificatorService,
@@ -55,7 +55,7 @@ export class AddManagerDialogComponent implements OnInit {
 
   onSubmit(): void {
     this.loading = true;
-    this.authzService.setRole(this.selectedRole, this.selection.selected.map(u => u.id), this.data.complementaryObject).subscribe(() => {
+    this.authzService.setRoleWithUserComplementaryObject({role: this.selectedRole, users: this.selection.selected.map(u => u.id), complementaryObject: this.data.complementaryObject}).subscribe(() => {
       this.notificator.showSuccess(this.successMessage);
       this.loading = false;
       this.dialogRef.close();

@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CacheHelperService } from './core/services/common/cache-helper.service';
-import { AuthzService, AuthResolverService, AuthService, StoreService } from '@perun-web-apps/perun/services';
+import { StoreService } from '@perun-web-apps/perun/services';
 import { PerunPrincipal } from '@perun-web-apps/perun/openapi';
 import { environment } from '../environments/environment';
 
@@ -12,9 +12,6 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit {
 
   constructor(
-    private authzService: AuthzService,
-    private authResolver: AuthResolverService,
-    private authService: AuthService,
     private cache: CacheHelperService,
     private store: StoreService
   ) {

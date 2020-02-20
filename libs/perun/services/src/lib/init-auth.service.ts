@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { StoreService } from './store.service';
 import { AuthResolverService } from './auth-resolver.service';
-import { AuthzService } from './authz.service';
+import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class InitAuthService {
     private authService: AuthService,
     private storeService: StoreService,
     private authResolver: AuthResolverService,
-    private authzService: AuthzService
+    private authzService: AuthzResolverService
   ) {
   }
 
@@ -40,6 +40,7 @@ export class InitAuthService {
    * Load principal
    */
   loadPrincipal(): Promise<any> {
+    console.log('Started principal');
     return this.authzService.getPerunPrincipal()
       .toPromise()
       .then(perunPrincipal => {

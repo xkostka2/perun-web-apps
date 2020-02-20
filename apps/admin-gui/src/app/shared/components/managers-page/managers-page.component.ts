@@ -5,8 +5,7 @@ import {AddManagerDialogComponent} from '../dialogs/add-manager-dialog/add-manag
 import {RemoveManagerDialogComponent} from '../dialogs/remove-manager-dialog/remove-manager-dialog.component';
 import {RemoveGroupManagerDialogComponent} from '../dialogs/remove-group-manager-dialog/remove-group-manager-dialog.component';
 import {AddGroupManagerDialogComponent} from '../dialogs/add-group-manager-dialog/add-group-manager-dialog.component';
-import { AuthzService } from '@perun-web-apps/perun/services';
-import { Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
+import { AuthzResolverService, Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { Role } from '@perun-web-apps/perun/models';
 
@@ -21,7 +20,7 @@ export class ManagersPageComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private authzService: AuthzService
+    private authzService: AuthzResolverService
   ) {
   }
 
@@ -57,8 +56,8 @@ export class ManagersPageComponent implements OnInit {
   changeUser() {
     this.loading = true;
     if (this.selected === 'user') {
-      this.authzService.getRichAdmins(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType,
-        [Urns.USER_DEF_ORGANIZATION, Urns.USER_DEF_PREFERRED_MAIL]).subscribe(managers => {
+      this.authzService.getAuthzRichAdmins(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType,
+        [Urns.USER_DEF_ORGANIZATION, Urns.USER_DEF_PREFERRED_MAIL],false, true).subscribe(managers => {
         this.managers = managers;
         this.selectionUsers.clear();
         this.selectionGroups.clear();
@@ -68,7 +67,7 @@ export class ManagersPageComponent implements OnInit {
       });
     }
     if (this.selected === 'group') {
-      this.authzService.getManagerGroups(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType).subscribe(groups => {
+      this.authzService.getAuthzAdminGroups(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType).subscribe(groups => {
         this.groups = groups;
         this.selectionUsers.clear();
         this.selectionGroups.clear();

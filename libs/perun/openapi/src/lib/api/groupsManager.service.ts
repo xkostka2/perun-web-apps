@@ -460,7 +460,7 @@ export class GroupsManagerService {
     /**
      * Returns all AllRichSubGroups from parent group containing selected attributes (all level subgroups).
      * @param group id of Group
-     * @param attrNames list of attribute names List&lt;String&gt;
+     * @param attrNames list of attribute names List&lt;String&gt; or null
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

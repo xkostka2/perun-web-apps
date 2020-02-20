@@ -2,8 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource} from '@angular/material';
 import {NotificatorService} from '../../../../core/services/common/notificator.service';
 import {TranslateService} from '@ngx-translate/core';
-import { Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
-import { AuthzService } from '@perun-web-apps/perun/services';
+import { AuthzResolverService, Facility, Group, RichUser, Vo } from '@perun-web-apps/perun/openapi';
 import { Role } from '@perun-web-apps/perun/models';
 
 export interface RemoveManagerDialogData {
@@ -24,7 +23,7 @@ export class RemoveManagerDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: RemoveManagerDialogData,
               private notificator: NotificatorService,
               private translate: TranslateService,
-              private authzService: AuthzService) {
+              private authzService: AuthzResolverService) {
   }
 
   displayedColumns: string[] = ['name'];
@@ -44,7 +43,7 @@ export class RemoveManagerDialogComponent implements OnInit {
 
   onSubmit() {
     this.loading = true;
-    this.authzService.unsetRole(this.data.role, this.data.managers.map(manager => manager.id), this.data.complementaryObject)
+    this.authzService.unsetRoleWithUserComplementaryObject({role: this.data.role, users: this.data.managers.map(manager => manager.id), complementaryObject: this.data.complementaryObject})
       .subscribe(() => {
       this.translate.get('DIALOGS.REMOVE_MANAGERS.SUCCESS').subscribe(successMessage => {
         this.notificator.showSuccess(successMessage);

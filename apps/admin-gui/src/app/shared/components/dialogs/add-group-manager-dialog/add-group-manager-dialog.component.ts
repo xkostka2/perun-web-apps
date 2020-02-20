@@ -7,9 +7,9 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {Observable} from 'rxjs';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
-import { Facility, Group, GroupsManagerService, Vo } from '@perun-web-apps/perun/openapi';
+import { AuthzResolverService, Facility, Group, GroupsManagerService, Vo } from '@perun-web-apps/perun/openapi';
 import { Role } from '@perun-web-apps/perun/models';
-import { AuthzService, VoService } from '@perun-web-apps/perun/services';
+import { VoService } from '@perun-web-apps/perun/services';
 
 export interface AddGroupManagerDialogData {
   complementaryObject: Vo | Group | Facility;
@@ -29,7 +29,7 @@ export class AddGroupManagerDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<AddGroupManagerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: AddGroupManagerDialogData,
     private voService: VoService,
-    private authzService: AuthzService,
+    private authzService: AuthzResolverService,
     private groupService: GroupsManagerService,
     private translate: TranslateService,
     private notificator: NotificatorService,
@@ -68,7 +68,7 @@ export class AddGroupManagerDialogComponent implements OnInit {
 
   onSubmit(): void {
     this.loading = true;
-    this.authzService.setRoleForGroups( this.selectedRole, this.selection.selected.map(group => group.id), this.data.complementaryObject)
+    this.authzService.setRoleWithGroupComplementaryObject({ role: this.selectedRole, authorizedGroups: this.selection.selected.map(group => group.id), complementaryObject: this.data.complementaryObject})
       .subscribe(() => {
         this.notificator.showSuccess(this.successMessage);
         this.loading = false;

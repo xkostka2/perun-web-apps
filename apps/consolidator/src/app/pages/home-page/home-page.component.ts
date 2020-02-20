@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { AddIdentityDialogComponent } from '../../components/add-identity-dialog/add-identity-dialog.component';
-import { AuthzService, RegistrarService, UsersService } from '@perun-web-apps/perun/services';
+import { RegistrarService, UsersService } from '@perun-web-apps/perun/services';
 import { Identity } from '../../models/Identity';
+import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 
 @Component({
   selector: 'perun-web-apps-home-page',
@@ -14,7 +15,7 @@ export class HomePageComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private usersService: UsersService,
-    private authzService: AuthzService,
+    private authzService: AuthzResolverService,
     private registrarService: RegistrarService
   ) { }
 

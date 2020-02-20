@@ -1,4 +1,3 @@
-export { AuthzService } from './lib/authz.service';
 export { FacilityService } from './lib/facility.service';
 export { MembersService } from './lib/members.service';
 export { PerunApiService } from './lib/perun-api-service';
