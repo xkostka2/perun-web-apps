@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, RouterOutlet} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {SideMenuItemService} from '../../../shared/side-menu/side-menu-item.service';
 import {SideMenuService} from '../../../core/services/common/side-menu.service';
 import {TranslateService} from '@ngx-translate/core';

@@ -38,7 +38,7 @@ export class SideMenuItemComponent implements OnInit, OnChanges {
   index: number;
 
   @Input()
-  showOpen: boolean;
+  showLinks: boolean;
 
   @ViewChild('collapse') collapseDiv: ElementRef;
 

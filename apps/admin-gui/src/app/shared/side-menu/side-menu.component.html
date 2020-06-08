@@ -15,6 +15,7 @@
       [index]="i">
     </app-side-menu-item>
   </div>
+
   <app-side-menu-root-item
     [sideNav]="sideNav"
     *ngIf="authResolver.isVoAdmin() || authResolver.isVoObserver()"
@@ -29,7 +30,7 @@
         [sideNav]="sideNav"
         [item]="item"
         [index]="i"
-        [showOpen]="true">
+        [showLinks]="i === accessItems.length - 1">
       </app-side-menu-item>
     </div>
   </div>
@@ -47,7 +48,8 @@
       <app-side-menu-item
         [sideNav]="sideNav"
         [item]="item"
-        [index]="i">
+        [index]="i"
+        [showLinks]="i === facilityItems.length - 1">
       </app-side-menu-item>
     </div>
 
