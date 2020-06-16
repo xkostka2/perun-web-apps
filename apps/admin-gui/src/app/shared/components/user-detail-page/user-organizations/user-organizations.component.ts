@@ -1,11 +1,12 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { PerunPrincipal, UsersManagerService, Vo } from '@perun-web-apps/perun/openapi';
+import { UsersManagerService, Vo } from '@perun-web-apps/perun/openapi';
 import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { PageEvent } from '@angular/material/paginator';
 import {
   TABLE_USER_PROFILE_ADMIN_SELECT, TABLE_USER_PROFILE_MEMBER_SELECT,
   TableConfigService
 } from '@perun-web-apps/config/table-config';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-organizations',
@@ -20,11 +21,11 @@ export class UserOrganizationsComponent implements OnInit {
     private usersService: UsersManagerService,
     private authResolver: GuiAuthResolver,
     private tableConfigService: TableConfigService,
-    private store: StoreService
+    private store: StoreService,
+    private route: ActivatedRoute
   ) {
   }
 
-  principal: PerunPrincipal;
   vosWhereIsAdmin: Vo[];
   vosWhereIsMember: Vo[];
   loading: boolean;
@@ -40,8 +41,14 @@ export class UserOrganizationsComponent implements OnInit {
   ngOnInit() {
     this.adminPageSize = this.tableConfigService.getTablePageSize(this.adminTableId);
     this.memberPageSize = this.tableConfigService.getTablePageSize(this.memberTableId);
-    this.principal = this.store.getPerunPrincipal();
-    this.userId = this.principal.user.id;
+    this.route.parent.params.subscribe(params => {
+      this.userId = params['userId'];
+      if (this.userId === undefined) {
+        this.userId = this.store.getPerunPrincipal().userId;
+      }
+
+      this.refreshTable();
+    });
 
     this.refreshTable();
   }

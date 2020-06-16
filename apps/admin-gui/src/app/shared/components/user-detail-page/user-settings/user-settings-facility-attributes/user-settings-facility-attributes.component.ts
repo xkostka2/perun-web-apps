@@ -22,11 +22,16 @@ export class UserSettingsFacilityAttributesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.userId = this.storage.getPerunPrincipal().userId;
+    this.route.parent.parent.params.subscribe(params => {
+      this.userId = params['userId'];
+      if (this.userId === undefined) {
+        this.userId = this.storage.getPerunPrincipal().userId;
+      }
 
-    this.facilitiesManagerService.getAssignedFacilitiesByUser(this.userId).subscribe(facilities => {
-      this.facilities = facilities;
-      this.loading = false;
+      this.facilitiesManagerService.getAssignedFacilitiesByUser(this.userId).subscribe(facilities => {
+        this.facilities = facilities;
+        this.loading = false;
+      });
     });
   }
 

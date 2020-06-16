@@ -1,12 +1,13 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { MembersService, StoreService } from '@perun-web-apps/perun/services';
-import { Group, GroupsManagerService, PerunPrincipal, UsersManagerService, Vo } from '@perun-web-apps/perun/openapi';
+import { Group, GroupsManagerService, UsersManagerService, Vo } from '@perun-web-apps/perun/openapi';
 import {
   TABLE_USER_DETAIL_ADMIN_GROUPS,
   TABLE_USER_DETAIL_MEMBER_GROUPS,
   TableConfigService
 } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-groups',
@@ -18,7 +19,7 @@ export class UserGroupsComponent implements OnInit {
   @HostBinding('class.router-component') true;
 
   loading = false;
-  principal: PerunPrincipal;
+  userId: number;
   vos: Vo[] = [];
   membersGroups: Group[] = [];
   adminsGroups: Group[] = [];
@@ -33,23 +34,30 @@ export class UserGroupsComponent implements OnInit {
               private memberService: MembersService,
               private tableConfigService: TableConfigService,
               private groupService: GroupsManagerService,
-              private store: StoreService) { }
+              private store: StoreService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.loading = true;
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.adminPageSize = this.tableConfigService.getTablePageSize(this.adminTableId);
-    this.principal = this.store.getPerunPrincipal();
-    this.refreshTable();
+    this.route.parent.params.subscribe(params => {
+      this.userId = params['userId'];
+      if (this.userId === undefined) {
+        this.userId = this.store.getPerunPrincipal().userId;
+      }
+
+      this.refreshTable();
+    });
   }
 
   refreshTable() {
     this.loading = true;
     this.membersGroups = [];
-    this.usersService.getVosWhereUserIsMember(this.principal.userId).subscribe(vos => {
+    this.usersService.getVosWhereUserIsMember(this.userId).subscribe(vos => {
       this.vos = vos;
       for(const vo of this.vos) {
-        this.memberService.getMemberByUser(vo.id, this.principal.userId).subscribe( member => {
+        this.memberService.getMemberByUser(vo.id, this.userId).subscribe( member => {
           this.groupService.getMemberGroups(member.id).subscribe( groups => {
             this.membersGroups = this.membersGroups.concat(groups);
           });
@@ -57,7 +65,7 @@ export class UserGroupsComponent implements OnInit {
       }
       this.loading = false;
     });
-    this.usersService.getGroupsWhereUserIsAdmin(this.principal.userId).subscribe( groups => {
+    this.usersService.getGroupsWhereUserIsAdmin(this.userId).subscribe( groups => {
       this.adminsGroups = groups;
     });
   }
