@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { BanOnFacility } from '../model/banOnFacility';
 import { ContactGroup } from '../model/contactGroup';
+import { EnrichedHost } from '../model/enrichedHost';
 import { Facility } from '../model/facility';
 import { Group } from '../model/group';
 import { Host } from '../model/host';
@@ -1847,6 +1848,73 @@ export class FacilitiesManagerService {
 
 
         return this.httpClient.get<Array<BanOnFacility>>(`${this.configuration.basePath}/json/facilitiesManager/getBansForUser`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Return all enriched hosts of given facility. That is host with all its attributes.
+     * @param facility id of Facility
+     * @param attrNames list of attribute names List&lt;String&gt;
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getEnrichedHosts(facility: number, attrNames: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<EnrichedHost>>;
+    public getEnrichedHosts(facility: number, attrNames: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<EnrichedHost>>>;
+    public getEnrichedHosts(facility: number, attrNames: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<EnrichedHost>>>;
+    public getEnrichedHosts(facility: number, attrNames: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (facility === null || facility === undefined) {
+            throw new Error('Required parameter facility was null or undefined when calling getEnrichedHosts.');
+        }
+        if (attrNames === null || attrNames === undefined) {
+            throw new Error('Required parameter attrNames was null or undefined when calling getEnrichedHosts.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (facility !== undefined && facility !== null) {
+            queryParameters = queryParameters.set('facility', <any>facility);
+        }
+        if (attrNames) {
+            attrNames.forEach((element) => {
+                queryParameters = queryParameters.append('attrNames[]', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<EnrichedHost>>(`${this.configuration.basePath}/json/facilitiesManager/getEnrichedHosts`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Group } from '../model/group';
 import { PerunException } from '../model/perunException';
+import { PerunPolicy } from '../model/perunPolicy';
 import { PerunPrincipal } from '../model/perunPrincipal';
 import { RichUser } from '../model/richUser';
 import { SetRoleWithGroupComplementaryObject } from '../model/setRoleWithGroupComplementaryObject';
@@ -56,6 +57,54 @@ export class AuthzResolverService {
     }
 
 
+
+    /**
+     * Return all loaded perun policies.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllPolicies(observe?: 'body', reportProgress?: boolean): Observable<Array<PerunPolicy>>;
+    public getAllPolicies(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PerunPolicy>>>;
+    public getAllPolicies(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PerunPolicy>>>;
+    public getAllPolicies(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<PerunPolicy>>(`${this.configuration.basePath}/json/authzResolver/getAllPolicies`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * Get all groups of managers (authorizedGroups) for complementaryObject and role

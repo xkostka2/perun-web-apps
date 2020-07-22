@@ -9,17 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Task } from './task';
-import { Service } from './service';
-import { Facility } from './facility';
+import { Attribute } from './attribute';
+import { Host } from './host';
 
 
-export interface ServiceState { 
-    service?: Service;
-    facility?: Facility;
-    task?: Task;
-    blockedOnFacility?: boolean;
-    readonly blockedGlobally?: boolean;
-    hasDestinations?: boolean;
+export interface EnrichedHost { 
+    host?: Host;
+    hostAttributes?: Array<Attribute>;
 }
 

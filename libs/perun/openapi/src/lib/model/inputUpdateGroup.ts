@@ -9,17 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Task } from './task';
-import { Service } from './service';
-import { Facility } from './facility';
+import { Group } from './group';
 
 
-export interface ServiceState { 
-    service?: Service;
-    facility?: Facility;
-    task?: Task;
-    blockedOnFacility?: boolean;
-    readonly blockedGlobally?: boolean;
-    hasDestinations?: boolean;
+/**
+ * input to updateGroup
+ */
+export interface InputUpdateGroup { 
+    group: Group;
 }
 

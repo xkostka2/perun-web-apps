@@ -22,6 +22,7 @@ import { PerunException } from '../model/perunException';
 import { ResourceState } from '../model/resourceState';
 import { ServiceState } from '../model/serviceState';
 import { Task } from '../model/task';
+import { TaskIdObject } from '../model/taskIdObject';
 import { TaskResult } from '../model/taskResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -104,21 +105,16 @@ export class TasksManagerService {
 
     /**
      * Delete Task and TaskResults.
-     * @param task Task id
+     * @param taskIdObject 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteTask(task: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteTask(task: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteTask(task: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteTask(task: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (task === null || task === undefined) {
-            throw new Error('Required parameter task was null or undefined when calling deleteTask.');
-        }
-
-        let queryParameters = new HttpParams({encoder: this.encoder});
-        if (task !== undefined && task !== null) {
-            queryParameters = queryParameters.set('task', <any>task);
+    public deleteTask(taskIdObject: TaskIdObject, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteTask(taskIdObject: TaskIdObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteTask(taskIdObject: TaskIdObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteTask(taskIdObject: TaskIdObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (taskIdObject === null || taskIdObject === undefined) {
+            throw new Error('Required parameter taskIdObject was null or undefined when calling deleteTask.');
         }
 
         let headers = this.defaultHeaders;
@@ -149,10 +145,18 @@ export class TasksManagerService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/json/tasksManager/deleteTask`,
-            null,
+            taskIdObject,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

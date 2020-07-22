@@ -18,6 +18,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Group } from '../model/group';
+import { InputUpdateGroup } from '../model/inputUpdateGroup';
 import { PerunException } from '../model/perunException';
 import { RichGroup } from '../model/richGroup';
 
@@ -883,7 +884,7 @@ export class GroupsManagerService {
     }
 
     /**
-     * Returns a group by VO and Group name. IMPORTANT: need to use full name of group (ex. \&#39;toplevel:a:b\&#39;, not the shortname which is in this example \&#39;b\&#39;) Throws GroupNotExistsException when the group doesn\&#39;t exist.
+     * Returns a group by VO and Group name. IMPORTANT: need to use full name of group (ex. \&#39;toplevel:a:b\&#39;, not the shortname which is in this example \&#39;b\&#39;) Throws GroupNotExistsException when the group doesn\&#39;t exist. 
      * @param vo id of Vo
      * @param name name of entity
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1399,4 +1400,67 @@ export class GroupsManagerService {
             }
         );
     }
+
+    /**
+     * Updates a group.
+     * @param inputUpdateGroup 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateGroup(inputUpdateGroup: InputUpdateGroup, observe?: 'body', reportProgress?: boolean): Observable<Group>;
+    public updateGroup(inputUpdateGroup: InputUpdateGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Group>>;
+    public updateGroup(inputUpdateGroup: InputUpdateGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Group>>;
+    public updateGroup(inputUpdateGroup: InputUpdateGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (inputUpdateGroup === null || inputUpdateGroup === undefined) {
+            throw new Error('Required parameter inputUpdateGroup was null or undefined when calling updateGroup.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<Group>(`${this.configuration.basePath}/json/groupsManager/updateGroup`,
+            inputUpdateGroup,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

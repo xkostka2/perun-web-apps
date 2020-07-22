@@ -9,17 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Task } from './task';
-import { Service } from './service';
-import { Facility } from './facility';
 
 
-export interface ServiceState { 
-    service?: Service;
-    facility?: Facility;
-    task?: Task;
-    blockedOnFacility?: boolean;
-    readonly blockedGlobally?: boolean;
-    hasDestinations?: boolean;
+export interface PerunPolicy { 
+    policyName: string;
+    includePolicies: Array<string>;
+    perunRoles: Array<{ [key: string]: string; }>;
 }
 

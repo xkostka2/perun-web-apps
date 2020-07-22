@@ -33,7 +33,7 @@ export class UserResourcesComponent implements OnInit {
     this.loading = true;
     this.route.parent.params.subscribe(parentParams => {
       const userId = parentParams['userId'];
-      this.userManager.getAssignedRichResources(userId).subscribe(richResources => {
+      this.userManager.getAssignedRichResourcesForUser(userId).subscribe(richResources => {
         this.resources = richResources;
         this.loading = false;
       });

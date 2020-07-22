@@ -59,7 +59,7 @@ export class UsersManagerService {
 
     /**
      * Adds user\&#39;s external sources.
-     * @param addUserExtSourceInput
+     * @param addUserExtSourceInput 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -122,9 +122,9 @@ export class UsersManagerService {
     /**
      * Creates alternative password in external system.
      * @param user id of User
-     * @param description
-     * @param loginNamespace
-     * @param password
+     * @param description 
+     * @param loginNamespace 
+     * @param password 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -202,8 +202,8 @@ export class UsersManagerService {
     /**
      * Deletes alternative password in external system.
      * @param user id of User
-     * @param loginNamespace
-     * @param passwordId
+     * @param loginNamespace 
+     * @param passwordId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -512,7 +512,7 @@ export class UsersManagerService {
 
     /**
      * Get list of groups of user on specified facility where use is active.
-     * That means User is a VALID in the VO and the Group and groups are assigned to the facility.
+     * That means User is a VALID in the VO and the Group and groups are assigned to the facility. 
      * @param user id of User
      * @param facility id of Facility
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -578,7 +578,7 @@ export class UsersManagerService {
 
     /**
      * Get list of groups of user on specified resource where use is active.
-     * That means User is a VALID in the VO and the Group and groups are assigned to the resource.
+     * That means User is a VALID in the VO and the Group and groups are assigned to the resource. 
      * @param user id of User
      * @param resource id of Resource
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -930,6 +930,64 @@ export class UsersManagerService {
 
 
         return this.httpClient.get<RichUser>(`${this.configuration.basePath}/json/usersManager/getRichUserWithAttributes`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get all specific users who are owned by the user.
+     * @param user id of User
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSpecificUsersByUser(user: number, observe?: 'body', reportProgress?: boolean): Observable<Array<User>>;
+    public getSpecificUsersByUser(user: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<User>>>;
+    public getSpecificUsersByUser(user: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<User>>>;
+    public getSpecificUsersByUser(user: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (user === null || user === undefined) {
+            throw new Error('Required parameter user was null or undefined when calling getSpecificUsersByUser.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (user !== undefined && user !== null) {
+            queryParameters = queryParameters.set('user', <any>user);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<User>>(`${this.configuration.basePath}/json/userManager/getSpecificUsersByUser`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -1455,57 +1513,5 @@ export class UsersManagerService {
             }
         );
     }
-
-  public getAssignedRichResources(id: number, observe?: 'body', reportProgress?: boolean): Observable<Array<RichResource>>;
-  public getAssignedRichResources(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichResource>>>;
-  public getAssignedRichResources(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichResource>>>;
-  public getAssignedRichResources(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-    if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling getUserById.');
-    }
-
-    let queryParameters = new HttpParams({encoder: this.encoder});
-    if (id !== undefined && id !== null) {
-      queryParameters = queryParameters.set('user', <any>id);
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (ApiKeyAuth) required
-    if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
-      headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
-    }
-
-    // authentication (BasicAuth) required
-    if (this.configuration.username || this.configuration.password) {
-      headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-    }
-    // authentication (BearerAuth) required
-    if (this.configuration.accessToken) {
-      const accessToken = typeof this.configuration.accessToken === 'function'
-        ? this.configuration.accessToken()
-        : this.configuration.accessToken;
-      headers = headers.set('Authorization', 'Bearer ' + accessToken);
-    }
-    // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
-    const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-
-    return this.httpClient.get<Array<RichResource>>(`${this.configuration.basePath}/json/usersManager/getAssignedRichResources`,
-      {
-        params: queryParameters,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress
-      }
-    );
-  }
 
 }
