@@ -34,7 +34,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { UserProfileConfigService } from './services/user-profile-config.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { PrivacyPageComponent } from './pages/privacy-page/privacy-page.component';
-import { BreadcrumbModule } from 'angular-crumbs';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
 import { ChangeEmailDialogComponent } from './components/dialogs/change-email-dialog/change-email-dialog.component';
@@ -71,6 +70,7 @@ import { NotificatorComponent } from './components/notificator/notificator.compo
 import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { ApiService } from '@perun-web-apps/perun/services';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -128,7 +128,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     MembershipListComponent,
     ValidateExpirationPipe,
     ShowSshDialogComponent,
-    NotificatorComponent
+    NotificatorComponent,
+    BreadcrumbsComponent
   ],
   imports: [
     BrowserModule,
@@ -149,7 +150,6 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     MatButtonModule,
     FlexLayoutModule,
     MatToolbarModule,
-    BreadcrumbModule,
     PerunSharedComponentsModule,
     MatTableExporterModule,
     UiAlertsModule,

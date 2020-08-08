@@ -8,13 +8,7 @@
     </mat-sidenav>
     <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
       <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
-        <breadcrumb #parent>
-        <span *ngFor="let route of parent.breadcrumbs" class="custom-breadcrumb">
-          <a *ngIf="!route.terminal" [routerLink]="[route.url]" href=""
-             mat-button>{{ route.displayName | translate}}</a>
-          <a *ngIf="route.terminal" mat-button>{{ route.displayName | translate}}</a>
-        </span>
-        </breadcrumb>
+        <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>
         <router-outlet></router-outlet>
       </div>
 

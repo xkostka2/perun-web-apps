@@ -21,22 +21,6 @@ a{
   color: black;
 }
 
-.custom-breadcrumb {
-  display: inline-block;
-}
-
-.custom-breadcrumb:first-child:before {
-  display: none;
-}
-
-.custom-breadcrumb:before {
-  content: '>';
-  vertical-align: center;
-  display: inline-block;
-  margin: 0 10px 10px 8px;
-  -webkit-font-smoothing: antialiased;
-}
-
 .side-menu-size {
   width: 200px;
   height: auto;
