@@ -18,6 +18,12 @@
         <div class="text-muted">
           #{{group.id}}
         </div>
+        <mat-icon
+          [ngStyle]="{'color':'black'}"
+          class="perun-icon"
+          matTooltip="{{group.id | highestRole: supportedEntities : roles}}"
+          svgIcon='{{group.id | highestRole: supportedEntities : roles | iconForRole}}'>
+        </mat-icon>
       </div>
       <perun-web-apps-group-menu
         [disabled]="group.fullName === 'members'"
@@ -53,6 +59,12 @@
         <div class="text-muted">
           #{{group.id}}
         </div>
+        <mat-icon
+          [ngStyle]="{'color':'black'}"
+          class="perun-icon"
+          matTooltip="{{group.id | highestRole: supportedEntities : roles}}"
+          svgIcon='{{group.id | highestRole: supportedEntities : roles | iconForRole}}'>
+        </mat-icon>
       </div>
       <perun-web-apps-group-menu
         [disabled]="group.fullName === 'members'"

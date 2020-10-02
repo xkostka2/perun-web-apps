@@ -21,6 +21,12 @@
           <mat-icon>edit</mat-icon>
         </button>
       </div>
+      <mat-icon
+        [ngStyle]="{'color':'black'}"
+        class="perun-icon"
+        matTooltip="{{group.id | highestRole: supportedEntities : roles}}"
+        svgIcon='{{group.id | highestRole: supportedEntities : roles | iconForRole}}'>
+      </mat-icon>
       <span class="text-muted mt-1 entity-info">
         {{'GROUP_DETAIL.ENTITY' | translate}},
         {{'GROUP_DETAIL.VO_NAME' | translate}}:

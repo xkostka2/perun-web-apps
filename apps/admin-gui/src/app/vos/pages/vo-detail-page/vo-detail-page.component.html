@@ -26,6 +26,12 @@
         </button>
       </div>
       <span class="text-muted mt-1 entity-info">
+        <mat-icon
+          [ngStyle]="{'color':'black'}"
+          class="perun-icon"
+          matTooltip="{{vo.id | highestRole: supportedEntities : roles}}"
+          svgIcon='{{vo.id | highestRole: supportedEntities : roles | iconForRole}}'>
+    </mat-icon>
         {{'VO_DETAIL.ENTITY' | translate}},
         {{'VO_DETAIL.SHORT_NAME' | translate}}: {{vo.shortName}}
       </span>

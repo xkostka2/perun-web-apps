@@ -21,9 +21,22 @@
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.ID' | translate}}</th>
           <td *matCellDef="let vo" class="static-column-size" mat-cell>{{vo.id}}</td>
         </ng-container>
-        <ng-container matColumnDef="recent">
+        <ng-container matColumnDef="highestRole">
           <th *matHeaderCellDef mat-header-cell>
+            {{'PRIVILEGES'|translate}}
           </th>
+          <td *matCellDef="let vo" mat-cell>
+            <mat-icon
+              [ngStyle]="{'color':'black'}"
+              class="perun-icon"
+              matTooltip="{{vo.id | highestRole: supportedEntities : roles}}"
+              svgIcon='{{vo.id | highestRole: supportedEntities : roles | iconForRole}}'>
+            </mat-icon>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="shortName">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.SHORTNAME' | translate}}</th>
           <td *matCellDef="let vo" mat-cell>
             <mat-icon
               *ngIf="recentIds.indexOf(vo.id) > -1"
@@ -31,12 +44,8 @@
               matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.RECENT' | translate}}">
               visibility
             </mat-icon>
+            {{vo.shortName}}
           </td>
-        </ng-container>
-        <ng-container matColumnDef="shortName">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.SHORTNAME' | translate}}</th>
-          <td *matCellDef="let vo" mat-cell>{{vo.shortName}}</td>
         </ng-container>
         <ng-container matColumnDef="name">
           <th *matHeaderCellDef mat-header-cell

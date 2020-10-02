@@ -3,13 +3,13 @@ import { Component, EventEmitter, HostListener, Input, OnChanges, Output, Simple
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {SelectionModel} from '@angular/cdk/collections';
-import { GroupsManagerService, RichGroup, Vo } from '@perun-web-apps/perun/openapi';
+import { RichGroup, Vo } from '@perun-web-apps/perun/openapi';
 import { GroupFlatNode, TreeGroup } from '@perun-web-apps/perun/models';
 import { MatDialog } from '@angular/material/dialog';
 import { findParent, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { GroupSyncDetailDialogComponent } from '../group-sync-detail-dialog/group-sync-detail-dialog.component';
 import { EditGroupDialogComponent } from '../edit-group-dialog/edit-group-dialog.component';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-groups-tree',
@@ -18,10 +18,7 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class GroupsTreeComponent implements OnChanges {
 
-  constructor(
-    private dialog: MatDialog,
-    private authResolver: GuiAuthResolver,
-  ) { }
+  supportedEntities = ['Vo', 'Resource', 'Group', 'Member'];
 
   private transformer = (node: TreeGroup, level: number) => {
     return {
@@ -40,6 +37,13 @@ export class GroupsTreeComponent implements OnChanges {
   displayButtons = true;
   @Input()
   theme = 'group-theme';
+  roles = this.store.getPerunPrincipal().roles;
+
+  constructor(
+    private dialog: MatDialog,
+    private authResolver: GuiAuthResolver,
+    private store: StoreService
+  ) { }
 
   @HostListener('window:resize', ['$event'])
   shouldHideButtons() {

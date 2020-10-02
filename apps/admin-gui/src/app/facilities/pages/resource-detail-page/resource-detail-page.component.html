@@ -11,7 +11,7 @@
     </mat-icon>
     <div class="page-title-block">
       <div class="page-title-headline d-flex align-items-center">
-        <a class="resource-link" [routerLink]="[baseUrl]">
+        <a *ngIf="facilityLinkAuth" [routerLink]="[baseUrl]" class="resource-link">
           {{resource.name}}
         </a>
         <span class="resource-text" *ngIf="!facilityLinkAuth">
@@ -24,6 +24,12 @@
           <mat-icon>edit</mat-icon>
         </button>
       </div>
+      <mat-icon
+        [ngStyle]="{'color':'black'}"
+        class="perun-icon"
+        matTooltip="{{resource.id | highestRole: supportedEntities : roles}}"
+        svgIcon='{{resource.id | highestRole: supportedEntities : roles | iconForRole}}'>
+      </mat-icon>
       <span class="text-muted mt-1 entity-info">
         {{'RESOURCE_DETAIL.ENTITY' | translate}},
         {{'RESOURCE_DETAIL.VO' | translate}}: <a *ngIf="voLinkAuth" [routerLink]="['/organizations', resource.vo.id]" class="resource-link">{{resource.vo.name}}</a>

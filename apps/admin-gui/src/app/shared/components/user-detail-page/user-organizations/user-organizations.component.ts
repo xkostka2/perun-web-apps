@@ -32,7 +32,7 @@ export class UserOrganizationsComponent implements OnInit {
   userId: number;
   filterValue = '';
 
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['id', 'highestRole', 'name'];
   adminPageSize: number;
   memberPageSize: number;
   adminTableId = TABLE_USER_PROFILE_ADMIN_SELECT;

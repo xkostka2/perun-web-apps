@@ -42,7 +42,7 @@ export class FacilityResourcesComponent implements OnInit {
   loading: boolean;
   pageSize: number;
   tableId = TABLE_FACILITY_RESOURCES_LIST;
-  displayedColumns = ['id', 'vo', 'facility', 'description'];
+  displayedColumns = ['id', 'role', 'vo', 'facility', 'description'];
 
   addAuth: boolean;
   removeAuth: boolean;

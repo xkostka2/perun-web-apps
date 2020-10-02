@@ -11,7 +11,7 @@
                                          [placeholder]="'USER_DETAIL.OVERVIEW.FILTER'"></perun-web-apps-immediate-filter>
         <perun-web-apps-vo-select-table (page)="pageChanged($event, voTableId, voPageSize)"
                                         [pageSize]="voPageSize"
-                                        [displayedColumns]="['id', 'shortName', 'name']"
+                                        [displayedColumns]="['id', 'highestRole','shortName', 'name']"
                                         [recentIds]="[]"
                                         [vos]="this.adminVo"
                                         [filterValue]="voFilterValue">
@@ -72,7 +72,7 @@
         <perun-web-apps-resources-list (page)="pageChanged($event, resourceTableId, resourcePageSize)"
                                    [pageSize]="resourcePageSize"
                                    [resources]="this.adminResource"
-                                   [displayedColumns]="['id', 'name']"
+                                   [displayedColumns]="['id','role', 'name']"
                                    [routingVo]="true"
                                    [filterValue]="resourceFilterValue">
         </perun-web-apps-resources-list>

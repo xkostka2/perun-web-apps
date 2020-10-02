@@ -10,7 +10,7 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '../../../shared/components/dialogs/edit-facility-resource-group-vo-dialog/edit-facility-resource-group-vo-dialog.component';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-group-detail-page',
@@ -22,6 +22,14 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class GroupDetailPageComponent implements OnInit {
 
+  supportedEntities = ['Vo', 'Resource', 'Group', 'Member'];
+
+  vo: Vo;
+  group: Group;
+  editAuth = false;
+  loading = false;
+  roles = this.store.getPerunPrincipal().roles;
+
   constructor(
     private sideMenuService: SideMenuService,
     private voService: VosManagerService,
@@ -29,14 +37,10 @@ export class GroupDetailPageComponent implements OnInit {
     private sideMenuItemService: SideMenuItemService,
     private groupService: GroupsManagerService,
     private dialog: MatDialog,
-    private guiAuthResolver: GuiAuthResolver
+    private guiAuthResolver: GuiAuthResolver,
+    private store: StoreService
   ) {
   }
-
-  vo: Vo;
-  group: Group;
-  editAuth = false;
-  loading = false;
 
   ngOnInit() {
     this.loading = true;

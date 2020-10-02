@@ -32,6 +32,18 @@
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_RESOURCE_ID' | translate}}</th>
           <td mat-cell class="static-column-size" *matCellDef="let resource">{{resource.id}}</td>
         </ng-container>
+        <ng-container matColumnDef="role">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'PRIVILEGES' | translate}}</th>
+          <td *matCellDef="let resource" mat-cell>
+            <mat-icon
+              [ngStyle]="{'color':'black'}"
+              class="perun-icon"
+              matTooltip="{{resource.id | highestRole: supportedEntities : roles}}"
+              svgIcon='{{resource.id | highestRole: supportedEntities : roles | iconForRole}}'>
+            </mat-icon>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_RESOURCE_NAME' | translate}}</th>

@@ -16,7 +16,7 @@ import {
   EditFacilityResourceGroupVoDialogOptions
 } from '../../../shared/components/dialogs/edit-facility-resource-group-vo-dialog/edit-facility-resource-group-vo-dialog.component';
 import { Resource } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { GetResourceRoutePipe } from '@perun-web-apps/perun/pipes';
 
 @Component({
@@ -29,6 +29,16 @@ import { GetResourceRoutePipe } from '@perun-web-apps/perun/pipes';
 })
 export class ResourceDetailPageComponent implements OnInit {
 
+  supportedEntities = ['Vo','Facility', 'Resource'];
+
+  resource: RichResource;
+  facilityLinkAuth: boolean;
+  editResourceAuth: boolean;
+  voLinkAuth: boolean;
+  baseUrl = '';
+  loading = false;
+  roles = this.store.getPerunPrincipal().roles;
+
   constructor(
     private route: ActivatedRoute,
     private facilityManager: FacilitiesManagerService,
@@ -37,16 +47,10 @@ export class ResourceDetailPageComponent implements OnInit {
     private sideMenuService: SideMenuService,
     private sideMenuItemService: SideMenuItemService,
     private dialog: MatDialog,
-    public guiAuthResolver:GuiAuthResolver
+    public guiAuthResolver:GuiAuthResolver,
+    private store: StoreService
   ) {
   }
-
-  resource: RichResource;
-  facilityLinkAuth: boolean;
-  editResourceAuth: boolean;
-  voLinkAuth: boolean;
-  baseUrl = '';
-  loading = false;
 
   ngOnInit() {
     this.loading = true;

@@ -63,7 +63,7 @@ export class VoResourcesPreviewComponent implements OnInit {
       this.routeAuth = this.authResolver.isAuthorized('getResourceById_int_policy', [this.vo, this.resources[0]]);
     }
 
-    this.displayedColumns = this.removeAuth ? ['select', 'id', 'name', 'facility', 'tags', 'description'] : ['id', 'name', 'facility', 'tags', 'description'];
+    this.displayedColumns = this.removeAuth ? ['select', 'id', 'role', 'name', 'facility', 'tags', 'description'] : ['id', 'role', 'name', 'facility', 'tags', 'description'];
   }
 
   refreshTable() {

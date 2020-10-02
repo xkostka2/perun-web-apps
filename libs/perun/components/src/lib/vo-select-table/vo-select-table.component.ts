@@ -14,6 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-vo-select-table',
@@ -22,7 +23,7 @@ import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 })
 export class VoSelectTableComponent implements OnChanges, AfterViewInit {
 
-  constructor() { }
+  constructor(private store: StoreService) { }
 
   @Input()
   vos: Vo[] = [];
@@ -61,6 +62,9 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
   exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
+  supportedEntities = ['Vo', 'Resource', 'Group', 'Member'];
+  roles = this.store.getPerunPrincipal().roles;
+
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource = new MatTableDataSource<Vo>(this.vos);
     this.setDataSource();
@@ -81,4 +85,5 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
   checkboxLabel(row?: Vo): string {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
+
 }

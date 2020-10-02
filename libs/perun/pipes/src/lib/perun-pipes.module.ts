@@ -15,6 +15,8 @@ import { MemberStatusIconColorPipe } from './member-status-icon-color.pipe';
 import { MemberStatusIconPipe } from './member-status-icon.pipe';
 import { MemberStatusTooltipPipe } from './member-status-tooltip.pipe';
 import { MemberEmailPipe } from './member-email.pipe';
+import { HighestRolePipe } from './highest-role.pipe';
+import { IconForRolePipe } from './icon-for-role.pipe';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { MemberEmailPipe } from './member-email.pipe';
     MemberStatusIconColorPipe,
     MemberStatusIconPipe,
     MemberStatusTooltipPipe,
-    MemberEmailPipe
+    MemberEmailPipe,
+    HighestRolePipe,
+    IconForRolePipe
   ],
   exports: [
     ResourceTagsToStringPipe,
@@ -51,7 +55,9 @@ import { MemberEmailPipe } from './member-email.pipe';
     MemberStatusIconColorPipe,
     MemberStatusIconPipe,
     MemberStatusTooltipPipe,
-    MemberEmailPipe
+    MemberEmailPipe,
+    HighestRolePipe,
+    IconForRolePipe
   ],
   imports: [CommonModule],
 })

@@ -14,7 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Group, RichResource } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-resources-list',
@@ -23,7 +23,8 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
-  constructor(private guiAuthResolver: GuiAuthResolver) { }
+  @Input()
+  displayedColumns: string[] = ['select', 'id', 'role', 'name', 'vo', 'facility', 'tags', 'description'];
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -42,8 +43,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   disableRouting = false;
   @Input()
   routingVo = false;
-  @Input()
-  displayedColumns: string[] = ['select', 'id', 'name', 'vo', 'facility', 'tags', 'description'];
+  supportedEntities = ['Vo','Facility', 'Resource'];
   @Input()
   groupToResource: Group;
 
@@ -63,6 +63,10 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  roles = this.store.getPerunPrincipal().roles;
+
+  constructor(private guiAuthResolver: GuiAuthResolver,
+              private store: StoreService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource = new MatTableDataSource<RichResource>(this.resources);
