@@ -98,6 +98,12 @@ export class UserOverviewComponent implements OnInit {
     });
     this.navItems.push(
       {
+        cssIcon: 'perun-group',
+        url: `roles`,
+        label: 'MENU_ITEMS.USER.ROLES',
+        style: 'user-btn'
+      },
+      {
         cssIcon: 'perun-settings2',
         url: `settings`,
         label: 'MENU_ITEMS.ADMIN.SETTINGS',

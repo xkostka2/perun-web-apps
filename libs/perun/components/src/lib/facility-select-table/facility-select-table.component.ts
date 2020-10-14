@@ -46,6 +46,9 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
+  @Input()
+  checkAuth: boolean;
+
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
 

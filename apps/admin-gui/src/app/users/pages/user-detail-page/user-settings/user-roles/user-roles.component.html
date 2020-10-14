@@ -1,7 +1,234 @@
-<mat-accordion>
+<h1 class="page-title d-flex">{{'ROLES.TITLE'| translate}}</h1>
+<mat-spinner *ngIf="outerLoading" class="ml-auto mr-auto"></mat-spinner>
+<mat-accordion *ngIf="!outerLoading">
+  <mat-expansion-panel (opened)="getSelfData()">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-user-dark' class="mr-2"></mat-icon>
+        {{'ROLES.SELF' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.SELF_VOS' | translate}}
+      <perun-web-apps-vo-select-table
+        [displayedColumns]="['id', 'name', 'shortName']"
+        [vos]="vos">
+      </perun-web-apps-vo-select-table>
+
+      <div class="mt-5" *ngIf="users.length">
+        {{'ROLES.SELF_IDENTITIES' | translate}}
+        <app-users-list
+          [users]="users"
+          [disableRouting]="true"
+          [displayedColumns]="['user', 'id', 'name']">
+        </app-users-list>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getGroupsAndVos()" *ngIf="isGroupAdmin">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-group-black' class="mr-2"></mat-icon>
+        {{'ROLES.GROUPADMIN' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.GROUPADMIN_GROUPS' | translate}}
+      <perun-web-apps-groups-list
+        [groups]="groups"
+        [hideColumns]="['select', 'menu']"
+      ></perun-web-apps-groups-list>
+
+      <div class="mt-5">
+        {{'ROLES.GROUPADMIN_VOS' | translate}}
+        <perun-web-apps-vo-select-table
+          [displayedColumns]="['id', 'name', 'shortName']"
+          [vos]="vos">
+        </perun-web-apps-vo-select-table>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getAdminVos()" *ngIf="isVoAdmin">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-vo-black' class="mr-2"></mat-icon>
+        {{'ROLES.VOADMIN' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.VOADMIN_VOS' | translate}}
+      <perun-web-apps-vo-select-table
+        [displayedColumns]="['id', 'name', 'shortName']"
+        [vos]="vos">
+      </perun-web-apps-vo-select-table>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getObserverVos()" *ngIf="isVoObserver">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-vo-black' class="mr-2"></mat-icon>
+        {{'ROLES.VOOBSERVER' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.VOOBSERVER_VOS' | translate}}
+      <perun-web-apps-vo-select-table
+        [displayedColumns]="['id', 'name', 'shortName']"
+        [vos]="vos">
+      </perun-web-apps-vo-select-table>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getResourcesData('RESOURCEADMIN')" *ngIf="isResourceAdmin">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-resource-black' class="mr-2"></mat-icon>
+        {{'ROLES.RESOURCEADMIN' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.RESOURCEADMIN_RESOURCES' | translate}}
+      <perun-web-apps-resources-list
+        [resources]="resources"
+        [routingVo]="true"
+        [displayedColumns]="['id', 'name', 'vo', 'facility', 'description']">
+      </perun-web-apps-resources-list>
+
+      <div class="mt-5">
+        {{'ROLES.RESOURCEADMIN_VOS' | translate}}
+        <perun-web-apps-vo-select-table
+          [displayedColumns]="['id', 'name', 'shortName']"
+          [vos]="vos">
+        </perun-web-apps-vo-select-table>
+      </div>
+
+      <div class="mt-5">
+        {{'ROLES.RESOURCEADMIN_FACILITIES' | translate}}
+        <app-facility-select-table
+          [displayedColumns]="['id', 'name']"
+          [checkAuth]="true"
+          [facilities]="facilities">
+        </app-facility-select-table>
+      </div>
+
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getResourcesData('RESOURCESELFSERVICE')" *ngIf="isResourceSelfService">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-resource-black' class="mr-2"></mat-icon>
+        {{'ROLES.RESOURCESELFSERVICE' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.RESOURCESELFSERVICE_RESOURCES' | translate}}
+      <perun-web-apps-resources-list
+        [resources]="resources"
+        [routingVo]="true"
+        [displayedColumns]="['id', 'name', 'vo', 'facility', 'description']">
+      </perun-web-apps-resources-list>
+
+      <div class="mt-5">
+        {{'ROLES.RESOURCESELFSERVICE_VOS' | translate}}
+        <perun-web-apps-vo-select-table
+          [displayedColumns]="['id', 'name', 'shortName']"
+          [vos]="vos">
+        </perun-web-apps-vo-select-table>
+      </div>
+
+      <div class="mt-5">
+        {{'ROLES.RESOURCESELFSERVICE_FACILITIES' | translate}}
+        <app-facility-select-table
+          [displayedColumns]="['id', 'name']"
+          [checkAuth]="true"
+          [facilities]="facilities">
+        </app-facility-select-table>
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getAdminFacilities()" *ngIf="isFacilityAdmin">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-facility-black' class="mr-2"></mat-icon>
+        {{'ROLES.FACILITYADMIN' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.FACILITYADMIN_FACILITIES' | translate}}
+      <app-facility-select-table
+        [displayedColumns]="['id', 'name']"
+        [facilities]="facilities">
+      </app-facility-select-table>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getVos(roles.get('TOPGROUPCREATOR').get('Vo'))" *ngIf="isTopGroupCreator">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-group-black' class="mr-2"></mat-icon>
+        {{'ROLES.TOPGROUPCREATOR' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.TOPGROUPCREATOR_VOS' | translate}}
+      <perun-web-apps-vo-select-table
+        [displayedColumns]="['id', 'name', 'shortName']"
+        [vos]="vos">
+      </perun-web-apps-vo-select-table>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getMembers()" *ngIf="isFacilityAdmin">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-user-dark' class="mr-2"></mat-icon>
+        {{'ROLES.SPONSORSHIP' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.SPONSORSHIP_MEMBERS' | translate}}
+      <perun-web-apps-members-list
+        [members]="members"
+        [hideColumns]="['checkbox', 'email', 'logins', 'status']"
+      ></perun-web-apps-members-list>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel (opened)="getVos(roles.get('SPONSOR').get('Vo'))" *ngIf="isSponsor">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-user-dark' class="mr-2"></mat-icon>
+        {{'ROLES.SPONSOR' | translate}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      {{'ROLES.SPONSOR_VOS' | translate}}
+      <perun-web-apps-vo-select-table
+        [displayedColumns]="['id', 'name', 'shortName']"
+        [vos]="vos">
+      </perun-web-apps-vo-select-table>
+    </div>
+  </mat-expansion-panel>
+
   <mat-expansion-panel *ngFor="let role of roleNames" (opened)="getInnerKeys(role)">
     <mat-expansion-panel-header>
       <mat-panel-title>
+        <mat-icon mat-card-avatar svgIcon='perun-user-dark' class="mr-2"></mat-icon>
         {{role}}
       </mat-panel-title>
     </mat-expansion-panel-header>
