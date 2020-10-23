@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export interface RemoveStringValueDialogData {
   valueIndex?: number;
   values?: string[];
+  doNotShowValues?: boolean;
   attribute: Attribute;
   userId: number;
   description: string;
@@ -42,21 +43,27 @@ export class RemoveStringValueDialogComponent implements OnInit {
 
   onSubmit() {
     this.loading = true;
-    // @ts-ignore
-    let values: string[] = this.data.attribute.value ? this.data.attribute.value : [];
-    if(this.data.valueIndex !== undefined){
-      values.splice(this.data.valueIndex,1);
+    if (this.data.doNotShowValues) {
+      // @ts-ignore
+      this.data.attribute.value = '';
     } else {
-      values = values.filter(elem => !this.data.values.find(el => el === elem));
+      // @ts-ignore
+      let values: string[] = this.data.attribute.value ? this.data.attribute.value : [];
+      if (this.data.valueIndex !== undefined) {
+        values.splice(this.data.valueIndex, 1);
+      } else {
+        values = values.filter(elem => !this.data.values.find(el => el === elem));
+      }
+      this.data.attribute.value = values;
     }
-    this.data.attribute.value = values;
+
     this.attributesManagerService.setUserAttribute({
       user: this.data.userId,
       attribute: this.data.attribute
     }).subscribe(() => {
       this.loading = false;
       this.dialogRef.close(true);
-    });
+    }, () => this.loading = false);
 
   }
 

@@ -34,6 +34,12 @@ export class SettingsOverviewComponent implements OnInit {
         tabName: 'alt_passwords'
       },
       {
+        icon: 'admin_panel_settings',
+        url: `/profile/settings/auth`,
+        label: 'SETTINGS.AUTHENTICATION',
+        tabName: 'auth'
+      },
+      {
         icon: 'storage',
         url: `/profile/settings/dataQuotas`,
         label: 'SETTINGS.DATA_QUOTAS',
