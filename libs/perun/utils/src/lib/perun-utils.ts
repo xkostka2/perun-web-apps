@@ -194,6 +194,24 @@ export function parseName(user: User | Candidate): string {
 }
 
 /**
+ * Returns friendly name transformed from camel case to sentence like string
+ * (eg. friendlyName -> Friendly name)
+ *
+ * @param friendlyName friendly name of the attribute
+ */
+export function parseAttributeFriendlyName(friendlyName: string): string{
+  let name = "";
+  const words = friendlyName.split(/(?=[A-Z])/g);
+  words.forEach(word => {
+    name = name.concat(word.toLowerCase());
+    name = name.concat(' ');
+  })
+  name = name.charAt(0).toUpperCase() + name.slice(1, name.length - 1);
+
+  return name;
+}
+
+/**
  * Returns attribute with specific urn from given rich user.
  * If the given user doesn't have attribute with given urn, null is returned.
  *

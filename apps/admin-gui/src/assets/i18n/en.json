@@ -592,7 +592,10 @@
       "NEVER_EXPIRES": "never",
       "MEMBERSHIP": "Membership",
       "STATUS": "Status:",
-      "EXPIRATION": "Expiration:"
+      "EXPIRATION": "Expiration:",
+      "PERSONAL": "Personal information",
+      "SPONSORED_BY": "This member is sponsored",
+      "SPONSORS": "Sponsors"
     },
     "GROUPS": {
       "TITLE": "Member groups",

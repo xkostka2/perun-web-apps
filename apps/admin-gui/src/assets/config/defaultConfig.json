@@ -30,6 +30,16 @@
     "urn:perun:user:attribute-def:def:login-namespace:egi-ui",
     "urn:perun:user:attribute-def:def:login-namespace:sitola"
   ],
+  "member_profile_attributes_friendly_names": [
+    "organization",
+    "workplace",
+    "researchGroup",
+    "mail",
+    "phone",
+    "address",
+    "preferredLanguage",
+    "preferredMail"
+  ],
   "pwd_reset_base_url": "https://perun-dev.cesnet.cz/fed/pwd-reset/",
   "skip_oidc": false,
   "groupNameSecondaryRegex": "^[-a-zA-Z.0-9_ ]+$",
