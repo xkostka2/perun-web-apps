@@ -7,7 +7,7 @@
 <button (click)="onDeleteImg()" class="m-1" color="warn" mat-flat-button>{{'AUTHENTICATION.DELETE_IMG' | customTranslate | translate}}</button>
 
 <h1 class="page-subtitle mt-5">{{'AUTHENTICATION.MFA' | customTranslate | translate}}</h1>
-<mat-slide-toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>
+<mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>
 <button (click)="reAuthenticate()" color="primary" mat-flat-button>RE AUTHENTICATE</button>
 <div [class.hide-table]="exporting" class="card mt-2">
   <div class="card-body">
@@ -16,6 +16,10 @@
       <table #exporter="matTableExporter" [dataSource]="dataSource" class="w-100" mat-table matTableExporter>
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'TYPE'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="nickname">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'NICKNAME'}}</th>
           <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
         </ng-container>
         <ng-container matColumnDef="revoked">
@@ -28,10 +32,6 @@
         </ng-container>
         <ng-container matColumnDef="used">
           <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'USED'}}</th>
-          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
-        </ng-container>
-        <ng-container matColumnDef="secret">
-          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'SECRET'}}</th>
           <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
         </ng-container>
 
