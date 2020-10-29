@@ -16,6 +16,7 @@ import { AttributesManagerService } from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { MatTableDataSource } from '@angular/material/table';
+import { PasswordResetRequestDialogComponent } from '../../../../shared/components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 
 @Component({
   selector: 'app-member-overview',
@@ -56,6 +57,7 @@ export class MemberOverviewComponent implements OnInit {
 
   vo: Vo;
   loading = false;
+  pwdResetAuth: boolean;
 
   ngOnInit() {
     this.loading = true;
@@ -77,7 +79,7 @@ export class MemberOverviewComponent implements OnInit {
           id: member.voId,
           beanName: "Vo"
         };
-
+        this.pwdResetAuth = this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [this.vo]);
         if (this.member.sponsored &&
           this.authResolver.isAuthorized('getSponsorsForMember_Member_List<String>_policy', [this.member])) {
 
@@ -187,5 +189,16 @@ export class MemberOverviewComponent implements OnInit {
         this.loading = false;
       }, () => this.loading = false);
     }, () => this.loading = false);
+  }
+
+  requestPwdReset() {
+    const config = getDefaultDialogConfig();
+    config.width = '400px';
+    config.data = {
+      userId: this.member.userId,
+      memberId: this.member.id
+    };
+
+    this.dialog.open(PasswordResetRequestDialogComponent, config);
   }
 }

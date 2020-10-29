@@ -81,6 +81,16 @@
               mat-row
             >
             </tr>
+            <tr *ngIf="pwdResetAuth">
+              <td class="vert-center">
+                {{'MEMBER_DETAIL.OVERVIEW.RESET_PASSWORD'|translate}}
+              </td>
+              <td>
+                <button mat-flat-button color="accent" (click)="requestPwdReset()">
+                  {{'MEMBER_DETAIL.OVERVIEW.SEND_REQUEST'|translate}}
+                </button>
+              </td>
+            </tr>
           </table>
         </mat-card-content>
       </mat-card>
