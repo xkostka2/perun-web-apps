@@ -7,4 +7,5 @@ export * from './lib/notification-dialog/notification-dialog.component';
 export * from './lib/remove-user-ext-source-dialog/remove-user-ext-source-dialog.component';
 export * from './lib/show-value-dialog/show-value-dialog.component';
 export * from './lib/edit-attribute-dialog/edit-attribute-dialog.component';
-export * from './lib/attribute-value-list-edit-dialog/attribute-value-list-edit-dialog.component'
+export * from './lib/attribute-value-list-edit-dialog/attribute-value-list-edit-dialog.component';
+export * from './lib/attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';

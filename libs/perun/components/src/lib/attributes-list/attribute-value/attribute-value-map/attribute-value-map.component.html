@@ -3,7 +3,7 @@
     <form class="d-flex w-100">
       <div class="w-100">
         <div class="mr-5">
-          <div *ngFor="let value of values; let i = index; trackBy: customTrackBy" class="d-flex mb-1">
+          <div *ngFor="let value of values.slice(0, itemsShown); let i = index; trackBy: customTrackBy" class="d-flex mb-1">
             <mat-form-field appearance="{{readonly ? 'none' : 'standard'}}" class="w-100 ml-3 mr-2">
               <label for="{{attribute.id}}-key-{{i}}"></label>
               <input
@@ -43,16 +43,29 @@
             </button>
           </div>
         </div>
-        <button
-          *ngIf="!readonly"
-          mat-icon-button
-          color="accent"
-          (click)="addValue()">
-          <mat-icon>
-            add_box
-          </mat-icon>
-        </button>
+        <div>
+          <span
+            [matTooltip]="showMore ? 'Show less' : 'Show more'"
+            [matTooltipPosition]="'above'">
+          <button
+            *ngIf="values.length > defaultItemsShown"
+            mat-icon-button
+            (click)="onShowChange()">
+            <mat-icon *ngIf="!showMore">more_horiz</mat-icon>
+            <mat-icon *ngIf="showMore">keyboard_arrow_up</mat-icon>
+          </button>
+          </span>
+        </div>
       </div>
     </form>
   </div>
+  <button
+    *ngIf="!readonly"
+    mat-icon-button
+    color="accent"
+    (click)="addValue()">
+    <mat-icon>
+      add_box
+    </mat-icon>
+  </button>
 </div>
