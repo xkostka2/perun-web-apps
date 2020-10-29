@@ -4,4 +4,6 @@ export interface MenuItem {
   style: string;
   clickAction?: Function;
   cssIcon: string;
+  intermediateBtn?: boolean;
+  children?: {label: string, url: string }[];
 }
