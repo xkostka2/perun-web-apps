@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import {AttributesListComponent} from '@perun-web-apps/perun/components';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -9,7 +9,7 @@ import {
   DeleteAttributeDialogComponent
 } from '../../../../shared/components/dialogs/delete-attribute-dialog/delete-attribute-dialog.component';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import { Attribute, AttributesManagerService, Facility } from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import {
   TABLE_ATTRIBUTES_SETTINGS,
@@ -32,7 +32,8 @@ export class FacilityAttributesComponent implements OnInit {
               private dialog: MatDialog,
               private notificator: NotificatorService,
               private tableConfigService: TableConfigService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private authResolver: GuiAuthResolver) {
     this.translate.get('FACILITY_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_SAVE').subscribe(value => this.saveSuccessMessage = value);
     this.translate.get('FACILITY_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_DELETE').subscribe(value => this.deleteSuccessMessage = value);
   }
@@ -46,6 +47,8 @@ export class FacilityAttributesComponent implements OnInit {
   saveSuccessMessage: string;
   deleteSuccessMessage: string;
 
+  facilityUserAttAuth: boolean;
+
   loading: boolean;
   filterValue = '';
   pageSize: number;
@@ -55,6 +58,13 @@ export class FacilityAttributesComponent implements OnInit {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.parent.params.subscribe(params => {
       this.facilityId = params['facilityId'];
+
+      const facility: Facility = {
+        id: this.facilityId,
+        beanName: 'Facility'
+      }
+      this.facilityUserAttAuth = this.authResolver.isAuthorized('getAssignedUsers_Facility_policy', [facility]);
+
       this.refreshTable();
     });
   }

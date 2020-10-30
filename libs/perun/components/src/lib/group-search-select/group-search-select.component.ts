@@ -29,6 +29,8 @@ export class GroupSearchSelectComponent implements OnInit, OnChanges, OnDestroy 
   ngOnChanges(changes: SimpleChanges): void {
     this.filteredGroups.next(this.groups.slice());
 
+    this.groupCtrl.setValue(this.groups[0]);
+
     this.groupCtrl.valueChanges.subscribe(grp => this.groupSelected.emit(grp));
 
     this.groupFilterCtrl.valueChanges

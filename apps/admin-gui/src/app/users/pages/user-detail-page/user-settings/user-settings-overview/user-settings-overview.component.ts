@@ -40,12 +40,6 @@ export class UserSettingsOverviewComponent implements OnInit {
 
   private initNavItems() {
     this.navItems = [
-      {
-        cssIcon: 'perun-attributes',
-        url: `facilityAttributes`,
-        label: 'MENU_ITEMS.USER.FACILITY_ATTRIBUTES',
-        style: 'user-btn'
-      }
     ];
     // if at user profile, add user gui config item
     // if at admin profile, add service identities

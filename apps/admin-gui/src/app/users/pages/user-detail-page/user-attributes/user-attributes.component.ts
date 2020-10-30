@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { AttributesListComponent } from '@perun-web-apps/perun/components';
@@ -9,7 +9,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { DeleteAttributeDialogComponent } from '../../../../shared/components/dialogs/delete-attribute-dialog/delete-attribute-dialog.component';
 import { StoreService } from '@perun-web-apps/perun/services';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService, User
+} from '@perun-web-apps/perun/openapi';
 import {
   TABLE_ATTRIBUTES_SETTINGS,
   TableConfigService
@@ -34,7 +37,8 @@ export class UserAttributesComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private tableConfigService: TableConfigService,
-    private store: StoreService
+    private store: StoreService,
+    private authResolver: GuiAuthResolver
   ) {
     this.translate.get('USER_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_SAVE').subscribe(value => this.saveSuccessMessage = value);
     this.translate.get('USER_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_DELETE').subscribe(value => this.deleteSuccessMessage = value);
@@ -48,6 +52,7 @@ export class UserAttributesComponent implements OnInit {
   selection = new SelectionModel<Attribute>(true, []);
   attributes: Attribute[] = [];
   userId: number;
+  userFacilityAttAuth: boolean;
 
   loading: boolean;
   filterValue = '';
@@ -63,6 +68,11 @@ export class UserAttributesComponent implements OnInit {
         this.userId = this.store.getPerunPrincipal().userId;
       }
 
+      const user: User = {
+        id: this.userId,
+        beanName: 'User'
+      }
+      this.userFacilityAttAuth = this.authResolver.isAuthorized('getAssignedFacilities_User_policy', [user]);
       this.refreshTable();
     });
   }

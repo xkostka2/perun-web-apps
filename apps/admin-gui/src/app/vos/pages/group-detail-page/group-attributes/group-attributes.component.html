@@ -1,28 +1,57 @@
 <div>
   <h1 class="page-subtitle">{{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.TITLE' | translate}}</h1>
-  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
-  <button mat-flat-button class="mr-2" color="accent" (click)="onCreate()">
-    {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
-  </button>
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template matTabLabel>
+        {{'GROUP_DETAIL.ENTITY' | translate}}
+      </ng-template>
+      <perun-web-apps-refresh-button class="mt-2" (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onCreate()">
+        {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
+      </button>
 
-  <button mat-flat-button class="mr-2" color="accent" (click)="onSave()" [disabled]="selection.selected.length === 0">
-    {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
-  </button>
+      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onSave()" [disabled]="selection.selected.length === 0">
+        {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
+      </button>
 
-  <button mat-flat-button color="warn" (click)="onDelete()" [disabled]="selection.selected.length === 0">
-    {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
-  </button>
-  <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER'"></perun-web-apps-immediate-filter>
+      <button mat-flat-button class="mt-2" color="warn" (click)="onDelete()" [disabled]="selection.selected.length === 0">
+        {{'GROUP_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
+      </button>
+      <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER'"></perun-web-apps-immediate-filter>
 
-  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+      <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 
-  <perun-web-apps-attributes-list
-    (page)="pageChanged($event)"
-    [pageSize]="pageSize"
-    #list
-    *ngIf="!loading"
-    [filterValue]="filterValue"
-    [attributes]="attributes"
-    [selection]="selection">
-  </perun-web-apps-attributes-list>
+      <perun-web-apps-attributes-list
+        (page)="pageChanged($event)"
+        [pageSize]="pageSize"
+        #list
+        *ngIf="!loading"
+        [filterValue]="filterValue"
+        [attributes]="attributes"
+        [selection]="selection">
+      </perun-web-apps-attributes-list>
+    </mat-tab>
+    <mat-tab *ngIf="groupMemberAttAuth">
+      <ng-template matTabLabel>
+        {{'GROUP_DETAIL.ENTITY' | translate}}
+        -
+        {{'MEMBER_DETAIL.ENTITY' | translate}}
+      </ng-template>
+      <ng-template matTabContent>
+        <app-two-entity-attribute-page [firstEntity]="'group'" [firstEntityId]="groupId"
+                                       [secondEntity]="'member'" *ngIf="!loading"></app-two-entity-attribute-page>
+      </ng-template>
+    </mat-tab>
+    <mat-tab *ngIf="groupResourceAttAuth">
+      <ng-template matTabLabel>
+        {{'GROUP_DETAIL.ENTITY' | translate}}
+        -
+        {{'RESOURCE_DETAIL.ENTITY' | translate}}
+      </ng-template>
+      <ng-template matTabContent>
+        <app-two-entity-attribute-page [firstEntity]="'group'" [firstEntityId]="groupId"
+                                       [secondEntity]="'resource'" *ngIf="!loading"></app-two-entity-attribute-page>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>

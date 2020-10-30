@@ -135,11 +135,6 @@ export class SideMenuItemService {
           activatedRegex: `^/myProfile/settings$`,
           children: [
             {
-              label: 'MENU_ITEMS.USER.FACILITY_ATTRIBUTES',
-              url: [`/myProfile/settings/facilityAttributes`],
-              activatedRegex: `^/myProfile/settings/facilityAttributes$`
-            },
-            {
               label: 'MENU_ITEMS.USER.PASSWORD_RESET',
               url: [`/myProfile/settings/passwordReset`],
               activatedRegex: `^/myProfile/settings/passwordReset`
@@ -595,11 +590,6 @@ export class SideMenuItemService {
       activatedRegex: `${regex}/settings$`,
       children: [
         {
-          label: 'MENU_ITEMS.USER.FACILITY_ATTRIBUTES',
-          url: [`${path}/settings/facilityAttributes`],
-          activatedRegex: `^${path}/settings/facilityAttributes`
-        },
-        {
           label: 'MENU_ITEMS.USER.ROLES',
           url: [`${path}/settings/roles`],
           activatedRegex: `^${path}/settings/roles`
@@ -668,39 +658,16 @@ export class SideMenuItemService {
     });
 
     //Settings
-    const resAttrAuth = this.authResolver.isAuthorized('getAllowedResources_Member_policy', [vo]);
-    const grpAttrAuth = this.authResolver.isAuthorized('getMemberGroups_Member_policy', [vo]);
+    // const children = [];
+    //
+    // links.push({
+    //   label: 'MENU_ITEMS.MEMBER.SETTINGS',
+    //   url: [`/organizations/${member.voId}/members/${member.id}/settings`],
+    //   activatedRegex: '/organizations/\\d+/members/\\d+/settings$',
+    //   children: children,
+    //   showChildrenRegex: '/organizations/\\d+/members/\\d+/settings'
+    // });
 
-    if (resAttrAuth || grpAttrAuth) {
-
-      const children = [];
-
-      // Resource attributes
-      if (resAttrAuth) {
-        children.push({
-          label: 'MENU_ITEMS.MEMBER.RESOURCE_ATTRIBUTES',
-          url: [`/organizations/${member.voId}/members/${member.id}/settings/resourceAttributes`],
-          activatedRegex: '/organizations/\\d+/members/\\d+/settings/resourceAttributes'
-        });
-      }
-
-      // Group attributes
-      if (grpAttrAuth) {
-        children.push({
-          label: 'MENU_ITEMS.MEMBER.GROUP_ATTRIBUTES',
-          url: [`/organizations/${member.voId}/members/${member.id}/settings/groupAttributes`],
-          activatedRegex: '/organizations/\\d+/members/\\d+/settings/groupAttributes$'
-        });
-      }
-
-      links.push({
-        label: 'MENU_ITEMS.MEMBER.SETTINGS',
-        url: [`/organizations/${member.voId}/members/${member.id}/settings`],
-        activatedRegex: '/organizations/\\d+/members/\\d+/settings$',
-        children: children,
-        showChildrenRegex: '/organizations/\\d+/members/\\d+/settings'
-      });
-    }
     return links;
   }
 
@@ -884,15 +851,6 @@ export class SideMenuItemService {
       url: [`/organizations/${group.voId}/groups/${group.id}/attributes`],
       activatedRegex: '/organizations/\\d+/groups/\\d+/attributes$'
     });
-
-    //SettingsResourceAttributes
-    if (this.authResolver.isAuthorized('getAssignedResources_Group_policy', [group])) {
-      settingsChildrenLinks.push({
-        label: 'MENU_ITEMS.GROUP.RESOURCE_ATTRIBUTES',
-        url: [`/organizations/${group.voId}/groups/${group.id}/settings/resourceAttributes`],
-        activatedRegex: '/organizations/\\d+/groups/\\d+/settings/resourceAttributes$'
-      });
-    }
 
     //SettingsMembership
     //not implemented in authorization....probably must be hardcoded

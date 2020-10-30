@@ -1,0 +1,17 @@
+<mat-form-field class="w-100">
+  <mat-select
+    placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.SELECT_USER' | translate}}"
+    [formControl]="userCtrl">
+    <mat-option>
+      <ngx-mat-select-search
+        placeholderLabel="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.FIND_USER' | translate}}"
+        noEntriesFoundLabel="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.NO_USER_FOUND' | translate}}"
+        [formControl]="userFilterCtrl">
+      </ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+      {{user | userFullName}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

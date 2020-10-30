@@ -61,6 +61,10 @@ import { MembersListComponent } from './members-list/members-list.component';
 import { TaskResultsListComponent } from './task-results-list/task-results-list.component';
 import { GroupSearchSelectComponent } from './group-search-select/group-search-select.component';
 import { MiddleClickRouterLinkDirective } from '@perun-web-apps/perun/directives';
+import { ResourceSearchSelectComponent } from './resource-search-select/resource-search-select.component';
+import { MemberSearchSelectComponent } from './member-search-select/member-search-select.component';
+import { FacilitySearchSelectComponent } from './facility-search-select/facility-search-select.component';
+import { UserSearchSelectComponent } from './user-search-select/user-search-select.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -152,7 +156,11 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MembersListComponent,
     TaskResultsListComponent,
     GroupSearchSelectComponent,
-    MiddleClickRouterLinkDirective
+    MiddleClickRouterLinkDirective,
+    ResourceSearchSelectComponent,
+    MemberSearchSelectComponent,
+    FacilitySearchSelectComponent,
+    UserSearchSelectComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -182,7 +190,11 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MembersListComponent,
     TaskResultsListComponent,
     GroupSearchSelectComponent,
-    MiddleClickRouterLinkDirective
+    MiddleClickRouterLinkDirective,
+    ResourceSearchSelectComponent,
+    MemberSearchSelectComponent,
+    FacilitySearchSelectComponent,
+    UserSearchSelectComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

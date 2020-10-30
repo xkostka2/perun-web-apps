@@ -107,15 +107,14 @@ export class MemberOverviewComponent implements OnInit {
       label: 'MENU_ITEMS.MEMBER.ATTRIBUTES',
       style: 'member-btn'
     });
-    if(this.authResolver.isAuthorized('getAllowedResources_Member_policy', [this.vo]) ||
-    this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])){
-      this.navItems.push({
-        cssIcon: 'perun-settings2',
-        url: `/organizations/${this.member.voId}/members/${this.member.id}/settings`,
-        label: 'MENU_ITEMS.MEMBER.SETTINGS',
-        style: 'member-btn'
-      });
-    }
+
+    // this.navItems.push({
+    //   cssIcon: 'perun-settings2',
+    //   url: `/organizations/${this.member.voId}/members/${this.member.id}/settings`,
+    //   label: 'MENU_ITEMS.MEMBER.SETTINGS',
+    //   style: 'member-btn'
+    // });
+
   }
 
   private refreshData() {
