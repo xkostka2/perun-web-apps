@@ -10,10 +10,16 @@
 
     <mat-form-field>
       <input matInput required placeholder="{{'DIALOGS.CREATE_RESOURCE.NAME' | translate}}" [formControl]="nameCtrl">
+      <mat-error>
+        {{'DIALOGS.CREATE_RESOURCE.INCORRECT_NAME' | translate}}
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput required placeholder="{{'DIALOGS.CREATE_RESOURCE.DESCRIPTION' | translate}}"
              [formControl]="descriptionCtrl">
+      <mat-error>
+        {{'DIALOGS.CREATE_RESOURCE.FILL_DESCRIPTION' | translate}}
+      </mat-error>
     </mat-form-field>
   </div>
 
@@ -26,5 +32,3 @@
             color="accent" (click)="onSubmit()">{{'DIALOGS.CREATE_RESOURCE.CREATE' | translate}}</button>
   </div>
 </div>
-
-

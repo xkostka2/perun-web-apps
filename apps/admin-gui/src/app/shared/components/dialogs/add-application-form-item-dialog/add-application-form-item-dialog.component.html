@@ -4,7 +4,11 @@
   <mat-form-field>
     <input
       matInput
-      [(ngModel)]="shortName">
+      required
+      [formControl]="nameCtrl">
+    <mat-error>
+      {{'DIALOGS.APPLICATION_FORM_ADD_ITEM.FILL_NAME' | translate}}
+    </mat-error>
   </mat-form-field>
   {{'DIALOGS.APPLICATION_FORM_ADD_ITEM.INPUT_WIDGET' | translate}}:
   <mat-form-field class="mb-4">
@@ -35,6 +39,7 @@
     {{'DIALOGS.APPLICATION_FORM_ADD_ITEM.CANCEL' | translate}}
   </button>
   <button
+    [disabled]="nameCtrl.invalid"
     mat-flat-button
     class="ml-2"
     color="accent"

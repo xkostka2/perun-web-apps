@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FacilitiesManagerService } from '@perun-web-apps/perun/openapi';
 import { NotificatorService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
+import { FormControl, Validators } from '@angular/forms';
 
 export interface AddHostDialogData {
   theme: string;
@@ -27,17 +28,19 @@ export class AddHostDialogComponent implements OnInit {
 
   theme: string;
   facilityName: string;
-  hosts = "";
   loading = false;
+  hostsCtrl: FormControl;
 
   ngOnInit(): void {
     this.theme = this.data.theme;
     this.facilityName= this.data.facilityName;
+    this.hostsCtrl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
+    this.hostsCtrl.markAllAsTouched();
   }
 
   onAdd(){
     this.loading = true;
-    const hostNames = this.hosts.split("\n");
+    const hostNames = this.hostsCtrl.value.split("\n");
     let generatedHostNames: string[] = [];
 
     for (const name of hostNames){

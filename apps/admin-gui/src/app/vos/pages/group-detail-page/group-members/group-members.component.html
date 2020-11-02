@@ -49,10 +49,19 @@
 
   <mat-form-field class="mr-2 search-field no-border-mat-input">
     <label>
-      <input matInput autocomplete="false" placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}" [(ngModel)]="searchString">
+      <input
+        matInput
+        autocomplete="false"
+        placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
+        [formControl]="searchControl">
     </label>
+    <mat-error>
+      {{'GROUP_DETAIL.MEMBERS.EMPTY_SEARCH' | translate}}
+    </mat-error>
   </mat-form-field>
-  <button mat-flat-button color="primary" class="mr-2" [disabled]="searchString.length === 0" (click)="onSearchByString()">
+  <button mat-flat-button color="primary"
+          class="mr-2" [disabled]="loading"
+          (click)="onSearchByString()">
     <mat-icon>search</mat-icon>
   </button>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">

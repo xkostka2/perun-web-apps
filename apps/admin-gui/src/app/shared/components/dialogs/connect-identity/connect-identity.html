@@ -3,14 +3,20 @@
   <div mat-dialog-content class="dialog-container">
     <mat-form-field class="mr-2 search-field no-border-mat-input">
       <label>
-        <input matInput autocomplete="false" placeholder="{{'DIALOGS.CONNECT_IDENTITY.SEARCH' | translate}}" [(ngModel)]="searchString">
+        <input matInput
+               autocomplete="false"
+               placeholder="{{'DIALOGS.CONNECT_IDENTITY.SEARCH' | translate}}"
+               [formControl]="searchCtrl">
       </label>
+      <mat-error>
+        {{'DIALOGS.CONNECT_IDENTITY.EMPTY_SEARCH_MESSAGE' | translate}}
+      </mat-error>
     </mat-form-field>
     <button
       mat-flat-button
       color="primary"
       class="mr-2 search-btn"
-      [disabled]="searchString.length === 0"
+      [disabled]="loading"
       (click)="onSearchByString()">
       <mat-icon>search</mat-icon>
     </button>

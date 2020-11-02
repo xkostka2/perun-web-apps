@@ -7,6 +7,7 @@ import {
 import { PageEvent } from '@angular/material/paginator';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { StoreService } from '@perun-web-apps/perun/services';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-users',
@@ -27,24 +28,29 @@ export class AdminUsersComponent implements OnInit {
 
   users: RichUser[];
 
-  searchString = '';
+  searchControl: FormControl;
   loading = false;
   firstSearchDone = false;
   pageSize: number;
   tableId = TABLE_ADMIN_USER_SELECT;
 
   ngOnInit() {
+    this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
   }
 
   onSearchByString() {
+    if (this.searchControl.invalid) {
+      this.searchControl.markAllAsTouched();
+      return;
+    }
     this.loading = true;
     this.firstSearchDone = true;
     let attributes = [
       Urns.USER_DEF_ORGANIZATION,
       Urns.USER_DEF_PREFERRED_MAIL];
     attributes = attributes.concat(this.storeService.getLoginAttributeNames());
-    this.usersService.findRichUsersWithAttributes(this.searchString, attributes).subscribe(users => {
+    this.usersService.findRichUsersWithAttributes(this.searchControl.value, attributes).subscribe(users => {
       this.users = users;
       this.loading = false;
     }, () => {
@@ -53,7 +59,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   onKeyInput(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.searchString.length > 0) {
+    if (event.key === 'Enter') {
       this.onSearchByString();
     }
   }

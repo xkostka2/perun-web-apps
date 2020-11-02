@@ -16,6 +16,7 @@ import { Role } from '@perun-web-apps/perun/models';
 import { TABLE_ADD_MANAGER, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
 import { Urns } from '@perun-web-apps/perun/urns';
+import { FormControl, Validators } from '@angular/forms';
 
 export interface AddManagerDialogData {
   complementaryObject: Vo | Group | Facility;
@@ -48,7 +49,6 @@ export class AddManagerDialogComponent implements OnInit {
   }
 
   title: string;
-  searchString = '';
   successMessage: string;
 
   selection = new SelectionModel<RichUser>(true, []);
@@ -61,12 +61,14 @@ export class AddManagerDialogComponent implements OnInit {
   theme: string;
   pageSize: number;
   tableId = TABLE_ADD_MANAGER;
+  searchCtrl: FormControl;
 
   ngOnInit(): void {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.theme = this.data.theme;
     this.availableRoles = this.data.availableRoles;
     this.selectedRole = this.data.selectedRole;
+    this.searchCtrl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
   }
 
   onCancel(): void {
@@ -83,6 +85,10 @@ export class AddManagerDialogComponent implements OnInit {
   }
 
   onSearchByString() {
+    if (this.searchCtrl.invalid) {
+      this.searchCtrl.markAllAsTouched();
+      return;
+    }
     this.loading = true;
 
     this.selection.clear();
@@ -92,7 +98,7 @@ export class AddManagerDialogComponent implements OnInit {
       Urns.USER_DEF_PREFERRED_MAIL];
     attributes = attributes.concat(this.storeService.getLoginAttributeNames());
 
-    this.usersService.findRichUsersWithAttributes(this.searchString, attributes).subscribe(
+    this.usersService.findRichUsersWithAttributes(this.searchCtrl.value, attributes).subscribe(
       users => {
         this.users = users;
         this.loading = false;

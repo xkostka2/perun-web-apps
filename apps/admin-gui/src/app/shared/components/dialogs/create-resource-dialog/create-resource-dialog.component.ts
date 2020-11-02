@@ -46,6 +46,8 @@ export class CreateResourceDialogComponent implements OnInit {
 
     this.nameCtrl = new FormControl(null, [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.descriptionCtrl = new FormControl(null, [Validators.required, Validators.pattern('.*[\\S]+.*')]);
+    this.nameCtrl.markAllAsTouched();
+    this.descriptionCtrl.markAllAsTouched();
   }
 
 

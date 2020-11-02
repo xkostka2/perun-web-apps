@@ -10,7 +10,7 @@ import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/
 import { MembersService } from '@perun-web-apps/perun/services';
 import { MembersManagerService, RichMember, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { TABLE_VO_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
@@ -46,7 +46,7 @@ export class VoMembersComponent implements OnInit {
   members: RichMember[] = null;
 
   selection = new SelectionModel<RichMember>(true, []);
-  searchString = '';
+  searchControl: FormControl;
   firstSearchDone = false;
 
   loading = false;
@@ -73,6 +73,7 @@ export class VoMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.statuses.setValue(this.statusList);
     this.attrNames = this.attrNames.concat(this.storeService.getLoginAttributeNames());
@@ -108,12 +109,16 @@ export class VoMembersComponent implements OnInit {
   }
 
   onSearchByString() {
+    if (this.searchControl.invalid) {
+      this.searchControl.markAllAsTouched();
+      return;
+    }
     this.loading = true;
     this.firstSearchDone = true;
 
     this.selection.clear();
 
-    this.membersService.findCompleteRichMembers(this.vo.id, this.searchString, this.attrNames, this.selectedStatuses).subscribe(
+    this.membersService.findCompleteRichMembers(this.vo.id, this.searchControl.value, this.attrNames, this.selectedStatuses).subscribe(
       members => {
         this.members = members;
         this.setAuthRights();
@@ -158,7 +163,7 @@ export class VoMembersComponent implements OnInit {
   }
 
   onKeyInput(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.searchString.length > 0) {
+    if (event.key === 'Enter') {
       this.onSearchByString();
     }
   }
@@ -195,7 +200,7 @@ export class VoMembersComponent implements OnInit {
   }
 
   refreshTable() {
-    if (this.searchString.trim().length > 0) {
+    if (this.searchControl.value.trim().length > 0) {
       this.onSearchByString();
     } else {
       this.onListAll();

@@ -75,8 +75,8 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
 
           return 0;
         }));
+        this.loading = false;
       }, () => this.loading = false);
-      this.loading = false;
     }, () => this.loading = false);
   }
 

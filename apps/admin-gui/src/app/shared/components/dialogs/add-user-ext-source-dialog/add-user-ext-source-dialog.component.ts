@@ -40,8 +40,10 @@ export class AddUserExtSourceDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.loginControl = new FormControl(null, [Validators.required]);
+    this.loginControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.extSourcesControl = new FormControl('', [Validators.required]);
+    this.loginControl.markAllAsTouched();
+    this.extSourcesControl.markAllAsTouched();
     this.filteredExtSources = this.extSourcesControl.valueChanges
       .pipe(
         startWith(''),

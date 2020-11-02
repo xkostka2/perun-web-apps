@@ -11,7 +11,12 @@
         rows="8"
         cols="50"
         matInput
-        [(ngModel)]="hosts"></textarea>
+        required
+        [formControl]="hostsCtrl">
+      </textarea>
+      <mat-error>
+        {{'DIALOGS.ADD_HOST.EMPTY_MESSAGE' | translate}}
+      </mat-error>
     </mat-form-field>
     <div class="text-muted">{{'DIALOGS.ADD_HOST.HINT'| translate}}</div>
   </div>
@@ -25,7 +30,7 @@
       mat-flat-button
       class="ml-2"
       color="accent"
-      [disabled]="hosts.trim().length === 0 || loading"
+      [disabled]="hostsCtrl.invalid || loading"
       (click)="onAdd()">
       {{'DIALOGS.ADD_HOST.ADD' | translate}}</button>
   </div>

@@ -7,15 +7,18 @@
       <label>
         <input matInput autocomplete="false" placeholder="{{'DIALOGS.ADD_MEMBERS.DESCRIPTION' | translate}}"
                (keyup.enter)="onSearchByString()"
-               [(ngModel)]="searchString">
+               [formControl]="searchCtrl">
       </label>
+      <mat-error>
+        {{'DIALOGS.ADD_MEMBERS.EMPTY_SEARCH_MESSAGE' | translate}}
+      </mat-error>
     </mat-form-field>
 
     <button
       mat-flat-button
       class="ml-auto"
       color="accent"
-      [disabled]="searchString.length === 0 || loading"
+      [disabled]="loading"
       (click)="onSearchByString()">
       {{'DIALOGS.ADD_MEMBERS.SEARCH' | translate}}
     </button>

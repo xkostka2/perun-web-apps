@@ -285,7 +285,8 @@
       "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
       "NO_MEMBERS_ALERT": "No members found.",
       "FILTER_STATUS": "Select Status",
-      "INVITE": "Invite"
+      "INVITE": "Invite",
+      "EMPTY_SEARCH": "Search field cannot be empty"
     },
     "OVERVIEW": {
       "INVITE_MEMBER": "Invite member",
@@ -505,7 +506,8 @@
       "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
       "NO_MEMBERS_ALERT": "No members found.",
       "INVITE_MEMBER": "Invite",
-      "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source."
+      "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
+      "EMPTY_SEARCH": "Search field cannot be empty"
     },
     "RESOURCES": {
       "TITLE": "Resources",
@@ -572,7 +574,7 @@
         "NO_APPLICATION_FORM": "Application form doesn't exist",
         "CREATE_APPLICATION_FORM": "Create application form"
       },
-      "RELATIONS":{
+      "RELATIONS": {
         "TITLE": "Relations",
         "DELETE": "Remove selected",
         "CREATE": "Add",
@@ -919,7 +921,8 @@
       "CREATE": "Add",
       "SUCCESS": "Selected managers were added",
       "COUNT": "Count",
-      "NO_USERS_FOUND": "No users found"
+      "NO_USERS_FOUND": "No users found",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty"
     },
     "ADD_MEMBERS": {
       "TITLE": "Add member",
@@ -932,7 +935,8 @@
       "SUCCESS_INVITE": "Invite was send to given user",
       "VALIDATION_SUCCESS": "Member validation was successful",
       "NO_USERS_FOUND": "No users found",
-      "ADD_MEMBER_PERMISSION_TOOLTIP": "You don't have permission to add member"
+      "ADD_MEMBER_PERMISSION_TOOLTIP": "You don't have permission to add member",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty"
     },
     "ADD_GROUPS": {
       "TITLE": "Add group",
@@ -1025,7 +1029,8 @@
       "INPUT_WIDGET": "Input widget",
       "INSERT_AFTER": "Insert after",
       "INSERT_TO_BEGINNING": "- insert to the beginning -",
-      "NO_SHORTNAME_ERROR": "Please fill the shortname"
+      "NO_SHORTNAME_ERROR": "Please fill the shortname",
+      "FILL_NAME": "Length of name has to be between 1 to 128 characters"
     },
     "APPLICATION_FORM_EDIT_ITEM": {
       "TITLE": "Edit form item",
@@ -1306,7 +1311,9 @@
       "DESCRIPTION": "Description",
       "CANCEL": "Cancel",
       "CREATE": "Create",
-      "SUCCESS": "Resource successfully created"
+      "SUCCESS": "Resource successfully created",
+      "INCORRECT_NAME": "Name cannot be empty and can contain only characters a-z, A-Z, numbers, spaces, dots, '_' and '-'",
+      "FILL_DESCRIPTION": "Description cannot be empty"
     },
     "ADD_EXT_SOURCES": {
       "TITLE": "Add external sources",
@@ -1380,10 +1387,10 @@
       "ADD": "Add",
       "CANCEL": "Cancel",
       "SUCCESS": "User external source has been added",
-      "LOGIN": "Login:",
-      "LOA": "Level of assurance:",
-      "EXT_SOURCE": "External source:",
-      "LOA_INFO": "0 - not verified = default\n1 - verified email\n2 - verified identity\n3 - verified identity, strict password strength"
+      "LOGIN": "Login",
+      "EXT_SOURCE": "External source",
+      "EMPTY_LOGIN": "Login cannot be empty",
+      "EMPTY_EXT_SOURCE": "External source cannot be empty"
     },
     "ADD_HOST": {
       "TITLE": "Add hosts",
@@ -1392,7 +1399,8 @@
       "SUBTITLE": "Hostnames",
       "HINT": "Enter one host per line. You can use \"[x-y]\" in hostname to generate hosts with numbers from x to y. This replacer can be specified multiple times in one hostname to generate MxN combinations.",
       "WARNING": "Please enter at least one hostname to add it to facility.",
-      "SUCCESS": "Added hosts."
+      "SUCCESS": "Added hosts.",
+      "EMPTY_MESSAGE": "Hostnames cannot be empty"
     },
     "REMOVE_HOST": {
       "TITLE": "Confirm removal",
@@ -1535,6 +1543,7 @@
       "CONNECT": "Connect",
       "CANCEL": "Cancel",
       "SEARCH": "Search",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty",
       "SEARCH_HINT": "Type in user`s First name, Last name (or both) or Login or Email.",
       "NO_IDENTITIES": "No user matching search criteria found.",
       "SUCCESS": "Identity was connected."
@@ -1695,9 +1704,10 @@
     },
     "USERS": {
       "TITLE": "Users",
-      "SEARCH_PLACEHOLDER":"Search by name, email or login",
+      "SEARCH_PLACEHOLDER": "Search by name, email or login",
       "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
-      "NO_USERS_FOUND": "No users found."
+      "NO_USERS_FOUND": "No users found.",
+      "EMPTY_SEARCH": "Search field cannot be empty"
     },
     "VISUALIZER": {
       "ATTR_DEPENDENCIES": {
@@ -1835,7 +1845,7 @@
       },
       "EXT_SOURCES_LIST": {
         "ID": "ID",
-        "NAME":"Name",
+        "NAME": "Name",
         "TYPE": "Type",
         "NO_EXT_SOURCES": "No external sources",
         "NO_FILTER_RESULTS": "There are no external sources matching your query"
@@ -1843,7 +1853,7 @@
       "SERVICES_LIST": {
         "ID": "Service Id",
         "NAME": "Name",
-        "ENABLED":"Enabled",
+        "ENABLED": "Enabled",
         "SCRIPT": "Script",
         "DESCRIPTION": "Description",
         "NO_SERVICES_WARNING": "No services assigned.",
@@ -1869,7 +1879,7 @@
           "FILTER": "Filter by name or ID"
         }
       },
-      "HOSTS_LIST" : {
+      "HOSTS_LIST": {
         "TABLE_HOST_ID": "Host ID",
         "TABLE_HOST_NAME": "Host name",
         "NO_HOST_WARNING": "No hosts found"

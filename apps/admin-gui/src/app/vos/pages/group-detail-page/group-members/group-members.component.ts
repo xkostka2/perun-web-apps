@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { TABLE_GROUP_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { InviteMemberDialogComponent } from '../../../../shared/components/dialogs/invite-member-dialog/invite-member-dialog.component';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-group-members',
@@ -41,7 +42,7 @@ export class GroupMembersComponent implements OnInit {
   selection: SelectionModel<RichMember>;
   synchEnabled = false;
 
-  searchString = '';
+  searchControl: FormControl;
   firstSearchDone = false;
 
   loading = false;
@@ -77,6 +78,7 @@ export class GroupMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
+    this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.selection = new SelectionModel<RichMember>(true, []);
     this.memberAttrNames = this.memberAttrNames.concat(this.storeService.getLoginAttributeNames());
@@ -94,7 +96,7 @@ export class GroupMembersComponent implements OnInit {
           this.loading = false;
         }, err => this.loading = false);
       }, err => this.loading = false);
-      });
+    });
   }
 
   isSynchronized() {
@@ -112,6 +114,10 @@ export class GroupMembersComponent implements OnInit {
 
 
   onSearchByString() {
+    if (this.searchControl.invalid) {
+      this.searchControl.markAllAsTouched();
+      return;
+    }
     this.data = 'search';
     this.firstSearchDone = true;
 
@@ -122,7 +128,7 @@ export class GroupMembersComponent implements OnInit {
     this.data = 'all';
     this.firstSearchDone = true;
 
-   this.refreshTable();
+    this.refreshTable();
   }
 
   onAddMember() {
@@ -146,7 +152,7 @@ export class GroupMembersComponent implements OnInit {
   }
 
   onKeyInput(event: KeyboardEvent) {
-    if (event.key === 'Enter' && this.searchString.length > 0) {
+    if (event.key === 'Enter') {
       this.onSearchByString();
     }
   }
@@ -203,7 +209,7 @@ export class GroupMembersComponent implements OnInit {
         break;
       }
       case 'search': {
-        this.membersService.findCompleteRichMembersForGroup(this.group.id, this.searchString, this.memberAttrNames).subscribe(
+        this.membersService.findCompleteRichMembersForGroup(this.group.id, this.searchControl.value, this.memberAttrNames).subscribe(
           members => {
             this.members = members;
             this.setAuthRights();

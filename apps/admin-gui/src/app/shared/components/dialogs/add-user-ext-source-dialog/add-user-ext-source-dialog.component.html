@@ -2,19 +2,27 @@
 <div class="dialog-container user-theme" mat-dialog-content>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
   <div *ngIf="!loading">
-    <mat-form-field appearance="standard" class="center-self w-100">
+    <mat-form-field class="center-self w-100">
       <input
         [formControl]="loginControl"
         matInput
-        placeholder="{{'DIALOGS.ADD_USER_EXT_SOURCE.LOGIN'|translate}}"
+        placeholder="{{'DIALOGS.ADD_USER_EXT_SOURCE.LOGIN' | translate}}"
         required>
+      <mat-error>
+        {{'DIALOGS.ADD_USER_EXT_SOURCE.EMPTY_LOGIN' | translate}}
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="center-self w-100">
-      <input [formControl]="extSourcesControl"
-             [matAutocomplete]="auto"
-             matInput
-             placeholder="{{'DIALOGS.ADD_USER_EXT_SOURCE.EXT_SOURCE'|translate}}"
-             type="text">
+      <input
+        [formControl]="extSourcesControl"
+        [matAutocomplete]="auto"
+        matInput
+        placeholder="{{'DIALOGS.ADD_USER_EXT_SOURCE.EXT_SOURCE' | translate}}"
+        type="text"
+        required>
+      <mat-error>
+        {{'DIALOGS.ADD_USER_EXT_SOURCE.EMPTY_EXT_SOURCE' | translate}}
+      </mat-error>
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let extSource of filteredExtSources | async" [value]="extSource">
           {{extSource.name}}
@@ -32,7 +40,7 @@
   </button>
   <button
     (click)="onAdd()"
-    [disabled]="loginControl.invalid || loading"
+    [disabled]="loginControl.invalid || extSourcesControl.invalid || loading"
     class="ml-2"
     color="accent"
     mat-flat-button>

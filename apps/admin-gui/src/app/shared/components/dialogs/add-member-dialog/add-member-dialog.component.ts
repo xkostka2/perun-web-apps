@@ -20,6 +20,7 @@ import {
   TableConfigService
 } from '@perun-web-apps/config/table-config';
 import { MembersCandidatesListComponent } from '../../members-candidates-list/members-candidates-list.component';
+import { FormControl, Validators } from '@angular/forms';
 
 export interface AddMemberDialogData {
   voId?: number;
@@ -72,6 +73,7 @@ export class AddMemberDialogComponent implements OnInit {
   list: MembersCandidatesListComponent;
 
   inviteAuth = false;
+  searchCtrl: FormControl;
 
   onCancel(): void {
     this.dialogRef.close(false);
@@ -131,6 +133,10 @@ export class AddMemberDialogComponent implements OnInit {
   }
 
   onSearchByString() {
+    if (this.searchCtrl.invalid) {
+      this.searchCtrl.markAllAsTouched();
+      return;
+    }
     this.loading = true;
 
     this.selection.clear();
@@ -161,6 +167,7 @@ export class AddMemberDialogComponent implements OnInit {
     if (this.data.type === 'group') {
       this.inviteAuth = this.guiAuthResolver.isAuthorized('group-sendInvitation_Vo_Group_User_policy', [this.data.group]);
     }
+    this.searchCtrl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
   }
 
   private addUserToVo(selectedMemberCandidate: MemberCandidate) {
