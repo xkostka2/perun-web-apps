@@ -141,9 +141,12 @@ export class AdminGuiConfigService {
     throw err;
   }
 
-  private loadPolicies() {
+  private loadPolicies(): Promise<void> {
+    return new Promise((resolve, reject) => {
       this.authzSevice.getAllPolicies().subscribe( policies => {
         this.guiAuthResolver.setPerunPolicies(policies);
-      });
+        resolve();
+      }, error => reject(error));
+    });
   }
 }
