@@ -27,7 +27,26 @@ import { VosManagerService } from './api/vosManager.service';
   imports:      [],
   declarations: [],
   exports:      [],
-  providers: []
+  providers: [
+    AttributesManagerService,
+    AuditMessagesManagerService,
+    AuthzResolverService,
+    CabinetManagerService,
+    DatabaseManagerService,
+    ExtSourcesManagerService,
+    FacilitiesManagerService,
+    FacilitiesManagerByFacilityNameService,
+    GroupsManagerService,
+    MembersManagerService,
+    OwnersManagerService,
+    RTMessagesManagerService,
+    RegistrarManagerService,
+    ResourcesManagerService,
+    ServicesManagerService,
+    TasksManagerService,
+    UsersManagerService,
+    UtilsService,
+    VosManagerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<any> {
