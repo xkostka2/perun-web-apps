@@ -46,7 +46,6 @@ export class ProfilePageComponent implements OnInit {
 
   languageAttribute: Attribute;
   timezoneAttribute: Attribute;
-  organizationAttribute: Attribute;
 
   email = '';
   fullName = '';
@@ -62,7 +61,7 @@ export class ProfilePageComponent implements OnInit {
     if (i && m && u) {
       this.usersManagerService.validatePreferredEmailChange(i, m, Number.parseInt(u, 10)).subscribe(() => {
         this.notificator.showSuccess(this.successMessage);
-        this.router.navigate([], { replaceUrl: true});
+        this.router.navigate([], { replaceUrl: true });
         this.getData();
       });
     } else {
@@ -77,9 +76,14 @@ export class ProfilePageComponent implements OnInit {
       this.usersManagerService.getRichUserWithAttributes(this.userId).subscribe(richUser => {
         this.fullName = new UserFullNamePipe().transform(richUser);
 
-        this.organizationAttribute = richUser.userAttributes.find(att => att.friendlyName === 'organization');
-        // @ts-ignore
-        this.organization = this.organizationAttribute.value;
+        const organizationAttribute = richUser.userAttributes.find(att => att.friendlyName === 'organization');
+        if (!organizationAttribute) {
+            this.organization = '-';
+        } else {
+          // @ts-ignore
+          this.organization = organizationAttribute.value;
+        }
+
 
         const emailAttribute = richUser.userAttributes.find(att => att.friendlyName === 'preferredMail');
         // @ts-ignore

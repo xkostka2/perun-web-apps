@@ -65,12 +65,20 @@ export class GroupsPageComponent implements OnInit {
   getAllGroups() {
     this.loading = true;
     let i = 0;
+    let j = 0;
     this.userMemberships = [];
     this.adminMemberships = [];
     const allMemberIds = this.store.getPerunPrincipal().roles['SELF']['Member'];
+    if (!allMemberIds.length) {
+      this.loading = false;
+    } else {
+      j = allMemberIds.length;
+    }
     allMemberIds.forEach(memberId => {
+      j--;
       this.groupService.getMemberGroups(memberId).subscribe(groups => {
         i += groups.length;
+        this.loading = i === 0 && j !== 0;
         groups.forEach(group => {
           this.attributesManagerService.getMemberGroupAttributes(memberId, group.id).subscribe(atts => {
             i--;
@@ -107,12 +115,7 @@ export class GroupsPageComponent implements OnInit {
       this.adminMemberships = [];
       this.loading = true;
       const vo: Vo = event.option.value;
-      this.memberService.getMembers(vo.id).subscribe(members => {
-        const member = members.find(mem => mem.userId === this.userId);
-        if (!member) {
-          this.loading = false;
-          return;
-        }
+      this.memberService.getMemberByUser(vo.id, this.userId).subscribe(member => {
         this.groupService.getMemberGroups(member.id).subscribe(groups => {
           let i = groups.length;
           this.loading = i !== 0;
