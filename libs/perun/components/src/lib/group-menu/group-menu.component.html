@@ -1,5 +1,5 @@
 <div *ngIf="displayButtons" class="buttons-container">
-  <button [cdkCopyToClipboard]="group.name" [matTooltipPosition]="'above'" class="ml-auto"
+  <button [cdkCopyToClipboard]="group.name" [matTooltipPosition]="'above'" class="ml-auto horiz_right"
           mat-icon-button matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.GROUP_MENU.COPY' | translate}}">
     <mat-icon>
       file_copy
@@ -7,11 +7,12 @@
   </button>
 
   <span [matTooltipPosition]="'above'"
-        [matTooltip]="group | groupSyncToolTip | translate">
+        [matTooltip]="group | groupSyncToolTip | translate"
+        *ngIf="syncAuth"
+        >
     <button (click)="onSyncDetail()"
             [disabled]="(group | groupSyncIcon) === 'sync_disabled'"
-            mat-icon-button
-            *ngIf="syncAuth">
+            mat-icon-button>
     <mat-icon class="{{group | groupSyncIconColor}}">
       {{group | groupSyncIcon}}
     </mat-icon>
@@ -19,29 +20,32 @@
   </span>
 
 
-  <button
-    *ngIf="moveAuth"
-    (click)="onMoveGroup()"
-    [matTooltipPosition]="'above'"
-    [disabled]="disabled"
-    mat-icon-button
-    matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.GROUP_MENU.MOVE' | translate}}">
-    <mat-icon>arrow_right_alt</mat-icon>
-  </button>
-  <button
-    *ngIf="editAuth"
-    [disabled]="disabled"
-    (click)="onChangeNameDescription()"
-    [matTooltipPosition]="'above'"
-    mat-icon-button matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.GROUP_MENU.RENAME' | translate}}">
-    <mat-icon>text_format</mat-icon>
-  </button>
+  <span [matTooltipPosition]="'above'"
+        matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.GROUP_MENU.MOVE' | translate}}"
+        *ngIf="moveAuth">
+    <button
+      (click)="onMoveGroup()"
+      [disabled]="disabled"
+      mat-icon-button>
+      <mat-icon>arrow_right_alt</mat-icon>
+    </button>
+  </span>
+  <span [matTooltipPosition]="'above'"
+        matTooltip="{{'SHARED_LIB.PERUN.COMPONENTS.GROUP_MENU.RENAME' | translate}}"
+        *ngIf="editAuth">
+    <button
+      [disabled]="disabled"
+      (click)="onChangeNameDescription()"
+      mat-icon-button>
+      <mat-icon>text_format</mat-icon>
+    </button>
+  </span>
 </div>
 <div *ngIf="!displayButtons">
   <button [mat-menu-trigger-for]="groupMenu" mat-icon-button>
     <mat-icon>more_vert</mat-icon>
   </button>
-  <mat-menu #groupMenu="matMenu" >
+  <mat-menu #groupMenu="matMenu">
     <button [cdkCopyToClipboard]="group.name" mat-menu-item>
       <mat-icon>
         file_copy

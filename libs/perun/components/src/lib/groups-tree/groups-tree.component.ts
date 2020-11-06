@@ -248,4 +248,8 @@ export class GroupsTreeComponent implements OnChanges {
   onMoveGroup(group: GroupFlatNode) {
     this.moveGroup.emit(group);
   }
+
+  isOverflowing(el) {
+    return (el.offsetWidth < el.scrollWidth);
+  }
 }
