@@ -45,13 +45,7 @@ export class ResourceOverviewComponent implements OnInit {
 
   private initItems(inVo: boolean) {
     const urlStart = inVo ? `/organizations/${this.resource.voId}` : `/facilities/${this.resource.facilityId}`;
-    this.navItems = [
-      {
-        cssIcon: 'perun-attributes',
-        url: `${urlStart}/resources/${this.resource.id}/attributes`,
-        label: 'MENU_ITEMS.RESOURCE.ATTRIBUTES',
-        style: 'resource-btn'
-      }];
+    this.navItems = [];
 
     if (this.guiAuthResolver.isAuthorized('getAssignedGroups_Resource_policy', [this.resource])) {
       this.navItems.push({
@@ -77,6 +71,13 @@ export class ResourceOverviewComponent implements OnInit {
         style: 'resource-btn'
       });
     }
+
+    this.navItems.push( {
+      cssIcon: 'perun-attributes',
+      url: `${urlStart}/resources/${this.resource.id}/attributes`,
+      label: 'MENU_ITEMS.RESOURCE.ATTRIBUTES',
+      style: 'resource-btn'
+    });
 
     this.navItems.push({
         cssIcon: 'perun-settings2',

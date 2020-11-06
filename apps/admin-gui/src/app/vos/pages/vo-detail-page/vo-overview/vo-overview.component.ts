@@ -49,14 +49,6 @@ export class VoOverviewComponent implements OnInit {
   }
 
   private initNavItems() {
-    // Attributes
-    this.navItems.push({
-        cssIcon: 'perun-attributes',
-        url: `/organizations/${this.vo.id}/attributes`,
-        label: 'MENU_ITEMS.VO.ATTRIBUTES',
-        style: 'vo-btn'
-      });
-
     // Members
     if (this.authResolver.isAuthorized('getCompleteRichMembers_Vo_List<String>_policy', [this.vo])) {
       this.navItems.push({
@@ -106,6 +98,14 @@ export class VoOverviewComponent implements OnInit {
         style: 'vo-btn'
       });
     }
+
+    // Attributes
+    this.navItems.push({
+      cssIcon: 'perun-attributes',
+      url: `/organizations/${this.vo.id}/attributes`,
+      label: 'MENU_ITEMS.VO.ATTRIBUTES',
+      style: 'vo-btn'
+    });
 
     // Settings
     if (this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [this.vo]) ||

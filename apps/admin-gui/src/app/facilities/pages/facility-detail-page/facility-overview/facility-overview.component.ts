@@ -39,13 +39,7 @@ export class FacilityOverviewComponent implements OnInit {
   }
 
   private initItems() {
-    this.navItems = [
-      {
-        cssIcon: 'perun-attributes',
-        url: `/facilities/${this.facility.id}/attributes`,
-        label: 'MENU_ITEMS.FACILITY.ATTRIBUTES',
-        style: 'facility-btn'
-      }];
+    this.navItems = [];
 
     // Resources
     if (this.authResolver.isAuthorized('getAssignedRichResources_Facility_policy', [this.facility])) {
@@ -112,19 +106,19 @@ export class FacilityOverviewComponent implements OnInit {
         style: 'facility-btn'
       });
     }
-    // Security teams
-    if (this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
-      this.navItems.push({
-        cssIcon: 'perun-security-teams',
-        url: `/facilities/${this.facility.id}/security-teams`,
-        label: 'MENU_ITEMS.FACILITY.SECURITY_TEAMS',
-        style: 'facility-btn'
-      });
-    }
+    // Attributes
+    this.navItems.push( {
+      cssIcon: 'perun-attributes',
+      url: `/facilities/${this.facility.id}/attributes`,
+      label: 'MENU_ITEMS.FACILITY.ATTRIBUTES',
+      style: 'facility-btn'
+    })
+
     // Settings
     if (this.authResolver.isAuthorized('getBansForFacility_int_policy', [this.facility]) ||
       this.authResolver.isAuthorized('getRichAdmins_Facility_List<String>_boolean_boolean_policy', [this.facility]) ||
-      this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility])) {
+      this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility]) ||
+      this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
       this.navItems.push({
         cssIcon: 'perun-settings2',
         url: `/facilities/${this.facility.id}/settings`,

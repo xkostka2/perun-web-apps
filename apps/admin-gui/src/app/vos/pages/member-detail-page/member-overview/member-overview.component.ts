@@ -75,12 +75,7 @@ export class MemberOverviewComponent implements OnInit {
   }
 
   private initNavItems() {
-    this.navItems = [{
-      cssIcon: 'perun-attributes',
-      url: `/organizations/${this.vo.id}/members/${this.member.id}/attributes`,
-      label: 'MENU_ITEMS.MEMBER.ATTRIBUTES',
-      style: 'member-btn'
-    }];
+    this.navItems = [];
 
     if(this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])){
       this.navItems.push( {
@@ -106,6 +101,12 @@ export class MemberOverviewComponent implements OnInit {
        style: 'member-btn'
      });
     }
+    this.navItems.push({
+      cssIcon: 'perun-attributes',
+      url: `/organizations/${this.vo.id}/members/${this.member.id}/attributes`,
+      label: 'MENU_ITEMS.MEMBER.ATTRIBUTES',
+      style: 'member-btn'
+    });
     if(this.authResolver.isAuthorized('getAllowedResources_Member_policy', [this.vo]) ||
     this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])){
       this.navItems.push({
