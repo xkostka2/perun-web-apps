@@ -16,6 +16,7 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {AttributeValueComponent} from './attribute-value/attribute-value.component';
 import { Attribute } from '@perun-web-apps/perun/openapi';
 import { filterCoreAttributes, isVirtualAttribute, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-attributes-list',
@@ -24,7 +25,7 @@ import { filterCoreAttributes, isVirtualAttribute, TABLE_ITEMS_COUNT_OPTIONS } f
 })
 export class AttributesListComponent implements OnChanges, AfterViewInit {
 
-  constructor() {
+  constructor(private authResolver: GuiAuthResolver) {
   }
 
   @ViewChild(MatSort, {static: true}) set matSort(ms: MatSort) {
@@ -72,6 +73,9 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<Attribute>(filterCoreAttributes(this.attributes));
     this.setDataSource();
   }

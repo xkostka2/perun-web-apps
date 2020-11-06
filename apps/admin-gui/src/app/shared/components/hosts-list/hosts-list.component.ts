@@ -15,6 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { Router } from '@angular/router';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-hosts-list',
@@ -23,7 +24,7 @@ import { Router } from '@angular/router';
 })
 export class HostsListComponent implements AfterViewInit, OnChanges {
 
-  constructor(private router: Router) { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -60,6 +61,9 @@ export class HostsListComponent implements AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<Host>(this.hosts);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

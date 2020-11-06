@@ -12,7 +12,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import { ResourcesManagerService, ResourceTag } from '@perun-web-apps/perun/openapi';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
@@ -26,7 +26,8 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
 
   constructor( private resourceManager: ResourcesManagerService,
                private notificator: NotificatorService,
-               private translator: TranslateService) { }
+               private translator: TranslateService,
+               private authResolver: GuiAuthResolver) { }
 
   @Input()
   resourceTags: ResourceTag[] = [];
@@ -59,6 +60,9 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<ResourceTag>(this.resourceTags);
     this.setDataSource();
   }

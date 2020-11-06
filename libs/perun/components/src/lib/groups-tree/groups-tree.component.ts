@@ -24,8 +24,7 @@ export class GroupsTreeComponent implements OnChanges {
 
   constructor(
     private dialog: MatDialog,
-    private authResolver: GuiAuthResolver,
-  ) { }
+    public authResolver: GuiAuthResolver) { }
 
   private transformer = (node: TreeGroup, level: number) => {
     return {

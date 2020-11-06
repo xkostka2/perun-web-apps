@@ -14,6 +14,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-perun-web-apps-destination-list',
@@ -22,7 +23,7 @@ import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 })
 export class DestinationListComponent implements AfterViewInit, OnChanges {
 
-  constructor() { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @Input()
   destinations: RichDestination[] = [];
@@ -54,6 +55,9 @@ export class DestinationListComponent implements AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'destinationId');
+    }
     this.dataSource = new MatTableDataSource<RichDestination>(this.destinations);
     this.setDataSource();
     this.dataSource.filter = this.filterValue.toLowerCase();

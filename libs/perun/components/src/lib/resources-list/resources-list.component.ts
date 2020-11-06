@@ -65,6 +65,9 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.guiAuthResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<RichResource>(this.resources);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

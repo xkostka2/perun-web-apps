@@ -14,6 +14,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { parseFullName, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-perun-web-apps-blacklist-list',
@@ -24,7 +25,7 @@ export class BlacklistListComponent implements AfterViewInit, OnChanges {
 
   private sort: MatSort;
 
-  constructor() {
+  constructor(private authResolver: GuiAuthResolver) {
   }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
@@ -54,6 +55,9 @@ export class BlacklistListComponent implements AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'userId');
+    }
     this.dataSource = new MatTableDataSource<[BanOnFacility, User]>(this.bansOnFacilitiesWithUsers);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

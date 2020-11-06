@@ -16,6 +16,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig, parseFullName, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-sponsored-members-list',
@@ -24,7 +25,8 @@ import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-spons
 })
 export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,
+              private authResolver: GuiAuthResolver) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -65,6 +67,9 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<MemberWithSponsors>(this.sponsoredMembers);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

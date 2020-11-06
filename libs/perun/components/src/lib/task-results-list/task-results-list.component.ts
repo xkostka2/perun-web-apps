@@ -14,6 +14,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-task-results-list',
@@ -30,7 +31,7 @@ export class TaskResultsListComponent implements AfterViewInit, OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
-  constructor() { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @Input()
   taskResults: TaskResult[] = [];
@@ -51,6 +52,9 @@ export class TaskResultsListComponent implements AfterViewInit, OnChanges {
   exporting = false;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<TaskResult>(this.taskResults);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

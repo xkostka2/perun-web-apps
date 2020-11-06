@@ -114,6 +114,9 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.disabledRouting = this.disableRouting;
     this.hasMembersGroup = this.checkIfHasMembersGroup();
     this.updateVoNames();
