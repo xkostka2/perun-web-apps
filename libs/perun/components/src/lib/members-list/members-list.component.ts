@@ -89,7 +89,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
         switch (property) {
           case 'fullName':
             if (richMember.user.lastName) {
-              return richMember.user.lastName.toLowerCase();
+              return richMember.user.lastName.toLocaleLowerCase();
             } else {
               return parseFullName(richMember.user);
             }
@@ -101,6 +101,27 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
             return richMember[property];
         }
       };
+      this.dataSource.sortData = (data,sort) => {
+        const active = sort.active;
+        const direction = sort.direction;
+
+        if (!active || direction === '') { return data; }
+
+        return data.sort((a, b) => {
+          const valueA = this.dataSource.sortingDataAccessor(a, active);
+          const valueB = this.dataSource.sortingDataAccessor(b, active);
+
+          let comparatorResult = 0;
+          if (valueA != null && valueB != null) {
+            comparatorResult = valueA.toString().localeCompare(valueB.toString(), 'cs');
+          } else if (valueA != null) {
+            comparatorResult = 1;
+          } else if (valueB != null) {
+            comparatorResult = -1;
+          }
+          return comparatorResult * (direction === 'asc' ? 1 : -1);
+        });
+      }
 
       this.dataSource.paginator = this.paginator;
     }
