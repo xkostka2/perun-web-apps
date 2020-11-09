@@ -39,6 +39,7 @@ export class IdentitiesPageComponent implements OnInit {
 
   userId: number;
   loading: boolean;
+  displayCertificates: boolean;
 
   hiddenColumnsIdp = ['id'];
   hiddenColumnsCert = ['id', 'mail'];
@@ -46,6 +47,7 @@ export class IdentitiesPageComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.storage.getPerunPrincipal().userId;
+    this.displayCertificates = this.storage.get('display_identity_certificates');
     this.refreshTables();
   }
 

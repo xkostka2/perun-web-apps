@@ -22,16 +22,16 @@
     "FILTER": "Filter by name",
     "NO_VOS_ALERT": "No organizations found",
     "TITLE": "User organizations",
-    "IS_ADMIN": "Organizations where you are admin",
-    "IS_MEMBER": "Organizations where you are member"
+    "IS_ADMIN": "Organizations you are manager of",
+    "IS_MEMBER": "Organizations you are member of"
   },
   "GROUPS": {
     "TITLE": "Groups",
     "SELECT_VO": "Filter by organization",
     "ALL": "All organizations",
     "FILTER": "Filter by name",
-    "MEMBER_GROUPS": "Groups where you are member",
-    "ADMINS_GROUPS": "Groups where you are admin",
+    "MEMBER_GROUPS": "Groups you are member of",
+    "ADMINS_GROUPS": "Groups you are manager of",
     "NO_GROUPS": "No groups found"
   },
   "SERVICES": {
@@ -60,8 +60,8 @@
   "PRIVACY": {
     "TITLE": "Privacy",
     "FILTER": "Filter private data by organization's name",
-    "USER_INFO": "User information",
-    "DATA": "Data for "
+    "USER_INFO": "Information about you",
+    "DATA": "Information used by "
   },
   "MEMBERSHIP_LIST": {
     "NAME": "Name",

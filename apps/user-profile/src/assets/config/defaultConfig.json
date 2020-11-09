@@ -19,7 +19,10 @@
   "consolidator_base_url": "https://perun-dev.cesnet.cz/",
   "registrar_base_url": "https://perun-dev.cesnet.cz/fed/registrar/",
   "pwd_reset_base_url": "https://perun-dev.cesnet.cz/fed/pwd-reset/",
-  "rt_url": "",
+  "profile_additional_attributes": [
+    "login-namespace:einfra"
+  ],
+  "display_identity_certificates": true,
   "external_services": [
     {
       "url": "https://google.com",
