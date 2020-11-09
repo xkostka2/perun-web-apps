@@ -12,7 +12,7 @@ import {
 import { UserFullNamePipe } from '@perun-web-apps/perun/pipes';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificatorService } from '@perun-web-apps/perun/services';
+import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-profile-page',
@@ -39,7 +39,8 @@ export class ProfilePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private translate: TranslateService,
-    private notificator: NotificatorService
+    private notificator: NotificatorService,
+    private storeService:StoreService
   ) {
     translate.get('PROFILE_PAGE.MAIL_CHANGE_SUCCESS').subscribe(res => this.successMessage = res);
   }
@@ -51,6 +52,8 @@ export class ProfilePageComponent implements OnInit {
   fullName = '';
   organization = '';
   currentTimezone = '';
+
+  additionalAttributes: Attribute[] = []
 
   ngOnInit() {
     const params = this.route.snapshot.queryParamMap;
@@ -96,6 +99,14 @@ export class ProfilePageComponent implements OnInit {
         this.timezoneAttribute = richUser.userAttributes.find(att => att.friendlyName === 'timezone');
         // @ts-ignore
         this.currentTimezone = this.timezoneAttribute && this.timezoneAttribute.value ? this.timezoneAttribute.value : '-';
+
+        const friendlyNames = this.storeService.get('profile_additional_attributes');
+        friendlyNames.forEach(friendlyName => {
+          const attribute = richUser.userAttributes.find(att => att.friendlyName === friendlyName)
+          if(attribute){
+            this.additionalAttributes.push(attribute);
+          }
+        })
         this.loading = false;
       });
     });

@@ -5,6 +5,10 @@
       <p class="column-size center-self">{{'PROFILE_PAGE.NAME'|customTranslate | translate}}</p>
       <p class="center-self">{{fullName}}</p>
     </div>
+    <div class="row center-self" *ngFor="let attribute of additionalAttributes">
+      <p class="column-size center-self">{{attribute.displayName}}</p>
+      <p class="center-self">{{attribute.value}}</p>
+    </div>
     <div class="row center-self">
       <p class="column-size center-self">{{'PROFILE_PAGE.ORGANIZATION'|customTranslate | translate}}</p>
       <p class="center-self">{{organization}}</p>
@@ -21,7 +25,8 @@
     </div>
     <div class="row mt-2">
       <p class="column-size center-self">{{'PROFILE_PAGE.EMAIL'|customTranslate | translate}}</p>
-      <p class="center-self">{{email}}</p>
+      <a class="center-self" href="mailto:{{email}}">{{email}}</a>
+<!--      <p class="center-self">{{email}}</p>-->
       <button (click)="changeEmail()" class="ml-2" mat-stroked-button>{{'PROFILE_PAGE.CHANGE_EMAIL'|customTranslate | translate}}</button>
     </div>
     <div class="row">
