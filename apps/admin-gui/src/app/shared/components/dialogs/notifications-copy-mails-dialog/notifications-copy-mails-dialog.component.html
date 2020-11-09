@@ -1,49 +1,24 @@
 <div class="{{theme}}">
   <h1 mat-dialog-title>{{'DIALOGS.NOTIFICATIONS_COPY_MAILS.TITLE' | translate}}</h1>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <div *ngIf="!loading" mat-dialog-content class="dialog-container">
+  <div [hidden]="loading" mat-dialog-content class="dialog-container">
 
     <div class="mb-2 font-italic">{{'DIALOGS.NOTIFICATIONS_COPY_MAILS.DESCRIPTION' | translate}}</div>
     {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.SOURCE_VO' | translate}}:
 
-    <mat-form-field>
-      <input matInput
-             type="text"
-             [formControl]="voControl"
-             [matAutocomplete]="auto">
-      <mat-error *ngIf="voControl.hasError('invalidVo')">
-        {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.ERROR_INVALID_VO' | translate}}
-      </mat-error>
-      <mat-error *ngIf="voControl.hasError('required')">
-        {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.ERROR_NO_VO' | translate}}
-      </mat-error>
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let vo of filteredVos | async" [value]="vo">
-          {{vo.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    <perun-web-apps-vo-search-select
+      class="long-input"
+      [vos]="vos"
+      (voSelected)="voSelected($event)">
+    </perun-web-apps-vo-search-select>
 
     {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.SOURCE_GROUP' | translate}}:
 
-    <mat-form-field>
-      <input matInput
-             type="text"
-             [formControl]="groupControl"
-             [matAutocomplete]="group"
-             (focus)="getGroups()">
-      <mat-error *ngIf="groupControl.hasError('invalidGroup')">
-        {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.ERROR_INVALID_GROUP' | translate}}
-      </mat-error>
-      <mat-error *ngIf="groupControl.hasError('required')">
-        {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.ERROR_NO_GROUP' | translate}}
-      </mat-error>
-      <mat-autocomplete #group="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let group of filteredGroups | async" [value]="group">
-          {{group.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+    <perun-web-apps-group-search-select
+      class="long-input"
+      [groups]="groups"
+      (groupSelected)="selectedGroup = ($event)">
+    </perun-web-apps-group-search-select>
 
   </div>
 
@@ -58,7 +33,7 @@
       mat-flat-button
       class="ml-2"
       color="accent"
-      [disabled]="voControl.invalid || groupControl.invalid || loading"
+      [disabled]="selectedVo === null || selectedGroup === null || loading"
       (click)="submit()">
       {{'DIALOGS.NOTIFICATIONS_COPY_MAILS.SUBMIT_BUTTON' | translate}}
     </button>

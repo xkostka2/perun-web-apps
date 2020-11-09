@@ -39,10 +39,8 @@ export class NotificationsCopyMailsDialogComponent implements OnInit {
   vos: Vo[] = [];
   groups: Group[] = [];
   fakeGroup: Group;
-  voControl = new FormControl();
-  filteredVos: Observable<Vo[]>;
-  groupControl = new FormControl();
-  filteredGroups: Observable<Group[]>;
+  selectedVo: Vo = null;
+  selectedGroup: Group = null;
   theme: string;
   loading = false;
 
@@ -59,19 +57,12 @@ export class NotificationsCopyMailsDialogComponent implements OnInit {
         description: '',
         beanName: 'group'
       };
-      this.groupControl.setValue(this.fakeGroup);
+      this.selectedGroup = this.fakeGroup;
 
       this.voService.getAllVos().subscribe(vos => {
         this.vos = vos;
 
-        this.voControl = new FormControl('', [this.invalidVo(this.vos), Validators.required]);
 
-        this.filteredVos = this.voControl.valueChanges
-          .pipe(
-            startWith(''),
-            map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this._filterVo(name) : this.vos.slice())
-          );
         this.vos = vos.sort(((vo1, vo2) => {
           if (vo1.name > vo2.name) {
             return 1;
@@ -92,18 +83,6 @@ export class NotificationsCopyMailsDialogComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  _filterVo(value: string): Vo[] {
-    const filterValue = value.toLowerCase();
-
-    return this.vos.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
-  _filterGroup(value: string): Group[] {
-    const filterValue = value.toLowerCase();
-
-    return this.groups.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
   displayFn(entity?: any): string | undefined {
     return entity ? entity.name : undefined;
   }
@@ -111,87 +90,42 @@ export class NotificationsCopyMailsDialogComponent implements OnInit {
   submit() {
     this.loading = true;
     if (this.data.groupId) {      // checking if the dialog is for group or Vo
-      if (this.groupControl.value === this.fakeGroup) {
-        this.registrarService.copyMailsFromVoToGroup(this.voControl.value.id, this.data.groupId).subscribe(() => {
+      if (this.selectedGroup === this.fakeGroup) {
+        this.registrarService.copyMailsFromVoToGroup(this.selectedVo.id, this.data.groupId).subscribe(() => {
           this.dialogRef.close(true);
         }, () => this.loading = false);
       } else {
-        this.registrarService.copyMailsFromGroupToGroup(this.groupControl.value.id, this.data.groupId).subscribe(() => {
+        this.registrarService.copyMailsFromGroupToGroup(this.selectedGroup.id, this.data.groupId).subscribe(() => {
           this.dialogRef.close(true);
         }, () => this.loading = false);
       }
     } else {
-      if (this.groupControl.value === this.fakeGroup) {
-        this.registrarService.copyMailsFromVoToVo(this.voControl.value.id, this.data.voId).subscribe(() => {
+      if (this.selectedGroup === this.fakeGroup) {
+        this.registrarService.copyMailsFromVoToVo(this.selectedVo.id, this.data.voId).subscribe(() => {
           this.dialogRef.close(true);
         }, () => this.loading = false);
       } else {
-        this.registrarService.copyMailsFromGroupToVo(this.groupControl.value.id, this.data.voId).subscribe(() => {
+        this.registrarService.copyMailsFromGroupToVo(this.selectedGroup.id, this.data.voId).subscribe(() => {
           this.dialogRef.close(true);
         }, () => this.loading = false);
       }
     }
   }
 
+  voSelected(vo: Vo) {
+    this.selectedVo = vo;
+    this.getGroups();
+  }
+
   getGroups() {
-    if (!this.voControl.invalid) {
-      this.groupService.getAllGroups(this.voControl.value.id).subscribe( groups => {
+    if (this.selectedVo !== null) {
+      this.groupService.getAllGroups(this.selectedVo.id).subscribe( groups => {
         this.groups = [this.fakeGroup].concat(groups);
-        this.groupControl.setValidators([this.invalidGroup(this.groups), Validators.required]);
-        this.filteredGroups = this.groupControl.valueChanges
-          .pipe(
-            startWith(''),
-            map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this._filterGroup(name) : this.groups.slice())
-          );
       });
     } else {
       this.groups = [this.fakeGroup];
     }
   }
 
-  invalidVo(vos: Vo[]): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      let invalid = false;
-      if (control.value) {
-        if (control.value.beanName) {
-          if (control.value.beanName !== 'Vo') {
-            invalid = true;
-          }
-        } else {
-          const vo = vos.find(x => x.name.toLowerCase() === control.value.toLowerCase());
-          if (!vo) {
-            invalid = true;
-          } else {
-            control.setValue(vo);
-          }
-        }
-      }
-      return invalid ? {'invalidVo': true} : null;
-    };
-  }
-
-  invalidGroup(groups: Group[]): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: boolean } | null => {
-      let invalid = false;
-      if (control.value) {
-        if (control.value.beanName) {
-          if (control.value.beanName !== 'Group') {
-            invalid = true;
-          }
-        } else if (control.value === this.fakeGroup) {
-          invalid = false;
-        } else {
-          const group = groups.find(x => x.name.toLowerCase() === control.value.toLowerCase());
-          if (!group) {
-            invalid = true;
-          } else {
-            control.setValue(group);
-          }
-        }
-      }
-      return invalid ? {'invalidGroup': true} : null;
-    };
-  }
 }
 
