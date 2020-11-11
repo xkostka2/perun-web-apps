@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import { RichUser } from '@perun-web-apps/perun/openapi';
 import { parseFullName, parseUserEmail, parseVo, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-users-list',
@@ -13,7 +14,7 @@ import { parseFullName, parseUserEmail, parseVo, TABLE_ITEMS_COUNT_OPTIONS } fro
 })
 export class UsersListComponent implements OnChanges {
 
-  constructor() { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -71,6 +72,9 @@ export class UsersListComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<RichUser>(this.users);
     this.dataSource.paginator = this.paginator;
     this.setDataSource();

@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-user-ext-sources-list',
@@ -13,7 +14,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private authResolver: GuiAuthResolver) {
   }
 
   @Input()
@@ -58,6 +60,9 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<RichUserExtSource>(this.userExtSources);
     this.setDataSource();

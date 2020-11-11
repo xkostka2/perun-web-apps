@@ -14,6 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Host, RichFacility } from '@perun-web-apps/perun/openapi';
 import { parseTechnicalOwnersNames, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { SelectionModel } from '@angular/cdk/collections';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-facility-select-table',
@@ -21,7 +22,7 @@ import { SelectionModel } from '@angular/cdk/collections';
   styleUrls: ['./facility-select-table.component.scss']
 })
 export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
-  constructor() { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @Input()
   facilities: RichFacility[];
@@ -59,6 +60,9 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<RichFacility>(this.facilities);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

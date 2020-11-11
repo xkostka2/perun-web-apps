@@ -14,6 +14,7 @@ import { Group, Owner} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-owners-list',
@@ -24,7 +25,7 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor() {
+  constructor(private authResolver: GuiAuthResolver) {
   }
 
   @Input()
@@ -72,6 +73,9 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<Owner>(this.owners);
     this.setDataSource();

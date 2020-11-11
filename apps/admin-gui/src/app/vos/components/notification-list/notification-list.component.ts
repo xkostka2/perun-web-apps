@@ -8,7 +8,7 @@ import {
   AddEditNotificationDialogComponent
 } from '../../../shared/components/dialogs/add-edit-notification-dialog/add-edit-notification-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import { ApplicationMail, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 
@@ -23,7 +23,8 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
     private registrarService: RegistrarManagerService,
     private translate: TranslateService,
     private notificator: NotificatorService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private authResolver: GuiAuthResolver) {
   }
 
   @Input()
@@ -66,6 +67,9 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges() {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<ApplicationMail>(this.applicationMails);
     this.setDataSource();
   }

@@ -21,6 +21,7 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-members-list',
@@ -29,7 +30,8 @@ import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs
 })
 export class MembersListComponent implements OnChanges, AfterViewInit {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,
+              private authResolver: GuiAuthResolver) { }
 
   private sort: MatSort;
 
@@ -132,6 +134,9 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<RichMember>(this.members);
     this.setDataSource();

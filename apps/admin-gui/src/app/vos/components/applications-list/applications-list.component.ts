@@ -14,6 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {Router} from '@angular/router';
 import { Application, Group, Member } from '@perun-web-apps/perun/openapi';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-applications-list',
@@ -22,7 +23,7 @@ import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 })
 export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
-  constructor(private router: Router) { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -66,6 +67,9 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.dataSource = new MatTableDataSource<Application>(this.applications);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;

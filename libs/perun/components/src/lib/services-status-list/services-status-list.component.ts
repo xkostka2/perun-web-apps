@@ -14,6 +14,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-services-status-list',
@@ -22,7 +23,7 @@ import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 })
 export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
 
-  constructor() {
+  constructor(private authResolver: GuiAuthResolver) {
   }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
@@ -60,6 +61,9 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'task.id');
+    }
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<ServiceState>(this.servicesStatus);
     this.setDataSource();

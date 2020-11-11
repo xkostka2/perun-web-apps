@@ -4,6 +4,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-perun-web-apps-application-list-details',
@@ -13,6 +14,7 @@ import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 export class ApplicationListDetailsComponent implements OnChanges {
 
   constructor(private router: Router,
+              private authResolver: GuiAuthResolver,
               private registrarManager: RegistrarManagerService) { }
 
   @Input()
@@ -53,6 +55,9 @@ export class ApplicationListDetailsComponent implements OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!this.authResolver.isPerunAdmin()){
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
+    }
     this.loading = true;
     this.table = [];
     this.getApplicationsData(0);
