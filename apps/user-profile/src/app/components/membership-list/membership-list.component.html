@@ -62,5 +62,5 @@
     </mat-paginator>
   </div>
 </div>
-<app-alert *ngIf="!dataSource.filteredData.length" color="warn">{{'MEMBERSHIP_LIST.NO_MEMBERSHIPS' | customTranslate | translate}}</app-alert>
+<app-alert *ngIf="!dataSource.filteredData.length" alert_type="warn">{{'MEMBERSHIP_LIST.NO_MEMBERSHIPS' | customTranslate | translate}}</app-alert>
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>

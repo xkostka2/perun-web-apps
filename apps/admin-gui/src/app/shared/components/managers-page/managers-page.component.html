@@ -37,7 +37,7 @@
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
   <div *ngIf="!loading">
 
-    <app-alert *ngIf="managers && managers.length == 0 && selected === 'user'" color="warn">
+    <app-alert *ngIf="managers && managers.length == 0 && selected === 'user'" alert_type="warn">
       {{'SHARED.COMPONENTS.MANAGERS_PAGE.NO_MANAGERS' | translate}}
     </app-alert>
     <app-users-list

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-export type Color = 'error' | 'warn' | "info";
+export type AlertType = 'error' | 'warn' | "info";
 
 @Component({
   selector: 'app-alert',
@@ -12,7 +12,7 @@ export class AlertComponent implements OnInit {
   constructor() { }
 
   @Input()
-  color: Color;
+  alert_type: AlertType;
 
   ngOnInit() {
   }

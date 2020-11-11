@@ -98,11 +98,11 @@
 
 
 <div *ngIf="!loading">
-  <app-alert *ngIf="this.dataSource.data.length === 0" color="warn">
+  <app-alert *ngIf="this.dataSource.data.length === 0" alert_type="warn">
     {{'VO_DETAIL.APPLICATION.NO_APPLICATION_FOUND' | translate}}
   </app-alert>
 
-  <app-alert *ngIf="dataSource.filteredData.length === 0 && table.length !== 0" color="warn">
+  <app-alert *ngIf="dataSource.filteredData.length === 0 && table.length !== 0" alert_type="warn">
     {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
   </app-alert>
 

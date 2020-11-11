@@ -87,11 +87,11 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0 && sponsoredMembers.length !== 0" color="warn">
+<app-alert *ngIf="dataSource.filteredData.length === 0 && sponsoredMembers.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
 
-<app-alert *ngIf="sponsoredMembers.length === 0" color="warn">
+<app-alert *ngIf="sponsoredMembers.length === 0" alert_type="warn">
   {{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.NO_SPONSORED_MEMBERS_WARNING' | translate}}
 </app-alert>
 

@@ -11,7 +11,7 @@
 
     <ng-template matExpansionPanelContent>
       <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-      <app-alert *ngIf="resources.length === 0 && !loading" color="warn">{{'DATA_QUOTAS.NO_QUOTAS'|customTranslate | translate}}</app-alert>
+      <app-alert *ngIf="resources.length === 0 && !loading" alert_type="warn">{{'DATA_QUOTAS.NO_QUOTAS'|customTranslate | translate}}</app-alert>
       <mat-accordion *ngIf="resources.length && !loading">
         <mat-expansion-panel *ngFor="let resource of resources" (opened)="getResAttributes(resource.id)">
           <mat-expansion-panel-header>

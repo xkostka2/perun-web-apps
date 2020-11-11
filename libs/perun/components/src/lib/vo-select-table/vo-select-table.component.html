@@ -72,7 +72,7 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0" color="warn">
+<app-alert *ngIf="dataSource.filteredData.length === 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_ORGANIZATIONS' | translate}}
 </app-alert>
 

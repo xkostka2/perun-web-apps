@@ -10,7 +10,7 @@
     (filter)="applyFilter($event)"></perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <app-alert
-    color="warn"
+    alert_type="warn"
     *ngIf="!loading && (users === undefined || users.length === 0)">
     {{'FACILITY_DETAIL.ALLOWED_USERS.NO_USERS' | translate}}
   </app-alert>

@@ -57,6 +57,6 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="userExtSources.length === 0" color="warn">
+<app-alert *ngIf="userExtSources.length === 0" alert_type="warn">
   {{'SHARED_LIB.PERUN.COMPONENTS.USER_EXT_SOURCES_LIST.NO_IDENTITIES' | customTranslate | translate}}
 </app-alert>

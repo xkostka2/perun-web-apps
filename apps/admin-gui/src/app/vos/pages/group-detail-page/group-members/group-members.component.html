@@ -66,7 +66,7 @@
   </button>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
   </mat-spinner>
-  <app-alert color="info" *ngIf="!firstSearchDone">
+  <app-alert alert_type="info" *ngIf="!firstSearchDone">
     {{'GROUP_DETAIL.MEMBERS.SEARCH_ALERT' | translate}}
   </app-alert>
   <div class="mt-3" *ngIf="members !== null && !loading">
@@ -82,7 +82,7 @@
       [showGroupStatuses]="true">
     </perun-web-apps-members-list>
 
-    <app-alert *ngIf="members.length === 0" color="warn">
+    <app-alert *ngIf="members.length === 0" alert_type="warn">
       {{'GROUP_DETAIL.MEMBERS.NO_MEMBERS_ALERT' | translate}}
     </app-alert>
   </div>

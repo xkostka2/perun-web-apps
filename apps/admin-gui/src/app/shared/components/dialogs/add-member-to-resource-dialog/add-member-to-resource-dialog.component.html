@@ -72,7 +72,7 @@
             [selection]="selectedGroups">
           </perun-web-apps-groups-list>
         </div>
-        <app-alert *ngIf="groups.length === 0 && !processing" color="warn">
+        <app-alert *ngIf="groups.length === 0 && !processing" alert_type="warn">
           {{'DIALOGS.ADD_MEMBER_TO_RESOURCE.NO_GROUPS' | translate}}
         </app-alert>
         <div mat-dialog-actions>

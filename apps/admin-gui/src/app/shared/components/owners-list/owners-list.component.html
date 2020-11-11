@@ -67,6 +67,6 @@
   </div>
 </div>
 
-<app-alert *ngIf="!owners.length" color="warn">{{'FACILITY_DETAIL.SETTINGS.OWNERS.NO_OWNERS' | translate}}</app-alert>
-<app-alert *ngIf="!dataSource.filteredData.length && owners.length" color="warn">{{'SHARED.COMPONENTS.OWNERS_LIST.NO_OWNERS' | translate}}</app-alert>
+<app-alert *ngIf="!owners.length" alert_type="warn">{{'FACILITY_DETAIL.SETTINGS.OWNERS.NO_OWNERS' | translate}}</app-alert>
+<app-alert *ngIf="!dataSource.filteredData.length && owners.length" alert_type="warn">{{'SHARED.COMPONENTS.OWNERS_LIST.NO_OWNERS' | translate}}</app-alert>
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>

@@ -5,7 +5,7 @@
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content>
     <app-alert
-      color="info">
+      alert_type="info">
       {{'DIALOGS.IMPORT_ATTRIBUTE.INFO' | translate}}
     </app-alert>
     <mat-form-field class="w-100">

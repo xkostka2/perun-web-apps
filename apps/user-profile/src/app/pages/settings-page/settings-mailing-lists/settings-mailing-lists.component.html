@@ -11,7 +11,7 @@
     <ng-template matExpansionPanelContent>
       <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
       <app-alert *ngIf="resources.length === 0 && !loading"
-                 color="warn">{{'OPT_OUT_MAILING_LISTS.NO_MAILING_LISTS_ALERT' | customTranslate | translate}}</app-alert>
+                 alert_type="warn">{{'OPT_OUT_MAILING_LISTS.NO_MAILING_LISTS_ALERT' | customTranslate | translate}}</app-alert>
       <mat-accordion *ngIf="resources.length && !loading">
         <mat-expansion-panel *ngFor="let resource of resources" (opened)="getOptOutAttribute(resource)">
           <mat-expansion-panel-header>

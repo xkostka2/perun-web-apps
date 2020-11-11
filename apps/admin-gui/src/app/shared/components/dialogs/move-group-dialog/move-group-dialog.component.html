@@ -21,7 +21,7 @@
     </mat-radio-group>
     <app-alert
       *ngIf="toRootOptionDisabled && toGroupOptionDisabled"
-      color="warn">
+      alert_type="warn">
       {{'DIALOGS.MOVE_GROUP.CANNOT_MOVE' | translate}}
     </app-alert>
     <mat-form-field

@@ -96,10 +96,10 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0 && servicesStatus.length !== 0" color="warn">
+<app-alert *ngIf="dataSource.filteredData.length === 0 && servicesStatus.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
 
-<app-alert *ngIf="servicesStatus.length === 0" color="warn">
+<app-alert *ngIf="servicesStatus.length === 0" alert_type="warn">
   {{'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.NO_SERVICES_STATUS_WARNING' | translate}}
 </app-alert>

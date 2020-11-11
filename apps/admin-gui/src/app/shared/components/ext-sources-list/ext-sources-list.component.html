@@ -60,10 +60,10 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="extSources.length === 0" color="warn">
+<app-alert *ngIf="extSources.length === 0" alert_type="warn">
   {{'SHARED.COMPONENTS.EXT_SOURCES_LIST.NO_EXT_SOURCES' | translate}}
 </app-alert>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0 && extSources.length !== 0" color="warn">
+<app-alert *ngIf="dataSource.filteredData.length === 0 && extSources.length !== 0" alert_type="warn">
   {{'SHARED.COMPONENTS.EXT_SOURCES_LIST.NO_FILTER_RESULTS' | translate}}
 </app-alert>

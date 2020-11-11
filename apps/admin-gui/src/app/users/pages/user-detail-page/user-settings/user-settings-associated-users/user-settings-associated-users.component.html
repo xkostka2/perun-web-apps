@@ -29,7 +29,7 @@
   </app-users-list>
 
   <app-alert
-    color="warn"
+    alert_type="warn"
     *ngIf="!loading && (associatedUsers === undefined || associatedUsers.length === 0)">
     {{'USER_DETAIL.SETTINGS.ASSOCIATED_USERS.NO_ASSOCIATED_USERS' | translate}}
   </app-alert>

@@ -10,7 +10,7 @@
     <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
     <div *ngIf="!loading" mat-dialog-content class="dialog-container">
       <div [@openClose]="invalidNotification ? 'open' : 'closed'">
-        <app-alert color="error">{{'DIALOGS.NOTIFICATIONS_ADD_EDIT_MAIL.INVALID_NOTIFICATION' | translate}}</app-alert>
+        <app-alert alert_type="error">{{'DIALOGS.NOTIFICATIONS_ADD_EDIT_MAIL.INVALID_NOTIFICATION' | translate}}</app-alert>
       </div>
       <mat-tab-group color=primary>
         <mat-tab label="{{'DIALOGS.NOTIFICATIONS_ADD_EDIT_MAIL.BASIC_SETTINGS' | translate}}">

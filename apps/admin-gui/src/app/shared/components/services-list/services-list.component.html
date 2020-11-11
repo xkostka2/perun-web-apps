@@ -95,10 +95,10 @@
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && (this.services !== undefined && this.services.length !== 0)"
-           color="warn">
+           alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
 
 <app-alert *ngIf="this.services === undefined || this.services.length === 0"
-           color="warn"> {{'SHARED.COMPONENTS.SERVICES_LIST.NO_SERVICES_WARNING' | translate}}
+           alert_type="warn"> {{'SHARED.COMPONENTS.SERVICES_LIST.NO_SERVICES_WARNING' | translate}}
 </app-alert>

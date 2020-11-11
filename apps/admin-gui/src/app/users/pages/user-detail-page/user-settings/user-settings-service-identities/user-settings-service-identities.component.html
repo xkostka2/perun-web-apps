@@ -29,7 +29,7 @@
   </app-users-list>
 
   <app-alert
-    color="warn"
+    alert_type="warn"
     *ngIf="!loading && (identities === undefined || identities.length === 0)">
     {{'USER_DETAIL.SETTINGS.SERVICE_IDENTITIES.NO_IDENTITIES' | translate}}
   </app-alert>

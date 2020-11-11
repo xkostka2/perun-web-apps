@@ -26,7 +26,7 @@
     [disableMembers]="false">
   </perun-web-apps-groups-list>
 
-  <app-alert *ngIf="groupsToShow.length === 0 && !loading" color="warn">
+  <app-alert *ngIf="groupsToShow.length === 0 && !loading" alert_type="warn">
     {{'FACILITY_DETAIL.ALLOWED_GROUPS.NO_GROUPS_ALERT' | translate}}
   </app-alert>
 

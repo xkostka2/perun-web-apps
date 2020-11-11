@@ -1,12 +1,12 @@
 <h1 class="page-title">{{'PREFERRED_SHELLS.TITLE' | customTranslate | translate}}</h1>
-<app-alert color="info">
+<app-alert alert_type="info">
   {{'PREFERRED_SHELLS.DESCRIPTION' | customTranslate | translate}}
 </app-alert>
 
 <button mat-flat-button color="accent" (click)="addShell()">{{'PREFERRED_SHELLS.NEW_BUTTON' | customTranslate | translate}}</button>
 
 <!--<mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>-->
-<app-alert *ngIf="!loading && shells.length === 0" color="warn">{{'PREFERRED_SHELLS.NO_SHELLS' | customTranslate | translate}}</app-alert>
+<app-alert *ngIf="!loading && shells.length === 0" alert_type="warn">{{'PREFERRED_SHELLS.NO_SHELLS' | customTranslate | translate}}</app-alert>
 <mat-list *ngIf="!loading">
   <mat-list-item *ngFor="let shell of shells; let i = index">
     <mat-form-field class="w-100">

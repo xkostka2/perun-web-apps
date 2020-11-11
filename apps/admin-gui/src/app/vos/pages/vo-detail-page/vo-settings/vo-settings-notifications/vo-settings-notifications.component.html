@@ -55,6 +55,6 @@
     [theme]="'vo-theme'"
     (selectionChange)="changeSelection($event)"></app-notification-list>
 </div>
-<app-alert *ngIf="this.applicationMails.length === 0 && !loading" [color]="'warn'">
+<app-alert *ngIf="this.applicationMails.length === 0 && !loading" [alert_type]="'warn'">
   {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.NO_EMAILS' | translate}}
 </app-alert>

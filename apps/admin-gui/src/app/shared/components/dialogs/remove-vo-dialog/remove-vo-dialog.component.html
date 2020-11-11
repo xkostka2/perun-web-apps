@@ -22,7 +22,7 @@
     <mat-checkbox class="align-content-center" (change)="force = !force">
       {{'DIALOGS.REMOVE_VO.FORCE' | translate}}
     </mat-checkbox>
-    <app-alert *ngIf="force" color="warn">{{'DIALOGS.REMOVE_VO.FORCE_WARNING' | translate}}</app-alert>
+    <app-alert *ngIf="force" alert_type="warn">{{'DIALOGS.REMOVE_VO.FORCE_WARNING' | translate}}</app-alert>
   </div>
   <div mat-dialog-actions>
     <button

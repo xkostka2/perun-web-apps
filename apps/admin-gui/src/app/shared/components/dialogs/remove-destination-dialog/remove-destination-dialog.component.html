@@ -2,7 +2,7 @@
 <div class="{{theme}}">
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content>
-    <app-alert [color]="'warn'">{{'DIALOGS.REMOVE_DESTINATIONS.WARNING' | translate}}</app-alert>
+    <app-alert [alert_type]="'warn'">{{'DIALOGS.REMOVE_DESTINATIONS.WARNING' | translate}}</app-alert>
     <p>{{'DIALOGS.REMOVE_DESTINATIONS.DESCRIPTION' | translate}}</p>
     <div class="font-weight-bold">
       {{'DIALOGS.REMOVE_DESTINATIONS.ASK' | translate}}

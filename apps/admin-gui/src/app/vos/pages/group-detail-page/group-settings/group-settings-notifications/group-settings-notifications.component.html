@@ -54,12 +54,12 @@
       [theme]="'group-theme'"
       (selectionChange)="changeSelection($event)"></app-notification-list>
   </div>
-  <app-alert *ngIf="this.applicationMails.length === 0" color="warn">
+  <app-alert *ngIf="this.applicationMails.length === 0" alert_type="warn">
     {{'GROUP_DETAIL.SETTINGS.NOTIFICATIONS.NO_EMAILS' | translate}}
   </app-alert>
 </div>
 <div *ngIf="noApplicationForm && !loading">
-  <app-alert color="warn">{{'GROUP_DETAIL.SETTINGS.NOTIFICATIONS.NO_APPLICATION_FORM' | translate}}</app-alert>
+  <app-alert alert_type="warn">{{'GROUP_DETAIL.SETTINGS.NOTIFICATIONS.NO_APPLICATION_FORM' | translate}}</app-alert>
   <button *ngIf="createFormAuth" mat-stroked-button
           (click)="createEmptyApplicationForm()">
     {{'GROUP_DETAIL.SETTINGS.NOTIFICATIONS.CREATE_APPLICATION_FORM' | translate}}

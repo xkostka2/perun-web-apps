@@ -86,7 +86,7 @@
 <!--    </button>-->
   </div>
 
-  <app-alert color="info"
+  <app-alert alert_type="info"
              *ngIf="editAuth">
     {{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.DRAG_AND_DROP_INFO' | translate}}
   </app-alert>
@@ -101,7 +101,7 @@
   </app-application-form-list>
 </div>
 <div *ngIf="!loading && noApplicationForm">
-  <app-alert color="warn">{{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.NO_APPLICATION_FORM' | translate}}</app-alert>
+  <app-alert alert_type="warn">{{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.NO_APPLICATION_FORM' | translate}}</app-alert>
   <button
     *ngIf="createEmptyForm"
     mat-stroked-button

@@ -33,6 +33,6 @@
     [hideColumns]="['vo', 'menu']">
   </perun-web-apps-groups-list>
 </div>
-<app-alert *ngIf="assignedGroups.length === 0 && !loading" color="warn">
+<app-alert *ngIf="assignedGroups.length === 0 && !loading" alert_type="warn">
   {{'RESOURCE_DETAIL.ASSIGNED_GROUPS.NO_GROUPS' | translate}}
 </app-alert>

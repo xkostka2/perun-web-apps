@@ -63,7 +63,7 @@
     </perun-web-apps-groups-list>
   </div>
 
-  <app-alert *ngIf="groups.length === 0 && !loading" color="warn">
+  <app-alert *ngIf="groups.length === 0 && !loading" alert_type="warn">
     {{'VO_DETAIL.GROUPS.NO_GROUPS' | translate}}
   </app-alert>
 </div>

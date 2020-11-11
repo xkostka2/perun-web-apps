@@ -3,7 +3,7 @@
     <h1 class="page-subtitle">{{'DIALOGS.CREATE_ATTRIBUTE.SET_NEW' | translate}}</h1>
     <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER'"
                                      class="font-size-1rem"></perun-web-apps-immediate-filter>
-    <app-alert *ngIf="showError" class="ml-3 font-size-1rem" color="error">
+    <app-alert *ngIf="showError" class="ml-3 font-size-1rem" alert_type="error">
       {{'DIALOGS.CREATE_ATTRIBUTE.ERROR_EMPTY_VALUE' | translate}}
     </app-alert>
   </div>

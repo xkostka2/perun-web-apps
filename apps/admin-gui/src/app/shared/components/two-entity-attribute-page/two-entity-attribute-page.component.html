@@ -1,7 +1,7 @@
 <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="filterMessage | translate"></perun-web-apps-immediate-filter>
 <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-<app-alert *ngIf="entityValues.length === 0 && !loading" color="warn">{{noEntityMessage | translate}}</app-alert>
-<app-alert *ngIf="filteredEntityValues.length === 0 && entityValues.length && !loading" color="warn">{{noFilteredEntityMessage | translate}}</app-alert>
+<app-alert *ngIf="entityValues.length === 0 && !loading" alert_type="warn">{{noEntityMessage | translate}}</app-alert>
+<app-alert *ngIf="filteredEntityValues.length === 0 && entityValues.length && !loading" alert_type="warn">{{noFilteredEntityMessage | translate}}</app-alert>
 <mat-accordion *ngIf="!loading">
   <mat-expansion-panel *ngFor="let entity of filteredEntityValues" (opened)="getAttributes(entity.id)" (closed)="selection.clear()">
     <mat-expansion-panel-header>
