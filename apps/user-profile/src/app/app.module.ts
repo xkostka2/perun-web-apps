@@ -48,7 +48,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -72,6 +72,10 @@ import { ApiService } from '@perun-web-apps/perun/services';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { LocalizationLabelPipe } from './pipes/localization-label.pipe';
+import { SettingsAuthenticationComponent } from './pages/settings-page/settings-authorization/settings-authentication.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AddAuthImgDialogComponent } from './components/dialogs/add-auth-img-dialog/add-auth-img-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -131,7 +135,9 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     ShowSshDialogComponent,
     NotificatorComponent,
     BreadcrumbsComponent,
-    LocalizationLabelPipe
+    LocalizationLabelPipe,
+    SettingsAuthenticationComponent,
+    AddAuthImgDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -171,7 +177,10 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     PerunPipesModule,
     MatAutocompleteModule,
     MatRippleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    MatRadioModule,
+    FormsModule
   ],
   providers: [
     CustomIconService,

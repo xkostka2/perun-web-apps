@@ -1,0 +1,104 @@
+{
+  "api_url": "https://idm.ics.muni.cz/oauth/rpc",
+  "oidc_client": {
+    "oauth_authority": "https://oidc.muni.cz/oidc/",
+    "oauth_callback": "http://gui-dev.org/api-callback",
+    "oauth_client_id": "d574aeba-b2d0-4234-bcf0-53ec30b17ba4",
+    "oauth_post_logout_redirect_uri": "http://gui-dev.org/api-callback",
+    "oauth_redirect_uri": "http://gui-dev.org/api-callback",
+    "oauth_scopes": "openid profile perun_api",
+    "oauth_response_type": "token id_token"
+  },
+  "password_namespace_attributes": [],
+  "consolidator_base_url": "https://idm.ics.muni.cz/",
+  "registrar_base_url": "https://idm.ics.muni.cz/",
+  "external_services": [
+    {
+      "url": "https://is.muni.cz/auth/system/heslo/primarni",
+      "label_en": "Change primary password",
+      "label_cz": "Změna primárního hesla"
+    }
+  ],
+  "displayed_tabs": [
+    "profile",
+    "services",
+    "groups",
+    "privacy",
+    "settings",
+    "external",
+    "auth"
+  ],
+  "custom_labels": [],
+  "header_label": "Account",
+  "footer": {
+    "columns": [
+      {
+        "title_en": "ABOUT",
+        "title_cz": "O NÁS",
+        "elements": [
+          {
+            "link": "https://perun-aai.org/",
+            "label_en": "Perun web",
+            "label_cz": "Perun web"
+          },
+          {
+            "link": "https://perun-aai.org/team",
+            "label_en": "Perun team",
+            "label_cz": "Perun tým"
+          },
+          {
+            "link": "https://www.muni.cz/o-univerzite/uredni-deska/ochrana-osobnich-udaju",
+            "label_en": "Privacy policy",
+            "label_cz": "Ochrana osobních údajů"
+          }
+        ]
+      },
+      {
+        "title_en": "HELP",
+        "title_cz": "POMOC",
+        "elements": [
+          {
+            "link": "https://perun-aai.org/documentation/users-documentation",
+            "label_en": "Documentation",
+            "label_cz": "Dokumentace"
+          }
+        ]
+      },
+      {
+        "title_en": "SUPPORT",
+        "title_cz": "PODPORA",
+        "elements": [
+          {
+            "link": "",
+            "label_en": "idm@ics.muni.cz",
+            "label_cz": "idm@ics.muni.cz"
+          }
+        ]
+      }
+    ],
+    "copyright_items": [
+      {
+        "name": "ICS MUNI",
+        "url": "https://www.ics.muni.cz/"
+      }
+    ]
+  },
+  "theme": {
+    "content_bg_color": "#F2F2F2",
+    "header_bg_color": "#FFFFFF",
+    "header_text_color": "#0000DC",
+    "header_icon_color": "#0000DC",
+    "footer_bg_color": "#F0EFEF",
+    "footer_headers_text_color": "#0000DC",
+    "footer_links_text_color": "#000000",
+    "footer_copyright_text_color": "#000000",
+    "sidemenu_text_color": "#000000",
+    "sidemenu_bg_color": "#CCCCCC",
+    "sidemenu_border_color": "#CCCCCC",
+    "sidemenu_item_icon_color": "#000000",
+    "sidemenu_hover_color": "#BDBDBD",
+    "sidemenu_active_color": "#A7A7A7",
+    "sidemenu_active_text_color": "#000000",
+    "user_color": "#0000DC"
+  },
+  "logo": "<svg\n   xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n   xmlns:cc=\"http://creativecommons.org/ns#\"\n   xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\"\n   xmlns=\"http://www.w3.org/2000/svg\"\n   id=\"svg57\"\n   height=\"8.4666672mm\"\n   width=\"29.546938mm\"\n   version=\"1.0\">\n  <metadata\n     id=\"metadata61\">\n    <rdf:RDF>\n      <cc:Work\n         rdf:about=\"\">\n        <dc:format>image/svg+xml</dc:format>\n        <dc:type\n           rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" />\n        <dc:title></dc:title>\n      </cc:Work>\n    </rdf:RDF>\n  </metadata>\n  <defs\n     id=\"defs47\">\n    <pattern\n       y=\"0\"\n       x=\"0\"\n       height=\"6\"\n       width=\"6\"\n       patternUnits=\"userSpaceOnUse\"\n       id=\"EMFhbasepattern\" />\n  </defs>\n  <path\n     id=\"path49\"\n     d=\"M 0,0 H 4.789116 V 31.564625 H 0 Z M 5.006803,0 H 6.748299 L 9.795918,31.564625 H 8.054422 Z m 8.054422,0 h 1.741496 l -3.047619,31.564625 h -1.741497 z m 1.959183,0 h 4.789116 v 31.564625 h -4.789116 z\"\n     style=\"fill:#0000dc;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65306121\" />\n  <path\n     id=\"path51\"\n     d=\"m 38.530612,0 c 0,24.163265 0,24.163265 0,24.163265 0,1.741496 1.523809,3.047619 3.047619,3.047619 1.52381,0 3.047619,-1.306123 3.047619,-3.047619 C 44.62585,0 44.62585,0 44.62585,0 c 5.006803,0 5.006803,0 5.006803,0 0,24.380952 0,24.380952 0,24.380952 C 49.632653,28.517006 45.714286,32 41.578231,32 37.442177,32 33.523809,28.517006 33.523809,24.380952 33.523809,0 33.523809,0 33.523809,0 Z\"\n     style=\"fill:#0000dc;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65306121\" />\n  <path\n     id=\"path53\"\n     d=\"M 69.877553,0 V 31.564625 H 64.870748 V 0 Z m 1.959184,0 4.57143,31.564625 h -1.52382 L 70.095238,0 Z m 9.79592,0 v 31.564625 h -5.00681 V 0 Z\"\n     style=\"fill:#0000dc;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65306121\" />\n  <path\n     id=\"path55\"\n     d=\"M 102.53062,29.823129 V 1.7414966 H 98.176867 V 0 h 13.496603 v 1.7414966 h -4.13606 V 29.823129 h 4.13606 v 1.741496 H 98.176867 v -1.741496 z\"\n     style=\"fill:#0000dc;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65306121\" />\n</svg>"}

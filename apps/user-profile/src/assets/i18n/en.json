@@ -16,7 +16,8 @@
     "PREFERRED_UNIX_GROUP_NAMES": "Preferred unix group names",
     "SAMBA_PASSWORD": "Samba password",
     "SSH_KEYS": "SSH keys",
-    "PASSWORD_RESET": "Password reset"
+    "PASSWORD_RESET": "Password reset",
+    "AUTHENTICATION": "Authentication"
   },
   "ORGANIZATIONS": {
     "FILTER": "Filter by name",
@@ -131,6 +132,16 @@
     "OPT_OUT_LABEL": "Exclude me from this mailing list",
     "NO_MAILING_LISTS_ALERT": "You have no mailing lists assigned under this virtual organization"
   },
+  "AUTHENTICATION": {
+    "TITLE": "Anti-phishing image",
+    "MFA": "Multi-factor authentication",
+    "NEW_IMG": "New image",
+    "DELETE_IMG": "Delete image",
+    "ANTI_PHISHING_INFO": "You will be shown this anti-phishing image after you log in so you will know that you are visiting the right site",
+    "MFA_TOGGLE": "Turn on multi-factor authentication",
+    "DELETE_IMG_DIALOG_TITLE": "Delete anti-phishing image",
+    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process."
+  },
   "DIALOGS": {
     "CHANGE_EMAIL": {
       "TITLE": "Change email",
@@ -182,6 +193,14 @@
     },
     "SHOW_SSH": {
       "CLOSE": "Cancel"
+    },
+    "ADD_AUTH_IMG": {
+      "TITLE": "Change anti-phishing image",
+      "INFO": "Please, choose an image with size at least 500x150 pixels",
+      "GENERATE": "Generate image",
+      "UPLOAD_IMG_LABEL": "Upload an image from your computer",
+      "CANCEL": "Cancel",
+      "ADD": "Save image"
     }
   },
   "ALERTS": {

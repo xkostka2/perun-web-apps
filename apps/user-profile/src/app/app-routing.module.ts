@@ -17,6 +17,7 @@ import { SettingsSSHKeysComponent } from './pages/settings-page/settings-ssh-key
 import { PrivacyPageComponent } from './pages/privacy-page/privacy-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { PasswordResetComponent } from '@perun-web-apps/perun/components';
+import { SettingsAuthenticationComponent } from './pages/settings-page/settings-authorization/settings-authentication.component';
 
 const routes: Routes = [
   {
@@ -73,6 +74,11 @@ const routes: Routes = [
             path: 'altPasswords',
             component: SettingsAlternativePasswordsComponent,
             data: { breadcrumb: 'SETTINGS.ALTERNATIVE_PASSWORDS'}
+          },
+          {
+            path: 'auth',
+            component: SettingsAuthenticationComponent,
+            data: { breadcrumb: 'SETTINGS.AUTHENTICATION'}
           },
           {
             path: 'dataQuotas',

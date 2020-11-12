@@ -1,0 +1,31 @@
+<div mat-dialog-title>{{'DIALOGS.ADD_AUTH_IMG.TITLE' | customTranslate | translate}}</div>
+<div class="{{theme}}">
+  <div mat-dialog-content>
+    <app-alert color="info">{{'DIALOGS.ADD_AUTH_IMG.INFO' | customTranslate | translate}}</app-alert>
+    <div>
+      <img [src]="newImage" alt="" class="img-size"/>
+    </div>
+        <button (click)="generateImg()" class="m-1" color="accent" mat-flat-button>{{'DIALOGS.ADD_AUTH_IMG.GENERATE' | customTranslate | translate}}</button>
+        <button (click)="fileInput.click()" color="accent" mat-flat-button>
+          <span>{{'DIALOGS.ADD_AUTH_IMG.UPLOAD_IMG_LABEL'| customTranslate | translate}}</span>
+          <input #fileInput (change)="handleInputChange($event)" accept="image/*" class="d-none" type="file" />
+        </button>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      (click)="onCancel()"
+      class="ml-auto"
+      mat-flat-button>
+      {{'DIALOGS.ADD_AUTH_IMG.CANCEL'| customTranslate | translate}}
+    </button>
+    <button
+      (click)="onAdd()"
+      [disabled]="!newImage"
+      class="ml-2"
+      color="accent"
+      mat-flat-button>
+      {{'DIALOGS.ADD_AUTH_IMG.ADD'| customTranslate | translate}}
+    </button>
+  </div>
+
+</div>

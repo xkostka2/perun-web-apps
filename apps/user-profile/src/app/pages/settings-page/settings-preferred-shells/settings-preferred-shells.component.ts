@@ -32,6 +32,10 @@ export class SettingsPreferredShellsComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.store.getPerunPrincipal().userId;
+    this.translateService.onLangChange.subscribe(() => {
+      this.translateService.get('PREFERRED_SHELLS.REMOVE_DIALOG_DESCRIPTION').subscribe(value => this.removeDialogDescription = value);
+      this.translateService.get('PREFERRED_SHELLS.REMOVE_DIALOG_TITLE').subscribe(value => this.removeDialogTitle = value);
+    })
     this.getAttribute();
   }
 
