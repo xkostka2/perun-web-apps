@@ -101,11 +101,6 @@ const routes: Routes = [
         data: {animation: 'FacilityHostsDetailPage'}
       },
       {
-        path: 'security-teams',
-        component: FacilitySecurityTeamsComponent,
-        data: {animation: 'FacilitySecurityTeamsPage'}
-      },
-      {
         path: 'settings',
         component: FacilitySettingsComponent,
         children: [
@@ -123,6 +118,11 @@ const routes: Routes = [
             path: 'managers',
             component: FacilitySettingsManagersComponent,
             data: {animation: 'FacilitySettingsManagersPage'}
+          },
+          {
+            path: 'security-teams',
+            component: FacilitySecurityTeamsComponent,
+            data: {animation: 'FacilitySecurityTeamsPage'}
           },
           {
             path: 'blacklist',

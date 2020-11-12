@@ -55,14 +55,7 @@ export class GroupOverviewComponent implements OnInit {
   }
 
   private initNavItems() {
-    this.navItems = [
-      {
-      cssIcon: 'perun-attributes',
-      url: `/organizations/${this.group.voId}/groups/${this.group.id}/attributes`,
-      label: 'MENU_ITEMS.GROUP.ATTRIBUTES',
-      style: 'group-btn'
-      }
-    ];
+    this.navItems = [];
 
     if (this.guiAuthResolver.isAuthorized('getCompleteRichMembers_Group_List<String>_boolean_policy', [this.group])) {
       this.navItems.push(
@@ -101,6 +94,13 @@ export class GroupOverviewComponent implements OnInit {
         style: 'group-btn'
       });
     }
+
+    this.navItems.push({
+      cssIcon: 'perun-attributes',
+      url: `/organizations/${this.group.voId}/groups/${this.group.id}/attributes`,
+      label: 'MENU_ITEMS.GROUP.ATTRIBUTES',
+      style: 'group-btn'
+    });
 
     this.navItems.push({
       cssIcon: 'perun-settings2',

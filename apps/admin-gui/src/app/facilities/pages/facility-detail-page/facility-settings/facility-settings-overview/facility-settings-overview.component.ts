@@ -58,6 +58,15 @@ export class FacilitySettingsOverviewComponent implements OnInit {
        style: 'facility-btn'
      });
     }
+    // Security teams
+    if (this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
+      this.items.push({
+        cssIcon: 'perun-security-teams',
+        url: `/facilities/${this.facility.id}/settings/security-teams`,
+        label: 'MENU_ITEMS.FACILITY.SECURITY_TEAMS',
+        style: 'facility-btn'
+      });
+    }
     // Blacklist
     if(this.authResolver.isAuthorized('getBansForFacility_int_policy', [this.facility])){
      this.items.push({
