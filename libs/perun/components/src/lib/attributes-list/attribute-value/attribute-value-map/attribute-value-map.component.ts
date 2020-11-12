@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Attribute } from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowValueDialogComponent } from '@perun-web-apps/perun/dialogs';
@@ -23,8 +23,13 @@ export class AttributeValueMapComponent implements OnInit {
   keys: string[] = [];
   values: string[] = [];
 
+  defaultItemsShown = 3;
+  itemsShown: number;
+
+  showMore = false;
 
   ngOnInit() {
+    this.itemsShown = this.defaultItemsShown;
     if (this.attribute.value !== undefined) {
       const map = this.attribute.value as Map<string, string>;
       for (const [key, value] of Object.entries(map)) {
@@ -42,8 +47,13 @@ export class AttributeValueMapComponent implements OnInit {
   }
 
   addValue() {
-    this.keys.push('');
+    this.keys.push('')
     this.values.push('');
+
+    if(this.values.length > this.defaultItemsShown){
+      this.showMore = true;
+      this.setItemsShown()
+    }
   }
 
   removeValue(index: number) {
@@ -72,5 +82,20 @@ export class AttributeValueMapComponent implements OnInit {
     };
     this.dialog.open(ShowValueDialogComponent, config);
   }
+
+  setItemsShown() {
+    if(this.showMore){
+      this.itemsShown = this.values.length;
+    } else {
+      this.itemsShown = this.defaultItemsShown;
+    }
+  }
+
+  onShowChange() {
+    this.showMore = !this.showMore;
+
+    this.setItemsShown();
+  }
+
 }
 
