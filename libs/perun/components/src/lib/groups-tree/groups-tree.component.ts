@@ -91,8 +91,8 @@ export class GroupsTreeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.expandAll) {
-      this.filteredGroups = this.groups.filter( option => option.name.toLowerCase().includes(this.filterValue.toLowerCase()) ||
-                                                          option.description.toLowerCase().includes(this.filterValue.toLowerCase()) ||
+      this.filteredGroups = this.groups.filter( option => option.name?.toLowerCase().includes(this.filterValue.toLowerCase()) ||
+                                                          option.description?.toLowerCase().includes(this.filterValue.toLowerCase()) ||
                                                           option.id.toString().includes(this.filterValue.toLowerCase()));
       for (const group of this.filteredGroups) {
         if (group.parentGroupId) {
