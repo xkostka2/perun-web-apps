@@ -22,8 +22,13 @@
             #{{group.id}}
           </span>
         </div>
-        <div class="w-50 text-muted description-text overflow-ellipsis" matTooltip="{{group.description}}" matTooltipPosition="before">
-          {{group.description}}
+        <div class="w-50 text-muted description-text" #nodeDescription>
+          <span
+            [matTooltipDisabled]="!isOverflowing(nodeDescription)"
+            matTooltip="{{group.description}}"
+            matTooltipPosition="before">
+            {{group.description}}
+          </span>
         </div>
       </div>
       <perun-web-apps-group-menu
@@ -65,8 +70,13 @@
             #{{group.id}}
           </span>
         </div>
-        <div class="w-50 text-muted description-text overflow-ellipsis" matTooltip="{{group.description}}" matTooltipPosition="before">
-          {{group.description}}
+        <div class="w-50 text-muted description-text" #rootDescription>
+          <span
+            [matTooltipDisabled]="!isOverflowing(rootDescription)"
+            matTooltip="{{group.description}}"
+            matTooltipPosition="before">
+            {{group.description}}
+          </span>
         </div>
       </div>
       <perun-web-apps-group-menu
