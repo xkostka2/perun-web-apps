@@ -1,0 +1,54 @@
+<h1 class="page-subtitle">{{'AUTHENTICATION.TITLE' | customTranslate | translate}}</h1>
+<p>{{'AUTHENTICATION.ANTI_PHISHING_INFO' | customTranslate | translate}}</p>
+<div>
+  <img [src]="imageSrc" alt="" class="img-size"/>
+</div>
+<button (click)="onAddImg()" class="m-1" color="accent" mat-flat-button>{{'AUTHENTICATION.NEW_IMG' | customTranslate | translate}}</button>
+<button (click)="onDeleteImg()" class="m-1" color="warn" mat-flat-button>{{'AUTHENTICATION.DELETE_IMG' | customTranslate | translate}}</button>
+
+<!--<div>-->
+<!--  <img alt="" src="assets/img/webauthn-logo-black.png" style="width: 3rem; height: 3rem">-->
+<!--  <img [src]="img" alt="" style="width: 75px; height:25px; justify-content: center" >-->
+<!--</div>-->
+
+
+<h1 class="page-subtitle mt-5">{{'AUTHENTICATION.MFA' | customTranslate | translate}}</h1>
+<mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>
+<div [class.hide-table]="exporting" class="card mt-2">
+  <div class="card-body">
+    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <div class="overflow-auto">
+      <table #exporter="matTableExporter" [dataSource]="dataSource" class="w-100" mat-table matTableExporter>
+        <ng-container matColumnDef="type">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'TYPE'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="nickname">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'NICKNAME'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="revoked">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'REVOKE'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="added">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'ADDED'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="used">
+          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{'USED'}}</th>
+          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let key; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator [length]="tokens.length" [pageSizeOptions]="[5,10,25]" [pageSize]="this.pageSize"></mat-paginator>
+  </div>
+</div>

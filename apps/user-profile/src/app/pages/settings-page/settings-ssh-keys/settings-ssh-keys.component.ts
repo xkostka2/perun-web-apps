@@ -51,7 +51,12 @@ export class SettingsSSHKeysComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.store.getPerunPrincipal().userId;
-
+    this.translateService.onLangChange.subscribe(() => {
+      this.translateService.get('SSH_KEYS.REMOVE_DIALOG_DESCRIPTION').subscribe(value => this.removeDialogDescription = value);
+      this.translateService.get('SSH_KEYS.REMOVE_DIALOG_TITLE').subscribe(value => this.removeDialogTitle = value);
+      this.translateService.get('ALERTS.NO_ALT_PASSWORDS').subscribe(value => this.alertText = value);
+      this.translateService.get('SSH_KEYS.HEADER_COLUMN').subscribe(value => this.headerColumnText = value);
+    })
     this.loading= true;
     this.getUserSSH();
     this.getAdminSSH();

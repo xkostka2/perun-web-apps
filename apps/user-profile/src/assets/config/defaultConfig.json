@@ -51,7 +51,21 @@
     "pref_shells",
     "pref_group_names",
     "password_reset",
-    "external"
+    "external",
+    "password_reset",
+    "auth"
+  ],
+  "custom_labels": [
+    {
+      "label": "PREFERRED_SHELLS.TITLE",
+      "en": "Preferred shells (custom label)",
+      "cz": "Preferované shelly (custom label)"
+    },
+    {
+      "label": "MENU_ITEMS.PROFILE",
+      "en": "Profile (custom label)",
+      "cz": "Profil (vlastní štítek)"
+    }
   ],
   "header_label": "Generic user profile",
   "preferred_unix_group_names": [
