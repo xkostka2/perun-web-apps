@@ -6,14 +6,17 @@
 }
 
 .perun-alert.info-alert {
-  border-left: 4px solid;
-  color: #000000;
+  font-weight: bold;
+  text-align: left;
+  border: 1px #b3b3b3 solid;
+  border-radius: 10px;
 }
 
 .perun-alert.warn-alert {
   font-weight: bold;
   text-align: left;
-  border: 1px #888888 solid;
+  border: 1px #b3b3b3 solid;
+  border-radius: 10px;
 }
 
 .perun-warn-alert-icon {
