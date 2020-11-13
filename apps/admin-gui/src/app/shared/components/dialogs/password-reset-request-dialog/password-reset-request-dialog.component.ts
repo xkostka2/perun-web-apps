@@ -11,6 +11,7 @@ import { NotificatorService, StoreService } from '@perun-web-apps/perun/services
 export interface PasswordResetRequestDialogData {
   userId: number;
   memberId: number;
+  logins: Attribute[];
 }
 
 @Component({
@@ -41,21 +42,9 @@ export class PasswordResetRequestDialogComponent implements OnInit {
   successMessage: string;
 
   ngOnInit(): void {
-    this.loading = true;
     this.getMailAttributes();
-    this.getLogins();
-  }
-
-  private getLogins() {
-    const attUrns = this.store.get('password_namespace_attributes').map(urn => {
-      urn = urn.split(':');
-      return urn[urn.length - 1];
-    });
-    this.attributesManagerService.getLogins(this.data.userId).subscribe(logins => {
-      this.logins = logins.filter(login => attUrns.includes(login.friendlyNameParameter));
-      this.selectedLogin = this.logins[0];
-      this.loading = false;
-    });
+    this.logins = this.data.logins;
+    this.selectedLogin = this.logins[0];
   }
 
   private getMailAttributes() {

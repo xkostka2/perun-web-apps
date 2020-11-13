@@ -312,7 +312,8 @@
           "TITLE": "Změna hesla",
           "CHANGE_PASSWORD": "Změnit heslo",
           "NAMESPACE": "Jmenný prostor",
-          "LOGIN": "Přihlašovací jméno"
+          "LOGIN": "Přihlašovací jméno",
+          "NOT_SUPPORTED": "Zména hesla není podporována ve vašich jmených prostorech"
         },
         "SHOW_VALUE": {
           "CLOSE": "Zrušit",

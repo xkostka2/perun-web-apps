@@ -311,7 +311,8 @@
           "TITLE": "Password reset",
           "CHANGE_PASSWORD": "Change password",
           "NAMESPACE": "Namespace",
-          "LOGIN": "Login"
+          "LOGIN": "Login",
+          "NOT_SUPPORTED": "Password reset is not supported for your current namespaces"
         },
         "SHOW_VALUE": {
           "CLOSE": "Close",

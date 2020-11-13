@@ -3,16 +3,14 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuItem} from '@perun-web-apps/perun/models';
 import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
-import {
-  MembersManagerService,
-  RichMember,
-  Sponsor,
-  UsersManagerService,
-  Vo
-} from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
-import { AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService,
+  MembersManagerService, RichMember, Sponsor,
+  UsersManagerService, Vo
+} from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,13 +35,14 @@ export class MemberOverviewComponent implements OnInit {
     private dialog: MatDialog,
     public authResolver: GuiAuthResolver,
     private storeService: StoreService
-  ) { }
+  ) {
+  }
 
   fullName = '';
   statusIcon = '';
   statusIconColor = '';
   expiration = '';
-
+  logins: Attribute[] = [];
   member: RichMember = null;
   navItems: MenuItem[] = [];
 
@@ -66,10 +65,16 @@ export class MemberOverviewComponent implements OnInit {
       this.attributeNames = this.storeService.getMemberProfileAttributeNames();
 
       this.membersService.getRichMemberWithAttributes(memberId).subscribe(member => {
-        this.member = member;
-        this.fullName = parseFullName(this.member.user);
-        this.statusIcon = parseStatusIcon(this.member);
-        this.statusIconColor = parseStatusColor(this.member);
+        const attUrns = this.storeService.get('password_namespace_attributes').map(urn => {
+          urn = urn.split(':');
+          return urn[urn.length - 1];
+        });
+        this.attributesManager.getLogins(member.userId).subscribe(logins => {
+          this.logins = logins.filter(login => attUrns.includes(login.friendlyNameParameter));
+          this.member = member;
+          this.fullName = parseFullName(this.member.user);
+          this.statusIcon = parseStatusIcon(this.member);
+          this.statusIconColor = parseStatusColor(this.member);
 
         this.initAttributes();
         this.dataSource = new MatTableDataSource<string>(Array.from(this.attributes.keys()));
@@ -97,6 +102,7 @@ export class MemberOverviewComponent implements OnInit {
 
       }, () => this.loading = false);
     });
+  });
   }
 
   changeExpiration() {
@@ -106,7 +112,7 @@ export class MemberOverviewComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
     dialogRef.afterClosed().subscribe(success => {
-      if (success){
+      if (success) {
         this.refreshData();
       }
     });
@@ -140,29 +146,29 @@ export class MemberOverviewComponent implements OnInit {
   private initNavItems() {
     this.navItems = [];
 
-    if(this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])){
-      this.navItems.push( {
+    if (this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])) {
+      this.navItems.push({
         cssIcon: 'perun-group',
         url: `/organizations/${this.member.voId}/members/${this.member.id}/groups`,
         label: 'MENU_ITEMS.MEMBER.GROUPS',
         style: 'member-btn'
       });
     }
-    if(this.authResolver.isAuthorized('vo-getApplicationsForMember_Group_Member_policy', [this.vo])){
-      this.navItems.push( {
+    if (this.authResolver.isAuthorized('vo-getApplicationsForMember_Group_Member_policy', [this.vo])) {
+      this.navItems.push({
         cssIcon: 'perun-applications',
         url: `/organizations/${this.member.voId}/members/${this.member.id}/applications`,
         label: 'MENU_ITEMS.MEMBER.APPLICATIONS',
         style: 'member-btn'
       });
     }
-    if(this.authResolver.isAuthorized('getAssignedRichResources_Member_policy', [this.vo])){
-     this.navItems.push({
-       cssIcon: 'perun-resource',
-       url: `/organizations/${this.member.voId}/members/${this.member.id}/resources`,
-       label: 'MENU_ITEMS.MEMBER.RESOURCES',
-       style: 'member-btn'
-     });
+    if (this.authResolver.isAuthorized('getAssignedRichResources_Member_policy', [this.vo])) {
+      this.navItems.push({
+        cssIcon: 'perun-resource',
+        url: `/organizations/${this.member.voId}/members/${this.member.id}/resources`,
+        label: 'MENU_ITEMS.MEMBER.RESOURCES',
+        style: 'member-btn'
+      });
     }
     this.navItems.push({
       cssIcon: 'perun-attributes',
@@ -196,7 +202,8 @@ export class MemberOverviewComponent implements OnInit {
     config.width = '400px';
     config.data = {
       userId: this.member.userId,
-      memberId: this.member.id
+      memberId: this.member.id,
+      logins: this.logins
     };
 
     this.dialog.open(PasswordResetRequestDialogComponent, config);

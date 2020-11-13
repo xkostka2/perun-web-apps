@@ -597,6 +597,7 @@
       "SPONSORED_BY": "This member is sponsored",
       "SPONSORS": "Sponsors",
       "RESET_PASSWORD": "Reset password",
+      "RESET_DISABLED": "Unsupported functionality for user's namespaces",
       "SEND_REQUEST": "Send request"
     },
     "GROUPS": {
@@ -2104,7 +2105,8 @@
           "TITLE": "Password reset",
           "CHANGE_PASSWORD": "Change password",
           "NAMESPACE": "Namespace",
-          "LOGIN": "Login"
+          "LOGIN": "Login",
+          "NOT_SUPPORTED": "Password reset is not supported for your current namespaces"
         },
         "SHOW_VALUE": {
           "CLOSE": "Close",
