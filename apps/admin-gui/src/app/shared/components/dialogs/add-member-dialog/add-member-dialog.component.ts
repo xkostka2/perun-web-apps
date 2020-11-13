@@ -56,7 +56,6 @@ export class AddMemberDialogComponent implements OnInit {
   }
 
   title: string;
-  searchString = '';
 
   selection = new SelectionModel<MemberCandidate>(false, []);
   loading: boolean;
@@ -145,7 +144,7 @@ export class AddMemberDialogComponent implements OnInit {
     if (this.data.type === 'vo') {
       this.voService.getCompleteCandidatesForVo(this.data.entityId,
         [Urns.USER_DEF_ORGANIZATION, Urns.USER_DEF_PREFERRED_MAIL],
-        this.searchString).subscribe(members => {
+        this.searchCtrl.value).subscribe(members => {
         this.members = members;
         this.loading = false;
         this.firstSearchDone = true;
@@ -153,7 +152,7 @@ export class AddMemberDialogComponent implements OnInit {
     } else {
       this.voService.getCompleteCandidatesForGroup(this.data.entityId,
         [Urns.USER_DEF_ORGANIZATION, Urns.USER_DEF_PREFERRED_MAIL],
-        this.searchString).subscribe(members => {
+        this.searchCtrl.value).subscribe(members => {
         this.members = members;
         this.loading = false;
         this.firstSearchDone = true;
