@@ -23,5 +23,6 @@ module.exports = {
     '<rootDir>/libs/perun/directives',
     '<rootDir>/libs/dialogs',
     '<rootDir>/libs/perun/dialogs',
+    '<rootDir>/libs/perun/session-expiration',
   ],
 };

@@ -45,7 +45,10 @@
         "libs/perun/directives/src/index.ts"
       ],
       "@perun-web-apps/dialogs": ["libs/dialogs/src/index.ts"],
-      "@perun-web-apps/perun/dialogs": ["libs/perun/dialogs/src/index.ts"]
+      "@perun-web-apps/perun/dialogs": ["libs/perun/dialogs/src/index.ts"],
+      "@perun-web-apps/perun/session-expiration": [
+        "libs/perun/session-expiration/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

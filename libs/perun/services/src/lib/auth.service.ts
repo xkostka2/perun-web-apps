@@ -4,6 +4,9 @@ import {from, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { Params, Router } from '@angular/router';
 import { StoreService } from './store.service';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { SessionExpirationDialogComponent } from '@perun-web-apps/perun/session-expiration';
 
 
 @Injectable({
@@ -14,7 +17,8 @@ export class AuthService {
 
   constructor(
     private injector: Injector,
-    private store: StoreService
+    private store: StoreService,
+    private dialog: MatDialog
   ) {
     setTimeout(() => {
       this.router = this.injector.get(Router);
@@ -54,6 +58,13 @@ export class AuthService {
     this.setUser();
     this.manager.events.addUserLoaded(user => {
       this.user = user;
+    });
+
+    this.manager.events.addAccessTokenExpired(expired => {
+      const config = getDefaultDialogConfig();
+      config.width = '450px';
+
+      this.dialog.open(SessionExpirationDialogComponent, config);
     });
   }
 

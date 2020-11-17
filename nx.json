@@ -88,6 +88,9 @@
     },
     "perun-dialogs": {
       "tags": []
+    },
+    "perun-session-expiration": {
+      "tags": []
     }
   },
   "tasksRunnerOptions": {

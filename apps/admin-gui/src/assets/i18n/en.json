@@ -2097,6 +2097,11 @@
           "STANDARD_MESSAGE": "Standard message",
           "ERROR_MESSAGE": "Error message",
           "NO_RESULTS_WARNING": "No task results found"
+        },
+        "SESSION_EXPIRATION": {
+          "TITLE": "Session expiration",
+          "DESCRIPTION": "Your session has expired. Please sign in to continue.",
+          "SIGN_IN": "Sign in"
         }
       },
       "ORGANIZATIONS": {
