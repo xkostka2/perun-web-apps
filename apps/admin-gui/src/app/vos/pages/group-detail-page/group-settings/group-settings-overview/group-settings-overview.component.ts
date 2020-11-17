@@ -61,15 +61,6 @@ export class GroupSettingsOverviewComponent implements OnInit {
   private initItems() {
     this.items = []
 
-    if (this.guiAuthResolver.isAuthorized('getAssignedResources_Group_policy', [this.group])) {
-      this.items.push({
-        cssIcon: 'perun-attributes',
-        url: `/organizations/${this.vo.id}/groups/${this.group.id}/settings/resourceAttributes`,
-        label: 'MENU_ITEMS.GROUP.RESOURCE_ATTRIBUTES',
-        style: 'group-btn'
-      });
-    }
-
     //not implemented in authorization....probably must be hardcoded
     this.apiRequest.dontHandleErrorForNext();
     this.attributesManager.getGroupAttributeByName(this.group.id, Urns.GROUP_DEF_EXPIRATION_RULES).subscribe(() => {

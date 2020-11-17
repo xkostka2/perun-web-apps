@@ -1,7 +1,7 @@
 import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import { AttributesListComponent } from '@perun-web-apps/perun/components';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -9,7 +9,10 @@ import {
   DeleteAttributeDialogComponent
 } from '../../../../shared/components/dialogs/delete-attribute-dialog/delete-attribute-dialog.component';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService, Resource, ResourcesManagerService
+} from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import {
   TABLE_ATTRIBUTES_SETTINGS,
@@ -32,7 +35,9 @@ export class ResourceAttributesComponent implements OnInit {
               private dialog: MatDialog,
               private notificator: NotificatorService,
               private tableConfigService: TableConfigService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private authResolver: GuiAuthResolver,
+              private resourceManager: ResourcesManagerService) {
     this.translate.get('RESOURCE_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_SAVE').subscribe(value => this.saveSuccessMessage = value);
     this.translate.get('RESOURCE_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_DELETE').subscribe(value => this.deleteSuccessMessage = value);
   }
@@ -43,8 +48,13 @@ export class ResourceAttributesComponent implements OnInit {
   attributes: Attribute[] = [];
   selection = new SelectionModel<Attribute>(true, []);
   resourceId: number;
+  resource: Resource;
   saveSuccessMessage: string;
   deleteSuccessMessage: string;
+
+  resourceGroupAttAuth: boolean;
+  resourceMemberAttAuth: boolean;
+
   loading: boolean;
   filterValue = '';
   tableId = TABLE_ATTRIBUTES_SETTINGS;
@@ -53,8 +63,16 @@ export class ResourceAttributesComponent implements OnInit {
   ngOnInit() {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.parent.params.subscribe(params => {
-      this.resourceId = params['resourceId'];
-      this.refreshTable();
+      this.resourceId = parseInt(params['resourceId'], 10);
+
+      this.resourceManager.getResourceById(this.resourceId).subscribe(resource => {
+        this.resource = resource;
+
+        this.resourceGroupAttAuth = this.authResolver.isAuthorized('getAssignedGroups_Resource_policy', [this.resource]);
+        this.resourceMemberAttAuth = this.authResolver.isAuthorized('getAssignedRichMembers_Resource_policy', [this.resource]);
+
+        this.refreshTable();
+      });
     });
   }
 

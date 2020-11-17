@@ -1,26 +1,44 @@
 <div>
   <h1 class="page-subtitle">{{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.TITLE' | translate}}</h1>
-  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
-  <button mat-flat-button class="mr-2" color="accent" (click)="onCreate()">
-    {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
-  </button>
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template matTabLabel>
+        {{'FACILITY_DETAIL.ENTITY' | translate}}
+      </ng-template>
+      <perun-web-apps-refresh-button class="mt-2" (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onCreate()">
+        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
+      </button>
 
-  <button mat-flat-button class="mr-2" color="accent" (click)="onSave()" [disabled]="selection.selected.length === 0">
-    {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
-  </button>
+      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onSave()" [disabled]="selection.selected.length === 0">
+        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
+      </button>
 
-  <button mat-flat-button color="warn" (click)="onDelete()" [disabled]="selection.selected.length === 0">
-    {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
-  </button>
-  <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER' | translate"></perun-web-apps-immediate-filter>
-  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <perun-web-apps-attributes-list
-    #list
-    *ngIf="!loading"
-    (page)="pageChanged($event)"
-    [pageSize]="pageSize"
-    [filterValue]="filterValue"
-    [attributes]="attributes"
-    [selection]="selection">
-  </perun-web-apps-attributes-list>
+      <button mat-flat-button class="mt-2" color="warn" (click)="onDelete()" [disabled]="selection.selected.length === 0">
+        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
+      </button>
+      <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER' | translate"></perun-web-apps-immediate-filter>
+      <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+      <perun-web-apps-attributes-list
+        #list
+        *ngIf="!loading"
+        (page)="pageChanged($event)"
+        [pageSize]="pageSize"
+        [filterValue]="filterValue"
+        [attributes]="attributes"
+        [selection]="selection">
+      </perun-web-apps-attributes-list>
+    </mat-tab>
+    <mat-tab *ngIf="facilityUserAttAuth">
+      <ng-template matTabLabel>
+        {{'FACILITY_DETAIL.ENTITY' | translate}}
+        -
+        {{'ADMIN_USER.ENTITY' | translate}}
+      </ng-template>
+      <ng-template matTabContent>
+        <app-two-entity-attribute-page [firstEntity]="'facility'" [firstEntityId]="facilityId"
+                                       [secondEntity]="'user'" *ngIf="!loading"></app-two-entity-attribute-page>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>

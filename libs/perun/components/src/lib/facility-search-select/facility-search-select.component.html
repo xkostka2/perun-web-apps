@@ -1,0 +1,17 @@
+<mat-form-field class="w-100">
+  <mat-select
+    placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.FACILITY_SEARCH_SELECT.SELECT_FACILITY' | translate}}"
+    [formControl]="facilityCtrl">
+    <mat-option>
+      <ngx-mat-select-search
+        placeholderLabel="{{'SHARED_LIB.PERUN.COMPONENTS.FACILITY_SEARCH_SELECT.FIND_FACILITY' | translate}}"
+        noEntriesFoundLabel="{{'SHARED_LIB.PERUN.COMPONENTS.FACILITY_SEARCH_SELECT.NO_FACILITY_FOUND' | translate}}"
+        [formControl]="facilityFilterCtrl">
+      </ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let facility of filteredFacilities | async" [value]="facility">
+      {{facility.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+

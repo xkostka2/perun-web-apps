@@ -1,38 +1,63 @@
-<perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="filterMessage | translate"></perun-web-apps-immediate-filter>
-<mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-<app-alert *ngIf="entityValues.length === 0 && !loading" alert_type="warn">{{noEntityMessage | translate}}</app-alert>
-<app-alert *ngIf="filteredEntityValues.length === 0 && entityValues.length && !loading" alert_type="warn">{{noFilteredEntityMessage | translate}}</app-alert>
-<mat-accordion *ngIf="!loading">
-  <mat-expansion-panel *ngFor="let entity of filteredEntityValues" (opened)="getAttributes(entity.id)" (closed)="selection.clear()">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{entity.name}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
+<div class="mt-3">
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <app-alert *ngIf="entityValues.length === 0 && !loading" alert_type="warn">{{noEntityMessage}}</app-alert>
 
-    <ng-template matExpansionPanelContent>
-      <button mat-flat-button class="mr-2" color="accent" (click)="onAdd(entity.id)">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
-      </button>
+  <div *ngIf="entityValues.length !== 0">
+    <div class="flex-row w-35">
+    <perun-web-apps-group-search-select
+      *ngIf="secondEntity === 'group'"
+      [groups]="entityValues"
+      (groupSelected)="specifySecondEntity($event)">
+    </perun-web-apps-group-search-select>
 
-      <button
-        mat-flat-button
-        class="mr-2"
-        color="accent"
-        (click)="onSave(entity.id)"
-        [disabled]="selection.selected.length === 0">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
-      </button>
+    <perun-web-apps-resource-search-select
+      *ngIf="secondEntity === 'resource'"
+      [resources]="entityValues"
+      (resourceSelected)="specifySecondEntity($event)">
+    </perun-web-apps-resource-search-select>
 
-      <button
-        mat-flat-button color="warn"
-        (click)="onDelete(entity.id)"
-        [disabled]="selection.selected.length === 0">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
-      </button>
-      <mat-spinner class="ml-auto mr-auto" *ngIf="innerLoading"></mat-spinner>
-      <perun-web-apps-attributes-list [attributes]="attributes" [selection]="selection" #list *ngIf="!innerLoading"></perun-web-apps-attributes-list>
-    </ng-template>
-  </mat-expansion-panel>
-</mat-accordion>
+    <perun-web-apps-member-search-select
+      *ngIf="secondEntity === 'member'"
+      [members]="entityValues"
+      (memberSelected)="specifySecondEntity($event)">
+    </perun-web-apps-member-search-select>
 
+    <perun-web-apps-facility-search-select
+      *ngIf="secondEntity === 'facility'"
+      [facilities]="entityValues"
+      (facilitySelected)="specifySecondEntity($event)">
+    </perun-web-apps-facility-search-select>
+
+    <perun-web-apps-user-search-select
+      *ngIf="secondEntity === 'user'"
+      [users]="entityValues"
+      (userSelected)="specifySecondEntity($event)">
+    </perun-web-apps-user-search-select>
+    </div>
+
+    <perun-web-apps-refresh-button (refresh)="getAttributes(specificSecondEntity.id)"></perun-web-apps-refresh-button>
+
+    <button mat-flat-button class="mr-2" color="accent" (click)="onAdd(specificSecondEntity.id)">
+      {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
+    </button>
+
+    <button
+      mat-flat-button
+      class="mr-2"
+      color="accent"
+      (click)="onSave(specificSecondEntity.id)"
+      [disabled]="selection.selected.length === 0">
+      {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
+    </button>
+
+    <button
+      mat-flat-button color="warn"
+      (click)="onDelete(specificSecondEntity.id)"
+      [disabled]="selection.selected.length === 0">
+      {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
+    </button>
+    <mat-spinner class="ml-auto mr-auto" *ngIf="innerLoading"></mat-spinner>
+    <perun-web-apps-attributes-list [attributes]="attributes" [selection]="selection" #list
+                                    *ngIf="!innerLoading"></perun-web-apps-attributes-list>
+  </div>
+</div>

@@ -2,14 +2,17 @@ import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SelectionModel} from '@angular/cdk/collections';
 import {AttributesListComponent} from '@perun-web-apps/perun/components';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, MembersService, NotificatorService } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   DeleteAttributeDialogComponent
 } from '../../../../shared/components/dialogs/delete-attribute-dialog/delete-attribute-dialog.component';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService, Group, GroupsManagerService,
+} from '@perun-web-apps/perun/openapi';
 import {
   TABLE_ATTRIBUTES_SETTINGS,
   TableConfigService
@@ -30,10 +33,12 @@ export class GroupAttributesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private attributesManager: AttributesManagerService,
+    private groupManager: GroupsManagerService,
     private notificator: NotificatorService,
     private dialog: MatDialog,
     private translate: TranslateService,
     private tableConfigService: TableConfigService,
+    private authResolver: GuiAuthResolver
   ) {
     this.translate.get('GROUP_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_SAVE').subscribe(value => this.saveSuccessMessage = value);
     this.translate.get('GROUP_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_DELETE').subscribe(value => this.deleteSuccessMessage = value);
@@ -47,6 +52,10 @@ export class GroupAttributesComponent implements OnInit {
   selection = new SelectionModel<Attribute>(true, []);
   attributes: Attribute[] = [];
   groupId: number;
+  group: Group;
+
+  groupResourceAttAuth: boolean;
+  groupMemberAttAuth: boolean;
 
   loading: boolean;
   filterValue = '';
@@ -58,7 +67,13 @@ export class GroupAttributesComponent implements OnInit {
     this.route.parent.params.subscribe(params => {
       this.groupId = params['groupId'];
 
-      this.refreshTable();
+      this.groupManager.getGroupById(this.groupId).subscribe(group => {
+        this.group = group;
+
+        this.groupResourceAttAuth = this.authResolver.isAuthorized('getAssignedResources_Group_policy', [this.group]);
+        this.groupMemberAttAuth = this.authResolver.isAuthorized('getCompleteRichMembers_Group_List<String>_List<String>_boolean_policy', [this.group]);
+        this.refreshTable();
+      });
     });
   }
 

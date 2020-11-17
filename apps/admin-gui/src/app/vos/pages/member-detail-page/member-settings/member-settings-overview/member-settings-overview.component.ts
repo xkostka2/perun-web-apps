@@ -49,25 +49,5 @@ export class MemberSettingsOverviewComponent implements OnInit {
   private initItems() {
     this.items = [];
 
-    // Resource attributes
-    if(this.authResolver.isAuthorized('getAllowedResources_Member_policy', [this.vo])){
-      this.items.push(
-        {
-          cssIcon: 'perun-attributes',
-          url: `/organizations/${this.vo.id}/members/${this.member.id}/settings/resourceAttributes`,
-          label: 'MENU_ITEMS.MEMBER.RESOURCE_ATTRIBUTES',
-          style: 'member-btn'
-        });
-    }
-    // Group attributes
-    if(this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.vo])){
-      this.items.push(
-        {
-          cssIcon: 'perun-attributes',
-          url: `/organizations/${this.vo.id}/members/${this.member.id}/settings/groupAttributes`,
-          label: 'MENU_ITEMS.MEMBER.GROUP_ATTRIBUTES',
-          style: 'member-btn'
-        });
-    }
   }
 }

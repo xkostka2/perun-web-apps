@@ -1,6 +1,6 @@
 import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
 import {AttributesListComponent} from '@perun-web-apps/perun/components';
@@ -9,7 +9,12 @@ import {
   DeleteAttributeDialogComponent
 } from '../../../../shared/components/dialogs/delete-attribute-dialog/delete-attribute-dialog.component';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService, Group,
+  GroupsManagerService, Member, MembersManagerService, Resource,
+  ResourcesManagerService
+} from '@perun-web-apps/perun/openapi';
 import {
   TABLE_ATTRIBUTES_SETTINGS,
   TableConfigService
@@ -33,6 +38,8 @@ export class MemberAttributesComponent implements OnInit {
     private dialog: MatDialog,
     private translate: TranslateService,
     private tableConfigService: TableConfigService,
+    private authResolver: GuiAuthResolver,
+    private memberManager: MembersManagerService
   ) {
     this.translate.get('MEMBER_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_SAVE').subscribe(value => this.saveSuccessMessage = value);
     this.translate.get('MEMBER_DETAIL.SETTINGS.ATTRIBUTES.SUCCESS_DELETE').subscribe(value => this.deleteSuccessMessage = value);
@@ -46,6 +53,10 @@ export class MemberAttributesComponent implements OnInit {
   selection = new SelectionModel<Attribute>(true, []);
   attributes: Attribute[] = [];
   memberId: number;
+  member: Member;
+
+  memberResourceAttAuth: boolean;
+  memberGroupAttAuth: boolean;
 
   loading: boolean;
   filterValue = '';
@@ -56,7 +67,14 @@ export class MemberAttributesComponent implements OnInit {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.parent.params.subscribe(params => {
       this.memberId = params['memberId'];
-      this.refreshTable();
+
+     this.memberManager.getMemberById(this.memberId).subscribe(member => {
+       this.member = member;
+
+       this.memberGroupAttAuth = this.authResolver.isAuthorized('getMemberGroups_Member_policy', [this.member]);
+       this.memberResourceAttAuth = this.authResolver.isAuthorized('getAllowedResources_Member_policy', [this.member]);
+       this.refreshTable();
+     });
     });
   }
 
