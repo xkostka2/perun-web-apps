@@ -1,14 +1,21 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuItem} from '@perun-web-apps/perun/models';
-import { GuiAuthResolver} from '@perun-web-apps/perun/services';
-import { MembersManagerService, RichMember, Vo } from '@perun-web-apps/perun/openapi';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import {
+  MembersManagerService,
+  RichMember,
+  Sponsor,
+  UsersManagerService,
+  Vo
+} from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
 import { AttributesManagerService } from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-member-overview',
@@ -23,10 +30,12 @@ export class MemberOverviewComponent implements OnInit {
   constructor(
     private attributesManager: AttributesManagerService,
     private membersService: MembersManagerService,
+    private usersManager: UsersManagerService,
     private translate: TranslateService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public authResolver: GuiAuthResolver,
+    private storeService: StoreService
   ) { }
 
   fullName = '';
@@ -37,6 +46,14 @@ export class MemberOverviewComponent implements OnInit {
   member: RichMember = null;
   navItems: MenuItem[] = [];
 
+  attributeNames: Array<string> = [];
+  attributes: Map<string, string[]> = new Map<string, string[]>();
+  dataSource = new MatTableDataSource<string>();
+  membershipDataSource = new MatTableDataSource<string>();
+  displayedColumns = ['attName', 'attValue'];
+  sponsors: Sponsor[] = [];
+  sponsorsDataSource = new MatTableDataSource<Sponsor>();
+
   vo: Vo;
   loading = false;
 
@@ -44,6 +61,7 @@ export class MemberOverviewComponent implements OnInit {
     this.loading = true;
     this.route.parent.params.subscribe(parentParams => {
       const memberId = parentParams['memberId'];
+      this.attributeNames = this.storeService.getMemberProfileAttributeNames();
 
       this.membersService.getRichMemberWithAttributes(memberId).subscribe(member => {
         this.member = member;
@@ -51,12 +69,30 @@ export class MemberOverviewComponent implements OnInit {
         this.statusIcon = parseStatusIcon(this.member);
         this.statusIconColor = parseStatusColor(this.member);
 
+        this.initAttributes();
+        this.dataSource = new MatTableDataSource<string>(Array.from(this.attributes.keys()));
+        this.membershipDataSource = new MatTableDataSource<string>(['Status', 'Expiration']);
+
         this.vo = {
           id: member.voId,
           beanName: "Vo"
         };
-        this.initNavItems();
-        this.refreshData();
+
+        if (this.member.sponsored &&
+          this.authResolver.isAuthorized('getSponsorsForMember_Member_List<String>_policy', [this.member])) {
+
+          this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
+            this.sponsors = sponsors;
+            this.sponsorsDataSource = new MatTableDataSource<Sponsor>(this.sponsors);
+
+            this.initNavItems();
+            this.refreshData();
+          });
+        } else {
+          this.initNavItems();
+          this.refreshData();
+        }
+
       }, () => this.loading = false);
     });
   }
@@ -72,6 +108,31 @@ export class MemberOverviewComponent implements OnInit {
         this.refreshData();
       }
     });
+  }
+
+  private initAttributes() {
+    this.attributeNames.forEach(name => {
+      this.attributes.set(name, [null ,'-']);
+    })
+    this.filterAttributes();
+  }
+
+  private filterAttributes() {
+    if (this.member.memberAttributes !== null){
+      this.member.memberAttributes.forEach(att => {
+        if(this.attributeNames.includes(att.friendlyName)){
+          this.attributes.set(att.friendlyName, [att.displayName, att.value.toString()]);
+        }
+      });
+    }
+
+    if (this.member.userAttributes !== null){
+      this.member.userAttributes.forEach(att => {
+        if(this.attributeNames.includes(att.friendlyName)){
+          this.attributes.set(att.friendlyName, [att.displayName, att.value.toString()]);
+        }
+      });
+    }
   }
 
   private initNavItems() {

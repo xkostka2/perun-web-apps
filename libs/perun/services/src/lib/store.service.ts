@@ -36,6 +36,10 @@ export class StoreService {
     return this.get("login_namespace_attributes");
   }
 
+  getMemberProfileAttributeNames(): Array<string> {
+    return this.get("member_profile_attributes_friendly_names");
+  }
+
   skipOidc(): boolean {
     return this.get('skip_oidc');
   }

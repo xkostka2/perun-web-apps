@@ -174,6 +174,7 @@ import { GenerateSponsoredMembersDialogComponent } from './components/dialogs/ge
 import { SponsoredMembersListComponent } from './components/sponsored-members-list/sponsored-members-list.component';
 import { EditMemberSponsorsDialogComponent } from './components/dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
 import { CreateAttributeDialogComponent } from './components/dialogs/create-attribute-dialog/create-attribute-dialog.component';
+import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe';
 
 @NgModule({
   imports: [
@@ -308,7 +309,8 @@ import { CreateAttributeDialogComponent } from './components/dialogs/create-attr
     UsersListComponent,
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
-    CreateAttributeDialogComponent
+    CreateAttributeDialogComponent,
+    AttributeFriendlyNamePipe
   ],
   declarations: [
     PerunNavComponent,
@@ -424,7 +426,8 @@ import { CreateAttributeDialogComponent } from './components/dialogs/create-attr
     GenerateSponsoredMembersDialogComponent,
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
-    CreateAttributeDialogComponent
+    CreateAttributeDialogComponent,
+    AttributeFriendlyNamePipe
   ],
   providers: [
     AnyToStringPipe,

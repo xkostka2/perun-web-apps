@@ -1,36 +1,118 @@
 <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
 <div *ngIf="!loading">
-  <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.MEMBERSHIP' | translate}}</h1>
-  <table class="table table-bordered info-table col-3">
-    <tbody>
-    <tr>
-      <td>{{'MEMBER_DETAIL.OVERVIEW.STATUS' | translate}}</td>
-      <td class="d-flex border-0">
-        <mat-icon class="mr-1" [color]="statusIconColor">
-          {{statusIcon}}
-        </mat-icon>
-        <b>
-          {{member.status | transformMemberStatus}}
-        </b>
-      </td>
-    </tr>
-    <!-- TODO fix authorization of expiration attribute when it is supported-->
-    <tr *ngIf="authResolver.isThisVoAdminOrObserver(vo.id)">
-      <td class="vert-center">{{'MEMBER_DETAIL.OVERVIEW.EXPIRATION' | translate}}</td>
-      <td>
-        <i>
-          {{expiration}}
-        </i>
-        <button
-          *ngIf="authResolver.isThisVoAdmin(vo.id)"
-          (click)="changeExpiration()"
-          mat-icon-button>
-          <mat-icon>edit</mat-icon>
-        </button>
-      </td>
-    </tr>
-    </tbody>
-  </table>
 
-  <perun-web-apps-menu-buttons-field [items]="navItems" [size]="'small'"></perun-web-apps-menu-buttons-field>
+  <div>
+    <div class="align-cards">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.PERSONAL' | translate}}</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="attName">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
+                <span *ngIf="attributes.get(attribute)[0] !== null">
+                  {{attributes.get(attribute)[0]}}:
+                </span>
+                <span *ngIf="attributes.get(attribute)[0] === null">
+                  {{attribute | attributeFriendlyName}}:
+                </span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="attValue">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let attribute" class="column-center" mat-cell>
+                {{attributes.get(attribute)[1]}}
+              </td>
+            </ng-container>
+            <tr
+              *matRowDef="let attribute; columns: displayedColumns;"
+              mat-row
+            >
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="align-cards">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.MEMBERSHIP' | translate}}</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="membershipDataSource">
+            <ng-container matColumnDef="attName">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
+                {{attribute}}:
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="attValue">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let attribute" class="column-center" mat-cell>
+                <div *ngIf="attribute === 'Status'">
+                  <mat-icon class="vert-top mr-1" [color]="statusIconColor">
+                    {{statusIcon}}
+                  </mat-icon>
+                  <b class="vert-top">
+                    {{member.status | transformMemberStatus}}
+                  </b>
+                </div>
+                <div *ngIf="attribute === 'Expiration'">
+                  <i class="column-center">
+                    {{expiration}}
+                  </i>
+                  <button
+                    *ngIf="authResolver.isThisVoAdmin(vo.id)"
+                    (click)="changeExpiration()"
+                    mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+            <tr
+              *matRowDef="let attribute; columns: displayedColumns;"
+              mat-row
+            >
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="align-cards" *ngIf="member.sponsored">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.SPONSORED_BY' | translate}}</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngIf="sponsors.length !== 0">
+          <h5>{{'MEMBER_DETAIL.OVERVIEW.SPONSORS' | translate}}:</h5>
+          <table class="w-100" mat-table [dataSource]="sponsorsDataSource">
+            <ng-container matColumnDef="sponsors">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let sponsor" class="column-center" mat-cell>
+                {{sponsor.user | userFullName}}
+              </td>
+            </ng-container>
+            <tr
+              *matRowDef="let sponsor; columns: ['sponsors'];"
+              mat-row
+            >
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div>
+    <perun-web-apps-menu-buttons-field [items]="navItems" [size]="'small'"></perun-web-apps-menu-buttons-field>
+  </div>
 </div>
