@@ -1007,6 +1007,39 @@
           "style": "scss"
         }
       }
+    },
+    "perun-session-expiration": {
+      "projectType": "library",
+      "root": "libs/perun/session-expiration",
+      "sourceRoot": "libs/perun/session-expiration/src",
+      "prefix": "perun-web-apps",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/perun/session-expiration/tsconfig.lib.json",
+              "libs/perun/session-expiration/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/perun/session-expiration/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/perun/session-expiration/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

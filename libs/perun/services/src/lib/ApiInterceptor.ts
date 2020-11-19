@@ -7,6 +7,9 @@ import { AuthService } from './auth.service';
 import { StoreService } from './store.service';
 import { NotificatorService } from './notificator.service';
 import { ApiRequestConfigurationService } from './api-request-configuration.service';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { SessionExpirationDialogComponent } from '@perun-web-apps/perun/session-expiration';
 
 
 @Injectable()
@@ -16,7 +19,8 @@ export class ApiInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private apiRequestConfiguration: ApiRequestConfigurationService,
     private notificator: NotificatorService,
-    private store: StoreService
+    private store: StoreService,
+    private dialog: MatDialog
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -31,14 +35,10 @@ export class ApiInterceptor implements HttpInterceptor {
       });
     }
     if (apiUrl !== undefined && req.url.toString().indexOf(apiUrl) !== -1 && !this.store.skipOidc() && !this.authService.isLoggedIn()) {
-      const err: RPCError = {
-        message: "Your authentication has timed out.",
-        errorId: null,
-        name: "User not logged in.",
-        type: "UserNotLoggedIn"
-      };
-      this.notificator.showRPCError(err);
-      return throwError(err);
+      const config = getDefaultDialogConfig();
+      config.width = '450px';
+
+      this.dialog.open(SessionExpirationDialogComponent, config);
     }
     // Apply the headers
     req = req.clone({
