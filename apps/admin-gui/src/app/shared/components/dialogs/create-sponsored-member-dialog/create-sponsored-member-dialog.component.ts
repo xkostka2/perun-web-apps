@@ -2,11 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   InputCreateSponsoredMember,
-  InputCreateSponsoredMember1,
   MembersManagerService, RichMember
 } from '@perun-web-apps/perun/openapi';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { FormControl, Validators } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 export interface CreateSponsoredMemberDialogData {
   entityId?: number
@@ -49,6 +49,8 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
 
+  expiration = 'never';
+  expirationControl = new FormControl(null);
 
   constructor(private dialogRef: MatDialogRef<CreateSponsoredMemberDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: CreateSponsoredMemberDialogData,
@@ -94,6 +96,10 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
       sendActivationLink: this.passwordReset
     }
 
+    if(this.expiration !== 'never' && this.expirationControl.value !== ''){
+      sponsoredMember.validityTo = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
+    }
+
     this.membersService.createSponsoredMember(sponsoredMember).subscribe(richMember => {
       this.successfullyCreated = true;
       this.dialogRef.updateSize('600px');
@@ -136,5 +142,10 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
     } else {
       this.password.enable();
     }
+  }
+
+  setExpiration() {
+    this.expiration = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
+    this.expirationControl.setValue(formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB'));
   }
 }

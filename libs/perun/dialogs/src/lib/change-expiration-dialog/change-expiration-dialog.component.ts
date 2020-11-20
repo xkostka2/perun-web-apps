@@ -61,7 +61,6 @@ export class ChangeExpirationDialogComponent implements OnInit {
     } else {
       this.changeExpiration();
     }
-
   }
 
   onCancel() {

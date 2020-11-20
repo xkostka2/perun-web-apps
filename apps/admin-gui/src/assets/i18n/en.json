@@ -1527,6 +1527,7 @@
     "CHANGE_EXPIRATION": {
       "TITLE_VO": "Change member expiration",
       "TITLE_GROUP": "Change member's group expiration",
+      "TITLE_SPONSORSHIP": "Change sponsorship expiration",
       "CURRENT_EXPIRATION": "Current expiration: ",
       "NEW_EXPIRATION": "New expiration:         ",
       "DATE_LABEL": "Expire to a date",
@@ -1638,7 +1639,11 @@
       "WAS_CREATED": "was successfully created",
       "COPY_INFORMATION": "Please save this information. It will not be possible to access this information later.",
       "PASSWORD_RESET": "Let the created user change his password via a given email address",
-      "PASSWORD_DISABLED": "User will choose his password via an email sent to the entered e-mail address"
+      "PASSWORD_DISABLED": "User will choose his password via an email sent to the entered e-mail address",
+      "EXPIRATION": "Sponsorship expiration",
+      "EXPIRE_DATE": "Expire to a date",
+      "EXPIRE_NEVER": "Never expire",
+      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd"
     },
     "GENERATE_SPONSORED_MEMBERS": {
       "TITLE": "Create sponsored members in bulk",
@@ -1652,12 +1657,18 @@
       "SUCCESS": "Members successfully created",
       "EMAIL": "Email",
       "EMAIL_ERROR": "Email is not valid",
-      "PASSWORD_RESET": "Let created users change their password via given email addresses."
+      "PASSWORD_RESET": "Let created users change their password via given email addresses.",
+      "EXPIRATION": "Sponsorship expiration",
+      "EXPIRE_DATE": "Expire to a date",
+      "EXPIRE_NEVER": "Never expire",
+      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd"
     },
     "EDIT_MEMBER_SPONSORS": {
-      "TITLE": "Edit member sponsors",
+      "TITLE": "Edit sponsored member",
+      "EXPIRATION": "Sponsorship expiration",
       "TABLE_ID": "id",
       "TABLE_NAME": "name",
+      "TABLE_EXPIRATION": "expiration",
       "CANCEL": "Cancel",
       "SUBMIT": "Submit",
       "REMOVE_SPONSOR_DISABLED": "You are not authorized to remove sponsor",
