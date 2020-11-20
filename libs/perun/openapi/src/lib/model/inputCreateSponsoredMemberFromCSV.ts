@@ -9,17 +9,24 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Attribute } from './attribute';
 
 
 /**
- * input to setVoAttribute
+ * input for createSponsoredMembersFromCSV
  */
-export interface InputSetVoAttribute { 
+export interface InputCreateSponsoredMemberFromCSV { 
     /**
-     * vo id
+     * values separated with semicolons
      */
+    data: Array<string>;
+    /**
+     * csv header for the given data, values are also split with semicolons
+     */
+    header: string;
     vo: number;
-    attribute: Attribute;
+    sponsor: number;
+    namespace: string;
+    validityTo?: string;
+    sendActivationLink?: boolean;
 }
 

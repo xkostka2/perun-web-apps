@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  InputCreateSponsoredMember,
+  InputCreateSponsoredMember1,
   MembersManagerService, RichMember
 } from '@perun-web-apps/perun/openapi';
 import { StoreService } from '@perun-web-apps/perun/services';
@@ -38,6 +40,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   titleAfter = '';
 
+  passwordReset = false;
   password = new FormControl('', [Validators.required]);
 
   namespace = new FormControl('', [Validators.required]);
@@ -45,6 +48,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
   login = new FormControl('', [Validators.required]);
 
   email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
+
 
   constructor(private dialogRef: MatDialogRef<CreateSponsoredMemberDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: CreateSponsoredMemberDialogData,
@@ -76,17 +80,21 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   onConfirm() {
     this.loading = true;
-    this.membersService.createSponsoredMember({
+
+    const sponsoredMember: InputCreateSponsoredMember = {
       vo: this.data.voId,
       firstName: this.firstName.value,
       lastName: this.lastName.value,
       titleAfter: this.titleAfter,
       titleBefore: this.titleBefore,
       namespace: this.namespace.value,
-      password: this.password.value,
+      password: this.passwordReset ? '' : this.password.value,
       sponsor: this.store.getPerunPrincipal().userId,
-      email: this.email.value
-    }).subscribe(richMember => {
+      email: this.email.value,
+      sendActivationLink: this.passwordReset
+    }
+
+    this.membersService.createSponsoredMember(sponsoredMember).subscribe(richMember => {
       this.successfullyCreated = true;
       this.dialogRef.updateSize('600px');
       this.createdMember = richMember;
@@ -119,6 +127,14 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
       this.login.disable();
     } else {
       this.login.enable();
+    }
+  }
+
+  passwordResetChange() {
+    if (this.passwordReset){
+      this.password.disable();
+    } else {
+      this.password.enable();
     }
   }
 }

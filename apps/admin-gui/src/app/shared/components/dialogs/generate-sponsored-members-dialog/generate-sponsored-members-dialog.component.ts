@@ -43,6 +43,8 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   sponsoredMembers: FormControl = new FormControl('', [Validators.required, Validators.pattern(this.notEmptyRegex)]);
   email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
 
+  passwordReset = false;
+
   constructor(private dialogRef: MatDialogRef<GenerateSponsoredMembersDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: GenerateSponsoredMembersDialogData,
               private store: StoreService,
@@ -142,14 +144,18 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     // console.log(fakeExportData);
     //this.exportData(fakeExportData);
 
+
     this.membersService.createSponsoredMembers({
       guestNames: finalMemberNames,
       namespace: this.namespace.value,
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
-      email: this.email.value
+      email: this.email.value,
+      sendActivationLink: this.passwordReset
     }).subscribe(logins => {
-      this.exportData(logins);
+      if(!this.passwordReset) {
+        this.exportData(logins);
+      }
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
       this.dialogRef.close(true);
     }, err => this.loading = false);

@@ -9,17 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Attribute } from './attribute';
 
 
-/**
- * input to setMemberAttribute
- */
-export interface InputSetMemberAttribute { 
-    /**
-     * member id
-     */
-    member: number;
-    attribute: Attribute;
+export interface RoleManagementRules { 
+    roleName: string;
+    primaryObject: string | null;
+    privilegedRolesToManage: Array<{ [key: string]: string; }>;
+    privilegedRolesToRead: Array<{ [key: string]: string; }>;
+    entitiesToManage: { [key: string]: string; };
+    assignedObjects: { [key: string]: string; };
 }
 

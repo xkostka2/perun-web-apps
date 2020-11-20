@@ -57,9 +57,19 @@
     </mat-form-field>
 
 
-    <mat-form-field>
-      <input matInput [formControl]="password" required
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
+    <mat-checkbox
+      labelPosition="before"
+      (change)="passwordResetChange()"
+      [(ngModel)]="passwordReset">{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET' | translate}}
+    </mat-checkbox>
+    <mat-form-field
+      matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_DISABLED' | translate}}"
+      matTooltipPosition="left"
+      [matTooltipDisabled]="!passwordReset">
+      <input
+        [disabled]=""
+        matInput [formControl]="password" required
+        placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
       <mat-error *ngIf="password.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
     </mat-form-field>
 

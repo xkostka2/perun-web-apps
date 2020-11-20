@@ -36,6 +36,10 @@
       </mat-error>
     </mat-form-field>
     <div class="text-muted">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
+    <br>
+    <mat-checkbox [(ngModel)]="passwordReset" labelPosition="before">
+      {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_RESET' | translate}}
+    </mat-checkbox>
   </div>
 
   <table
