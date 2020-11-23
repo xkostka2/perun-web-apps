@@ -123,45 +123,8 @@ export class FacilityOverviewComponent implements OnInit {
         cssIcon: 'perun-settings2',
         url: `/facilities/${this.facility.id}/settings`,
         label: 'MENU_ITEMS.FACILITY.SETTINGS',
-        style: 'facility-btn',
-        intermediateBtn: true,
-        children: this.getSettingsChildren()
+        style: 'facility-btn'
       });
     }
-  }
-
-  private getSettingsChildren(): {label: string, url: string}[] {
-    const children: {label: string, url: string}[] = [];
-
-    // Owners
-    if(this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility])){
-      children.push({
-        url: `/facilities/${this.facility.id}/settings/owners`,
-        label: 'MENU_ITEMS.FACILITY.OWNERS'
-      });
-    }
-    // Managers
-    if(this.authResolver.isAuthorized('getRichAdmins_Facility_List<String>_boolean_boolean_policy', [this.facility])){
-      children.push({
-        url: `/facilities/${this.facility.id}/settings/managers`,
-        label: 'MENU_ITEMS.FACILITY.MANAGERS'
-      });
-    }
-    // Security teams
-    if (this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
-      children.push({
-        url: `/facilities/${this.facility.id}/settings/security-teams`,
-        label: 'MENU_ITEMS.FACILITY.SECURITY_TEAMS'
-      });
-    }
-    // Blacklist
-    if(this.authResolver.isAuthorized('getBansForFacility_int_policy', [this.facility])){
-      children.push({
-        url: `/facilities/${this.facility.id}/settings/blacklist`,
-        label: 'MENU_ITEMS.FACILITY.BLACKLIST'
-      });
-    }
-
-    return children
   }
 }

@@ -1,9 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import {MenuItem} from '@perun-web-apps/perun/models';
 import {
-  User, UsersManagerService
+  User
 } from '@perun-web-apps/perun/openapi';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-overview',
@@ -14,25 +13,14 @@ export class UserOverviewComponent implements OnInit {
 
   @HostBinding('class.router-component') true;
 
-  constructor(private userService: UsersManagerService,
-              private route: ActivatedRoute) { }
+  constructor() { }
 
   navItems: MenuItem[] = [];
   user: User;
   path: string;
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      if(params['userId'] !== undefined) {
-        this.userService.getUserById(params['userId']).subscribe(user => {
-          this.user = user;
-
-          this.initNavItems();
-        });
-      } else {
-        this.initNavItems();
-      }
-    });
+    this.initNavItems();
   }
 
   private initNavItems() {
@@ -75,42 +63,7 @@ export class UserOverviewComponent implements OnInit {
         cssIcon: 'perun-settings2',
         url: `settings`,
         label: 'MENU_ITEMS.ADMIN.SETTINGS',
-        style: 'user-btn',
-        intermediateBtn: true,
-        children: this.getChildren()
+        style: 'user-btn'
       });
-  }
-
-  getChildren(): {label: string, url: string}[]{
-    const children: {label: string, url: string}[] = [];
-
-    if (window.location.pathname.startsWith('/admin')){
-      if(this.user.serviceUser){
-        children.push({
-          label: 'MENU_ITEMS.USER.ASSOCIATED_USERS',
-          url: 'settings/associated-users'
-        });
-      } else {
-        children.push({
-          label: 'MENU_ITEMS.USER.SERVICE_IDENTITIES',
-          url: 'settings/service-identities'
-        });
-      }
-      children.push({
-        label: 'MENU_ITEMS.USER.ROLES',
-        url: 'settings/roles'
-      })
-    } else {
-      children.push({
-        label: 'MENU_ITEMS.USER.PASSWORD_RESET',
-        url: 'settings/passwordReset'
-      });
-      children.push({
-        label: 'MENU_ITEMS.USER.GUI_CONFIG',
-        url: 'settings/guiConfig'
-      })
-    }
-
-    return children
   }
 }

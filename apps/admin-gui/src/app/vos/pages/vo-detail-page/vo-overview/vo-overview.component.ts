@@ -75,9 +75,7 @@ export class VoOverviewComponent implements OnInit {
         cssIcon: 'perun-manage-facility',
         url: `/organizations/${this.vo.id}/resources`,
         label: 'MENU_ITEMS.VO.RESOURCES',
-        style: 'vo-btn',
-        intermediateBtn: true,
-        children: this.getResourceChildren()
+        style: 'vo-btn'
       });
     }
 
@@ -117,77 +115,9 @@ export class VoOverviewComponent implements OnInit {
         cssIcon: 'perun-settings2',
         url: `/organizations/${this.vo.id}/settings`,
         label: 'MENU_ITEMS.VO.SETTINGS',
-        style: 'vo-btn',
-        intermediateBtn: true,
-        children: this.getSettingsChildren()
+        style: 'vo-btn'
       });
     }
-  }
-
-  private getResourceChildren(): {label: string, url: string}[]{
-    const children: {label: string, url: string}[] = [];
-
-    children.push({
-      url: `/organizations/${this.vo.id}/resources/preview`,
-      label: 'MENU_ITEMS.VO.RESOURCE_PREVIEW'
-    })
-
-    if(this.authResolver.isAuthorized('getAllResourcesTagsForVo_Vo_policy', [this.vo])){
-      children.push({
-        url: `/organizations/${this.vo.id}/resources/tags`,
-        label: 'MENU_ITEMS.VO.RESOURCE_TAGS'
-      });
-    }
-
-    if(this.authResolver.isAuthorized('getResourcesState_Vo_policy', [this.vo])){
-      children.push({
-        url: `/organizations/${this.vo.id}/resources/states`,
-        label: 'MENU_ITEMS.VO.RESOURCE_STATES'
-      });
-    }
-
-    return children;
-  }
-
-  private getSettingsChildren(): {label: string, url: string}[] {
-    const children: {label: string, url: string}[] = [];
-    // Membership
-    if (this.authResolver.isThisVoAdminOrObserver(this.vo.id)) {
-      children.push({
-        url: `/organizations/${this.vo.id}/settings/expiration`,
-        label: 'MENU_ITEMS.VO.EXPIRATION'
-      });
-    }
-    // Managers
-    if (this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [this.vo])) {
-      children.push({
-        url: `/organizations/${this.vo.id}/settings/managers`,
-        label: 'MENU_ITEMS.VO.MANAGERS'
-      });
-    }
-    // Application forms
-    if (this.authResolver.isThisVoAdminOrObserver(this.vo.id)) {
-      children.push({
-        url: `/organizations/${this.vo.id}/settings/applicationForm`,
-        label: 'MENU_ITEMS.VO.APPLICATION_FORM'
-      });
-    }
-    // Notifications
-    if (this.authResolver.isThisVoAdminOrObserver(this.vo.id)) {
-      children.push({
-        url: `/organizations/${this.vo.id}/settings/notifications`,
-        label: 'MENU_ITEMS.VO.NOTIFICATIONS'
-      });
-    }
-    // Ext sources
-    if (this.authResolver.isAuthorized('getVoExtSources_Vo_policy', [this.vo])) {
-      children.push({
-        url: `/organizations/${this.vo.id}/settings/extsources`,
-        label: 'MENU_ITEMS.VO.EXTSOURCES'
-      });
-    }
-
-    return children;
   }
 
   private initItems() {
