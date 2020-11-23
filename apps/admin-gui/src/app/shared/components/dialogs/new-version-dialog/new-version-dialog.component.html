@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{'DIALOGS.NEW_VERSION.TITLE' | translate}}</h1>
+
+<div class="user-theme">
+  <div mat-dialog-content>
+    <p>
+      {{'DIALOGS.NEW_VERSION.DESCRIPTION' | translate}}
+    </p>
+  </div>
+
+  <div mat-dialog-actions>
+
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="onClose()">
+      {{'DIALOGS.NEW_VERSION.LATER' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="accent"
+      (click)="onReload()">
+      {{'DIALOGS.NEW_VERSION.RELOAD' | translate}}
+    </button>
+  </div>
+</div>

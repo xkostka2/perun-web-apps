@@ -1678,6 +1678,12 @@
       "PENDING_MAILS_BEGIN": "Validation e-mail has been sent to ",
       "PENDING_MAILS_END": ". Check your inbox and complete validation by clicking on link in received e-mail.",
       "EMAIL_ERROR": "Email is not valid"
+    },
+    "NEW_VERSION": {
+      "TITLE": "New version is available!",
+      "DESCRIPTION": "New version is available. Please, reload the page to apply the changes.",
+      "LATER": "Got it! I will reload later",
+      "RELOAD": "Reload"
     }
   },
   "MEMBERS_LIST": {
