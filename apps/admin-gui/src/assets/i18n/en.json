@@ -595,7 +595,10 @@
       "EXPIRATION": "Expiration:",
       "PERSONAL": "Personal information",
       "SPONSORED_BY": "This member is sponsored",
-      "SPONSORS": "Sponsors"
+      "SPONSORS": "Sponsors",
+      "RESET_PASSWORD": "Reset password",
+      "RESET_DISABLED": "Unsupported functionality for user's namespaces",
+      "SEND_REQUEST": "Send request"
     },
     "GROUPS": {
       "TITLE": "Member groups",
@@ -1653,8 +1656,18 @@
       "TABLE_NAME": "name",
       "CANCEL": "Cancel",
       "SUBMIT": "Submit",
-      "SUCCESS": "Sponsors successfully edited",
-      "REMOVE_SPONSOR_DISABLED": "You are not authorized to remove sponsor"
+      "REMOVE_SPONSOR_DISABLED": "You are not authorized to remove sponsor",
+      "SUCCESS": "Sponsors successfully edited"
+    },
+    "PASSWORD_RESET_REQUEST": {
+      "TITLE": "Password reset request",
+      "LANGUAGE": "Language",
+      "NAMESPACE": "Namespace",
+      "EMAIL": "Email attribute",
+      "LOGIN": "Login:",
+      "SEND": "Send",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Request has successfully been sent."
     }
   },
   "MEMBERS_LIST": {
@@ -2092,7 +2105,8 @@
           "TITLE": "Password reset",
           "CHANGE_PASSWORD": "Change password",
           "NAMESPACE": "Namespace",
-          "LOGIN": "Login"
+          "LOGIN": "Login",
+          "NOT_SUPPORTED": "Password reset is not supported for your current namespaces"
         },
         "SHOW_VALUE": {
           "CLOSE": "Close",

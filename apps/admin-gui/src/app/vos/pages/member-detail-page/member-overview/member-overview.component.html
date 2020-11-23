@@ -110,6 +110,23 @@
         </mat-card-content>
       </mat-card>
     </div>
+    <div class="align-cards" *ngIf="pwdResetAuth">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-header>
+          <mat-card-title>
+            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.RESET_PASSWORD' | translate}}</h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="column-center">
+          <div  [matTooltip]="'MEMBER_DETAIL.OVERVIEW.RESET_DISABLED' | translate"
+                [matTooltipDisabled]="logins.length>0">
+            <button mat-flat-button color="accent" (click)="requestPwdReset()"  [disabled]="!logins.length">
+              {{'MEMBER_DETAIL.OVERVIEW.SEND_REQUEST'|translate}}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 
   <div>

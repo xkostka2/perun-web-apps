@@ -175,6 +175,7 @@ import { SponsoredMembersListComponent } from './components/sponsored-members-li
 import { EditMemberSponsorsDialogComponent } from './components/dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
 import { CreateAttributeDialogComponent } from './components/dialogs/create-attribute-dialog/create-attribute-dialog.component';
 import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe';
+import { PasswordResetRequestDialogComponent } from './components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 
 @NgModule({
   imports: [
@@ -427,7 +428,8 @@ import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe'
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
-    AttributeFriendlyNamePipe
+    AttributeFriendlyNamePipe,
+    PasswordResetRequestDialogComponent
   ],
   providers: [
     AnyToStringPipe,
