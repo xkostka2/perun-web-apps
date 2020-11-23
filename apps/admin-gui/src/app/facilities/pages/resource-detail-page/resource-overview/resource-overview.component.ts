@@ -80,24 +80,10 @@ export class ResourceOverviewComponent implements OnInit {
     });
 
     this.navItems.push({
-      cssIcon: 'perun-settings2',
-      url: `${urlStart}/resources/${this.resource.id}/settings`,
-      label: 'MENU_ITEMS.RESOURCE.SETTINGS',
-      style: 'resource-btn',
-      intermediateBtn: true,
-      children: this.getSettingsChildren(inVo)
-    });
-  }
-
-  private getSettingsChildren(inVo: boolean): {label: string, url: string}[] {
-    const children: {label: string, url: string}[] = [];
-
-    children.push(
-      {
-      url: `${inVo ? `/organizations/${this.resource.voId}` : `/facilities/${this.resource.facilityId}`}/resources/${this.resource.id}/settings/managers`,
-      label: 'MENU_ITEMS.RESOURCE.MANAGERS'
-    })
-
-    return children
+        cssIcon: 'perun-settings2',
+        url: `${urlStart}/resources/${this.resource.id}/settings`,
+        label: 'MENU_ITEMS.RESOURCE.SETTINGS',
+        style: 'resource-btn'
+      });
   }
 }

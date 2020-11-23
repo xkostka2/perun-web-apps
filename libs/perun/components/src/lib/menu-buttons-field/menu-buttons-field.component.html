@@ -1,18 +1,9 @@
 <div *ngIf="size === 'small'" class="items-container">
   <div *ngFor="let item of items" class="item-itself-container" mat-ripple>
-    <button *ngIf="item.intermediateBtn" class="{{item.style}} sign" mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon class="{{item.style}}">more_horiz</mat-icon>
-    </button>
-    <mat-menu class="{{item.style}}" #menu="matMenu">
-      <button class="{{item.style}}" mat-menu-item *ngFor="let page of item.children" [routerLink]="page.url">
-        {{page.label | translate}}
-      </button>
-    </mat-menu>
     <a class="{{item.style}} item-itself" [routerLink]="item.url">
       <mat-icon [svgIcon]="item.cssIcon" class="item-pic perun-icon"></mat-icon>
   <!--    <img src="assets/img/PerunWebImages/{{item.icon}}" alt="{{item.label}}">-->
       {{item.label | translate}}
-      <div class="separator"></div>
     </a>
   </div>
 </div>

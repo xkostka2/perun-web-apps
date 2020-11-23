@@ -35,18 +35,7 @@ export class AdminOverviewComponent implements OnInit {
       cssIcon: 'perun-preview',
       url: '/admin/visualizer',
       label: 'MENU_ITEMS.ADMIN.VISUALIZER',
-      style: 'admin-btn',
-      intermediateBtn: true,
-      children: [
-        {
-          label: 'MENU_ITEMS.VISUALIZER.ATTR_DEPENDENCIES',
-          url: '/admin/visualizer/attrDependencies'
-        },
-        {
-          label: 'MENU_ITEMS.VISUALIZER.USER_DESTINATION',
-          url: '/admin/visualizer/userDestinationRelationship'
-        }
-      ]
+      style: 'admin-btn'
     },
     {
       cssIcon: 'perun-external-sources',
