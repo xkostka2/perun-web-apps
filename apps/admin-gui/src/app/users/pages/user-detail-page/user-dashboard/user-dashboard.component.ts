@@ -120,6 +120,9 @@ export class UserDashboardComponent implements OnInit {
     return new Promise((resolve, reject) => {
       if (this.guiAuthResolver.isOnlySponsor()) {
         const vosSponsoring = this.storeService.getPerunPrincipal().roles['SPONSOR']['Vo'];
+        if (vosSponsoring === undefined || vosSponsoring.length === 0){
+          resolve();
+        }
         let voCount = 0;
         for (const voId of vosSponsoring) {
           this.voManager.getVoById(voId).subscribe(vo => {
