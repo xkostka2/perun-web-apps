@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { AttributesManagerService, MemberWithSponsors } from '@perun-web-apps/perun/openapi';
+import { Attribute, AttributesManagerService, MemberWithSponsors, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -63,6 +63,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   dataSource: MatTableDataSource<MemberWithSponsors>;
   private sort: MatSort;
   exporting = false;
+  loading = false;
 
   routingStrategy = false;
 
@@ -149,6 +150,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   }
 
   resetPassword(sponsoredMember: MemberWithSponsors) {
+    this.loading = true;
     const attUrns = this.storeService.get('password_namespace_attributes').map(urn => {
       urn = urn.split(':');
       return urn[urn.length - 1];
@@ -164,8 +166,20 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
         logins: filteredLogins
       };
 
-      this.dialog.open(PasswordResetRequestDialogComponent, config);
-    });
+      const dialogRef = this.dialog.open(PasswordResetRequestDialogComponent, config);
 
+      dialogRef.afterClosed().subscribe(() => {
+        this.loading = false;
+      });
+    }, () => this.loading = false);
+  }
+
+  passwdResetAuth(sponsoredMember: MemberWithSponsors) {
+    const vo: Vo = {
+      id: sponsoredMember.member.voId,
+      beanName: "Vo"
+    };
+
+    return this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [vo]);
   }
 }
