@@ -65,6 +65,7 @@ import { ResourceSearchSelectComponent } from './resource-search-select/resource
 import { MemberSearchSelectComponent } from './member-search-select/member-search-select.component';
 import { FacilitySearchSelectComponent } from './facility-search-select/facility-search-select.component';
 import { UserSearchSelectComponent } from './user-search-select/user-search-select.component';
+import { ExpirationSelectComponent } from './expiration-select/expiration-select.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -160,7 +161,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     ResourceSearchSelectComponent,
     MemberSearchSelectComponent,
     FacilitySearchSelectComponent,
-    UserSearchSelectComponent
+    UserSearchSelectComponent,
+    ExpirationSelectComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -194,7 +196,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     ResourceSearchSelectComponent,
     MemberSearchSelectComponent,
     FacilitySearchSelectComponent,
-    UserSearchSelectComponent
+    UserSearchSelectComponent,
+    ExpirationSelectComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

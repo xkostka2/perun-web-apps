@@ -47,7 +47,6 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   passwordReset = false;
 
   expiration = 'never';
-  expirationControl = new FormControl(null);
 
   constructor(private dialogRef: MatDialogRef<GenerateSponsoredMembersDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: GenerateSponsoredMembersDialogData,
@@ -157,9 +156,10 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
       sendActivationLink: this.passwordReset
     }
 
-    if(this.expiration !== 'never' && this.expirationControl.value !== ''){
-      inputSponsoredMembers.validityTo = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
+    if(this.expiration !== 'never'){
+      inputSponsoredMembers.validityTo = formatDate(this.expiration,'yyyy-MM-dd','en-GB');
     }
+
     this.membersService.createSponsoredMembers(inputSponsoredMembers).subscribe(logins => {
       this.exportData(logins);
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
@@ -238,9 +238,12 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     this.page.emit(event);
   }
 
-  setExpiration() {
-    this.expiration = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
-    this.expirationControl.setValue(formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB'));
+  setExpiration(newExpiration) {
+    if(newExpiration === 'never'){
+      this.expiration = 'never';
+    } else {
+      this.expiration = formatDate(newExpiration,'yyyy-MM-dd','en-GB');
+    }
   }
 
 }

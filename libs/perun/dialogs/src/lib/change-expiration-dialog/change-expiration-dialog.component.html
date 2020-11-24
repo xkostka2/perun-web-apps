@@ -1,5 +1,5 @@
 <div class="member-theme">
-  <h1 mat-dialog-title>{{(mode === 'vo' ? 'DIALOGS.CHANGE_EXPIRATION.TITLE_VO' : 'DIALOGS.CHANGE_EXPIRATION.TITLE_GROUP')| translate}}</h1>
+  <h1 mat-dialog-title>{{title}}</h1>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
   <div *ngIf="!loading">
     <div mat-dialog-content>

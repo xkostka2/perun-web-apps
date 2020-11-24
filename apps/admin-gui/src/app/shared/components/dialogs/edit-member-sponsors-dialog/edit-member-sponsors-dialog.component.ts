@@ -96,8 +96,9 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
     const config = getDefaultDialogConfig();
     config.width = '400px';
     config.data = {
-      member: this.data.member,
-      sponsor: sponsor
+      memberId: this.data.member.id,
+      sponsor: sponsor,
+      mode: 'sponsor'
     };
 
     const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);

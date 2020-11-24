@@ -50,7 +50,6 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
 
   expiration = 'never';
-  expirationControl = new FormControl(null);
 
   constructor(private dialogRef: MatDialogRef<CreateSponsoredMemberDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: CreateSponsoredMemberDialogData,
@@ -96,8 +95,8 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
       sendActivationLink: this.passwordReset
     }
 
-    if(this.expiration !== 'never' && this.expirationControl.value !== ''){
-      sponsoredMember.validityTo = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
+    if(this.expiration !== 'never'){
+      sponsoredMember.validityTo = this.expiration;
     }
 
     this.membersService.createSponsoredMember(sponsoredMember).subscribe(richMember => {
@@ -144,8 +143,12 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
     }
   }
 
-  setExpiration() {
-    this.expiration = formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB');
-    this.expirationControl.setValue(formatDate(this.expirationControl.value,'yyyy-MM-dd','en-GB'));
+  setExpiration(newExpiration) {
+    if (newExpiration === 'never') {
+      this.expiration = 'never';
+    } else {
+      this.expiration = formatDate(newExpiration, 'yyyy-MM-dd', 'en-GB');
+    }
   }
+
 }

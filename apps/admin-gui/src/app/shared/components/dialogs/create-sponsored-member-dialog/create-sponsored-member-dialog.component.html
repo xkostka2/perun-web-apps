@@ -87,24 +87,9 @@
 
 
     <h6>{{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRATION' | translate}}</h6>
-    <mat-radio-group [(ngModel)]="expiration">
-      <div>
-        <mat-radio-button value="never">
-          {{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRE_NEVER'|translate}}
-        </mat-radio-button>
-      </div>
-      <mat-radio-button value="{{expirationControl.value}}">
-        <mat-form-field appearance="fill" color="primary">
-          <mat-label>{{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRE_DATE'|translate}}</mat-label>
-          <input (dateChange)="setExpiration()" [formControl]="expirationControl" [matDatepicker]="picker" matInput>
-          <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="expiration !== 'never' && expirationControl.hasError('matDatepickerParse')">
-            {{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRATION_ERROR'|translate}}
-          </mat-error>
-        </mat-form-field>
-      </mat-radio-button>
-    </mat-radio-group>
+    <perun-web-apps-expiration-select
+      (datePicker)="setExpiration($event)">
+    </perun-web-apps-expiration-select>
 
   </div>
 
@@ -132,8 +117,7 @@
     <button
       (click)="onConfirm()"
       [disabled]="loading || firstName.invalid || lastName.invalid ||
-      login.invalid || password.invalid || namespace.invalid || email.invalid ||
-      (expiration !== 'never' && expirationControl.hasError('matDatepickerParse'))"
+      login.invalid || password.invalid || namespace.invalid || email.invalid"
       class="ml-2"
       color="accent"
       mat-flat-button>
