@@ -25,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { PerunPipesModule } from '@perun-web-apps/perun/pipes';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { AttributeValueListDeleteDialogComponent} from './attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';
+import { ChangeEmailDialogComponent } from './change-email-dialog/change-email-dialog.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { AttributeValueListDeleteDialogComponent} from './attribute-value-list-d
     ShowValueDialogComponent,
     EditAttributeDialogComponent,
     AttributeValueListEditDialogComponent,
-    AttributeValueListDeleteDialogComponent
+    AttributeValueListDeleteDialogComponent,
+    ChangeEmailDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,
@@ -68,7 +70,8 @@ import { AttributeValueListDeleteDialogComponent} from './attribute-value-list-d
     ShowValueDialogComponent,
     EditAttributeDialogComponent,
     AttributeValueListEditDialogComponent,
-    AttributeValueListDeleteDialogComponent
+    AttributeValueListDeleteDialogComponent,
+    ChangeEmailDialogComponent
   ]
 })
 export class PerunDialogsModule {
