@@ -60,6 +60,15 @@
               mat-icon-button>
               <mat-icon>more_horiz</mat-icon>
             </button>
+            <button
+              (mouseenter)="disableRouting = true"
+              (mouseleave)="disableRouting = routingStrategy"
+              class="dark-hover-list-item"
+              aria-label="sponsors of member"
+              (click)="resetPassword(sponsoredMember)"
+              mat-icon-button>
+              <mat-icon>more_horiz</mat-icon>
+            </button>
           </td>
         </ng-container>
 
