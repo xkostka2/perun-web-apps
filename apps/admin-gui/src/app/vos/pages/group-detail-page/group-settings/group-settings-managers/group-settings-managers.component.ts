@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Group, GroupsManagerService } from '@perun-web-apps/perun/openapi';
-import { Role } from '@perun-web-apps/perun/models';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-group-settings-managers',
@@ -14,12 +14,13 @@ export class GroupSettingsManagersComponent implements OnInit {
 
   constructor(
     private groupService: GroupsManagerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private guiAuthResolver: GuiAuthResolver
   ) { }
 
   group: Group;
 
-  availableRoles: Role[] = [ Role.GROUPADMIN ];
+  availableRoles: string[] = [];
 
   selected = 'user';
 
@@ -35,5 +36,7 @@ export class GroupSettingsManagersComponent implements OnInit {
         this.group = group;
       });
     });
+
+    this.guiAuthResolver.assignAvailableRoles(this.availableRoles, 'Group');
   }
 }

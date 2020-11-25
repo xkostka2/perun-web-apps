@@ -11,19 +11,12 @@
  */
 
 
-/**
- * input for createSponsoredMember
- */
-export interface InputCreateSponsoredMember { 
-    firstName: string;
-    lastName: string;
-    titleBefore?: string;
-    titleAfter?: string;
-    password: string;
-    email?: string;
-    vo: number;
-    sponsor: number;
-    namespace: string;
-    validityTo?: string;
+export interface RoleManagementRules { 
+    roleName: string;
+    primaryObject: string | null;
+    privilegedRolesToManage: Array<{ [key: string]: string; }>;
+    privilegedRolesToRead: Array<{ [key: string]: string; }>;
+    entitiesToManage: { [key: string]: string; };
+    assignedObjects: { [key: string]: string; };
 }
 

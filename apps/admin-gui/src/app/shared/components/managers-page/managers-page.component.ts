@@ -7,7 +7,6 @@ import { RemoveGroupManagerDialogComponent } from '../dialogs/remove-group-manag
 import { AddGroupManagerDialogComponent } from '../dialogs/add-group-manager-dialog/add-group-manager-dialog.component';
 import { AuthzResolverService, Facility, Group, Resource, RichUser, Vo } from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
-import { Role } from '@perun-web-apps/perun/models';
 import { TABLE_GROUP_MANAGERS_PAGE, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
@@ -39,7 +38,7 @@ export class ManagersPageComponent implements OnInit {
   complementaryObject: Group | Vo | Facility | Resource;
 
   @Input()
-  availableRoles: Role[];
+  availableRoles: string[];
 
   @Input()
   complementaryObjectType: string;
@@ -51,7 +50,7 @@ export class ManagersPageComponent implements OnInit {
   selectionGroups = new SelectionModel<Group>(true, []);
 
   selected = 'user';
-  selectedRole: Role;
+  selectedRole: string;
 
   loading = false;
 
