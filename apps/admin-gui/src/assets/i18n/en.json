@@ -1668,6 +1668,16 @@
       "SEND": "Send",
       "CANCEL": "Cancel",
       "SUCCESS": "Request has successfully been sent."
+    },
+    "CHANGE_EMAIL": {
+      "TITLE": "Change preffered email",
+      "INPUT_PLACEHOLDER": "New email",
+      "CANCEL": "Cancel",
+      "CHANGE": "Change",
+      "SUCCESS": "Request for changing preferred email has been sent. Please check your mailbox.",
+      "PENDING_MAILS_BEGIN": "Validation e-mail has been sent to ",
+      "PENDING_MAILS_END": ". Check your inbox and complete validation by clicking on link in received e-mail.",
+      "EMAIL_ERROR": "Email is not valid"
     }
   },
   "MEMBERS_LIST": {
@@ -1795,7 +1805,8 @@
       "RESOURCES_TOOLTIP_INFO": "Resources where you are admin",
       "FACILITIES_TOOLTIP_INFO": "Facilities where you are admin",
       "SPONSOR_TOOLTIP_INFO": "Organizations where you have role Sponsor",
-      "TOP_GROUP_CREATOR_TOOLTIP_INFO": "Organization where you have role Top group creator"
+      "TOP_GROUP_CREATOR_TOOLTIP_INFO": "Organization where you have role Top group creator",
+      "GENERAL_SETTINGS": "General settings"
     },
     "IDENTITIES": {
       "TITLE": "Identities",

@@ -10,6 +10,7 @@
         [formControl]="emailControl"
       >
     </label>
+    <mat-error *ngIf="emailControl.invalid">{{'DIALOGS.CHANGE_EMAIL.EMAIL_ERROR'|customTranslate | translate}}</mat-error>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>

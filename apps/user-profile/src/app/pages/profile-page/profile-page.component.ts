@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeEmailDialogComponent } from '../../components/dialogs/change-email-dialog/change-email-dialog.component';
+import { ChangeEmailDialogComponent } from '@perun-web-apps/perun/dialogs';
 import {
   Attribute,
   AttributesManagerService,

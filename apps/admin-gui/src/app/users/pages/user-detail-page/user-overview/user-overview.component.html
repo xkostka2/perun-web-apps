@@ -1,3 +1,38 @@
+<div class="align-cards" *ngIf="inMyProfile">
+  <mat-card class="mat-elevation-z3">
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="page-subtitle">{{'USER_DETAIL.OVERVIEW.GENERAL_SETTINGS' | translate}}</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="w-100" mat-table [dataSource]="mailDataSource">
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
+            {{attribute.displayName}}:
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let attribute" mat-cell>
+            {{attribute.value}}
+            <button class="ml-3" mat-icon-button (click)="changeEmail()">
+            <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr
+          *matRowDef="let attribute; columns: displayedColumns;"
+          mat-row
+        >
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+
 <perun-web-apps-menu-buttons-field [items]="navItems" [size]="'small'"></perun-web-apps-menu-buttons-field>
 
 
