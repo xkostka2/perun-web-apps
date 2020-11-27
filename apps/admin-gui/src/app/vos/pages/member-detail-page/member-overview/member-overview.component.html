@@ -65,7 +65,7 @@
                 </div>
                 <div *ngIf="attribute === 'Expiration'">
                   <i class="column-center">
-                    {{expiration}}
+                    {{expiration | parseDate}}
                   </i>
                   <button
                     *ngIf="authResolver.isThisVoAdmin(vo.id)"

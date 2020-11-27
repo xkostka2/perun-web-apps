@@ -28,10 +28,12 @@
   [pageSize]="pageSize"
   (page)="pageChanged($event)"
   [groups]="groups"
-  [hideColumns]="removeAuth ? [ 'vo', 'menu'] : ['select', 'vo', 'menu']"
+  [hideColumns]="removeAuth ? [ 'vo','menu'] : ['select', 'vo', 'menu']"
   [selection]="selection"
   [filter]="filterValue"
+  [memberId]="memberId"
   [disableRouting]="!routeAuth"
   [authType]="'member-groups'"
+  (refreshTable)="refreshTable()"
   *ngIf="!loading">
 </perun-web-apps-groups-list>

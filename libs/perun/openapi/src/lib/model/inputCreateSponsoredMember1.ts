@@ -14,7 +14,7 @@
 /**
  * input for createSponsoredMember
  */
-export interface InputCreateSponsoredMember1 { 
+export interface InputCreateSponsoredMember1 {
     /**
      * names of members to create, single name should have the format {firstName};{lastName} to be parsed well
      */

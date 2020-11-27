@@ -4,7 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges, OnInit, Output,
+  OnChanges, Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -15,7 +15,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { ChangeExpirationDialogComponent, GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import {
   EditFacilityResourceGroupVoDialogComponent,
@@ -86,13 +86,16 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
   @Input()
   authType: string;
 
+  @Input()
+  memberId: number;
+
   @Output()
   page = new EventEmitter<PageEvent>();
 
   @Output()
   refreshTable = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['select', 'id', 'vo', 'name', 'description', 'menu'];
+  displayedColumns: string[] = ['select', 'id', 'vo', 'name', 'description','expiration', 'menu'];
   dataSource: MatTableDataSource<Group | RichGroup>;
 
   exporting = false;
@@ -290,5 +293,24 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
           }
         });
       }
+  }
+
+  changeExpiration(group: RichGroup) {
+    const expirationAtt = group.attributes.find(att => att.baseFriendlyName === 'groupMembershipExpiration');
+    const config = getDefaultDialogConfig();
+    config.width = '400px';
+    config.data = {
+      memberId: this.memberId,
+      groupId: group.id,
+      expirationAttr: expirationAtt,
+      mode: 'group'
+    }
+
+    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
+    dialogRef.afterClosed().subscribe(success => {
+      if (success){
+        this.refreshTable.emit();
+      }
+    });
   }
 }

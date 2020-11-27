@@ -19,7 +19,7 @@
     (page)="pageChanged($event)"
     [pageSize]="pageSize"
     *ngIf="!loading && groupsToShow.length !== 0"
-    [hideColumns]="['select', 'menu']"
+    [hideColumns]="['select', 'expiration','menu']"
     [groups] = "groupsToShow"
     [groupsToDisable]="groupsWithoutRouteAuth"
     [filter]="filterValue"

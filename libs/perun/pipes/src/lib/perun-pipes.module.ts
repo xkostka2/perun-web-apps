@@ -16,7 +16,9 @@ import { MemberStatusIconPipe } from './member-status-icon.pipe';
 import { MemberStatusTooltipPipe } from './member-status-tooltip.pipe';
 import { MemberEmailPipe } from './member-email.pipe';
 import { MemberLoginsPipe} from './member-logins.pipe';
+import { GroupExpirationPipe } from './group-expiration.pipe';
 import { MemberOrganizationPipe } from './member-organization.pipe';
+import { ParseDatePipe } from './parse-date.pipe';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { MemberOrganizationPipe } from './member-organization.pipe';
     MemberStatusTooltipPipe,
     MemberEmailPipe,
     MemberLoginsPipe,
-    MemberOrganizationPipe
+    MemberOrganizationPipe,
+    GroupExpirationPipe,
+    ParseDatePipe
   ],
   exports: [
     ResourceTagsToStringPipe,
@@ -57,7 +61,9 @@ import { MemberOrganizationPipe } from './member-organization.pipe';
     MemberStatusTooltipPipe,
     MemberEmailPipe,
     MemberLoginsPipe,
-    MemberOrganizationPipe
+    GroupExpirationPipe,
+    MemberOrganizationPipe,
+    ParseDatePipe
   ],
   imports: [CommonModule],
 })
