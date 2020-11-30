@@ -59,15 +59,47 @@ export class AuthzResolverService {
 
 
 
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key,
+                        (value as Date).toISOString().substr(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
     /**
      * Return all loaded perun policies.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllPolicies(observe?: 'body', reportProgress?: boolean): Observable<Array<PerunPolicy>>;
-    public getAllPolicies(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PerunPolicy>>>;
-    public getAllPolicies(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PerunPolicy>>>;
-    public getAllPolicies(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllPolicies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<PerunPolicy>>;
+    public getAllPolicies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<PerunPolicy>>>;
+    public getAllPolicies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<PerunPolicy>>>;
+    public getAllPolicies(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -87,18 +119,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<PerunPolicy>>(`${this.configuration.basePath}/json/authzResolver/getAllPolicies`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -112,10 +153,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllRolesManagementRules(observe?: 'body', reportProgress?: boolean): Observable<Array<RoleManagementRules>>;
-    public getAllRolesManagementRules(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RoleManagementRules>>>;
-    public getAllRolesManagementRules(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RoleManagementRules>>>;
-    public getAllRolesManagementRules(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllRolesManagementRules(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RoleManagementRules>>;
+    public getAllRolesManagementRules(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RoleManagementRules>>>;
+    public getAllRolesManagementRules(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RoleManagementRules>>>;
+    public getAllRolesManagementRules(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -135,18 +176,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RoleManagementRules>>(`${this.configuration.basePath}/json/authzResolver/getAllRolesManagementRules`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -157,16 +207,16 @@ export class AuthzResolverService {
 
     /**
      * Get all groups of managers (authorizedGroups) for complementaryObject and role
-     * @param role 
+     * @param role
      * @param complementaryObjectId Property id of complementaryObject to get managers for
      * @param complementaryObjectName Property beanName of complementaryObject, meaning object type (Vo | Group | Facility | ... )
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Group>>;
-    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Group>>>;
-    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Group>>>;
-    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<Group>>;
+    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<Group>>>;
+    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<Group>>>;
+    public getAuthzAdminGroups(role: string, complementaryObjectId: number, complementaryObjectName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (role === null || role === undefined) {
             throw new Error('Required parameter role was null or undefined when calling getAuthzAdminGroups.');
         }
@@ -179,13 +229,16 @@ export class AuthzResolverService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (role !== undefined && role !== null) {
-            queryParameters = queryParameters.set('role', <any>role);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>role, 'role');
         }
         if (complementaryObjectId !== undefined && complementaryObjectId !== null) {
-            queryParameters = queryParameters.set('complementaryObjectId', <any>complementaryObjectId);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>complementaryObjectId, 'complementaryObjectId');
         }
         if (complementaryObjectName !== undefined && complementaryObjectName !== null) {
-            queryParameters = queryParameters.set('complementaryObjectName', <any>complementaryObjectName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>complementaryObjectName, 'complementaryObjectName');
         }
 
         let headers = this.defaultHeaders;
@@ -206,19 +259,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<Group>>(`${this.configuration.basePath}/json/authzResolver/getAdminGroups`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -230,7 +292,7 @@ export class AuthzResolverService {
     /**
      * Gets all rich admins
      * Returns all managers for complementaryObject and role with specified attributes.
-     * @param role 
+     * @param role
      * @param complementaryObjectId Property id of complementaryObject to get managers for
      * @param complementaryObjectName Property beanName of complementaryObject, meaning object type (Vo | Group | Facility | ... )
      * @param specificAttributes list of specified attributes which are needed in object richUser
@@ -239,10 +301,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<RichUser>>;
-    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichUser>>>;
-    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichUser>>>;
-    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RichUser>>;
+    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RichUser>>>;
+    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RichUser>>>;
+    public getAuthzRichAdmins(role: string, complementaryObjectId: number, complementaryObjectName: string, specificAttributes: Array<string>, allUserAttributes?: boolean, onlyDirectAdmins?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (role === null || role === undefined) {
             throw new Error('Required parameter role was null or undefined when calling getAuthzRichAdmins.');
         }
@@ -258,24 +320,30 @@ export class AuthzResolverService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (role !== undefined && role !== null) {
-            queryParameters = queryParameters.set('role', <any>role);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>role, 'role');
         }
         if (complementaryObjectId !== undefined && complementaryObjectId !== null) {
-            queryParameters = queryParameters.set('complementaryObjectId', <any>complementaryObjectId);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>complementaryObjectId, 'complementaryObjectId');
         }
         if (complementaryObjectName !== undefined && complementaryObjectName !== null) {
-            queryParameters = queryParameters.set('complementaryObjectName', <any>complementaryObjectName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>complementaryObjectName, 'complementaryObjectName');
         }
         if (specificAttributes) {
             specificAttributes.forEach((element) => {
-                queryParameters = queryParameters.append('specificAttributes', <any>element);
+                queryParameters = this.addToHttpParams(queryParameters,
+                  <any>element, 'specificAttributes');
             })
         }
         if (allUserAttributes !== undefined && allUserAttributes !== null) {
-            queryParameters = queryParameters.set('allUserAttributes', <any>allUserAttributes);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>allUserAttributes, 'allUserAttributes');
         }
         if (onlyDirectAdmins !== undefined && onlyDirectAdmins !== null) {
-            queryParameters = queryParameters.set('onlyDirectAdmins', <any>onlyDirectAdmins);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>onlyDirectAdmins, 'onlyDirectAdmins');
         }
 
         let headers = this.defaultHeaders;
@@ -296,19 +364,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RichUser>>(`${this.configuration.basePath}/json/authzResolver/getRichAdmins`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -318,22 +395,23 @@ export class AuthzResolverService {
     }
 
     /**
-     * Returns list of group\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems. 
+     * Returns list of group\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems.
      * @param group id of Group
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGroupRoleNames(group: number, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getGroupRoleNames(group: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getGroupRoleNames(group: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getGroupRoleNames(group: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGroupRoleNames(group: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<string>>;
+    public getGroupRoleNames(group: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<string>>>;
+    public getGroupRoleNames(group: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<string>>>;
+    public getGroupRoleNames(group: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (group === null || group === undefined) {
             throw new Error('Required parameter group was null or undefined when calling getGroupRoleNames.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (group !== undefined && group !== null) {
-            queryParameters = queryParameters.set('group', <any>group);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>group, 'group');
         }
 
         let headers = this.defaultHeaders;
@@ -354,19 +432,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<string>>(`${this.configuration.basePath}/json/authzResolver/getGroupRoleNames`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -381,17 +468,18 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGroupRoles(groupId: number, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: { [key: string]: Array<number>; }; }>;
-    public getGroupRoles(groupId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: { [key: string]: Array<number>; }; }>>;
-    public getGroupRoles(groupId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: { [key: string]: Array<number>; }; }>>;
-    public getGroupRoles(groupId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getGroupRoles(groupId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<{ [key: string]: { [key: string]: Array<number>; }; }>;
+    public getGroupRoles(groupId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<{ [key: string]: { [key: string]: Array<number>; }; }>>;
+    public getGroupRoles(groupId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<{ [key: string]: { [key: string]: Array<number>; }; }>>;
+    public getGroupRoles(groupId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (groupId === null || groupId === undefined) {
             throw new Error('Required parameter groupId was null or undefined when calling getGroupRoles.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (groupId !== undefined && groupId !== null) {
-            queryParameters = queryParameters.set('groupId', <any>groupId);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>groupId, 'groupId');
         }
 
         let headers = this.defaultHeaders;
@@ -412,19 +500,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<{ [key: string]: { [key: string]: Array<number>; }; }>(`${this.configuration.basePath}/urlinjsonout/authzResolver/getGroupRoles`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -438,10 +535,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLoggedUser(observe?: 'body', reportProgress?: boolean): Observable<User>;
-    public getLoggedUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
-    public getLoggedUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
-    public getLoggedUser(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getLoggedUser(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<User>;
+    public getLoggedUser(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<User>>;
+    public getLoggedUser(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<User>>;
+    public getLoggedUser(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -461,18 +558,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<User>(`${this.configuration.basePath}/json/authzResolver/getLoggedUser`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -487,10 +593,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPerunPrincipal(observe?: 'body', reportProgress?: boolean): Observable<PerunPrincipal>;
-    public getPerunPrincipal(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PerunPrincipal>>;
-    public getPerunPrincipal(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PerunPrincipal>>;
-    public getPerunPrincipal(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPerunPrincipal(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<PerunPrincipal>;
+    public getPerunPrincipal(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<PerunPrincipal>>;
+    public getPerunPrincipal(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<PerunPrincipal>>;
+    public getPerunPrincipal(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -510,18 +616,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
 
         return this.httpClient.get<PerunPrincipal>(`${this.configuration.basePath}/json/authzResolver/getPerunPrincipal`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -531,14 +646,14 @@ export class AuthzResolverService {
     }
 
     /**
-     * Returns list of caller\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems. 
+     * Returns list of caller\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPrincipalRoleNames(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getPrincipalRoleNames(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getPrincipalRoleNames(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getPrincipalRoleNames(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getPrincipalRoleNames(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<string>>;
+    public getPrincipalRoleNames(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<string>>>;
+    public getPrincipalRoleNames(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<string>>>;
+    public getPrincipalRoleNames(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -558,18 +673,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<string>>(`${this.configuration.basePath}/json/authzResolver/getPrincipalRoleNames`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -579,22 +703,23 @@ export class AuthzResolverService {
     }
 
     /**
-     * Returns list of user\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems. 
+     * Returns list of user\&#39;s role names. Perun system uses role names in the upper case format. However, for now, they are converted to the lower case format because of the compatibility with external systems.
      * @param user id of User
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserRoleNames(user: number, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getUserRoleNames(user: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getUserRoleNames(user: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getUserRoleNames(user: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUserRoleNames(user: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<string>>;
+    public getUserRoleNames(user: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<string>>>;
+    public getUserRoleNames(user: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<string>>>;
+    public getUserRoleNames(user: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (user === null || user === undefined) {
             throw new Error('Required parameter user was null or undefined when calling getUserRoleNames.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (user !== undefined && user !== null) {
-            queryParameters = queryParameters.set('user', <any>user);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>user, 'user');
         }
 
         let headers = this.defaultHeaders;
@@ -615,19 +740,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<string>>(`${this.configuration.basePath}/json/authzResolver/getUserRoleNames`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -642,17 +776,18 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserRoles(userId: number, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: { [key: string]: Array<number>; }; }>;
-    public getUserRoles(userId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: { [key: string]: Array<number>; }; }>>;
-    public getUserRoles(userId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: { [key: string]: Array<number>; }; }>>;
-    public getUserRoles(userId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUserRoles(userId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<{ [key: string]: { [key: string]: Array<number>; }; }>;
+    public getUserRoles(userId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<{ [key: string]: { [key: string]: Array<number>; }; }>>;
+    public getUserRoles(userId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<{ [key: string]: { [key: string]: Array<number>; }; }>>;
+    public getUserRoles(userId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling getUserRoles.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (userId !== undefined && userId !== null) {
-            queryParameters = queryParameters.set('userId', <any>userId);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>userId, 'userId');
         }
 
         let headers = this.defaultHeaders;
@@ -673,19 +808,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<{ [key: string]: { [key: string]: Array<number>; }; }>(`${this.configuration.basePath}/json/authzResolver/getUserRoles`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -700,14 +844,15 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isFacilityAdmin(facility?: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public isFacilityAdmin(facility?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public isFacilityAdmin(facility?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public isFacilityAdmin(facility?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isFacilityAdmin(facility?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public isFacilityAdmin(facility?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public isFacilityAdmin(facility?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public isFacilityAdmin(facility?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (facility !== undefined && facility !== null) {
-            queryParameters = queryParameters.set('facility', <any>facility);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>facility, 'facility');
         }
 
         let headers = this.defaultHeaders;
@@ -728,19 +873,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/urlinjsonout/authzResolver/isFacilityAdmin`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -755,14 +909,15 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isGroupAdmin(group?: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public isGroupAdmin(group?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public isGroupAdmin(group?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public isGroupAdmin(group?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isGroupAdmin(group?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public isGroupAdmin(group?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public isGroupAdmin(group?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public isGroupAdmin(group?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (group !== undefined && group !== null) {
-            queryParameters = queryParameters.set('group', <any>group);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>group, 'group');
         }
 
         let headers = this.defaultHeaders;
@@ -783,19 +938,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/urlinjsonout/authzResolver/isGroupAdmin`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -809,10 +973,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isPerunAdmin(observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public isPerunAdmin(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public isPerunAdmin(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public isPerunAdmin(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isPerunAdmin(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public isPerunAdmin(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public isPerunAdmin(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public isPerunAdmin(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -832,18 +996,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/json/authzResolver/isPerunAdmin`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -858,14 +1031,15 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public isVoAdmin(vo?: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public isVoAdmin(vo?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public isVoAdmin(vo?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public isVoAdmin(vo?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public isVoAdmin(vo?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public isVoAdmin(vo?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public isVoAdmin(vo?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public isVoAdmin(vo?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
 
         let headers = this.defaultHeaders;
@@ -886,19 +1060,28 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/urlinjsonout/authzResolver/isVoAdmin`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -912,10 +1095,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public keepAlive(observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public keepAlive(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public keepAlive(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public keepAlive(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public keepAlive(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<string>;
+    public keepAlive(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<string>>;
+    public keepAlive(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<string>>;
+    public keepAlive(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -935,18 +1118,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<string>(`${this.configuration.basePath}/json/authzResolver/keepAlive`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -960,10 +1152,10 @@ export class AuthzResolverService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public loadAuthorizationComponents(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public loadAuthorizationComponents(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public loadAuthorizationComponents(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public loadAuthorizationComponents(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public loadAuthorizationComponents(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public loadAuthorizationComponents(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public loadAuthorizationComponents(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public loadAuthorizationComponents(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -983,18 +1175,27 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<any>(`${this.configuration.basePath}/json/authzResolver/loadAuthorizationComponents`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1005,14 +1206,14 @@ export class AuthzResolverService {
 
     /**
      * Set role for authorizedGroup and complementaryObject
-     * @param setRoleWithGroupComplementaryObject 
+     * @param setRoleWithGroupComplementaryObject
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public setRoleWithGroupComplementaryObject(setRoleWithGroupComplementaryObject: SetRoleWithGroupComplementaryObject, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (setRoleWithGroupComplementaryObject === null || setRoleWithGroupComplementaryObject === undefined) {
             throw new Error('Required parameter setRoleWithGroupComplementaryObject was null or undefined when calling setRoleWithGroupComplementaryObject.');
         }
@@ -1035,11 +1236,14 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -1054,9 +1258,15 @@ export class AuthzResolverService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/json/authzResolver/setRole/g-co`,
             setRoleWithGroupComplementaryObject,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1067,14 +1277,14 @@ export class AuthzResolverService {
 
     /**
      * Set role for user and complementaryObject
-     * @param setRoleWithUserComplementaryObject 
+     * @param setRoleWithUserComplementaryObject
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public setRoleWithUserComplementaryObject(setRoleWithUserComplementaryObject: SetRoleWithUserComplementaryObject, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (setRoleWithUserComplementaryObject === null || setRoleWithUserComplementaryObject === undefined) {
             throw new Error('Required parameter setRoleWithUserComplementaryObject was null or undefined when calling setRoleWithUserComplementaryObject.');
         }
@@ -1097,11 +1307,14 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -1116,9 +1329,15 @@ export class AuthzResolverService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/json/authzResolver/setRole/u-co`,
             setRoleWithUserComplementaryObject,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1129,14 +1348,14 @@ export class AuthzResolverService {
 
     /**
      * Unset role for authorizedGroup and complementaryObject
-     * @param unsetRoleWithGroupComplementaryObject 
+     * @param unsetRoleWithGroupComplementaryObject
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public unsetRoleWithGroupComplementaryObject(unsetRoleWithGroupComplementaryObject: UnsetRoleWithGroupComplementaryObject, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (unsetRoleWithGroupComplementaryObject === null || unsetRoleWithGroupComplementaryObject === undefined) {
             throw new Error('Required parameter unsetRoleWithGroupComplementaryObject was null or undefined when calling unsetRoleWithGroupComplementaryObject.');
         }
@@ -1159,11 +1378,14 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -1178,9 +1400,15 @@ export class AuthzResolverService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/json/authzResolver/unsetRole/g-co`,
             unsetRoleWithGroupComplementaryObject,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1191,14 +1419,14 @@ export class AuthzResolverService {
 
     /**
      * Unset role for user and complementaryObject
-     * @param unsetRoleWithUserComplementaryObject 
+     * @param unsetRoleWithUserComplementaryObject
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public unsetRoleWithUserComplementaryObject(unsetRoleWithUserComplementaryObject: UnsetRoleWithUserComplementaryObject, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (unsetRoleWithUserComplementaryObject === null || unsetRoleWithUserComplementaryObject === undefined) {
             throw new Error('Required parameter unsetRoleWithUserComplementaryObject was null or undefined when calling unsetRoleWithUserComplementaryObject.');
         }
@@ -1221,11 +1449,14 @@ export class AuthzResolverService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -1240,9 +1471,15 @@ export class AuthzResolverService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/json/authzResolver/unsetRole/u-co`,
             unsetRoleWithUserComplementaryObject,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
