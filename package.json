@@ -1,6 +1,6 @@
 {
   "name": "perun-web-apps",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "license": "MIT",
   "scripts": {
     "analyze": "webpack-bundle-analyzer",
