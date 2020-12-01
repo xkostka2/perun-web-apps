@@ -2,6 +2,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CacheHelperService } from './core/services/common/cache-helper.service';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { PerunPrincipal } from '@perun-web-apps/perun/openapi';
+import { interval } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { NewVersionDialogComponent } from './shared/components/dialogs/new-version-dialog/new-version-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +18,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private cache: CacheHelperService,
-    private store: StoreService
+    private store: StoreService,
+    private http: HttpClient,
+    private dialog:MatDialog
   ) {
 
     this.cache.init();
@@ -33,6 +41,8 @@ export class AppComponent implements OnInit {
   displayWarning: boolean = this.store.get('display_warning');
   warningMessage: string = this.store.get('warning_message');
 
+  version = version;
+
   @HostListener('window:resize', ['$event'])
   getScreenSize(event?) {
     this.sidebarMode = this.isMobile() ? 'over' : 'side';
@@ -46,6 +56,31 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.principal = this.store.getPerunPrincipal();
+    this.loadAppVersion();
+    interval(30000).subscribe(() => {
+      this.loadAppVersion();
+    });
+  }
+
+  loadAppVersion() {
+    const httpHeaders = new HttpHeaders({
+      'Cache-Control': 'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    this.http.get('/assets/config/version.json', { headers: httpHeaders })
+      .subscribe(result => {
+        const recentVersion = result['version'];
+        if (recentVersion) {
+          if (this.version && recentVersion !== 'SNAPSHOT' && this.version !== recentVersion) {
+            const config = getDefaultDialogConfig();
+            this.dialog.open(NewVersionDialogComponent,config);
+          } else {
+            this.version = recentVersion;
+          }
+        }
+      }, () => {
+      });
   }
 
   getTopGap() {
@@ -68,8 +103,7 @@ export class AppComponent implements OnInit {
     // 64 for nav (+48) when alert is shown
     // 210 for footer, 510 for footer on mobile
 
-    let footerSpace = this.isMobile() ? '510' : '210';
-    footerSpace = '0';
+    const footerSpace = '0';
     return this.displayWarning ? 'calc((100vh - 112px) + ' + footerSpace + 'px)' : 'calc((100vh - 64px) + ' + footerSpace + 'px)';
   }
 }

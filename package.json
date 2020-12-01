@@ -31,7 +31,7 @@
     "help": "nx help",
     "start-dev-admin-gui": "ng serve admin-gui --public-host=http://localhost:4200 --disable-host-check",
     "preversion": "npm run lint",
-    "version": "npm run build -- --prod && npm run build -- user-profile --prod && git add -A -f dist",
+    "version": "npm run build -- --prod && npm run build -- user-profile --prod && bash create-version-file.sh && git add -A -f dist",
     "start-user-profile": "ng serve user-profile --public-host=http://localhost:4200 --disable-host-check",
     "start-dev-admin-gui-with-external-database": "sudo ng serve admin-gui --port=80 --public-host=http://localhost:80 --disable-host-check",
     "postinstall": "node ./decorate-angular-cli.js"
