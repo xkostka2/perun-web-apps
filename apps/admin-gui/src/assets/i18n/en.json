@@ -1636,7 +1636,9 @@
       "SUCCESSFULLY_CREATED": "Sponsored member was successfully created",
       "USER": "User",
       "WAS_CREATED": "was successfully created",
-      "COPY_INFORMATION": "Please save this information. It will not be possible to access this information later."
+      "COPY_INFORMATION": "Please save this information. It will not be possible to access this information later.",
+      "PASSWORD_RESET": "Let the created user change his password via a given email address",
+      "PASSWORD_DISABLED": "User will choose his password via an email sent to the entered e-mail address"
     },
     "GENERATE_SPONSORED_MEMBERS": {
       "TITLE": "Create sponsored members in bulk",
@@ -1649,7 +1651,8 @@
       "GENERATE": "Create",
       "SUCCESS": "Members successfully created",
       "EMAIL": "Email",
-      "EMAIL_ERROR": "Email is not valid"
+      "EMAIL_ERROR": "Email is not valid",
+      "PASSWORD_RESET": "Let created users change their password via given email addresses."
     },
     "EDIT_MEMBER_SPONSORS": {
       "TITLE": "Edit member sponsors",

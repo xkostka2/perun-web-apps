@@ -61,6 +61,7 @@ export * from './inputCreateServiceUser';
 export * from './inputCreateServicesPackage';
 export * from './inputCreateSponsoredMember';
 export * from './inputCreateSponsoredMember1';
+export * from './inputCreateSponsoredMemberFromCSV';
 export * from './inputCreateThanks';
 export * from './inputCreateVoWithVo';
 export * from './inputDeleteResourceTag';

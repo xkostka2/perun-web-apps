@@ -24,5 +24,6 @@ export interface InputCreateSponsoredMember1 {
     namespace: string;
     validityTo?: string;
     email?: string;
+    sendActivationLink?: boolean;
 }
 

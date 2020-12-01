@@ -12,15 +12,17 @@
 
 
 /**
- * input for createSponsoredMember
+ * input for createSponsoredMembersFromCSV
  */
-export interface InputCreateSponsoredMember { 
-    firstName: string;
-    lastName: string;
-    titleBefore?: string;
-    titleAfter?: string;
-    password: string;
-    email?: string;
+export interface InputCreateSponsoredMemberFromCSV { 
+    /**
+     * values separated with semicolons
+     */
+    data: Array<string>;
+    /**
+     * csv header for the given data, values are also split with semicolons
+     */
+    header: string;
     vo: number;
     sponsor: number;
     namespace: string;

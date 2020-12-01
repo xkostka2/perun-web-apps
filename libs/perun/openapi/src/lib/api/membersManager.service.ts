@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { InputCreateSponsoredMember } from '../model/inputCreateSponsoredMember';
 import { InputCreateSponsoredMember1 } from '../model/inputCreateSponsoredMember1';
+import { InputCreateSponsoredMemberFromCSV } from '../model/inputCreateSponsoredMemberFromCSV';
 import { InputSetSponsoredMember } from '../model/inputSetSponsoredMember';
 import { InputSpecificMember } from '../model/inputSpecificMember';
 import { Member } from '../model/member';
@@ -235,6 +236,68 @@ export class MembersManagerService {
 
         return this.httpClient.post<{ [key: string]: { [key: string]: string; }; }>(`${this.configuration.basePath}/json/membersManager/createSponsoredMembers`,
             inputCreateSponsoredMember1,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Creates new sponsored members in a given VO and namespace.
+     * @param inputCreateSponsoredMemberFromCSV 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: { [key: string]: string; }; }>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (inputCreateSponsoredMemberFromCSV === null || inputCreateSponsoredMemberFromCSV === undefined) {
+            throw new Error('Required parameter inputCreateSponsoredMemberFromCSV was null or undefined when calling createSponsoredMembersFromCSV.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<{ [key: string]: { [key: string]: string; }; }>(`${this.configuration.basePath}/json/membersManager/createSponsoredMembersFromCSV`,
+            inputCreateSponsoredMemberFromCSV,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1263,6 +1326,86 @@ export class MembersManagerService {
 
 
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/removeSponsor`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Send mail to user\&#39;s preferred email address with link for non-authz account activation. Correct authz information is stored in link\&#39;s URL.
+     * @param member id of Member
+     * @param namespace namespace
+     * @param emailAttributeURN urn of the attribute with stored mail
+     * @param language language of the message
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (member === null || member === undefined) {
+            throw new Error('Required parameter member was null or undefined when calling sendAccountActivationLinkEmail.');
+        }
+        if (namespace === null || namespace === undefined) {
+            throw new Error('Required parameter namespace was null or undefined when calling sendAccountActivationLinkEmail.');
+        }
+        if (emailAttributeURN === null || emailAttributeURN === undefined) {
+            throw new Error('Required parameter emailAttributeURN was null or undefined when calling sendAccountActivationLinkEmail.');
+        }
+        if (language === null || language === undefined) {
+            throw new Error('Required parameter language was null or undefined when calling sendAccountActivationLinkEmail.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (member !== undefined && member !== null) {
+            queryParameters = queryParameters.set('member', <any>member);
+        }
+        if (namespace !== undefined && namespace !== null) {
+            queryParameters = queryParameters.set('namespace', <any>namespace);
+        }
+        if (emailAttributeURN !== undefined && emailAttributeURN !== null) {
+            queryParameters = queryParameters.set('emailAttributeURN', <any>emailAttributeURN);
+        }
+        if (language !== undefined && language !== null) {
+            queryParameters = queryParameters.set('language', <any>language);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/sendAccountActivationLinkEmail`,
             null,
             {
                 params: queryParameters,
