@@ -60,6 +60,22 @@
               mat-icon-button>
               <mat-icon>more_horiz</mat-icon>
             </button>
+            <span
+              *ngIf="passwdResetAuth(sponsoredMember)"
+              [matTooltip]="'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.PASSWORD_RESET' | translate"
+              [matTooltipPosition]="'above'"
+            >
+              <button
+                (mouseenter)="disableRouting = true"
+                (mouseleave)="disableRouting = routingStrategy"
+                class="dark-hover-list-item"
+                aria-label="sponsors of member"
+                (click)="resetPassword(sponsoredMember)"
+                [disabled]="loading"
+                mat-icon-button>
+                <mat-icon>vpn_key</mat-icon>
+            </button>
+            </span>
           </td>
         </ng-container>
 

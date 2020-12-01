@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MemberWithSponsors } from '@perun-web-apps/perun/openapi';
+import { Attribute, AttributesManagerService, MemberWithSponsors, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,7 +16,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig, parseFullName, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { PasswordResetRequestDialogComponent } from '../dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 
 @Component({
   selector: 'app-sponsored-members-list',
@@ -26,7 +27,9 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
 
   constructor(private dialog: MatDialog,
-              private authResolver: GuiAuthResolver) { }
+              private authResolver: GuiAuthResolver,
+              private storeService: StoreService,
+              private attributesManager: AttributesManagerService) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -60,6 +63,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   dataSource: MatTableDataSource<MemberWithSponsors>;
   private sort: MatSort;
   exporting = false;
+  loading = false;
 
   routingStrategy = false;
 
@@ -145,4 +149,37 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  resetPassword(sponsoredMember: MemberWithSponsors) {
+    this.loading = true;
+    const attUrns = this.storeService.get('password_namespace_attributes').map(urn => {
+      urn = urn.split(':');
+      return urn[urn.length - 1];
+    });
+    this.attributesManager.getLogins(sponsoredMember.member.userId).subscribe(logins => {
+      const filteredLogins = logins.filter(login => attUrns.includes(login.friendlyNameParameter));
+
+      const config = getDefaultDialogConfig();
+      config.width = '400px';
+      config.data = {
+        userId: sponsoredMember.member.userId,
+        memberId: sponsoredMember.member.id,
+        logins: filteredLogins
+      };
+
+      const dialogRef = this.dialog.open(PasswordResetRequestDialogComponent, config);
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.loading = false;
+      });
+    }, () => this.loading = false);
+  }
+
+  passwdResetAuth(sponsoredMember: MemberWithSponsors) {
+    const vo: Vo = {
+      id: sponsoredMember.member.voId,
+      beanName: "Vo"
+    };
+
+    return this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [vo]);
+  }
 }

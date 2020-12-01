@@ -1664,7 +1664,7 @@
       "TITLE": "Password reset request",
       "LANGUAGE": "Language",
       "NAMESPACE": "Namespace",
-      "EMAIL": "Email attribute",
+      "EMAIL": "Email, where the request will be send",
       "LOGIN": "Login:",
       "SEND": "Send",
       "CANCEL": "Cancel",
@@ -1941,7 +1941,8 @@
         "ID": "Id",
         "NAME": "Name",
         "SPONSORS": "Sponsors",
-        "NO_SPONSORED_MEMBERS_WARNING": "No sponsored members found"
+        "NO_SPONSORED_MEMBERS_WARNING": "No sponsored members found",
+        "PASSWORD_RESET": "Reset password"
       },
       "DESTINATIONS_LIST": {
         "DESTINATION_ID": "Destination ID",
