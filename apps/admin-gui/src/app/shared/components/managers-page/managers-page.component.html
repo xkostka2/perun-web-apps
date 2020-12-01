@@ -53,7 +53,7 @@
       (page)="pageChanged($event)"
       [pageSize]="pageSize"
       *ngIf="groups && selected === 'group' && !loading"
-      [hideColumns]="isAuthorized ? ['menu', 'vo'] : ['select', 'menu', 'vo']"
+      [hideColumns]="isAuthorized ? ['menu', 'expiration','vo'] : ['select','expiration', 'menu', 'vo']"
       [groups]="groups"
       [selection]="selectionGroups"
       [disableMembers]="false">

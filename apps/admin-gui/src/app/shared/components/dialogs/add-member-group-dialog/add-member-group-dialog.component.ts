@@ -46,7 +46,7 @@ export class AddMemberGroupDialogComponent implements OnInit {
     Urns.GROUP_LAST_STRUCTURE_SYNC_TIMESTAMP
   ];
 
-  hideColumns = [ 'vo', 'menu' ];
+  hideColumns = [ 'vo', 'expiration','menu' ];
   filterValue = "";
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class AddMemberGroupDialogComponent implements OnInit {
       this.groupManager.getAllRichGroupsWithAttributesByNames(this.member.voId, this.attrNames).subscribe(groups => {
         this.groups = groups.filter(grp => this.authResolver.isAuthorized('addMember_Group_Member_policy', [grp]));
         this.loading = false;
-      }, error => this.loading = false);
+      }, () => this.loading = false);
     });
   }
 
@@ -70,7 +70,7 @@ export class AddMemberGroupDialogComponent implements OnInit {
     this.groupManager.addMember(groupIds, this.member.id).subscribe(() => {
       this.notificator.showSuccess(this.translate.instant('DIALOGS.ADD_MEMBER_GROUP.SUCCESS'));
       this.dialogRef.close(true);
-    }, error => this.loading = false);
+    }, () => this.loading = false);
   }
 
   onCancel() {

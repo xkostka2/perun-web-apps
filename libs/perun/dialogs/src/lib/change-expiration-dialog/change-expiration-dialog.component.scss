@@ -1,1 +1,8 @@
+.disable{
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
+::ng-deep .mat-form-field.mat-focused .mat-form-field-underline {
+  display: none;
+}

@@ -2,19 +2,19 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuItem} from '@perun-web-apps/perun/models';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
-import { Urns } from '@perun-web-apps/perun/urns';
-import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { MatTableDataSource } from '@angular/material/table';
+import { PasswordResetRequestDialogComponent } from '../../../../shared/components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import {
   Attribute,
   AttributesManagerService,
   MembersManagerService, RichMember, Sponsor,
   UsersManagerService, Vo
 } from '@perun-web-apps/perun/openapi';
-import { MatDialog } from '@angular/material/dialog';
-import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
-import { MatTableDataSource } from '@angular/material/table';
-import { PasswordResetRequestDialogComponent } from '../../../../shared/components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
+import { Urns } from '@perun-web-apps/perun/urns';
 
 @Component({
   selector: 'app-member-overview',
@@ -56,6 +56,7 @@ export class MemberOverviewComponent implements OnInit {
 
   vo: Vo;
   loading = false;
+  expirationAtt: Attribute;
   pwdResetAuth: boolean;
 
   ngOnInit() {
@@ -108,7 +109,11 @@ export class MemberOverviewComponent implements OnInit {
   changeExpiration() {
     const config = getDefaultDialogConfig();
     config.width = '400px';
-    config.data = this.member;
+    config.data = {
+      memberId: this.member.id,
+      expirationAttr: this.expirationAtt,
+      mode: 'vo'
+    }
 
     const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
     dialogRef.afterClosed().subscribe(success => {
@@ -189,6 +194,7 @@ export class MemberOverviewComponent implements OnInit {
   private refreshData() {
     this.loading = true;
     this.attributesManager.getMemberAttributeByName(this.member.id, Urns.MEMBER_DEF_EXPIRATION).subscribe(attr => {
+      this.expirationAtt = attr;
       this.expiration = !attr.value ? this.translate.instant('MEMBER_DETAIL.OVERVIEW.NEVER_EXPIRES') : attr.value;
       this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
         this.member = member;

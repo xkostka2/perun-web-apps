@@ -42,7 +42,7 @@
           <perun-web-apps-groups-list (page)="pageChanged($event, groupTableId, groupPageSize)"
                                       [pageSize]="groupPageSize"
                                       [groups]="this.adminGroup"
-                                      [hideColumns]="['select', 'menu']"
+                                      [hideColumns]="['select', 'expiration', 'menu']"
                                       [filter]="groupFilterValue">
           </perun-web-apps-groups-list>
         </div>

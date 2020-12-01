@@ -74,7 +74,7 @@ export class MemberGroupsComponent implements OnInit {
 
   refreshTable() {
     this.loading = true;
-    this.groupsService.getMemberGroups(this.memberId).subscribe(groups => {
+    this.groupsService.getMemberRichGroupsWithAttributesByNames(this.memberId, ['urn:perun:member_group:attribute-def:def:groupMembershipExpiration']).subscribe(groups => {
       this.selection.clear();
       this.filterValue = '';
       this.groups = groups;

@@ -9,3 +9,4 @@ export * from './lib/member-status-icon.pipe';
 export * from './lib/member-status-tooltip.pipe';
 export * from './lib/member-email.pipe';
 export * from './lib/member-logins.pipe';
+export * from './lib/parse-date.pipe';

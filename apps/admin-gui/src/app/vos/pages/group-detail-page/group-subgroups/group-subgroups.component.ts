@@ -50,7 +50,7 @@ export class GroupSubgroupsComponent implements OnInit {
   createAuth: boolean;
   deleteAuth: boolean;
   routeAuth: boolean;
-  hideColumns: String[] = [];
+  hideColumns: String[] = ['expiration'];
 
   @ViewChild('tree', {})
   tree: GroupsTreeComponent;

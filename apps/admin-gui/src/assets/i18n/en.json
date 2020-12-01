@@ -1525,7 +1525,8 @@
       "SUCCESS": "Required attributes were removed."
     },
     "CHANGE_EXPIRATION": {
-      "TITLE": "Change member expiration",
+      "TITLE_VO": "Change member expiration",
+      "TITLE_GROUP": "Change member's group expiration",
       "CURRENT_EXPIRATION": "Current expiration: ",
       "NEW_EXPIRATION": "New expiration:         ",
       "DATE_LABEL": "Expire to a date",
@@ -1992,6 +1993,7 @@
           "TABLE_GROUP_NAME": "Name",
           "TABLE_SEARCH": "Filter by name, description or ID",
           "TABLE_GROUP_DESCRIPTION": "Description",
+          "TABLE_GROUP_EXPIRATION": "Expiration",
           "DISABLED_HINT": "You cannot add members to this group or user is already member.",
           "ALREADY_MEMBER_TOOLTIP": "User is already member of group",
           "CREATE_RELATION_AUTH_TOOLTIP": "You don't have permission to create relation with this group.",
