@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { FacilitiesManagerService, Facility } from '@perun-web-apps/perun/openapi';
 import { ActivatedRoute } from '@angular/router';
-import { Role } from '@perun-web-apps/perun/models';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-perun-web-apps-facility-settings-managers',
@@ -14,12 +14,13 @@ export class FacilitySettingsManagersComponent implements OnInit {
 
   constructor(
     private facilityService: FacilitiesManagerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private guiAuthResolver: GuiAuthResolver
   ) { }
 
   facility: Facility;
 
-  availableRoles: Role[] = [ Role.FACILITYADMIN ];
+  availableRoles: string[] = [];
 
   selected = 'user';
 
@@ -35,6 +36,7 @@ export class FacilitySettingsManagersComponent implements OnInit {
         this.facility = facility;
       });
     });
-  }
 
+    this.guiAuthResolver.assignAvailableRoles(this.availableRoles, 'Facility');
+  }
 }

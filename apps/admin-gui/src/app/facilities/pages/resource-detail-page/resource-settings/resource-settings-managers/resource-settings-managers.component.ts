@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Resource, ResourcesManagerService } from '@perun-web-apps/perun/openapi';
-import { Role } from '@perun-web-apps/perun/models';
 import { ActivatedRoute } from '@angular/router';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-resource-settings-managers',
@@ -12,10 +12,12 @@ export class ResourceSettingsManagersComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private resourceService: ResourcesManagerService) { }
+    private resourceService: ResourcesManagerService,
+    private guiAuthResolver: GuiAuthResolver
+  ) { }
 
   resource: Resource;
-  availableRoles: Role[] = [ Role.RESOURCEADMIN ];
+  availableRoles: string[] = [];
   type = "Resource";
   theme = 'resource-theme';
 
@@ -29,6 +31,7 @@ export class ResourceSettingsManagersComponent implements OnInit {
         this.resource = resource;
       });
     });
-  }
 
+    this.guiAuthResolver.assignAvailableRoles(this.availableRoles, 'Resource');
+  }
 }

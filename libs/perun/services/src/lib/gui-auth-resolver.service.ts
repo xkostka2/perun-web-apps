@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { PerunBean, PerunPolicy, PerunPrincipal } from '@perun-web-apps/perun/openapi';
+import { PerunBean, PerunPolicy, PerunPrincipal, RoleManagementRules} from '@perun-web-apps/perun/openapi';
 import { Role } from '@perun-web-apps/perun/models';
+import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GuiAuthResolver {
 
-  constructor() {
+  constructor(private authzSevice: AuthzResolverService) {
   }
 
   private principal: PerunPrincipal;
   private perunPolicies: PerunPolicy[];
+  private allRolesManagementRules: RoleManagementRules[];
 
   private principalRoles: Set<Role> = new Set<Role>();
 
@@ -261,6 +263,43 @@ export class GuiAuthResolver {
 
   public getMemberIds(): number[] {
     return this.members;
+  }
+
+  public loadRolesManagementRules(): Promise<void>  {
+    return new Promise((resolve, reject) => {
+      this.authzSevice.getAllRolesManagementRules().subscribe( allRules => {
+        this.allRolesManagementRules = allRules;
+        resolve();
+      }, error => reject(error));
+    });
+  }
+
+  public assignAvailableRoles(availableRoles: string[], primaryObject: string) {
+    this.allRolesManagementRules.forEach(rule => {
+      if(rule.primaryObject === primaryObject) {
+        availableRoles.push(rule.roleName);
+      }
+    });
+    availableRoles.sort();
+    if(primaryObject === "Vo")
+      this.voCustomSort(availableRoles);
+  }
+
+  /**
+   * Makes specific sort for selector (select role) in VO due to UX
+   *
+   * @param availableRoles is array of available roles for VO
+   */
+  private voCustomSort(availableRoles: string[]) {
+    for(let i = 0; i < availableRoles.length; i++){
+      if (availableRoles[i] === 'VOADMIN') {
+        availableRoles.unshift(availableRoles[i]);
+        availableRoles.splice(i+1, 1);
+      } else if (availableRoles[i] === 'VOOBSERVER') {
+        availableRoles.splice(1, 0, availableRoles[i]);
+        availableRoles.splice(i+1, 1);
+      }
+    }
   }
 
   /**

@@ -1980,9 +1980,14 @@
     "PERUN_ADMIN": "Perun admin",
     "SELF": "Self",
     "FACILITYADMIN": "Facility admin",
+    "FACILITYOBSERVER": "Facility observer",
+    "TRUSTEDFACILITYADMIN": "Trusted facility admin",
+    "GROUPOBSERVER": "Group observer",
     "GROUPADMIN": "Group admin",
     "RESOURCEADMIN": "Resource admin",
-    "SPONSOR": "Sponsor"
+    "SPONSOR": "Sponsor",
+    "RESOURCESELFSERVICE":  "Resource self service",
+    "RESOURCEOBSERVER":  "Resource observer"
   },
   "SHARED_LIB": {
     "PERUN": {

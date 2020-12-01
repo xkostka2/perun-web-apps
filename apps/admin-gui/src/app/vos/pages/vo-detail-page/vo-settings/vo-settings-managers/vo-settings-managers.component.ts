@@ -2,7 +2,7 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { Role } from '@perun-web-apps/perun/models';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-vo-settings-managers',
@@ -16,12 +16,13 @@ export class VoSettingsManagersComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private voService: VosManagerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private guiAuthResolver: GuiAuthResolver
   ) { }
 
   vo: Vo;
 
-  availableRoles: Role[] = [ Role.VOADMIN, Role.VOOBSERVER, Role.TOPGROUPCREATOR, Role.SPONSOR ];
+  availableRoles: string[] = [];
 
   selected = 'user';
 
@@ -37,5 +38,7 @@ export class VoSettingsManagersComponent implements OnInit {
         this.vo = vo;
       });
     });
+
+    this.guiAuthResolver.assignAvailableRoles(this.availableRoles, 'Vo');
   }
 }
