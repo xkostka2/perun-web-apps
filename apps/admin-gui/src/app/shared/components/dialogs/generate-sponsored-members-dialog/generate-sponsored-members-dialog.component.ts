@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MembersManagerService } from '@perun-web-apps/perun/openapi';
+import { InputCreateSponsoredMember1, MembersManagerService } from '@perun-web-apps/perun/openapi';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableExporterDirective } from 'mat-table-exporter';
+import { formatDate } from '@angular/common';
 
 export interface GenerateSponsoredMembersDialogData {
   voId: number;
@@ -44,6 +45,8 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
 
   passwordReset = false;
+
+  expiration = 'never';
 
   constructor(private dialogRef: MatDialogRef<GenerateSponsoredMembersDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: GenerateSponsoredMembersDialogData,
@@ -144,18 +147,21 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     // console.log(fakeExportData);
     //this.exportData(fakeExportData);
 
-
-    this.membersService.createSponsoredMembers({
+    const inputSponsoredMembers: InputCreateSponsoredMember1 = {
       guestNames: finalMemberNames,
       namespace: this.namespace.value,
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
       email: this.email.value,
       sendActivationLink: this.passwordReset
-    }).subscribe(logins => {
-      if(!this.passwordReset) {
-        this.exportData(logins);
-      }
+    }
+
+    if(this.expiration !== 'never'){
+      inputSponsoredMembers.validityTo = formatDate(this.expiration,'yyyy-MM-dd','en-GB');
+    }
+
+    this.membersService.createSponsoredMembers(inputSponsoredMembers).subscribe(logins => {
+      this.exportData(logins);
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
       this.dialogRef.close(true);
     }, err => this.loading = false);
@@ -230,6 +236,14 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
 
   pageChanged(event: PageEvent) {
     this.page.emit(event);
+  }
+
+  setExpiration(newExpiration) {
+    if(newExpiration === 'never'){
+      this.expiration = 'never';
+    } else {
+      this.expiration = formatDate(newExpiration,'yyyy-MM-dd','en-GB');
+    }
   }
 
 }

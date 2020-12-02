@@ -40,6 +40,13 @@
     <mat-checkbox [(ngModel)]="passwordReset" labelPosition="before">
       {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_RESET' | translate}}
     </mat-checkbox>
+    <br>
+    <div>
+      <h6>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXPIRATION' | translate}}</h6>
+      <perun-web-apps-expiration-select
+        (datePicker)="setExpiration($event)">
+      </perun-web-apps-expiration-select>
+    </div>
   </div>
 
   <table

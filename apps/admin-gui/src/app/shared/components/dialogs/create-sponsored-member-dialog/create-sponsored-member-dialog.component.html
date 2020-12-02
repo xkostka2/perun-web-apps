@@ -85,6 +85,12 @@
       <mat-error *ngIf="email.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.EMAIL_ERROR' | translate}}</mat-error>
     </mat-form-field>
 
+
+    <h6>{{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRATION' | translate}}</h6>
+    <perun-web-apps-expiration-select
+      (datePicker)="setExpiration($event)">
+    </perun-web-apps-expiration-select>
+
   </div>
 
   <div mat-dialog-content class="dialog-container" *ngIf="!loading && successfullyCreated">
@@ -110,7 +116,8 @@
     </button>
     <button
       (click)="onConfirm()"
-      [disabled]="loading || firstName.invalid || lastName.invalid || login.invalid || password.invalid || namespace.invalid || email.invalid"
+      [disabled]="loading || firstName.invalid || lastName.invalid ||
+      login.invalid || password.invalid || namespace.invalid || email.invalid"
       class="ml-2"
       color="accent"
       mat-flat-button>
