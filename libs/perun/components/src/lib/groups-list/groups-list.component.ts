@@ -94,7 +94,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   @Input()
-  recentIds: number[];
+  recentIds: number[] = [];
 
   @Output()
   page = new EventEmitter<PageEvent>();

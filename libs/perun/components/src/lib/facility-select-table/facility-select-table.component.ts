@@ -23,7 +23,7 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
 
-  constructor(private authResolver: GuiAuthResolver) { }
+  constructor(public authResolver: GuiAuthResolver) { }
 
   @Input()
   facilities: RichFacility[];

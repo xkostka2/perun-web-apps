@@ -54,11 +54,11 @@
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let facility; columns: displayedColumns;"
-          [routerLink]="checkAuth && !guiAuthResolver.isAuthorized('getFacilityById_int_policy',[facility]) ? null : ['/facilities', facility.id]"
+          [routerLink]="checkAuth && !authResolver.isAuthorized('getFacilityById_int_policy',[facility]) ? null : ['/facilities', facility.id]"
           [perunWebAppsMiddleClickRouterLink]="['/facilities', facility.id]"
           class="dark-hover-list-item"
-          [class.cursor-pointer]="!checkAuth || guiAuthResolver.isAuthorized('getFacilityById_int_policy',[facility])"
-          [class.disable-outline]="!checkAuth || !guiAuthResolver.isAuthorized('getFacilityById_int_policy',[facility])"
+          [class.cursor-pointer]="!checkAuth || authResolver.isAuthorized('getFacilityById_int_policy',[facility])"
+          [class.disable-outline]="!checkAuth || !authResolver.isAuthorized('getFacilityById_int_policy',[facility])"
           mat-row>
         </tr>
       </table>

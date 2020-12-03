@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   AuthzResolverService, FacilitiesManagerService, Facility,
-  Group, Member, MembersManagerService,
+  Group, GroupsManagerService, Member, MembersManagerService,
   PerunPrincipal, Resource, ResourcesManagerService, RichResource, User,
   UsersManagerService,
   Vo,
@@ -34,8 +34,15 @@ export class UserRolesComponent implements OnInit {
   isSponsor: boolean;
   isResourceSelfService: boolean;
   isVoObserver: boolean;
+  isResourceObserver: boolean;
+  isGroupObserver: boolean;
+  isTrustedFacilityAdmin: boolean;
+  isFacilityObserver: boolean;
+  isPerunAdmin: boolean;
 
-  roleFilter = ['SELF', 'GROUPADMIN', 'VOADMIN', 'RESOURCEADMIN', 'FACILITYADMIN', 'TOPGROUPCREATOR', 'SPONSORSHIP', 'SPONSOR', 'RESOURCESELFSERVICE', 'VOOBSERVER'];
+  roleFilter = ['SELF', 'GROUPADMIN', 'VOADMIN', 'RESOURCEADMIN', 'FACILITYADMIN', 'TOPGROUPCREATOR', 'SPONSORSHIP',
+    'SPONSOR', 'RESOURCESELFSERVICE', 'VOOBSERVER', 'RESOURCEOBSERVER', 'GROUPOBSERVER',
+    'TRUSTEDFACILITYADMIN', 'FACILITYOBSERVER', 'PERUNADMIN'];
   roleNames: string[] = [];
   groups: Group[] = [];
   vos: Vo[] = [];
@@ -45,6 +52,7 @@ export class UserRolesComponent implements OnInit {
   members: Member[] = [];
   outerLoading: boolean;
   loading: boolean;
+  showDescription: boolean;
 
   constructor(private authzResolverService: AuthzResolverService,
               private usersManagerService: UsersManagerService,
@@ -52,6 +60,7 @@ export class UserRolesComponent implements OnInit {
               private facilitiesManagerService: FacilitiesManagerService,
               private resourcesManagerService: ResourcesManagerService,
               private membersManagerService: MembersManagerService,
+              private groupsManagerService: GroupsManagerService,
               private route: ActivatedRoute,
               private store: StoreService) {
   }
@@ -68,6 +77,7 @@ export class UserRolesComponent implements OnInit {
           });
         });
       } else {
+        this.showDescription = true;
         this.principal = this.store.getPerunPrincipal();
         this.userId = this.principal.userId;
         this.roleNames = Object.keys(this.principal.roles);
@@ -112,6 +122,21 @@ export class UserRolesComponent implements OnInit {
         case 'VOOBSERVER':
           this.isVoObserver = true;
           break;
+        case 'RESOURCEOBSERVER':
+          this.isResourceObserver = true;
+          break;
+        case 'GROUPOBSERVER':
+          this.isGroupObserver = true;
+          break;
+        case 'TRUSTEDFACILITYADMIN':
+          this.isTrustedFacilityAdmin = true;
+          break;
+        case 'FACILITYOBSERVER':
+          this.isFacilityObserver = true;
+          break;
+        case 'PERUNADMIN':
+          this.isPerunAdmin = true;
+          break;
       }
 
       this.roles.set(roleName, innerMap);
@@ -120,7 +145,7 @@ export class UserRolesComponent implements OnInit {
     this.outerLoading = false;
   }
 
-  getGroupsAndVos() {
+  getAdminGroupsAndVos() {
     this.loading = true;
     this.groups = [];
     this.usersManagerService.getGroupsWhereUserIsAdmin(this.userId).subscribe(groups => {
@@ -133,13 +158,9 @@ export class UserRolesComponent implements OnInit {
   getVos(voIds: number[]) {
     this.loading = true;
     this.vos = [];
-    voIds.forEach(id => {
-      this.vosManagerService.getVoById(id).subscribe(vo => {
-        this.vos.push(vo);
-        if (this.vos.length === voIds.length) {
-          this.loading = false;
-        }
-      });
+    this.vosManagerService.getVosByIds(voIds).subscribe(vos => {
+      this.vos = vos;
+      this.loading = false;
     });
   }
 
@@ -187,16 +208,11 @@ export class UserRolesComponent implements OnInit {
       if (!ids) {
         this.loading = false;
       } else {
-        ids.forEach(id => {
-          this.usersManagerService.getUserById(id).subscribe(user => {
-            this.users.push(user);
-            if (this.users.length === ids.length) {
-              this.loading = false;
-            }
-          });
+        this.usersManagerService.getUsersByIds(ids).subscribe(users => {
+          this.users = users;
+          this.loading = false;
         });
       }
-
     });
   }
 
@@ -206,19 +222,11 @@ export class UserRolesComponent implements OnInit {
     this.vos = [];
     this.facilities = [];
     this.resources = [];
-    resourceIds.forEach(id => {
-      this.resourcesManagerService.getRichResourceById(id).subscribe(resource => {
-        this.resources.push(resource);
-        if (!this.vos.find(item => item.id === resource.voId)) {
-          this.vos.push(resource.vo);
-        }
-        if (!this.facilities.find(item => item.id === resource.facilityId)) {
-          this.facilities.push(resource.facility);
-        }
-        if (resourceIds.length === this.resources.length) {
-          this.loading = false;
-        }
-      });
+    this.resourcesManagerService.getRichResourcesByIds(resourceIds).subscribe(resources => {
+      this.resources = resources;
+      this.vos = this.resources.map(res => res.vo).filter((item, i, ar) => ar.indexOf(item) === i);
+      this.facilities = this.resources.map(res => res.facility).filter((item, i, ar) => ar.indexOf(item) === i);
+      this.loading = false;
     });
   }
 
@@ -227,27 +235,35 @@ export class UserRolesComponent implements OnInit {
     this.loading = true;
     const memberIds = this.roles.get('SPONSORSHIP').get('Member');
     this.members = [];
-    memberIds.forEach(id => {
-      this.membersManagerService.getRichMember(id).subscribe(member => {
-        this.members.push(member);
-        if(this.members.length === memberIds.length){
-          this.loading = false;
-        }
+    this.membersManagerService.getMembersByIds(memberIds).subscribe(members => {
+        this.members = members;
+        this.loading = false;
+      });
+  }
+
+  getGroupsAndVos(role: string) {
+    this.loading = true;
+    const voIds = this.roles.get(role).get('Vo');
+    const groupIds = this.roles.get(role).get('Group');
+    this.vos = [];
+    this.groups = [];
+    this.groupsManagerService.getGroupsByIds(groupIds).subscribe(groups => {
+      this.groups = groups;
+
+      this.vosManagerService.getVosByIds(voIds).subscribe(vos => {
+        this.vos = vos;
+        this.loading = false;
       });
     });
   }
 
-  getObserverVos() {
+  getFacilities(role: string) {
     this.loading = true;
-    this.vos = [];
-    const voIds = this.roles.get('VOOBSERVER').get('Vo');
-    voIds.forEach(id => {
-      this.vosManagerService.getVoById(id).subscribe(vo => {
-        this.vos.push(vo);
-        if (this.vos.length === voIds.length){
-          this.loading = false;
-        }
-      })
-    })
+    this.facilities = [];
+    const facilityIds = this.roles.get(role).get('Facility');
+    this.facilitiesManagerService.getFacilitiesByIds(facilityIds).subscribe(facilities => {
+      this.facilities = facilities;
+      this.loading = false;
+    });
   }
 }
