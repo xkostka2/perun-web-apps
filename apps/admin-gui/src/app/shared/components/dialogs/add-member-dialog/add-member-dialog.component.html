@@ -56,15 +56,6 @@
     matTooltipPosition="above"
     [matTooltipDisabled]="selection.selected.length === 0 || this.data.type !== 'group' || (list !== undefined && list.addAuth)">
     <button
-      mat-flat-button
-      class="ml-2"
-      color="accent"
-      (click)="onAdd()"
-      [disabled]="selection.selected.length === 0 || loading || (this.data.type === 'group' && list !== undefined && !list.addAuth)">
-      {{'DIALOGS.ADD_MEMBERS.CREATE' | translate}}
-    </button>
-    </span>
-    <button
       *ngIf="this.data.type !== 'group' || (this.data.type === 'group' && inviteAuth)"
       mat-flat-button
       class="ml-2"
@@ -72,6 +63,15 @@
       (click)="onInvite()"
       [disabled]="selection.selected.length === 0 || loading">
       {{'DIALOGS.ADD_MEMBERS.INVITE' | translate}}
+    </button>
+    </span>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="accent"
+      (click)="onAdd()"
+      [disabled]="selection.selected.length === 0 || loading || (this.data.type === 'group' && list !== undefined && !list.addAuth)">
+      {{'DIALOGS.ADD_MEMBERS.CREATE' | translate}}
     </button>
   </div>
 </div>
