@@ -17,8 +17,8 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { AuditMessage } from '../model/auditMessage';
-import { PerunException } from '../model/perunException';
+import { AuditMessage } from '../model/models';
+import { PerunException } from '../model/models';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -50,23 +50,56 @@ export class AuditMessagesManagerService {
 
 
 
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key,
+                        (value as Date).toISOString().substr(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
     /**
      * Log arbitrary auditer message/event to the audit log. 
      * @param msg Message to be logged
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public auditMessagesManagerLog(msg: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public auditMessagesManagerLog(msg: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public auditMessagesManagerLog(msg: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public auditMessagesManagerLog(msg: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public auditMessagesManagerLog(msg: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public auditMessagesManagerLog(msg: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public auditMessagesManagerLog(msg: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public auditMessagesManagerLog(msg: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (msg === null || msg === undefined) {
             throw new Error('Required parameter msg was null or undefined when calling auditMessagesManagerLog.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (msg !== undefined && msg !== null) {
-            queryParameters = queryParameters.set('msg', <any>msg);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>msg, 'msg');
         }
 
         let headers = this.defaultHeaders;
@@ -87,20 +120,29 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/AuditMessagesManager/log`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -115,17 +157,18 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createAuditerConsumer(consumerName: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public createAuditerConsumer(consumerName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public createAuditerConsumer(consumerName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public createAuditerConsumer(consumerName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createAuditerConsumer(consumerName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public createAuditerConsumer(consumerName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public createAuditerConsumer(consumerName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public createAuditerConsumer(consumerName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (consumerName === null || consumerName === undefined) {
             throw new Error('Required parameter consumerName was null or undefined when calling createAuditerConsumer.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (consumerName !== undefined && consumerName !== null) {
-            queryParameters = queryParameters.set('consumerName', <any>consumerName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>consumerName, 'consumerName');
         }
 
         let headers = this.defaultHeaders;
@@ -146,20 +189,29 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/AuditMessagesManager/createAuditerConsumer`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -173,10 +225,10 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllAuditerConsumers(observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: number; }>;
-    public getAllAuditerConsumers(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: number; }>>;
-    public getAllAuditerConsumers(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: number; }>>;
-    public getAllAuditerConsumers(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAllAuditerConsumers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<{ [key: string]: number; }>;
+    public getAllAuditerConsumers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<{ [key: string]: number; }>>;
+    public getAllAuditerConsumers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<{ [key: string]: number; }>>;
+    public getAllAuditerConsumers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -196,18 +248,27 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<{ [key: string]: number; }>(`${this.configuration.basePath}/json/AuditMessagesManager/getAllAuditerConsumers`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -221,10 +282,10 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAuditerMessagesCount(observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public getAuditerMessagesCount(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public getAuditerMessagesCount(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public getAuditerMessagesCount(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAuditerMessagesCount(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public getAuditerMessagesCount(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public getAuditerMessagesCount(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public getAuditerMessagesCount(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -244,18 +305,27 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/json/AuditMessagesManager/getAuditerMessagesCount`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -269,10 +339,10 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLastMessageId(observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public getLastMessageId(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public getLastMessageId(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public getLastMessageId(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getLastMessageId(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public getLastMessageId(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public getLastMessageId(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public getLastMessageId(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -292,18 +362,27 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/json/AuditMessagesManager/getLastMessageId`,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -318,14 +397,15 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMessages(count?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<AuditMessage>>;
-    public getMessages(count?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuditMessage>>>;
-    public getMessages(count?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuditMessage>>>;
-    public getMessages(count?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMessages(count?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<AuditMessage>>;
+    public getMessages(count?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<AuditMessage>>>;
+    public getMessages(count?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<AuditMessage>>>;
+    public getMessages(count?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (count !== undefined && count !== null) {
-            queryParameters = queryParameters.set('count', <any>count);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>count, 'count');
         }
 
         let headers = this.defaultHeaders;
@@ -346,19 +426,28 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<AuditMessage>>(`${this.configuration.basePath}/json/AuditMessagesManager/getMessages`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -373,17 +462,18 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMessagesByCount(count: number, observe?: 'body', reportProgress?: boolean): Observable<Array<AuditMessage>>;
-    public getMessagesByCount(count: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuditMessage>>>;
-    public getMessagesByCount(count: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuditMessage>>>;
-    public getMessagesByCount(count: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMessagesByCount(count: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<AuditMessage>>;
+    public getMessagesByCount(count: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<AuditMessage>>>;
+    public getMessagesByCount(count: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<AuditMessage>>>;
+    public getMessagesByCount(count: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (count === null || count === undefined) {
             throw new Error('Required parameter count was null or undefined when calling getMessagesByCount.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (count !== undefined && count !== null) {
-            queryParameters = queryParameters.set('count', <any>count);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>count, 'count');
         }
 
         let headers = this.defaultHeaders;
@@ -404,19 +494,28 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<AuditMessage>>(`${this.configuration.basePath}/json/AuditMessagesManager/getMessagesByCount`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -431,17 +530,18 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public pollConsumerMessages(consumerName: string, observe?: 'body', reportProgress?: boolean): Observable<Array<AuditMessage>>;
-    public pollConsumerMessages(consumerName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuditMessage>>>;
-    public pollConsumerMessages(consumerName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuditMessage>>>;
-    public pollConsumerMessages(consumerName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public pollConsumerMessages(consumerName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<AuditMessage>>;
+    public pollConsumerMessages(consumerName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<AuditMessage>>>;
+    public pollConsumerMessages(consumerName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<AuditMessage>>>;
+    public pollConsumerMessages(consumerName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (consumerName === null || consumerName === undefined) {
             throw new Error('Required parameter consumerName was null or undefined when calling pollConsumerMessages.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (consumerName !== undefined && consumerName !== null) {
-            queryParameters = queryParameters.set('consumerName', <any>consumerName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>consumerName, 'consumerName');
         }
 
         let headers = this.defaultHeaders;
@@ -462,19 +562,28 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<AuditMessage>>(`${this.configuration.basePath}/json/AuditMessagesManager/pollConsumerMessages`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -490,10 +599,10 @@ export class AuditMessagesManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public setLastProcessedId(consumerName: string, lastProcessedId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (consumerName === null || consumerName === undefined) {
             throw new Error('Required parameter consumerName was null or undefined when calling setLastProcessedId.');
         }
@@ -503,10 +612,12 @@ export class AuditMessagesManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (consumerName !== undefined && consumerName !== null) {
-            queryParameters = queryParameters.set('consumerName', <any>consumerName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>consumerName, 'consumerName');
         }
         if (lastProcessedId !== undefined && lastProcessedId !== null) {
-            queryParameters = queryParameters.set('lastProcessedId', <any>lastProcessedId);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>lastProcessedId, 'lastProcessedId');
         }
 
         let headers = this.defaultHeaders;
@@ -527,20 +638,29 @@ export class AuditMessagesManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/AuditMessagesManager/setLastProcessedId`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

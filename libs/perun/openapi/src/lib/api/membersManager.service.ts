@@ -59,16 +59,48 @@ export class MembersManagerService {
 
 
 
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key,
+                        (value as Date).toISOString().substr(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
     /**
      * Creates a new member from candidate which is prepared for creating specificUser.
-     * @param inputSpecificMember 
+     * @param inputSpecificMember
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'body', reportProgress?: boolean): Observable<Member>;
-    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
-    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
-    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Member>;
+    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Member>>;
+    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Member>>;
+    public createSpecificMember(inputSpecificMember: InputSpecificMember, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (inputSpecificMember === null || inputSpecificMember === undefined) {
             throw new Error('Required parameter inputSpecificMember was null or undefined when calling createSpecificMember.');
         }
@@ -91,11 +123,14 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -110,9 +145,15 @@ export class MembersManagerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<Member>(`${this.configuration.basePath}/json/membersManager/createSpecificMember`,
             inputSpecificMember,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -123,14 +164,14 @@ export class MembersManagerService {
 
     /**
      * Creates a new sponsored member in a given VO and namespace.
-     * @param inputCreateSponsoredMember 
+     * @param inputCreateSponsoredMember
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'body', reportProgress?: boolean): Observable<RichMember>;
-    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RichMember>>;
-    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RichMember>>;
-    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<RichMember>;
+    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<RichMember>>;
+    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<RichMember>>;
+    public createSponsoredMember(inputCreateSponsoredMember: InputCreateSponsoredMember, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (inputCreateSponsoredMember === null || inputCreateSponsoredMember === undefined) {
             throw new Error('Required parameter inputCreateSponsoredMember was null or undefined when calling createSponsoredMember.');
         }
@@ -153,11 +194,14 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -172,9 +216,15 @@ export class MembersManagerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<RichMember>(`${this.configuration.basePath}/json/membersManager/createSponsoredMember/withFullName`,
             inputCreateSponsoredMember,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -185,14 +235,14 @@ export class MembersManagerService {
 
     /**
      * Creates new sponsored members in a given VO and namespace.
-     * @param inputCreateSponsoredMember1 
+     * @param inputCreateSponsoredMember1
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: { [key: string]: string; }; }>;
-    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: { [key: string]: string; }; }>>;
-    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: { [key: string]: string; }; }>>;
-    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<{ [key: string]: { [key: string]: string; }; }>;
+    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembers(inputCreateSponsoredMember1: InputCreateSponsoredMember1, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (inputCreateSponsoredMember1 === null || inputCreateSponsoredMember1 === undefined) {
             throw new Error('Required parameter inputCreateSponsoredMember1 was null or undefined when calling createSponsoredMembers.');
         }
@@ -215,11 +265,14 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -234,9 +287,15 @@ export class MembersManagerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<{ [key: string]: { [key: string]: string; }; }>(`${this.configuration.basePath}/json/membersManager/createSponsoredMembers`,
             inputCreateSponsoredMember1,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -247,14 +306,14 @@ export class MembersManagerService {
 
     /**
      * Creates new sponsored members in a given VO and namespace.
-     * @param inputCreateSponsoredMemberFromCSV 
+     * @param inputCreateSponsoredMemberFromCSV
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: { [key: string]: string; }; }>;
-    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: { [key: string]: string; }; }>>;
-    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: { [key: string]: string; }; }>>;
-    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<{ [key: string]: { [key: string]: string; }; }>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<{ [key: string]: { [key: string]: string; }; }>>;
+    public createSponsoredMembersFromCSV(inputCreateSponsoredMemberFromCSV: InputCreateSponsoredMemberFromCSV, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (inputCreateSponsoredMemberFromCSV === null || inputCreateSponsoredMemberFromCSV === undefined) {
             throw new Error('Required parameter inputCreateSponsoredMemberFromCSV was null or undefined when calling createSponsoredMembersFromCSV.');
         }
@@ -277,11 +336,14 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -296,9 +358,15 @@ export class MembersManagerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<{ [key: string]: { [key: string]: string; }; }>(`${this.configuration.basePath}/json/membersManager/createSponsoredMembersFromCSV`,
             inputCreateSponsoredMemberFromCSV,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -313,17 +381,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMember(member: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteMember(member: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteMember(member: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteMember(member: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteMember(member: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public deleteMember(member: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public deleteMember(member: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public deleteMember(member: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling deleteMember.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
 
         let headers = this.defaultHeaders;
@@ -344,20 +413,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/deleteMember`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -375,10 +453,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<RichMember>>;
-    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichMember>>>;
-    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichMember>>>;
-    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RichMember>>;
+    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RichMember>>>;
+    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RichMember>>>;
+    public findCompleteRichMembers(vo: number, attrsNames: Array<string>, searchString: string, onlySponsored: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling findCompleteRichMembers.');
         }
@@ -394,18 +472,22 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (attrsNames) {
             attrsNames.forEach((element) => {
-                queryParameters = queryParameters.append('attrsNames', <any>element);
+                queryParameters = this.addToHttpParams(queryParameters,
+                  <any>element, 'attrsNames');
             })
         }
         if (searchString !== undefined && searchString !== null) {
-            queryParameters = queryParameters.set('searchString', <any>searchString);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>searchString, 'searchString');
         }
         if (onlySponsored !== undefined && onlySponsored !== null) {
-            queryParameters = queryParameters.set('onlySponsored', <any>onlySponsored);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>onlySponsored, 'onlySponsored');
         }
 
         let headers = this.defaultHeaders;
@@ -426,19 +508,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RichMember>>(`${this.configuration.basePath}/json/membersManager/findCompleteRichMembers/v-sponsored`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -454,10 +545,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findMembersInVo(vo: number, searchString: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Member>>;
-    public findMembersInVo(vo: number, searchString: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Member>>>;
-    public findMembersInVo(vo: number, searchString: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Member>>>;
-    public findMembersInVo(vo: number, searchString: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findMembersInVo(vo: number, searchString: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<Member>>;
+    public findMembersInVo(vo: number, searchString: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<Member>>>;
+    public findMembersInVo(vo: number, searchString: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<Member>>>;
+    public findMembersInVo(vo: number, searchString: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling findMembersInVo.');
         }
@@ -467,10 +558,12 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (searchString !== undefined && searchString !== null) {
-            queryParameters = queryParameters.set('searchString', <any>searchString);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>searchString, 'searchString');
         }
 
         let headers = this.defaultHeaders;
@@ -491,19 +584,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<Member>>(`${this.configuration.basePath}/json/membersManager/findMembersInVo`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -520,10 +622,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'body', reportProgress?: boolean): Observable<Member>;
-    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
-    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
-    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Member>;
+    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Member>>;
+    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Member>>;
+    public getMemberByExtSourceNameAndExtLogin(vo: number, extLogin: string, extSourceName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getMemberByExtSourceNameAndExtLogin.');
         }
@@ -536,13 +638,16 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (extLogin !== undefined && extLogin !== null) {
-            queryParameters = queryParameters.set('extLogin', <any>extLogin);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>extLogin, 'extLogin');
         }
         if (extSourceName !== undefined && extSourceName !== null) {
-            queryParameters = queryParameters.set('extSourceName', <any>extSourceName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>extSourceName, 'extSourceName');
         }
 
         let headers = this.defaultHeaders;
@@ -563,19 +668,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Member>(`${this.configuration.basePath}/json/membersManager/getMemberByExtSourceNameAndExtLogin`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -591,17 +705,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMemberById(id: number, observe?: 'body', reportProgress?: boolean): Observable<Member>;
-    public getMemberById(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
-    public getMemberById(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
-    public getMemberById(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMemberById(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Member>;
+    public getMemberById(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Member>>;
+    public getMemberById(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Member>>;
+    public getMemberById(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getMemberById.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (id !== undefined && id !== null) {
-            queryParameters = queryParameters.set('id', <any>id);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>id, 'id');
         }
 
         let headers = this.defaultHeaders;
@@ -622,19 +737,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Member>(`${this.configuration.basePath}/json/membersManager/getMemberById`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -650,10 +774,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMemberByUser(vo: number, user: number, observe?: 'body', reportProgress?: boolean): Observable<Member>;
-    public getMemberByUser(vo: number, user: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
-    public getMemberByUser(vo: number, user: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
-    public getMemberByUser(vo: number, user: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMemberByUser(vo: number, user: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Member>;
+    public getMemberByUser(vo: number, user: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Member>>;
+    public getMemberByUser(vo: number, user: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Member>>;
+    public getMemberByUser(vo: number, user: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getMemberByUser.');
         }
@@ -663,10 +787,12 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (user !== undefined && user !== null) {
-            queryParameters = queryParameters.set('user', <any>user);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>user, 'user');
         }
 
         let headers = this.defaultHeaders;
@@ -687,19 +813,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Member>(`${this.configuration.basePath}/json/membersManager/getMemberByUser`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -715,20 +850,22 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'body', reportProgress?: boolean): Observable<Array<Member>>;
-    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Member>>>;
-    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Member>>>;
-    public getMembers(vo: number, status?: VoMemberStatuses, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<Member>>;
+    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<Member>>>;
+    public getMembers(vo: number, status?: VoMemberStatuses, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<Member>>>;
+    public getMembers(vo: number, status?: VoMemberStatuses, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getMembers.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (status !== undefined && status !== null) {
-            queryParameters = queryParameters.set('status', <any>status);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>status, 'status');
         }
 
         let headers = this.defaultHeaders;
@@ -749,19 +886,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<Member>>(`${this.configuration.basePath}/json/membersManager/getMembers`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -776,17 +922,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMembersByUser(user: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Member>>;
-    public getMembersByUser(user: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Member>>>;
-    public getMembersByUser(user: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Member>>>;
-    public getMembersByUser(user: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMembersByUser(user: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<Member>>;
+    public getMembersByUser(user: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<Member>>>;
+    public getMembersByUser(user: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<Member>>>;
+    public getMembersByUser(user: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (user === null || user === undefined) {
             throw new Error('Required parameter user was null or undefined when calling getMembersByUser.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (user !== undefined && user !== null) {
-            queryParameters = queryParameters.set('user', <any>user);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>user, 'user');
         }
 
         let headers = this.defaultHeaders;
@@ -807,19 +954,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<Member>>(`${this.configuration.basePath}/json/membersManager/getMembersByUser`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -834,17 +990,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMembersCount(vo: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public getMembersCount(vo: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public getMembersCount(vo: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public getMembersCount(vo: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getMembersCount(vo: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<number>;
+    public getMembersCount(vo: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<number>>;
+    public getMembersCount(vo: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<number>>;
+    public getMembersCount(vo: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getMembersCount.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
 
         let headers = this.defaultHeaders;
@@ -865,19 +1022,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<number>(`${this.configuration.basePath}/json/membersManager/getMembersCount`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -893,17 +1059,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRichMember(id: number, observe?: 'body', reportProgress?: boolean): Observable<RichMember>;
-    public getRichMember(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RichMember>>;
-    public getRichMember(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RichMember>>;
-    public getRichMember(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRichMember(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<RichMember>;
+    public getRichMember(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<RichMember>>;
+    public getRichMember(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<RichMember>>;
+    public getRichMember(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getRichMember.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (id !== undefined && id !== null) {
-            queryParameters = queryParameters.set('id', <any>id);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>id, 'id');
         }
 
         let headers = this.defaultHeaders;
@@ -924,19 +1091,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<RichMember>(`${this.configuration.basePath}/json/membersManager/getRichMember`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -952,17 +1128,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getRichMemberWithAttributes(id: number, observe?: 'body', reportProgress?: boolean): Observable<RichMember>;
-    public getRichMemberWithAttributes(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RichMember>>;
-    public getRichMemberWithAttributes(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RichMember>>;
-    public getRichMemberWithAttributes(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getRichMemberWithAttributes(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<RichMember>;
+    public getRichMemberWithAttributes(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<RichMember>>;
+    public getRichMemberWithAttributes(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<RichMember>>;
+    public getRichMemberWithAttributes(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getRichMemberWithAttributes.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (id !== undefined && id !== null) {
-            queryParameters = queryParameters.set('id', <any>id);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>id, 'id');
         }
 
         let headers = this.defaultHeaders;
@@ -983,19 +1160,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<RichMember>(`${this.configuration.basePath}/json/membersManager/getRichMemberWithAttributes`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1010,17 +1196,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSponsoredMembers(vo: number, observe?: 'body', reportProgress?: boolean): Observable<Array<RichMember>>;
-    public getSponsoredMembers(vo: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichMember>>>;
-    public getSponsoredMembers(vo: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichMember>>>;
-    public getSponsoredMembers(vo: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSponsoredMembers(vo: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RichMember>>;
+    public getSponsoredMembers(vo: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RichMember>>>;
+    public getSponsoredMembers(vo: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RichMember>>>;
+    public getSponsoredMembers(vo: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getSponsoredMembers.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
 
         let headers = this.defaultHeaders;
@@ -1041,19 +1228,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RichMember>>(`${this.configuration.basePath}/json/membersManager/getSponsoredMembers/v`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1069,10 +1265,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<MemberWithSponsors>>;
-    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MemberWithSponsors>>>;
-    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MemberWithSponsors>>>;
-    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<MemberWithSponsors>>;
+    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<MemberWithSponsors>>>;
+    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<MemberWithSponsors>>>;
+    public getSponsoredMembersAndTheirSponsors(vo: number, attrNames: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getSponsoredMembersAndTheirSponsors.');
         }
@@ -1082,11 +1278,13 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (attrNames) {
             attrNames.forEach((element) => {
-                queryParameters = queryParameters.append('attrNames[]', <any>element);
+                queryParameters = this.addToHttpParams(queryParameters,
+                  <any>element, 'attrNames[]');
             })
         }
 
@@ -1108,19 +1306,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<MemberWithSponsors>>(`${this.configuration.basePath}/json/membersManager/getSponsoredMembersAndTheirSponsors`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1136,21 +1343,23 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<RichUser>>;
-    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichUser>>>;
-    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichUser>>>;
-    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RichUser>>;
+    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RichUser>>>;
+    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RichUser>>>;
+    public getSponsorsByMember(member: number, attrNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling getSponsorsByMember.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
         if (attrNames) {
             attrNames.forEach((element) => {
-                queryParameters = queryParameters.append('attrNames[]', <any>element);
+                queryParameters = this.addToHttpParams(queryParameters,
+                  <any>element, 'attrNames[]');
             })
         }
 
@@ -1172,19 +1381,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RichUser>>(`${this.configuration.basePath}/json/membersManager/getSponsors/member`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1202,10 +1420,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<RichUser>>;
-    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichUser>>>;
-    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichUser>>>;
-    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<RichUser>>;
+    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<RichUser>>>;
+    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<RichUser>>>;
+    public getSponsorsByVo(vo: number, extSourceName: string, extLogin: string, attrNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (vo === null || vo === undefined) {
             throw new Error('Required parameter vo was null or undefined when calling getSponsorsByVo.');
         }
@@ -1218,17 +1436,21 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (vo !== undefined && vo !== null) {
-            queryParameters = queryParameters.set('vo', <any>vo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>vo, 'vo');
         }
         if (extSourceName !== undefined && extSourceName !== null) {
-            queryParameters = queryParameters.set('extSourceName', <any>extSourceName);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>extSourceName, 'extSourceName');
         }
         if (extLogin !== undefined && extLogin !== null) {
-            queryParameters = queryParameters.set('extLogin', <any>extLogin);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>extLogin, 'extLogin');
         }
         if (attrNames) {
             attrNames.forEach((element) => {
-                queryParameters = queryParameters.append('attrNames[]', <any>element);
+                queryParameters = this.addToHttpParams(queryParameters,
+                  <any>element, 'attrNames[]');
             })
         }
 
@@ -1250,19 +1472,28 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.get<Array<RichUser>>(`${this.configuration.basePath}/json/membersManager/getSponsors/vo`,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1278,10 +1509,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public removeSponsor(member: number, sponsor: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public removeSponsor(member: number, sponsor: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public removeSponsor(member: number, sponsor: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public removeSponsor(member: number, sponsor: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public removeSponsor(member: number, sponsor: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public removeSponsor(member: number, sponsor: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public removeSponsor(member: number, sponsor: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public removeSponsor(member: number, sponsor: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling removeSponsor.');
         }
@@ -1291,10 +1522,12 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
         if (sponsor !== undefined && sponsor !== null) {
-            queryParameters = queryParameters.set('sponsor', <any>sponsor);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>sponsor, 'sponsor');
         }
 
         let headers = this.defaultHeaders;
@@ -1315,20 +1548,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/removeSponsor`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1346,10 +1588,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public sendAccountActivationLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling sendAccountActivationLinkEmail.');
         }
@@ -1365,16 +1607,20 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
         if (namespace !== undefined && namespace !== null) {
-            queryParameters = queryParameters.set('namespace', <any>namespace);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>namespace, 'namespace');
         }
         if (emailAttributeURN !== undefined && emailAttributeURN !== null) {
-            queryParameters = queryParameters.set('emailAttributeURN', <any>emailAttributeURN);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>emailAttributeURN, 'emailAttributeURN');
         }
         if (language !== undefined && language !== null) {
-            queryParameters = queryParameters.set('language', <any>language);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>language, 'language');
         }
 
         let headers = this.defaultHeaders;
@@ -1395,20 +1641,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/sendAccountActivationLinkEmail`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1426,10 +1681,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public sendPasswordResetLinkEmail(member: number, namespace: string, emailAttributeURN: string, language: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling sendPasswordResetLinkEmail.');
         }
@@ -1445,16 +1700,20 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
         if (namespace !== undefined && namespace !== null) {
-            queryParameters = queryParameters.set('namespace', <any>namespace);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>namespace, 'namespace');
         }
         if (emailAttributeURN !== undefined && emailAttributeURN !== null) {
-            queryParameters = queryParameters.set('emailAttributeURN', <any>emailAttributeURN);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>emailAttributeURN, 'emailAttributeURN');
         }
         if (language !== undefined && language !== null) {
-            queryParameters = queryParameters.set('language', <any>language);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>language, 'language');
         }
 
         let headers = this.defaultHeaders;
@@ -1475,20 +1734,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/sendPasswordResetLinkEmail`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1499,14 +1767,14 @@ export class MembersManagerService {
 
     /**
      * Creates a sponsored membership for the given user.
-     * @param inputSetSponsoredMember 
+     * @param inputSetSponsoredMember
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'body', reportProgress?: boolean): Observable<RichMember>;
-    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RichMember>>;
-    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RichMember>>;
-    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<RichMember>;
+    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<RichMember>>;
+    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<RichMember>>;
+    public setSponsoredMember(inputSetSponsoredMember: InputSetSponsoredMember, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (inputSetSponsoredMember === null || inputSetSponsoredMember === undefined) {
             throw new Error('Required parameter inputSetSponsoredMember was null or undefined when calling setSponsoredMember.');
         }
@@ -1529,11 +1797,14 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
@@ -1548,9 +1819,15 @@ export class MembersManagerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<RichMember>(`${this.configuration.basePath}/json/membersManager/setSponsoredMember`,
             inputSetSponsoredMember,
             {
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1567,10 +1844,10 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<any>;
+    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<any>>;
+    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<any>>;
+    public updateSponsorshipValidity(member: number, sponsor: number, validityTo?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling updateSponsorshipValidity.');
         }
@@ -1580,13 +1857,16 @@ export class MembersManagerService {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
         if (sponsor !== undefined && sponsor !== null) {
-            queryParameters = queryParameters.set('sponsor', <any>sponsor);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>sponsor, 'sponsor');
         }
         if (validityTo !== undefined && validityTo !== null) {
-            queryParameters = queryParameters.set('validityTo', <any>validityTo);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>validityTo, 'validityTo');
         }
 
         let headers = this.defaultHeaders;
@@ -1607,20 +1887,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/membersManager/updateSponsorshipValidity`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1635,17 +1924,18 @@ export class MembersManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public validateMemberAsync(member: number, observe?: 'body', reportProgress?: boolean): Observable<Member>;
-    public validateMemberAsync(member: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
-    public validateMemberAsync(member: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
-    public validateMemberAsync(member: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public validateMemberAsync(member: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Member>;
+    public validateMemberAsync(member: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Member>>;
+    public validateMemberAsync(member: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Member>>;
+    public validateMemberAsync(member: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (member === null || member === undefined) {
             throw new Error('Required parameter member was null or undefined when calling validateMemberAsync.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
         if (member !== undefined && member !== null) {
-            queryParameters = queryParameters.set('member', <any>member);
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>member, 'member');
         }
 
         let headers = this.defaultHeaders;
@@ -1666,20 +1956,29 @@ export class MembersManagerService {
                 : this.configuration.accessToken;
             headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
+        let responseType: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType = 'text';
+        }
+
         return this.httpClient.post<Member>(`${this.configuration.basePath}/urlinjsonout/membersManager/validateMemberAsync`,
             null,
             {
                 params: queryParameters,
+                responseType: <any>responseType,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

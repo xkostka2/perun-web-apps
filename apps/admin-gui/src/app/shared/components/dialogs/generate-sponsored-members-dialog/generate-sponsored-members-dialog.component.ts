@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { InputCreateSponsoredMember1, MembersManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  InputCreateSponsoredMemberFromCSV,
+  MembersManagerService
+} from '@perun-web-apps/perun/openapi';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -42,7 +45,6 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   namespaceOptions: string[] = [];
   namespace: FormControl = new FormControl('', Validators.required);
   sponsoredMembers: FormControl = new FormControl('', [Validators.required, Validators.pattern(this.notEmptyRegex)]);
-  email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
 
   passwordReset = false;
 
@@ -87,7 +89,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     const output = [];
 
     for (const memberName of Object.keys(data)) {
-      name = memberName.replace(';', ' ');
+      name = memberName.replace(';', ' ').split(';')[0];
       for (const memberData of Object.keys(data[memberName])) {
         switch (memberData) {
           case 'status': {
@@ -124,18 +126,20 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
 
   onGenerate(){
     this.loading = true;
-    const memberNames = this.sponsoredMembers.value.split("\n");
-    let generatedMemberNames: string[] = [];
-    let finalMemberNames: string[] = [];
-
-    for (const name of memberNames){
-      generatedMemberNames = generatedMemberNames.concat(this.parseMemberName(name));
+    const listOfMembers = this.sponsoredMembers.value.split("\n");
+    const header = 'firstname;lastname;urn:perun:user:attribute-def:def:preferredMail;urn:perun:user:attribute-def:def:note';
+    const generatedMemberNames: string[] = [];
+    for (const line of listOfMembers){
+      const parsedLine = this.parseMemberLine(line);
+      if (parsedLine !== 'error') {
+        if (parsedLine !== '') {
+          generatedMemberNames.push(parsedLine);
+        }
+      } else {
+        this.loading = false;
+        return;
+      }
     }
-
-    for (const name of generatedMemberNames){
-      finalMemberNames = finalMemberNames.concat(this.parseFirstName(name));
-    }
-
     // For testing purposes
     // const fakeExportData = {
     //   'meno1': {'status': 'ok', 'login': '123', 'password': '456'},
@@ -147,20 +151,20 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     // console.log(fakeExportData);
     //this.exportData(fakeExportData);
 
-    const inputSponsoredMembers: InputCreateSponsoredMember1 = {
-      guestNames: finalMemberNames,
+    const inputSponsoredMembersFromCSV: InputCreateSponsoredMemberFromCSV = {
+      data: generatedMemberNames,
+      header: header,
       namespace: this.namespace.value,
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
-      email: this.email.value,
       sendActivationLink: this.passwordReset
     }
 
     if(this.expiration !== 'never'){
-      inputSponsoredMembers.validityTo = formatDate(this.expiration,'yyyy-MM-dd','en-GB');
+      inputSponsoredMembersFromCSV.validityTo = formatDate(this.expiration,'yyyy-MM-dd','en-GB');
     }
 
-    this.membersService.createSponsoredMembers(inputSponsoredMembers).subscribe(logins => {
+    this.membersService.createSponsoredMembersFromCSV(inputSponsoredMembersFromCSV).subscribe(logins => {
       this.exportData(logins);
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
       this.dialogRef.close(true);
@@ -171,67 +175,21 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     this.dialogRef.close(false);
   }
 
-  parseFirstName(name: string) {
-    if (name.indexOf(' ') === -1) {
-      return ';' + name;
-    } else {
-      return name.replace(' ', ';');
+  parseMemberLine(line: string):string {
+    const trimLine = line.trim();
+    if (trimLine === '') {
+      return '';
     }
-
-  }
-
-  parseMemberName(name: string){
-    const trimName = name.trim();
-    const rangeRegex = new RegExp('\[[0-9]+-[0-9]+\]','g');
-    const prefixes = trimName.split(rangeRegex);
-    const suffixes = trimName.match(rangeRegex);
-
-    if (suffixes === null){
-      if (trimName.trim() === ""){
-        return [];
-      }
-      return [trimName];
+    const memberAttributes = trimLine.split(';');
+    if (memberAttributes.length !== 4) {      //check if all attributes are filled
+      this.notificator.showError(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_FORMAT') + ': ' + trimLine);
+      return 'error';
     }
-
-    let nameParts: string[][]= [];
-
-    for(let i = 0; i < prefixes.length - 1; i++) {
-      const [from, to] = this.parseRange(suffixes[i]);
-      let parts = [];
-
-      for(let j = from; j <= to; j++){
-        parts = parts.concat(prefixes[i].concat(j.toString()));
-      }
-      nameParts = nameParts.concat([parts]);
+    if (!memberAttributes[2].trim().match(this.emailRegx)) {      //check if the email is valid email
+      this.notificator.showError(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_EMAIL') + ': ' + memberAttributes[2]);
+      return 'error';
     }
-    nameParts = nameParts.concat([prefixes[prefixes.length - 1]]);
-
-    return this.joinHostNames(nameParts, 0);
-  }
-
-  parseRange(range: string){
-    const [lower, upper] = range.split("-");
-
-    const from = parseInt(lower.substring(1, lower.length), 10);
-    const to = parseInt(upper.substring(0, upper.length), 10);
-
-    return [from, to];
-  }
-
-  joinHostNames(nameParts: string[][], position: number){
-    if (position === nameParts.length - 1){
-      return [nameParts[position]];
-    }
-
-    const suffixes = this.joinHostNames(nameParts, position + 1);
-    const joinedNames = [];
-
-    for (const name of nameParts[position]){
-      for(const suffix of suffixes){
-        joinedNames.push(name.concat(suffix));
-      }
-    }
-    return joinedNames;
+    return memberAttributes[0].trim() + ';' + memberAttributes[1].trim() + ';' + memberAttributes[2].trim() + ';' + memberAttributes[3].trim();
   }
 
   pageChanged(event: PageEvent) {

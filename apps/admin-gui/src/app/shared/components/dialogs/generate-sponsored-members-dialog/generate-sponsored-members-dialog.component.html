@@ -2,7 +2,7 @@
   <h1 mat-dialog-title>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.TITLE' | translate}}</h1>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content class="dialog-container">
-    <app-alert color="error" *ngIf="this.functionalityNotSupported">
+    <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
     </app-alert>
     <mat-form-field>
@@ -15,14 +15,12 @@
         {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMESPACE_ERROR' | translate}}
       </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput required [formControl]="email"
-             placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EMAIL' | translate}}">
-      <mat-error *ngIf="email.invalid">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EMAIL_ERROR' | translate}}</mat-error>
-    </mat-form-field>
-    <mat-form-field>
+    <div>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
+    <div class="font-weight-bold">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ATTRIBUTES'| translate}}</div>
+    <mat-form-field class="pt-2">
+      <mat-label>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.INSERT_HERE'| translate}}</mat-label>
       <textarea
-        placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMES' | translate}}"
+        placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXAMPLE'| translate}}"
         class="md-textarea form-control"
         id="voGenerateSponsoredMembers"
         name="voGenerateSponsoredMembers"
@@ -35,8 +33,6 @@
         {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMES_ERROR' | translate}}
       </mat-error>
     </mat-form-field>
-    <div class="text-muted">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
-    <br>
     <mat-checkbox [(ngModel)]="passwordReset" labelPosition="before">
       {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_RESET' | translate}}
     </mat-checkbox>
@@ -97,7 +93,7 @@
       mat-flat-button
       class="ml-2"
       color="accent"
-      [disabled]="sponsoredMembers.value.trim().length === 0 || namespace.invalid || email.invalid || loading"
+      [disabled]="sponsoredMembers.value.trim().length === 0 || namespace.invalid || loading"
       (click)="onGenerate()">
       {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GENERATE' | translate}}
     </button>
