@@ -50,7 +50,7 @@ export class FacilitySettingsOverviewComponent implements OnInit {
       });
     }
     // Managers
-    if(this.authResolver.isAuthorized('getRichAdmins_Facility_List<String>_boolean_boolean_policy', [this.facility])){
+    if(this.authResolver.isManagerPagePrivileged(this.facility)){
      this.items.push({
        cssIcon: 'perun-manager',
        url: `/facilities/${this.facility.id}/settings/managers`,

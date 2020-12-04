@@ -116,7 +116,7 @@ export class FacilityOverviewComponent implements OnInit {
 
     // Settings
     if (this.authResolver.isAuthorized('getBansForFacility_int_policy', [this.facility]) ||
-      this.authResolver.isAuthorized('getRichAdmins_Facility_List<String>_boolean_boolean_policy', [this.facility]) ||
+      this.authResolver.isManagerPagePrivileged(this.facility) ||
       this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility]) ||
       this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
       this.navItems.push({

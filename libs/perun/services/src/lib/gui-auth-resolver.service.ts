@@ -285,6 +285,54 @@ export class GuiAuthResolver {
       this.voCustomSort(availableRoles);
   }
 
+  public isManagerPagePrivileged(primaryObject: PerunBean): boolean {
+    const availableRoles = [];
+    let beanName = primaryObject.beanName;
+    if (beanName.startsWith('Rich')) {
+      beanName = beanName.substr(4);
+    }
+
+    this.assignAvailableRoles(availableRoles, beanName);
+    const rolesPrivileges = new Map<string, any>();
+    this.getRolesAuthorization(availableRoles, primaryObject, rolesPrivileges);
+    for (const privilege of rolesPrivileges.values()) {
+     if (privilege.readAuth || privilege.manageAuth) {
+       return true;
+     }
+    }
+
+    return false;
+  }
+
+  public getRolesAuthorization(availableRoles: string[], primaryObject: PerunBean, availableRolesPrivileges){
+    for (const role of availableRoles) {
+      let privilegedReadRoles: Array<{ [key: string]: string; }> = [];
+      let privilegedManageRoles: Array<{ [key: string]: string; }> = [];
+      let modes = [];
+      for (const rule of this.allRolesManagementRules){
+        if (rule.roleName === role){
+          privilegedReadRoles = privilegedReadRoles.concat(rule.privilegedRolesToRead);
+          privilegedManageRoles = privilegedManageRoles.concat(rule.privilegedRolesToManage);
+
+          for (const entity of Object.keys(rule.entitiesToManage)){
+            if (entity === "User"){
+              modes = [entity].concat(modes);
+            } else {
+              modes = modes.concat(entity);
+            }
+          }
+
+          break;
+        }
+      }
+
+      const mapOfBeans: { [key: string]: number[]; } = this.fetchAllRelatedObjects([primaryObject]);
+      const readAuth = this.resolveAuthorization(privilegedReadRoles, mapOfBeans);
+      const manageAuth = this.resolveAuthorization(privilegedManageRoles, mapOfBeans);
+      availableRolesPrivileges.set(role, {readAuth: readAuth, manageAuth: manageAuth, modes: modes});
+    }
+  }
+
   /**
    * Makes specific sort for selector (select role) in VO due to UX
    *
