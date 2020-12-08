@@ -4,6 +4,7 @@ import { NotificatorService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
 import { FormControl, Validators } from '@angular/forms';
 import { VosManagerService } from '@perun-web-apps/perun/openapi';
+import { Router } from '@angular/router';
 
 export interface CreateVoDialogData {
   theme: string;
@@ -22,6 +23,7 @@ export class CreateVoDialogComponent implements OnInit {
     private notificator: NotificatorService,
     private voService: VosManagerService,
     private translate: TranslateService,
+    private router: Router,
   ) {
     translate.get('DIALOGS.CREATE_VO.SUCCESS').subscribe(value => this.successMessage = value);
   }
@@ -45,10 +47,11 @@ export class CreateVoDialogComponent implements OnInit {
 
   onSubmit() {
     this.loading = true;
-    this.voService.createVoWithName(this.fullNameCtrl.value, this.shortNameCtrl.value).subscribe(() => {
+    this.voService.createVoWithName(this.fullNameCtrl.value, this.shortNameCtrl.value).subscribe(vo => {
       this.notificator.showSuccess(this.successMessage);
       this.loading = false;
       this.dialogRef.close(true);
+      this.router.navigate(['/organizations', vo.id]);
     }, () => this.loading = false);
   }
 }
