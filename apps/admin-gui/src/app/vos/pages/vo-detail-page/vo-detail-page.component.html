@@ -2,35 +2,36 @@
   <perun-web-apps-back-button>
   </perun-web-apps-back-button>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <div class="d-flex page-title-headtitle" *ngIf="!loading && vo !== undefined">
-    <mat-icon
-      matTooltip="{{'VO_DETAIL.ENTITY' | translate}}"
-      [ngStyle]="{'color':'black'}"
-      svgIcon='perun-vo-black'
-      class="perun-icon perun-icon-detail">
-    </mat-icon>
-    <div class="page-title-block">
-      <div class="page-title-headline d-flex align-items-center">
+  <div *ngIf="!loading && vo !== undefined">
+    <div class="d-flex page-title-headtitle">
+      <mat-icon
+        matTooltip="{{ 'VO_DETAIL.ENTITY' | translate }}"
+        [ngStyle]="{'color':'black'}"
+        svgIcon='perun-vo-black'
+        class="perun-icon perun-icon-detail">
+      </mat-icon>
+      <div class="page-title-block">
+        <div class="page-title-headline d-flex align-items-center">
           <a class="vo-link" [routerLink]="['/organizations/', vo.id]">
             {{vo.name}}
           </a>
           <span class="text-muted">
-          &nbsp;#{{vo.id}}
+            &nbsp;#{{vo.id}}
           </span>
-        <button
-          *ngIf="editAuth"
-          mat-icon-button
-          aria-label="Edit Vo"
-          (click)="editVo()">
-          <mat-icon>edit</mat-icon>
-        </button>
+          <button
+            *ngIf="editAuth"
+            mat-icon-button
+            aria-label="Edit Vo"
+            (click)="editVo()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <span class="mt-1 entity-info">
+          {{'VO_DETAIL.ENTITY' | translate}},
+          {{'VO_DETAIL.SHORT_NAME' | translate}}: {{vo.shortName}}
+        </span>
       </div>
-      <span class="mt-1 entity-info">
-        {{'VO_DETAIL.ENTITY' | translate}},
-        {{'VO_DETAIL.SHORT_NAME' | translate}}: {{vo.shortName}}
-      </span>
     </div>
+    <app-animated-router-outlet></app-animated-router-outlet>
   </div>
-  <app-animated-router-outlet></app-animated-router-outlet>
 </div>
-

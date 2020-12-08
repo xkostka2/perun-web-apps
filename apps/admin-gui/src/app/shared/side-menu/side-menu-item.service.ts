@@ -711,15 +711,6 @@ export class SideMenuItemService {
         activatedRegex: '/facilities/\\d+/services-status'
       });
     }
-    // Service configuration
-    if (this.authResolver.isAuthorized('getAssignedServices_Facility_policy', [facility]) &&
-      this.authResolver.isAuthorized('getAssignedResources_Facility_policy', [facility])) {
-      links.push({
-        label: 'MENU_ITEMS.FACILITY.SERVICE_CONFIG',
-        url: [`/facilities/${facility.id}/service-config`],
-        activatedRegex: 'facilities/\\d+/service-config'
-      });
-    }
     // Service destination
     if (this.authResolver.isAuthorized('getAllRichDestinations_Facility_policy', [facility])) {
       links.push({

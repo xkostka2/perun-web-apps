@@ -30,7 +30,7 @@ import {
 })
 export class GroupsListComponent implements  AfterViewInit, OnChanges {
 
-  displayButtons: boolean;
+  displayButtons = window.innerWidth > 800;
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -112,7 +112,7 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
 
   @HostListener('window:resize', ['$event'])
   shouldHideButtons() {
-    this.displayButtons = window.innerWidth > 1300;
+    this.displayButtons = window.innerWidth > 800;
   }
 
 

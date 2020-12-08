@@ -70,6 +70,7 @@ export class VoMembersComponent implements OnInit {
   removeAuth: boolean;
   inviteAuth: boolean;
   routeAuth: boolean;
+  count: number;
 
   ngOnInit() {
     this.loading = true;
@@ -84,6 +85,7 @@ export class VoMembersComponent implements OnInit {
         this.vo = vo;
         this.setAuthRights();
         this.memberMethodService.getMembersCount(this.vo.id).subscribe( count => {
+          this.count = count;
           if(count < 400) {
             this.onListAll();
           }
