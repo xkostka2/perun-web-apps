@@ -23,7 +23,12 @@
     [disabled]="selection.selected.length === 0"
     (click)="onDelete()"
     color="warn">{{'FACILITY_MANAGEMENT.DELETE' | translate}}</button>
-  <perun-web-apps-immediate-filter (filter)="applyFilter($event)" *ngIf="!loading" [placeholder]="'FACILITY_MANAGEMENT.FILTER_PLACEHOLDER'"></perun-web-apps-immediate-filter>
+  <perun-web-apps-immediate-filter
+    *ngIf="!loading"
+    [autoFocus]="true"
+    (filter)="applyFilter($event)"
+    [placeholder]="'FACILITY_MANAGEMENT.FILTER_PLACEHOLDER'">
+  </perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <app-facility-select-table
     [pageSize]="pageSize"
