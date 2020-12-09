@@ -4,7 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges, Output,
+  OnChanges, OnInit, Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -28,7 +28,7 @@ import {
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
 })
-export class GroupsListComponent implements  AfterViewInit, OnChanges {
+export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   displayButtons: boolean;
 
@@ -115,6 +115,9 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
     this.displayButtons = window.innerWidth > 1300;
   }
 
+  ngOnInit(): void {
+    this.shouldHideButtons();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
