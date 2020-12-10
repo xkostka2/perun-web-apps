@@ -56,6 +56,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
       this.notificator.showSuccess(this.translate.instant('DIALOGS.EDIT_MEMBER_SPONSORS.SUCCESS'));
       this.loading = false;
       this.dialogRef.close(true);
+      return
     }
 
     const sponsorId = sponsorIds.pop();

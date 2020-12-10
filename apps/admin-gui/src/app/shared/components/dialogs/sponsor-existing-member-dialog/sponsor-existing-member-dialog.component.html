@@ -1,7 +1,6 @@
 <div class="{{theme}}">
   <h1 mat-dialog-title>{{'DIALOGS.SPONSOR_EXISTING_MEMBER.TITLE' | translate}}</h1>
-  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <div *ngIf="!loading" mat-dialog-content>
+  <div mat-dialog-content>
 
     <mat-form-field class="mr-2 search-field adjust-width">
       <label>
@@ -18,13 +17,16 @@
       mat-flat-button
       class="ml-auto"
       color="accent"
-      [disabled]="processing"
+      [disabled]="loading"
       (click)="onSearchByString()">
       {{'DIALOGS.SPONSOR_EXISTING_MEMBER.SEARCH' | translate}}
     </button>
 
+    <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+
     <perun-web-apps-members-list
-      *ngIf="members.length !== 0"
+      *ngIf="firstSearchDone"
+      [hidden]="loading"
       [members]="members"
       [selection]="selection"
       [hideColumns]="['organization', 'logins']"
@@ -35,7 +37,7 @@
       {{'DIALOGS.SPONSOR_EXISTING_MEMBER.BEGIN_SEARCH' | translate}}
     </app-alert>
 
-    <div *ngIf="!processing">
+    <div>
       <br>
       <h6>{{'DIALOGS.SPONSOR_EXISTING_MEMBER.EXPIRATION' | translate}}</h6>
       <perun-web-apps-expiration-select
@@ -43,7 +45,7 @@
       </perun-web-apps-expiration-select>
     </div>
   </div>
-  <mat-spinner class="mr-auto ml-auto" *ngIf="processing"></mat-spinner>
+
   <div mat-dialog-actions>
     <button
       mat-flat-button

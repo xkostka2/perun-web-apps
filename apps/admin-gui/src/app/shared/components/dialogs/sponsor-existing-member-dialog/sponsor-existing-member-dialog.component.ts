@@ -29,7 +29,6 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
   }
 
   loading = false;
-  processing = false;
   theme: string;
 
   expiration = 'never';
@@ -53,21 +52,23 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
       this.notificator.showSuccess(this.translate.instant('DIALOGS.SPONSOR_EXISTING_MEMBER.SUCCESS'));
       this.loading = false;
       this.dialogRef.close(true);
+      return
     }
 
     const member = members.pop();
 
-    // this.membersService.setSponsorshipForMember(
-    //   member.id,
-    //   this.store.getPerunPrincipal().user.id,
-    //   this.expiration).subscribe( () => {
-    //     this.sponsor(members);
-    // }, () => this.loading = false);
+    this.membersService.setSponsorshipForMember(
+      member.id,
+      this.store.getPerunPrincipal().user.id,
+      this.expiration).subscribe( () => {
+        this.sponsor(members);
+    }, () => this.loading = false);
   }
 
   onSubmit() {
     this.loading = true;
-    const members = this.selection.selected;
+    const members = Array.from(this.selection.selected);
+    this.expiration = this.expiration === 'never' ? null : this.expiration;
 
     this.sponsor(members);
   }
@@ -83,20 +84,18 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
   onSearchByString() {
     if (this.searchCtrl.invalid) {
       this.searchCtrl.markAllAsTouched();
-      return;
+      return
     }
     this.firstSearchDone = true;
-    this.processing = true;
+    this.loading = true;
 
     this.selection.clear();
 
-    this.membersService.findCompleteRichMembers(
-      this.data.voId,
-      [Urns.MEMBER_DEF_EXPIRATION, Urns.USER_DEF_PREFERRED_MAIL],
-      this.searchCtrl.value,
-      false).subscribe(members => {
-      this.members = members;
-      this.processing = false;
+    const attrNames  = [Urns.MEMBER_DEF_EXPIRATION, Urns.USER_DEF_PREFERRED_MAIL]
+    this.membersService.findCompleteRichMembersForVo(
+      this.data.voId, attrNames, this.searchCtrl.value).subscribe(members => {
+      this.members = members.filter(member => !member.sponsored);
+      this.loading = false;
     }, () => this.loading = false);
   }
 }
