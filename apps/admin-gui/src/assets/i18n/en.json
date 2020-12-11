@@ -7,6 +7,11 @@
     },
     "PAGE_NOT_FOUND": {
       "TITLE": "404: Page not found"
+    },
+    "PROXY_OVERLOAD_PREVENTION": {
+      "TITLE": "Page not found",
+      "MESSAGE": "The page you are trying to access is missing. If you wish to continue please click the button below that will redirect you to our home page.",
+      "ACTION": "Redirect"
     }
   },
   "NAV": {
