@@ -20,7 +20,7 @@ export class MfaService {
   }
 
   enableMfa(value: boolean, idToken: string, accessToken: string): Observable<any> {
-    const apiUrl = this.storeService.get('mfa_api_url');
+    const apiUrl = this.storeService.get('mfa','api_url');
     const path = `mfaEnabled`;
     const url = `${apiUrl}${path}`;
     const body = `value=${value}&id_token=${idToken}`;

@@ -23,6 +23,12 @@
   "profile_additional_attributes": [
     "login-namespace:einfra"
   ],
+  "mfa": {
+    "api_url": "https://id.muni.cz/mfaapi/",
+    "security_image_attribute": "urn:perun:user:attribute-def:def:securityImage:mu",
+    "enforce_mfa_attribute": "urn:perun:user:attribute-def:def:mfaEnforced:mu",
+    "tokens_attribute": "urn:perun:user:attribute-def:def:mfaTokens:mu"
+  },
   "display_identity_certificates": true,
   "external_services": [
     {

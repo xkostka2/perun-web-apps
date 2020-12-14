@@ -111,9 +111,10 @@ export class SettingsAuthenticationComponent implements OnInit {
   }
 
   private loadImage() {
-    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:antiphishingImage').subscribe(attr => {
+    const imgAttributeName = this.store.get('mfa', 'security_image_attribute')
+    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, imgAttributeName).subscribe(attr => {
       if (!attr) {
-        this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:antiphishingImage').subscribe(att => {
+        this.attributesManagerService.getAttributeDefinitionByName(imgAttributeName).subscribe(att => {
           this.imgAtt = att as Attribute;
         });
       } else {
@@ -149,7 +150,9 @@ export class SettingsAuthenticationComponent implements OnInit {
   }
 
     private loadMFA() {
-      this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:mfaEnabled').subscribe(attr => {
+      const enforceMfaAttributeName = this.store.get('mfa', 'enforce_mfa_attribute')
+      const tokensAttributeName = this.store.get('mfa', 'tokens_attribute')
+      this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, enforceMfaAttributeName).subscribe(attr => {
       if (sessionStorage.getItem('mfa_route')) {
         sessionStorage.removeItem('mfa_route');
         this.mfaService.enableMfa(!attr || !attr.value, this.idToken, this.accessToken).subscribe(() => {
@@ -158,7 +161,7 @@ export class SettingsAuthenticationComponent implements OnInit {
         }, () => this.loadMFA());
       } else {
         if (!attr) {
-          this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:mfaEnabled').subscribe(att => {
+          this.attributesManagerService.getAttributeDefinitionByName(enforceMfaAttributeName).subscribe(att => {
             this.mfaAtt = att as Attribute;
           });
         } else {
@@ -174,9 +177,9 @@ export class SettingsAuthenticationComponent implements OnInit {
             });
           }
 
-          this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:mfaTokens').subscribe(mfaTokenAttr => {
+          this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, tokensAttributeName).subscribe(mfaTokenAttr => {
             if (!mfaTokenAttr) {
-              this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:mfaTokens').subscribe(att => {
+              this.attributesManagerService.getAttributeDefinitionByName(tokensAttributeName).subscribe(att => {
                 mfaTokenAttr = att as Attribute;
               });
             } else {
