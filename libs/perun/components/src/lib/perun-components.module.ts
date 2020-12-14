@@ -71,9 +71,9 @@ import { ExpirationSelectComponent } from './expiration-select/expiration-select
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
-      let day: string = date.getDate().toString();
+      const day: string = date.getDate().toString();
       // day = +day < 10 ? '0' + day : day;
-      let month: string = (date.getMonth() + 1).toString();
+      const month: string = (date.getMonth() + 1).toString();
       // month = +month < 10 ? '0' + month : month;
       const year = date.getFullYear();
       return `${day}.${month}.${year}`;
