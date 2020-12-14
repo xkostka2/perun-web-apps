@@ -136,9 +136,17 @@
     "NEW_IMG": "New image",
     "DELETE_IMG": "Delete image",
     "ANTI_PHISHING_INFO": "You will be shown this anti-phishing image after you log in so you will know that you are visiting the right site",
-    "MFA_TOGGLE": "Turn on multi-factor authentication",
+    "MFA_TOGGLE": "Enforce multi-factor authentication for all services",
     "DELETE_IMG_DIALOG_TITLE": "Delete anti-phishing image",
-    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process."
+    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process.",
+    "TYPE": "Type",
+    "NICKNAME": "Nickname",
+    "REVOKE": "Revoke",
+    "ADDED": "Added",
+    "USED": "Used",
+    "NO_TOKENS": "You don't have any tokens for multi-factor authentication",
+    "ADD_WEBAUTHN": "Add Webauthn device",
+    "ADD_TOTP": "Add TOTP device"
   },
   "DIALOGS": {
     "CHANGE_EMAIL": {
@@ -194,11 +202,12 @@
     },
     "ADD_AUTH_IMG": {
       "TITLE": "Change anti-phishing image",
-      "INFO": "Please, choose an image with size at least 500x150 pixels",
+      "INFO": "Please, choose an image with size max 5kB",
       "GENERATE": "Generate image",
       "UPLOAD_IMG_LABEL": "Upload an image from your computer",
       "CANCEL": "Cancel",
-      "ADD": "Save image"
+      "ADD": "Save image",
+      "IMG_TOO_LONG": "The image size is more than 5kB."
     }
   },
   "ALERTS": {
