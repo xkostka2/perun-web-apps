@@ -138,9 +138,17 @@
     "NEW_IMG": "Nový obrázek",
     "DELETE_IMG": "Vymazat obrázek",
     "ANTI_PHISHING_INFO": "Tento obrázek se vám ukáže při přihlašovaní",
-    "MFA_TOGGLE": "Zapnout multi-factor authentication",
-    "DELETE_IMG_DIALOG_TITLE": "Vymazat anti-phishing image",
-    "DELETE_IMG_DIALOG_DESC": "Váš obrázek na ochranu proti phishingu bude odstraněn a nebude použit během autentizace."
+    "MFA_TOGGLE": "Zapnout multi-factor authentication pro všechny služby",
+    "DELETE_IMG_DIALOG_TITLE": "Vymazat proti-phishingový obrázek",
+    "DELETE_IMG_DIALOG_DESC": "Váš obrázek na ochranu proti phishingu bude odstraněn a nebude použit během autentizace.",
+    "TYPE": "Typ",
+    "NICKNAME": "Přezdívka",
+    "REVOKE": "Zrušit",
+    "ADDED": "Přidáno",
+    "USED": "Naposledy použito",
+    "NO_TOKENS": "Nemáte žádné tokeny pro multi-factor authentication.",
+    "ADD_WEBAUTHN": "Přidat zařízení Webauthn",
+    "ADD_TOTP": "Přidat zařízení TOTP"
   },
   "DIALOGS": {
     "CHANGE_EMAIL": {
@@ -196,12 +204,12 @@
     },
     "ADD_AUTH_IMG": {
       "TITLE": "Změna proti-phishingového obrázku",
-      "INFO": "Prosím, zvolte obrázek s velikostí alespoň 500x150 pixelů.",
-      "GENERATE": "Generate image",
-      "UPLOAD_IMG_LABEL": "Nahrát obrázek z vášho počítače",
+      "INFO": "Prosím, zvolte obrázek s velikostí maximálně 5kB.",
+      "GENERATE": "Generovat obrázek",
+      "UPLOAD_IMG_LABEL": "Nahrát obrázek z vašeho počítače",
       "CANCEL": "Zrušit",
       "ADD": "Uložit obrázek",
-      "LOAD_IMG": "Načítat obrázek"
+      "IMG_TOO_LONG": "Velikost obrázku je větší než 5kB"
     }
   },
   "ALERTS": {

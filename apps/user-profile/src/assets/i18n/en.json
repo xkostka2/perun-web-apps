@@ -138,9 +138,17 @@
     "NEW_IMG": "New image",
     "DELETE_IMG": "Delete image",
     "ANTI_PHISHING_INFO": "You will be shown this anti-phishing image after you log in so you will know that you are visiting the right site",
-    "MFA_TOGGLE": "Turn on multi-factor authentication",
+    "MFA_TOGGLE": "Enforce multi-factor authentication for all services",
     "DELETE_IMG_DIALOG_TITLE": "Delete anti-phishing image",
-    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process."
+    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process.",
+    "TYPE": "Type",
+    "NICKNAME": "Nickname",
+    "REVOKE": "Revoke",
+    "ADDED": "Added",
+    "USED": "Used",
+    "NO_TOKENS": "You don't have any tokens for multi-factor authentication",
+    "ADD_WEBAUTHN": "Add Webauthn device",
+    "ADD_TOTP": "Add TOTP device"
   },
   "DIALOGS": {
     "CHANGE_EMAIL": {
@@ -196,11 +204,12 @@
     },
     "ADD_AUTH_IMG": {
       "TITLE": "Change anti-phishing image",
-      "INFO": "Please, choose an image with size at least 500x150 pixels",
+      "INFO": "Please, choose an image with size max 5kB",
       "GENERATE": "Generate image",
       "UPLOAD_IMG_LABEL": "Upload an image from your computer",
       "CANCEL": "Cancel",
-      "ADD": "Save image"
+      "ADD": "Save image",
+      "IMG_TOO_LONG": "The image size is more than 5kB."
     }
   },
   "ALERTS": {
@@ -215,20 +224,36 @@
       "COMPONENTS": {
         "GROUPS_LIST": {
           "TABLE_GROUP_ID": "Id",
-          "TABLE_VO_NAME": "Vo",
+          "TABLE_VO_NAME": "Organization",
           "TABLE_GROUP_NAME": "Name",
           "TABLE_SEARCH": "Filter by name, description or ID",
-          "TABLE_GROUP_DESCRIPTION": "Description"
+          "TABLE_GROUP_DESCRIPTION": "Description",
+          "TABLE_GROUP_EXPIRATION": "Expiration",
+          "DISABLED_HINT": "You cannot add members to this group or user is already member.",
+          "ALREADY_MEMBER_TOOLTIP": "User is already member of group",
+          "CREATE_RELATION_AUTH_TOOLTIP": "You don't have permission to create relation with this group.",
+          "SYNCHRONIZED_GROUP": "Group is filled with members from external source"
         },
         "GROUP_MENU": {
           "MOVE": "Move group",
-          "RENAME": "Update name/description"
+          "RENAME": "Update name/description",
+          "COPY": "Copy group name to clipboard"
+        },
+        "GROUP_SEARCH_SELECT": {
+          "SELECT_GROUP": "Select group",
+          "FIND_GROUP": "Find group...",
+          "NO_GROUP_FOUND": "No matching found"
         },
         "VO_SELECT_TABLE": {
           "ID": "Id",
           "NAME": "Name",
           "RECENT": "Recently viewed",
           "SHORTNAME": "Short name"
+        },
+        "VO_SEARCH_SELECT": {
+          "SELECT_VO": "Select organization",
+          "FIND_VO": "Find organization...",
+          "NO_VO_FOUND": "No matching vo found"
         },
         "RESOURCES_LIST": {
           "TITLE": "Resources",
@@ -241,6 +266,26 @@
           "TABLE_SEARCH": "Filter by name, description or ID",
           "TABLE_RESOURCE_DESCRIPTION": "Description",
           "NO_RESOURCES_WARNING": "No resources assigned."
+        },
+        "RESOURCE_SEARCH_SELECT": {
+          "SELECT_RESOURCE": "Select resource",
+          "FIND_RESOURCE": "Find resource...",
+          "NO_RESOURCE_FOUND": "No matching resource found"
+        },
+        "MEMBER_SEARCH_SELECT": {
+          "SELECT_MEMBER": "Select member",
+          "FIND_MEMBER": "Find member...",
+          "NO_MEMBER_FOUND": "No matching member found"
+        },
+        "FACILITY_SEARCH_SELECT": {
+          "SELECT_FACILITY": "Select facility",
+          "FIND_FACILITY": "Find facility...",
+          "NO_FACILITY_FOUND": "No matching facility found"
+        },
+        "USER_SEARCH_SELECT": {
+          "SELECT_USER": "Select user",
+          "FIND_USER": "Find user...",
+          "NO_USER_FOUND": "No matching user found"
         },
         "ATTRIBUTE_VALUE_LIST": {
           "EDIT_DIALOG": {
@@ -261,7 +306,9 @@
           "NAME": "Name",
           "VALUE": "Value",
           "DESCRIPTION": "Description",
-          "EMPTY": "No settings found. Use 'Add' button to add new setting."
+          "DISABLED_HINT": "You don't have permission to change this attribute.",
+          "EMPTY": "No settings found. Use 'Add' button to add new setting.",
+          "CHECKBOX_TOOLTIP": "You don't have privileges to edit this attribute"
         },
         "USER_DONT_EXIST": {
           "TITLE": "Requested user (by ID or external identity) doesn't exist."
@@ -293,11 +340,12 @@
           "SUBJECT_VALUE": "Reported error: ",
           "SUBJECT_ERROR": "Subject cannot be empty.",
           "MESSAGE": "Message",
-          "MESSAGE_PLACEHOLDER": "You can describe what you did that caused the error. (Minimal length is 60 characters)",
-          "MESSAGE_ERROR": "Minimal length is 60.",
+          "MESSAGE_PLACEHOLDER": "Please describe your problem and which of your actions lead to this problem.",
+          "MESSAGE_ERROR": "Please tell us something about the problem.",
           "CANCEL": "Cancel",
           "SEND": "Send",
-          "SUCCESS": "Bug report send"
+          "SUCCESS1": "Ticket with ID: ",
+          "SUCCESS2": " was created."
         },
         "REMOVE_USER_EXT_SOURCE": {
           "TITLE": "Remove user's external identity",
@@ -317,6 +365,34 @@
         "SHOW_VALUE": {
           "CLOSE": "Close",
           "COPY": "Copy to clipboard"
+        },
+        "SERVICES_STATUS_LIST": {
+          "TABLE_SEARCH": "Filter by service name, id or state",
+          "TASK_ID": "Task ID",
+          "SERVICE_NAME": "Service",
+          "STATUS": "Status",
+          "BLOCKED": "Blocked",
+          "STARTED": "Started",
+          "ENDED": "Ended",
+          "NO_SERVICES_STATUS_WARNING": "No service configuration was propagated to this facility.",
+          "NOT_YET": "NOT YET"
+        },
+        "TASK_RESULTS_LIST": {
+          "RESULT_ID": "Result id",
+          "DESTINATION": "Destination",
+          "TYPE": "Type",
+          "SERVICE": "Service",
+          "STATUS": "Status",
+          "TIME": "Time",
+          "RETURN_CODE": "Return code",
+          "STANDARD_MESSAGE": "Standard message",
+          "ERROR_MESSAGE": "Error message",
+          "NO_RESULTS_WARNING": "No task results found"
+        },
+        "SESSION_EXPIRATION": {
+          "TITLE": "Session expiration",
+          "DESCRIPTION": "Your session has expired. Please sign in to continue.",
+          "SIGN_IN": "Sign in"
         }
       },
       "ORGANIZATIONS": {
@@ -340,7 +416,9 @@
     "UI": {
       "ALERTS": {
         "NO_GROUPS": "No groups found.",
-        "NO_FILTER_RESULTS_ALERT": "No results match given search criteria."
+        "NO_ORGANIZATIONS": "No organizations found",
+        "NO_FILTER_RESULTS_ALERT": "No results match given search criteria.",
+        "NO_MEMBERS": "No members found"
       }
     }
   }

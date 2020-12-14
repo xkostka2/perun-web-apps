@@ -60,7 +60,7 @@ export class AuthService {
       this.user = user;
     });
 
-    this.manager.events.addAccessTokenExpired(expired => {
+    this.manager.events.addAccessTokenExpired(() => {
       const config = getDefaultDialogConfig();
       config.width = '450px';
 
@@ -165,6 +165,10 @@ export class AuthService {
   }
 
   public redirectToOriginDestination(): Promise<boolean> {
+    const mfaRoute = sessionStorage.getItem('mfa_route');
+    if (mfaRoute){
+      return this.router.navigate([mfaRoute], {replaceUrl: true})
+    }
     const redirectUrl = sessionStorage.getItem('auth:redirect');
     const storageParams = sessionStorage.getItem('auth:queryParams');
     let params: string[] = [];
