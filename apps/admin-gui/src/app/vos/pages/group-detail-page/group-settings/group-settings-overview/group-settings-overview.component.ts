@@ -76,7 +76,7 @@ export class GroupSettingsOverviewComponent implements OnInit {
       }
     });
 
-    if (this.guiAuthResolver.isAuthorized('getRichAdmins_Group_List<String>_boolean_boolean_policy', [this.group])) {
+    if (this.guiAuthResolver.isManagerPagePrivileged(this.group)) {
       this.items.push({
         cssIcon: 'perun-manager',
         url: `/organizations/${this.vo.id}/groups/${this.group.id}/settings/managers`,

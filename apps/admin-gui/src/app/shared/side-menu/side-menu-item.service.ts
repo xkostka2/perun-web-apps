@@ -278,19 +278,22 @@ export class SideMenuItemService {
       url: [baseUrl,`attributes`],
       activatedRegex: `${regexStart}/\\d+/resources/\\d+/attributes$`
     });
-    links.push({
-      label: 'MENU_ITEMS.RESOURCE.SETTINGS',
-      url: [baseUrl, `settings`],
-      activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings$`,
-      children: [
-        {
-          label: 'MENU_ITEMS.RESOURCE.MANAGERS',
-          url: [baseUrl, `settings`, `managers`],
-          activatedRegex: `${regexStart}\\d+/resources/\\d+/settings/managers$`
-        }
-      ],
-      showChildrenRegex: `${regexStart}/\\d+/resources/\\d+/settings`
-    });
+
+    if (this.authResolver.isManagerPagePrivileged(resource)){
+      links.push({
+        label: 'MENU_ITEMS.RESOURCE.SETTINGS',
+        url: [baseUrl, `settings`],
+        activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings$`,
+        children: [
+          {
+            label: 'MENU_ITEMS.RESOURCE.MANAGERS',
+            url: [baseUrl, `settings`, `managers`],
+            activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings/managers$`
+          }
+        ],
+        showChildrenRegex: `${regexStart}/\\d+/resources/\\d+/settings`
+      });
+    }
 
     return links;
   }
@@ -475,7 +478,7 @@ export class SideMenuItemService {
 
     // Settings
     const extSourcesAuth = this.authResolver.isAuthorized('getVoExtSources_Vo_policy', [vo]);
-    const managersAuth = this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [vo]);
+    const managersAuth = this.authResolver.isManagerPagePrivileged(vo);
     const adminOrObserver = this.authResolver.isThisVoAdminOrObserver(vo.id);
 
     if (managersAuth || extSourcesAuth || adminOrObserver) {
@@ -859,7 +862,7 @@ export class SideMenuItemService {
     });
 
     //SettingsManagers
-    if (this.authResolver.isAuthorized('getRichAdmins_Group_List<String>_boolean_boolean_policy', [group])) {
+    if (this.authResolver.isManagerPagePrivileged(group)) {
       settingsChildrenLinks.push({
         label: 'MENU_ITEMS.GROUP.MANAGERS',
         url: [`/organizations/${group.voId}/groups/${group.id}/settings/managers`],
@@ -895,13 +898,15 @@ export class SideMenuItemService {
     }
 
     //SettingsWithChildrenLinks
-    links.push({
-      label: 'MENU_ITEMS.GROUP.SETTINGS',
-      url: [`/organizations/${group.voId}/groups/${group.id}/settings`],
-      activatedRegex: '/organizations/\\d+/groups/\\d+/settings$',
-      children: settingsChildrenLinks,
-      showChildrenRegex: '/organizations/\\d+/groups/\\d+/settings'
-    });
+    if (settingsChildrenLinks.length !== 0){
+      links.push({
+        label: 'MENU_ITEMS.GROUP.SETTINGS',
+        url: [`/organizations/${group.voId}/groups/${group.id}/settings`],
+        activatedRegex: '/organizations/\\d+/groups/\\d+/settings$',
+        children: settingsChildrenLinks,
+        showChildrenRegex: '/organizations/\\d+/groups/\\d+/settings'
+      });
+    }
 
     return links;
   }

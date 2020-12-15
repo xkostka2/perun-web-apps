@@ -2,6 +2,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from '@perun-web-apps/perun/models';
 import { Resource, ResourcesManagerService } from '@perun-web-apps/perun/openapi';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-resource-settings-overview',
@@ -14,7 +15,8 @@ export class ResourceSettingsOverviewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private resourceManager: ResourcesManagerService
+    private resourceManager: ResourcesManagerService,
+    private authResolver: GuiAuthResolver
   ) { }
 
   items: MenuItem[] = [];
@@ -40,13 +42,18 @@ export class ResourceSettingsOverviewComponent implements OnInit {
   }
 
   private initItems(inVo: boolean) {
-    this.items = [
-      {
-        cssIcon: 'perun-manager',
-        url: `${inVo ? `/organizations/${this.resource.voId}` : `/facilities/${this.resource.facilityId}`}/resources/${this.resource.id}/settings/managers`,
-        label: 'MENU_ITEMS.RESOURCE.MANAGERS',
-        style: 'resource-btn'
-      }
-    ];
+    this.items = [];
+
+    const managersAuth = this.authResolver.isManagerPagePrivileged(this.resource);
+    if (managersAuth) {
+      this.items.push(
+        {
+          cssIcon: 'perun-manager',
+          url: `${inVo ? `/organizations/${this.resource.voId}` : `/facilities/${this.resource.facilityId}`}/resources/${this.resource.id}/settings/managers`,
+          label: 'MENU_ITEMS.RESOURCE.MANAGERS',
+          style: 'resource-btn'
+        }
+      );
+    }
   }
 }

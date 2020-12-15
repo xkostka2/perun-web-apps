@@ -79,11 +79,15 @@ export class ResourceOverviewComponent implements OnInit {
       style: 'resource-btn'
     });
 
-    this.navItems.push({
+
+    const managersAuth = this.guiAuthResolver.isManagerPagePrivileged(this.resource);
+    if (managersAuth) {
+      this.navItems.push({
         cssIcon: 'perun-settings2',
         url: `${urlStart}/resources/${this.resource.id}/settings`,
         label: 'MENU_ITEMS.RESOURCE.SETTINGS',
         style: 'resource-btn'
       });
+    }
   }
 }

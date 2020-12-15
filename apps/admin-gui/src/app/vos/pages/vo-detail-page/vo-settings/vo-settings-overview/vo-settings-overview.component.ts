@@ -53,7 +53,7 @@ export class VoSettingsOverviewComponent implements OnInit {
       });
     }
     // Managers
-    if (this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [this.vo])) {
+    if (this.authResolver.isManagerPagePrivileged(this.vo)) {
       this.items.push({
         cssIcon: 'perun-manager',
         url: `/organizations/${this.vo.id}/settings/managers`,

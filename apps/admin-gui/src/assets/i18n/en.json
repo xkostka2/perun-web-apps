@@ -1900,7 +1900,8 @@
         "USER": "User",
         "GROUP": "Group",
         "NO_MANAGERS": "This role has no managers.",
-        "NO_GROUP_MANAGERS": "This role has no group managers."
+        "NO_GROUP_MANAGERS": "This role has no group managers.",
+        "NO_AVAILABLE_ROLES": "This entity has no available manager roles or you dont have privileges to manage them"
       },
       "EXT_SOURCES_LIST": {
         "ID": "ID",
