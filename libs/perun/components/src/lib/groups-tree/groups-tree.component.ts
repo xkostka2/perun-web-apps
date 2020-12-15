@@ -41,7 +41,7 @@ export class GroupsTreeComponent implements OnChanges {
     };
   };
 
-  displayButtons = true;
+  displayButtons = window.innerWidth > 600;
   @Input()
   theme = 'group-theme';
 

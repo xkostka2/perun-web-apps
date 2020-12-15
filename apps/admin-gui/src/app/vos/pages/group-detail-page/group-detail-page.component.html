@@ -2,46 +2,48 @@
   <perun-web-apps-back-button>
   </perun-web-apps-back-button>
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
-  <div class="d-flex page-title-headtitle" *ngIf="!loading && vo !== undefined && group !== undefined">
-    <mat-icon
-      matTooltip="{{'GROUP_DETAIL.ENTITY' | translate}}"
-      [ngStyle]="{'color':'black'}"
-      svgIcon='perun-group-black'
-      class="perun-icon perun-icon-detail">
-    </mat-icon>
-    <div class="page-title-block">
-      <div class="page-title-headline d-flex align-items-center">
-        <a class="group-link" [routerLink]="['/organizations', vo.id, 'groups', group.id]">
-          {{group.shortName}}
-        </a>
-        <span class="text-muted">
-          &nbsp;#{{group.id}}
-        </span>
-        <button *ngIf="group.name != 'members' && editAuth" mat-icon-button aria-label="Edit group" (click)="editGroup()">
-          <mat-icon>edit</mat-icon>
-        </button>
-      </div>
-      <span class="mt-1 entity-info">
-        {{'GROUP_DETAIL.ENTITY' | translate}},
-        {{'GROUP_DETAIL.VO_NAME' | translate}}:
-        <a class="group-link" [routerLink]="['/organizations', vo.id]">{{vo.name}}</a>,
-        {{'GROUP_DETAIL.DESCRIPTION' | translate}}: {{group.description}}
-        <span *ngIf="syncEnabled">
-          , {{'GROUP_DETAIL.SYNCHRONIZATION' | translate}}:
-          <span [matTooltipPosition]="'above'"
-                [matTooltip]="group | groupSyncToolTip | translate">
-            <button (click)="onSyncDetail()"
-                    *ngIf="syncAuth"
-                    [disabled]="(group | groupSyncIcon) === 'sync_disabled'"
-                    mat-icon-button>
-              <mat-icon class="{{group | groupSyncIconColor}}">
-                {{group | groupSyncIcon}}
-              </mat-icon>
-            </button>
+  <div *ngIf="!loading && vo !== undefined && group !== undefined">
+    <div class="d-flex page-title-headtitle">
+      <mat-icon
+        matTooltip="{{'GROUP_DETAIL.ENTITY' | translate}}"
+        [ngStyle]="{'color':'black'}"
+        svgIcon='perun-group-black'
+        class="perun-icon perun-icon-detail">
+      </mat-icon>
+      <div class="page-title-block">
+        <div class="page-title-headline d-flex align-items-center">
+          <a class="group-link" [routerLink]="['/organizations', vo.id, 'groups', group.id]">
+            {{group.shortName}}
+          </a>
+          <span class="text-muted">
+            &nbsp;#{{group.id}}
+          </span>
+          <button *ngIf="group.name != 'members' && editAuth" mat-icon-button aria-label="Edit group" (click)="editGroup()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <span class="mt-1 entity-info">
+          {{'GROUP_DETAIL.ENTITY' | translate}},
+          {{'GROUP_DETAIL.VO_NAME' | translate}}:
+          <a class="group-link" [routerLink]="['/organizations', vo.id]">{{vo.name}}</a>,
+          {{'GROUP_DETAIL.DESCRIPTION' | translate}}: {{group.description}}
+          <span *ngIf="syncEnabled">
+            , {{'GROUP_DETAIL.SYNCHRONIZATION' | translate}}:
+            <span [matTooltipPosition]="'above'"
+                  [matTooltip]="group | groupSyncToolTip | translate">
+              <button (click)="onSyncDetail()"
+                      *ngIf="syncAuth"
+                      [disabled]="(group | groupSyncIcon) === 'sync_disabled'"
+                      mat-icon-button>
+                <mat-icon class="{{group | groupSyncIconColor}}">
+                  {{group | groupSyncIcon}}
+                </mat-icon>
+              </button>
+            </span>
           </span>
         </span>
-      </span>
+      </div>
     </div>
+    <app-animated-router-outlet></app-animated-router-outlet>
   </div>
-  <app-animated-router-outlet></app-animated-router-outlet>
 </div>

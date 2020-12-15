@@ -2,44 +2,46 @@
   <perun-web-apps-back-button>
   </perun-web-apps-back-button>
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
-  <div class="d-flex page-title-headtitle" *ngIf="!loading && resource !== undefined">
-    <mat-icon
-      matTooltip="{{'RESOURCE_DETAIL.ENTITY' | translate}}"
-      [ngStyle]="{'color':'black'}"
-      svgIcon='perun-resource-black'
-      class="perun-icon perun-icon-detail">
-    </mat-icon>
-    <div class="page-title-block">
-      <div class="page-title-headline d-flex align-items-center">
-        <a class="resource-link" [routerLink]="[baseUrl]">
-          {{resource.name}}
-        </a>
-        <span class="text-muted">
-        &nbsp;#{{resource.id}}
+  <div *ngIf="!loading && resource !== undefined">
+    <div class="d-flex page-title-headtitle">
+      <mat-icon
+        matTooltip="{{'RESOURCE_DETAIL.ENTITY' | translate}}"
+        [ngStyle]="{'color':'black'}"
+        svgIcon='perun-resource-black'
+        class="perun-icon perun-icon-detail">
+      </mat-icon>
+      <div class="page-title-block">
+        <div class="page-title-headline d-flex align-items-center">
+          <a class="resource-link" [routerLink]="[baseUrl]">
+            {{resource.name}}
+          </a>
+          <span class="text-muted">
+          &nbsp;#{{resource.id}}
+          </span>
+          <button mat-icon-button aria-label="Edit resource" *ngIf="editResourceAuth" (click)="editResource()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <span class="mt-1 entity-info">
+          {{'RESOURCE_DETAIL.ENTITY' | translate}},
+          {{'RESOURCE_DETAIL.VO' | translate}}:
+          <a *ngIf="voLinkAuth"
+             [routerLink]="['/organizations', resource.vo.id]" class="resource-link">{{resource.vo.name}}</a>
+          <span *ngIf="!voLinkAuth">
+            {{resource.vo.name}}
+          </span>
+          #{{resource.voId}},
+          {{'RESOURCE_DETAIL.FACILITY' | translate}}:
+          <a class="resource-link" *ngIf="facilityLinkAuth"
+             [routerLink]="['/facilities', resource.facilityId]">{{resource.facility.name}}</a>
+          <span *ngIf="!facilityLinkAuth">
+            {{resource.facility.name}}
+          </span>
+          #{{resource.facilityId}},
+          {{'RESOURCE_DETAIL.DESCRIPTION' | translate}}: {{resource.description}}
         </span>
-        <button mat-icon-button aria-label="Edit resource" *ngIf="editResourceAuth" (click)="editResource()">
-          <mat-icon>edit</mat-icon>
-        </button>
       </div>
-      <span class="mt-1 entity-info">
-        {{'RESOURCE_DETAIL.ENTITY' | translate}},
-        {{'RESOURCE_DETAIL.VO' | translate}}:
-        <a *ngIf="voLinkAuth"
-           [routerLink]="['/organizations', resource.vo.id]" class="resource-link">{{resource.vo.name}}</a>
-        <span *ngIf="!voLinkAuth">
-          {{resource.vo.name}}
-        </span>
-        #{{resource.voId}},
-        {{'RESOURCE_DETAIL.FACILITY' | translate}}:
-        <a class="resource-link" *ngIf="facilityLinkAuth"
-           [routerLink]="['/facilities', resource.facilityId]">{{resource.facility.name}}</a>
-        <span *ngIf="!facilityLinkAuth">
-          {{resource.facility.name}}
-        </span>
-        #{{resource.facilityId}},
-        {{'RESOURCE_DETAIL.DESCRIPTION' | translate}}: {{resource.description}}
-      </span>
     </div>
+    <app-animated-router-outlet></app-animated-router-outlet>
   </div>
-  <app-animated-router-outlet></app-animated-router-outlet>
 </div>
