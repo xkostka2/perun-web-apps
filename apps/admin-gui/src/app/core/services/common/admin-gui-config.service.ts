@@ -8,7 +8,7 @@ import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Location } from '@angular/common';
-import { ServerDownDialogComponent } from '@perun-web-apps/general';
+import { PreventProxyOverloadDialogComponent, ServerDownDialogComponent } from '@perun-web-apps/general';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { Title } from '@angular/platform-browser';
 
@@ -99,17 +99,21 @@ export class AdminGuiConfigService {
       .then(() => this.appConfigService.initializeColors(this.entityColorConfigs, this.colorConfigs))
       .then(() => this.initAuthService.authenticateUser())
       .catch(err => {
-        // if there is an error, it means user probably navigated to /api-callback without logging in
-        console.error(err);
-        this.location.go("/");
-        location.reload();
-        throw err;
+        if (err === 'Invalid path') {
+          this.handleErr(err);
+        } else {
+          // if there is another error, it means user probably navigated to /api-callback without logging in
+          console.error(err);
+          this.location.go("/");
+          location.reload();
+          throw err;
+        }
       })
       .then(isAuthenticated => {
         // if the authentication is successful, continue
         if (isAuthenticated) {
           return this.initAuthService.loadPrincipal()
-            .catch(err => this.handlePrincipalErr(err))
+            .catch(err => this.handleErr(err))
             .then(() => this.loadPolicies())
             .then(() => this.guiAuthResolver.loadRolesManagementRules());
         }
@@ -128,16 +132,28 @@ export class AdminGuiConfigService {
     });
   }
 
-  private handlePrincipalErr(err: any) {
+  private handleErr(err: any) {
     const config = getDefaultDialogConfig();
     // FIXME: during initialization phase, it might happen that the translations are not loaded.
-    config.data = {
-      title: 'GENERAL.PRINCIPAL_ERROR.TITLE',
-      message: err.status === 0 ? 'GENERAL.PRINCIPAL_ERROR.MESSAGE' : err.message,
-      action: 'GENERAL.PRINCIPAL_ERROR.ACTION',
-    };
+    if (err === 'Invalid path') {
+      config.data = {
+        title: 'GENERAL.PROXY_OVERLOAD_PREVENTION.TITLE',
+        message: 'GENERAL.PROXY_OVERLOAD_PREVENTION.MESSAGE',
+        action: 'GENERAL.PROXY_OVERLOAD_PREVENTION.ACTION',
+      };
 
-    this.dialog.open(ServerDownDialogComponent, config);
+      this.dialog.open(PreventProxyOverloadDialogComponent, config);
+    } else {
+      config.data = {
+        title: 'GENERAL.PRINCIPAL_ERROR.TITLE',
+        message: err.status === 0 ? 'GENERAL.PRINCIPAL_ERROR.MESSAGE' : err.message,
+        action: 'GENERAL.PRINCIPAL_ERROR.ACTION',
+      };
+
+      this.dialog.open(ServerDownDialogComponent, config);
+    }
+
+
     console.error(err);
     throw err;
   }
