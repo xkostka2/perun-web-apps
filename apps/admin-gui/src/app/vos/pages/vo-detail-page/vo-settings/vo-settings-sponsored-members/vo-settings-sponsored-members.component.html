@@ -17,6 +17,14 @@
     (click)="onGenerate()">
     {{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.GENERATE' | translate}}
   </button>
+  <button
+    *ngIf="!loading && setSponsorshipAuth"
+    mat-flat-button
+    color="accent"
+    class="mr-2"
+    (click)="onSponsorExistingMember()">
+    {{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.SPONSOR_EXISTING' | translate}}
+  </button>
   <perun-web-apps-immediate-filter
     (filter)="applyFilter($event)"
     [placeholder]="'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.FILTER'">

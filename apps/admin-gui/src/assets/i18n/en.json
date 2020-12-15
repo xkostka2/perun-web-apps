@@ -424,7 +424,8 @@
         "TITLE": "Sponsored members",
         "CREATE": "Create",
         "GENERATE": "Create in bulk",
-        "FILTER": "Filter by name or ID"
+        "FILTER": "Filter by name or ID",
+        "SPONSOR_EXISTING": "Sponsor existing member"
       }
     },
     "APPLICATION": {
@@ -1710,6 +1711,17 @@
       "DESCRIPTION": "New version is available. Please, reload the page to apply the changes.",
       "LATER": "Got it! I will reload later",
       "RELOAD": "Reload"
+    },
+    "SPONSOR_EXISTING_MEMBER": {
+      "TITLE": "Sponsor existing member",
+      "CANCEL": "Cancel",
+      "SPONSOR": "Sponsor",
+      "SEARCH": "Search",
+      "DESCRIPTION": "Search by member name",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty",
+      "EXPIRATION": "Sponsorship expiration",
+      "BEGIN_SEARCH": "Search for members you would like to sponsor",
+      "SUCCESS": "Members successfully sponsored"
     }
   },
   "MEMBERS_LIST": {

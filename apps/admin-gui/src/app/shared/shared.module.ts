@@ -177,6 +177,7 @@ import { CreateAttributeDialogComponent } from './components/dialogs/create-attr
 import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe';
 import { PasswordResetRequestDialogComponent } from './components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import { NewVersionDialogComponent } from './components/dialogs/new-version-dialog/new-version-dialog.component';
+import { SponsorExistingMemberDialogComponent } from './components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
 
 @NgModule({
   imports: [
@@ -431,7 +432,8 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     CreateAttributeDialogComponent,
     AttributeFriendlyNamePipe,
     PasswordResetRequestDialogComponent,
-    NewVersionDialogComponent
+    NewVersionDialogComponent,
+    SponsorExistingMemberDialogComponent
   ],
   providers: [
     AnyToStringPipe,
