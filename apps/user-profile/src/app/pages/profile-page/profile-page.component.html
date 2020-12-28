@@ -1,43 +1,47 @@
 <div class="user-theme">
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-  <div *ngIf="!loading" class="col ml-2 mt-3">
-    <div class="row">
-      <p class="column-size center-self">{{'PROFILE_PAGE.NAME'|customTranslate | translate}}</p>
-      <p class="center-self">{{fullName}}</p>
-    </div>
-    <div class="row center-self" *ngFor="let attribute of additionalAttributes">
-      <p class="column-size center-self">{{attribute.displayName}}</p>
-      <p class="center-self">{{attribute.value}}</p>
-    </div>
-    <div class="row center-self">
-      <p class="column-size center-self">{{'PROFILE_PAGE.ORGANIZATION'|customTranslate | translate}}</p>
-      <p class="center-self">{{organization}}</p>
-    </div>
-    <div class="row">
-      <p class="column-size center-self">{{'PROFILE_PAGE.PREFERRED_LANGUAGE'|customTranslate | translate}}</p>
-      <mat-form-field class="lang-field-width center-self">
-        <mat-select [(value)]="currentLang" class="mb-auto ">
-          <mat-option (click)="changeLanguage(lang)" *ngFor="let lang of languages" [value]="lang">
-            {{lang}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="row mt-2">
-      <p class="column-size center-self">{{'PROFILE_PAGE.EMAIL'|customTranslate | translate}}</p>
-      <a class="center-self" href="mailto:{{email}}">{{email}}</a>
-<!--      <p class="center-self">{{email}}</p>-->
-      <button (click)="changeEmail()" class="ml-2" mat-stroked-button>{{'PROFILE_PAGE.CHANGE_EMAIL'|customTranslate | translate}}</button>
-    </div>
-    <div class="row">
-      <p class="column-size center-self">{{'PROFILE_PAGE.TIMEZONE'|customTranslate | translate}}</p>
-      <mat-form-field class="center-self">
-        <mat-select [(value)]="currentTimezone">
-          <mat-option (click)="changeTimeZone(tz)" *ngFor="let tz of timeZones" [value]="tz">
-            {{tz}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+  <table *ngIf="!loading" class="mt-3 word-break-all">
+    <tbody>
+    <tr>
+      <td class="font-weight-bold">{{'PROFILE_PAGE.NAME'|customTranslate | translate}}</td>
+      <td>{{fullName}}</td>
+    </tr>
+    <tr *ngFor="let attribute of additionalAttributes">
+      <td class="font-weight-bold"><div [matTooltip]="attribute.tooltip" matTooltipPosition="above">{{attribute.displayName}}</div></td>
+      <td [ngSwitch]="attribute.attribute.friendlyName">
+        <mat-form-field class="lang-field-width center-self" *ngSwitchCase="'preferredLanguage'">
+          <mat-select [(value)]="currentLang" class="mb-auto ">
+            <mat-option (click)="changeLanguage(lang)" *ngFor="let lang of languages" [value]="lang">
+              {{lang}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngSwitchCase="'preferredMail'">
+          <a class="center-self" href="mailto:{{email}}">{{email}}</a>
+          <button (click)="changeEmail()" class="ml-2"
+                  mat-stroked-button>{{'PROFILE_PAGE.CHANGE_EMAIL'|customTranslate | translate}}</button>
+        </div>
+
+        <mat-form-field class="center-self" *ngSwitchCase="'timezone'">
+          <mat-select [(value)]="currentTimezone">
+            <mat-option (click)="changeTimeZone(tz)" *ngFor="let tz of timeZones" [value]="tz">
+              {{tz}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngSwitchDefault>
+          <p *ngIf="!attribute.attribute.value">-</p>
+          <perun-web-apps-attribute-value
+            *ngIf="attribute.attribute.value"
+            [attribute]="attribute.attribute"
+            [readonly]="true">
+          </perun-web-apps-attribute-value>
+        </div>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>

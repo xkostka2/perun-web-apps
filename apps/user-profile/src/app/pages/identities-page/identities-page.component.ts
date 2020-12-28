@@ -32,7 +32,7 @@ export class IdentitiesPageComponent implements OnInit {
   certSelection: SelectionModel<UserExtSource> = new SelectionModel<UserExtSource>(true, []);
   otherSelection: SelectionModel<UserExtSource> = new SelectionModel<UserExtSource>(true, []);
 
-  loginIdp = 'SHARED_LIB.PERUN.COMPONENTS.USER_EXT_SOURCES_LIST.ID';
+  loginIdp = 'IDENTITIES.LOGIN_IDP';
   extSourceNameCert = 'IDENTITIES.EXT_SOURCE_NAME_CERT';
   loginCert = 'IDENTITIES.LOGIN_CERT';
   extSourceNameOther = 'IDENTITIES.EXT_SOURCE_NAME_OTHER';
@@ -41,7 +41,7 @@ export class IdentitiesPageComponent implements OnInit {
   loading: boolean;
   displayCertificates: boolean;
 
-  hiddenColumnsIdp = ['id'];
+  hiddenColumnsIdp = ['id', 'mail'];
   hiddenColumnsCert = ['id', 'mail'];
   hiddenColumnsOther = ['mail', 'id'];
 

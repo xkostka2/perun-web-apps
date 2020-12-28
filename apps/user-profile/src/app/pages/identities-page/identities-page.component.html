@@ -26,7 +26,12 @@
       ></perun-web-apps-user-ext-sources-list>
     </div>
 
-    <h1 class="page-title mt-5">{{'IDENTITIES.OTHER' | customTranslate | translate}}</h1>
+    <h1 class="page-title mt-5">
+      {{'IDENTITIES.OTHER' | customTranslate | translate}}
+      <mat-icon matTooltipPosition="above" [matTooltip]="'IDENTITIES.OTHER_TOOLTIP' | customTranslate | translate" class="center-icon">
+        info_outline
+      </mat-icon>
+    </h1>
     <button (click)="removeIdentity(otherSelection)" [disabled]="otherSelection.selected.length === 0" class="ml-2" color="warn" mat-flat-button>{{'IDENTITIES.REMOVE' | customTranslate | translate}}</button>
     <perun-web-apps-user-ext-sources-list
       [userExtSources]="otherExtSources"

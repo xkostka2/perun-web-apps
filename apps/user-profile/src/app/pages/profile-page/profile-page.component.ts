@@ -14,6 +14,12 @@ import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 
+type AdditionalAttribute = {
+  attribute: Attribute;
+  displayName: string;
+  tooltip: string;
+}
+
 @Component({
   selector: 'perun-web-apps-profile-page',
   templateUrl: './profile-page.component.html',
@@ -22,7 +28,7 @@ import { NotificatorService, StoreService } from '@perun-web-apps/perun/services
 export class ProfilePageComponent implements OnInit {
 
   currentLang = 'en';
-  languages = ['en', 'cz'];
+  languages = ['en', 'cs'];
   timeZones = moment.tz.names().filter(name => !name.startsWith('Etc/'));
 
   successMessage: string;
@@ -40,7 +46,7 @@ export class ProfilePageComponent implements OnInit {
     private router: Router,
     private translate: TranslateService,
     private notificator: NotificatorService,
-    private storeService:StoreService
+    private storeService: StoreService
   ) {
     translate.get('PROFILE_PAGE.MAIL_CHANGE_SUCCESS').subscribe(res => this.successMessage = res);
   }
@@ -53,7 +59,7 @@ export class ProfilePageComponent implements OnInit {
   organization = '';
   currentTimezone = '';
 
-  additionalAttributes: Attribute[] = []
+  additionalAttributes: AdditionalAttribute[] = [];
 
   ngOnInit() {
     const params = this.route.snapshot.queryParamMap;
@@ -81,12 +87,11 @@ export class ProfilePageComponent implements OnInit {
 
         const organizationAttribute = richUser.userAttributes.find(att => att.friendlyName === 'organization');
         if (!organizationAttribute) {
-            this.organization = '-';
+          this.organization = '-';
         } else {
           // @ts-ignore
           this.organization = organizationAttribute.value;
         }
-
 
         const emailAttribute = richUser.userAttributes.find(att => att.friendlyName === 'preferredMail');
         // @ts-ignore
@@ -100,14 +105,30 @@ export class ProfilePageComponent implements OnInit {
         // @ts-ignore
         this.currentTimezone = this.timezoneAttribute && this.timezoneAttribute.value ? this.timezoneAttribute.value : '-';
 
-        const friendlyNames = this.storeService.get('profile_additional_attributes');
-        friendlyNames.forEach(friendlyName => {
-          const attribute = richUser.userAttributes.find(att => att.friendlyName === friendlyName)
-          if(attribute){
-            this.additionalAttributes.push(attribute);
+        const additionalAttributesSpecs = this.storeService.get('profile_page_attributes');
+        let count = 0;
+        additionalAttributesSpecs.forEach(spec => {
+          const attribute = richUser.userAttributes.find(att => att.friendlyName === spec.friendly_name);
+          if(!attribute){
+            this.attributesManagerService.getAttributeDefinitionByName(`urn:perun:user:attribute-def:${spec.is_virtual ? 'virt' : 'def'}:${spec.friendly_name}`).subscribe(att => {
+              this.additionalAttributes.push(<AdditionalAttribute>{
+                attribute: att,
+                displayName: spec.display_name && spec.display_name.length ? spec.display_name : att.displayName,
+                tooltip: spec.tooltip ?? ''
+              });
+              count++;
+              this.loading = count !==additionalAttributesSpecs.length
+            })
+          } else {
+            count++;
+            this.additionalAttributes.push(<AdditionalAttribute>{
+              attribute: attribute,
+              displayName: spec.display_name && spec.display_name.length ? spec.display_name : attribute.displayName,
+              tooltip: spec.tooltip ?? ''
+            });
           }
-        })
-        this.loading = false;
+          this.loading = count !==additionalAttributesSpecs.length
+        });
       });
     });
   }
