@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Member, MembersManagerService, Sponsor, UsersManagerService } from '@perun-web-apps/perun/openapi';
+import { Member, MembersManagerService, Sponsor, UsersManagerService, Vo } from '@perun-web-apps/perun/openapi';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,6 +34,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'expiration', 'remove'];
   dataSource: MatTableDataSource<Sponsor>;
   loading = false;
+  vo: Vo;
 
   sponsorsToRemove: Set<number> = new Set<number>();
 
@@ -41,6 +42,10 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
     this.theme = this.data.theme;
     this.sponsors = this.data.sponsors;
     this.dataSource = new MatTableDataSource<Sponsor>(this.data.sponsors);
+    this.vo = {
+      beanName: 'Vo',
+      id: this.data.member.voId
+    };
   }
 
   markSponsor(sponsor: Sponsor) {
@@ -81,7 +86,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
   }
 
   isExpirationAuthorized(sponsor: Sponsor){
-    return this.authResolver.isAuthorized('updateSponsorshipValidity_Member_User_LocalDate', [this.data.member, sponsor.user]);
+    return this.authResolver.isAuthorized('updateSponsorshipValidity_Member_User_LocalDate', [sponsor.user, this.vo]);
   }
 
   parseDate(date){
