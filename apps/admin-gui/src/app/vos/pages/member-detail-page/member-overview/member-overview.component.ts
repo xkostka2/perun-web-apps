@@ -85,7 +85,7 @@ export class MemberOverviewComponent implements OnInit {
           id: member.voId,
           beanName: "Vo"
         };
-        this.pwdResetAuth = this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [this.vo]);
+        this.pwdResetAuth = this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [this.vo, this.member]);
         if (this.member.sponsored &&
           this.authResolver.isAuthorized('getSponsorsForMember_Member_List<String>_policy', [this.member])) {
 
