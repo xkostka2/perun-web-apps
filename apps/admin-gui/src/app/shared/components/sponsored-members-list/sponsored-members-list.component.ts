@@ -178,6 +178,6 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
       beanName: "Vo"
     };
 
-    return this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [vo]);
+    return this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [vo, sponsoredMember.member]);
   }
 }
