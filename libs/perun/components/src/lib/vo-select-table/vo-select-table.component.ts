@@ -68,7 +68,6 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
     }
     this.dataSource = new MatTableDataSource<Vo>(this.vos);
     this.setDataSource();
-    this.dataSource.filter = this.filterValue;
   }
 
   ngAfterViewInit(): void {
@@ -77,6 +76,26 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Vo, filter: string) => {
+        filter = filter.toLowerCase();
+        const dataStr = (data.id.toString() + data.name + data.shortName).toLowerCase();
+        return dataStr.indexOf(filter) !== -1;
+      };
+      this.dataSource.filter = this.filterValue;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'id': {
+            return +item.id;
+          }
+          case 'shortName' : {
+            return item.shortName.toLocaleLowerCase();
+          }
+          case 'name' : {
+            return item.name.toLocaleLowerCase();
+          }
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
