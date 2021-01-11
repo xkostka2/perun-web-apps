@@ -199,7 +199,7 @@ export class GuiAuthResolver {
   }
 
   public canManageFacilities(): boolean {
-    return this.hasAtLeasOne(Role.PERUNADMIN, Role.FACILITYADMIN);
+    return this.hasAtLeasOne(Role.PERUNADMIN, Role.FACILITYADMIN, Role.FACILITIYOBSERVER);
   }
 
   public isPerunAdmin(): boolean {
