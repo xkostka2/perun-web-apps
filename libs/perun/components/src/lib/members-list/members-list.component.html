@@ -42,11 +42,16 @@
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
           <td *matCellDef="let member" mat-cell>
             <i (click)="changeStatus($event, member)"
-               class="material-icons {{member.status | memberStatusIconColor}}"
+               class="material-icons {{showGroupStatuses ? (member.groupStatus | memberStatusIconColor) : (member.status | memberStatusIconColor)}}"
                matTooltip="{{member | memberStatusTooltip: showGroupStatuses}}"
                matTooltipClass="status-tooltip"
                matTooltipPosition="left">
-              {{member.status | memberStatusIcon}}
+              <span *ngIf="!showGroupStatuses">
+                {{member.status | memberStatusIcon}}
+              </span>
+              <span *ngIf="showGroupStatuses">
+                {{member.groupStatus | memberStatusIcon}}
+              </span>
             </i>
           </td>
         </ng-container>
