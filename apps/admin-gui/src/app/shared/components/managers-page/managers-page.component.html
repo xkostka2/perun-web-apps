@@ -54,7 +54,7 @@
       (page)="pageChanged($event)"
       [pageSize]="pageSize"
       *ngIf="groups && selectedMode === 'group' && !loading"
-      [hideColumns]="manageAuth ? ['menu', 'expiration','vo'] : ['select','expiration', 'menu', 'vo']"
+      [hideColumns]="manageAuth ? ['menu', 'expiration'] : ['select','expiration', 'menu']"
       [groups]="groups"
       [selection]="selectionGroups"
       [disableMembers]="false">
