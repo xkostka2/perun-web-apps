@@ -1,6 +1,6 @@
 <div (keyup)="onKeyInput($event)">
   <h1 class="page-subtitle">{{'GROUP_DETAIL.MEMBERS.TITLE' | translate}}</h1>
-
+  <div class="align-elements">
   <span
     [matTooltipDisabled]="!synchEnabled"
     [matTooltipPosition]="'above'"
@@ -18,10 +18,10 @@
     {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
   </button>
   </span>
-  <span
-    [matTooltipDisabled]="!synchEnabled"
-    [matTooltipPosition]="'above'"
-    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+    <span
+      [matTooltipDisabled]="!synchEnabled"
+      [matTooltipPosition]="'above'"
+      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
     <button
       (click)="onInviteMember()"
       *ngIf="inviteAuth"
@@ -30,12 +30,12 @@
       color="accent"
       mat-flat-button>
     {{'GROUP_DETAIL.MEMBERS.INVITE_MEMBER' | translate}}
-  </button>
+    </button>
   </span>
-  <span
-    [matTooltipDisabled]="!synchEnabled"
-    [matTooltipPosition]="'above'"
-    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+    <span
+      [matTooltipDisabled]="!synchEnabled"
+      [matTooltipPosition]="'above'"
+      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
      <button
        (click)="onRemoveMembers()"
        *ngIf="removeAuth"
@@ -46,27 +46,38 @@
     {{'GROUP_DETAIL.MEMBERS.REMOVE_MEMBERS' | translate}}
   </button>
   </span>
-  <button (click)="onListAll()" class="mr-2 mb-2" mat-stroked-button>
-    {{'GROUP_DETAIL.MEMBERS.LIST_ALL' | translate}}
-  </button>
+    <button (click)="onListAll()" class="mr-2" mat-stroked-button>
+      {{'GROUP_DETAIL.MEMBERS.LIST_ALL' | translate}}
+    </button>
+    <mat-form-field class="mr-2 fix-select">
+      <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_STATUS' | translate}}</mat-label>
+      <mat-select [(value)]="selectedStatuses" [formControl]="statuses"
+                  multiple>
+        <mat-select-trigger>
+          {{displaySelectedStatuses()}}
+        </mat-select-trigger>
+        <mat-option class="group-theme" *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field class="mr-2 search-field no-border-mat-input">
-    <label>
-      <input
-        matInput
-        autocomplete="false"
-        placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
-        [formControl]="searchControl">
-    </label>
-    <mat-error>
-      {{'GROUP_DETAIL.MEMBERS.EMPTY_SEARCH' | translate}}
-    </mat-error>
-  </mat-form-field>
-  <button mat-flat-button color="primary"
-          class="mr-2" [disabled]="loading"
-          (click)="onSearchByString()">
-    <mat-icon>search</mat-icon>
-  </button>
+    <mat-form-field class="mr-2 search-field no-border-mat-input">
+      <label>
+        <input
+          matInput
+          autocomplete="false"
+          placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
+          [formControl]="searchControl">
+      </label>
+      <mat-error>
+        {{'GROUP_DETAIL.MEMBERS.EMPTY_SEARCH' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary"
+            class="mr-2" [disabled]="loading"
+            (click)="onSearchByString()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
   </mat-spinner>
   <app-alert alert_type="info" *ngIf="!firstSearchDone && !loading">
