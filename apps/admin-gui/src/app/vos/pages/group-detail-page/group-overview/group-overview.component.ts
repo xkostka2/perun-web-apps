@@ -96,7 +96,9 @@ export class GroupOverviewComponent implements OnInit {
       });
     }
 
-    if (this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [this.group])) {
+    //TODO delete this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [this.group])
+    if (this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [this.group]) ||
+        this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [this.group])) {
       this.navItems.push({
         cssIcon: 'perun-applications',
         url: `/organizations/${this.group.voId}/groups/${this.groupId}/applications`,
