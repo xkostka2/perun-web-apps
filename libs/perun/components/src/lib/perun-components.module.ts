@@ -66,6 +66,7 @@ import { MemberSearchSelectComponent } from './member-search-select/member-searc
 import { FacilitySearchSelectComponent } from './facility-search-select/facility-search-select.component';
 import { UserSearchSelectComponent } from './user-search-select/user-search-select.component';
 import { ExpirationSelectComponent } from './expiration-select/expiration-select.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -126,7 +127,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatRadioModule,
     MatOptionModule,
     MatSelectModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    ScrollingModule
   ],
   declarations: [
     VoSelectTableComponent,

@@ -1,94 +1,66 @@
 <div class="card mt-2" *ngIf="filteredGroups.length !== 0">
-  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-    <mat-tree-node class="group-tree-node"
-                   *matTreeNodeDef="let group" matTreeNodePadding>            <!--leaf-->
-      <div class="group-item-content"
-           [routerLink]="disableRouting ? null : ['/organizations', group.voId, 'groups', group.id]"
-           [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', group.voId, 'groups', group.id]">
+  <cdk-virtual-scroll-viewport
+    class="virtual-scroll-container"
+    itemSize="48"
+    #scrollViewport
+    [minBufferPx]="48 * 5"
+    [maxBufferPx]="48 * 10"
+    [ngStyle]="{'height' : getTreeViewHeight()}">
+    <ng-container *cdkVirtualFor="let group of dataSource">
+      <!-- Note that the [style.padding-left] is essentially what cdkTreeNodePadding is doing under the hood -->
+      <div class="node" [style.padding-left]="group.level * 24 + 'px'">
+        <!-- Note that treeControl.toggle(node) is essentially what cdkTreeNodeToggle is doing under the hood -->
         <mat-checkbox color="primary"
                       *ngIf="!hideCheckbox"
-                      [disabled]="group.fullName === 'members'"
                       class="no-label-margin-bottom ml-4"
+                      [disabled]="group.fullName === 'members'"
                       [checked]="selection.isSelected(group)"
-                      (change)="leafItemSelectionToggle(group)"
-                      matTreeNodeToggle></mat-checkbox>
-        <!-- use a disabled button to provide padding for tree leaf -->
-        <button mat-icon-button disabled></button>
-        <div class="w-50">
+                      [indeterminate]="descendantsPartiallySelected(group)"
+                      (change)="itemSelectionToggle(group)"
+                      ></mat-checkbox>
+        <div
+          class="group-item-content"
+          [routerLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]"
+          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]">
+          <button mat-icon-button
+                  (mouseenter)="disableRouting = true"
+                  (mouseleave)="disableRouting = false"
+                  [disabled]="!group.expandable"
+                  (click)="treeControl.toggle(group)"
+                  [attr.aria-label]="'toggle ' + group.name">
+            <mat-icon class="mat-icon-rtl-mirror" *ngIf="group.expandable">
+              {{treeControl.isExpanded(group) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          <div class="w-50">
           <span class="mr-2">
             {{group.name}}
           </span>
-          <span *ngIf="authResolver.isPerunAdmin()" class="text-muted">
+            <span *ngIf="authResolver.isPerunAdmin()" class="text-muted">
             #{{group.id}}
           </span>
-        </div>
-        <div class="w-50 text-muted description-text" #nodeDescription>
+          </div>
+          <div class="w-50 text-muted description-text" #rootDescription>
           <span
-            [matTooltipDisabled]="!isOverflowing(nodeDescription)"
             matTooltip="{{group.description}}"
             matTooltipPosition="before">
             {{group.description}}
           </span>
+          </div>
+        </div>
+        <div class="group-buttons">
+          <perun-web-apps-group-menu
+            [disabled]="group.fullName === 'members'"
+            (moveGroup)="onMoveGroup(group)"
+            (syncGroup)="onSyncDetail(group)"
+            (changeNameDescription)="onChangeNameDescription(group)"
+            [displayButtons]="displayButtons"
+            [group]="group">
+          </perun-web-apps-group-menu>
         </div>
       </div>
-      <perun-web-apps-group-menu
-        [disabled]="group.fullName === 'members'"
-        (moveGroup)="onMoveGroup(group)"
-        (changeNameDescription)="onChangeNameDescription(group)"
-        (syncGroup)="onSyncDetail(group)"
-        [displayButtons]="displayButtons"
-        [group]="group">
-      </perun-web-apps-group-menu>
-    </mat-tree-node>
-
-    <mat-tree-node
-      class="group-tree-node"
-      *matTreeNodeDef="let group;when: hasChild" matTreeNodePadding> <!--parent-->
-      <mat-checkbox color="primary"
-                    *ngIf="!hideCheckbox"
-                    class="no-label-margin-bottom ml-4"
-                    [disabled]="group.fullName === 'members'"
-                    [checked]="selection.isSelected(group)"
-                    [indeterminate]="descendantsPartiallySelected(group)"
-                    (change)="itemSelectionToggle(group)"
-                    matTreeNodeToggle></mat-checkbox>
-      <div
-        class="group-item-content"
-        [routerLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]"
-        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]">
-        <button mat-icon-button matTreeNodeToggle
-                [attr.aria-label]="'toggle ' + group.name">
-          <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(group) ? 'expand_more' : 'chevron_right'}}
-          </mat-icon>
-        </button>
-        <div class="w-50">
-          <span class="mr-2">
-            {{group.name}}
-          </span>
-          <span *ngIf="authResolver.isPerunAdmin()" class="text-muted">
-            #{{group.id}}
-          </span>
-        </div>
-        <div class="w-50 text-muted description-text" #rootDescription>
-          <span
-            [matTooltipDisabled]="!isOverflowing(rootDescription)"
-            matTooltip="{{group.description}}"
-            matTooltipPosition="before">
-            {{group.description}}
-          </span>
-        </div>
-      </div>
-      <perun-web-apps-group-menu
-        [disabled]="group.fullName === 'members'"
-        (moveGroup)="onMoveGroup(group)"
-        (syncGroup)="onSyncDetail(group)"
-        (changeNameDescription)="onChangeNameDescription(group)"
-        [displayButtons]="displayButtons"
-        [group]="group">
-      </perun-web-apps-group-menu>
-    </mat-tree-node>
-  </mat-tree>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
 </div>
 
 <app-alert *ngIf="filteredGroups.length === 0" alert_type="warn">

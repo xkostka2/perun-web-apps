@@ -1,5 +1,14 @@
 /* tslint:disable:member-ordering */
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges, ViewChild
+} from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -13,6 +22,7 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 
 @Component({
@@ -23,6 +33,7 @@ import {
 export class GroupsTreeComponent implements OnChanges {
 
   constructor(
+    public cd: ChangeDetectorRef,
     private dialog: MatDialog,
     public authResolver: GuiAuthResolver) { }
 
@@ -77,6 +88,9 @@ export class GroupsTreeComponent implements OnChanges {
   @Input()
   vo: Vo;
 
+  @ViewChild("scrollViewport", {static: false})
+  scrollViewport: CdkVirtualScrollViewport;
+
   removeAuth: boolean;
   filteredGroups: RichGroup[];
 
@@ -87,7 +101,6 @@ export class GroupsTreeComponent implements OnChanges {
     this.transformer, node => node.level, node => node.expandable, node => node.children);
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.expandAll) {
@@ -165,6 +178,7 @@ export class GroupsTreeComponent implements OnChanges {
     });
 
     this.dataSource.data = groupTree;
+    this.cd.detectChanges();
   }
 
   hasChild = (_: number, node: GroupFlatNode) => node.expandable;
@@ -210,11 +224,6 @@ export class GroupsTreeComponent implements OnChanges {
     this.removeAuth = this.setRemoveAuth();
   }
 
-  leafItemSelectionToggle(node: GroupFlatNode): void {
-    this.selection.toggle(node);
-    this.checkAllParentsSelection(node);
-  }
-
   descendantsPartiallySelected(node: GroupFlatNode): boolean {
     const descendants = this.treeControl.getDescendants(node);
     const result = descendants.some(child => this.selection.isSelected(child));
@@ -248,7 +257,19 @@ export class GroupsTreeComponent implements OnChanges {
     this.moveGroup.emit(group);
   }
 
-  isOverflowing(el) {
-    return (el.offsetWidth < el.scrollWidth);
+  getTreeViewHeight() {
+    let count = 0;
+    if (!!this.scrollViewport) {
+      count = this.scrollViewport.getDataLength();
+    }
+
+    let height = count * 48;
+    if (height > 672) {
+      height = 696;
+    }
+    if (!!this.scrollViewport) {
+      this.scrollViewport.checkViewportSize();
+    }
+    return height + 'px';
   }
 }
