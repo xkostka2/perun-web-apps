@@ -452,7 +452,9 @@ export class SideMenuItemService {
     }
 
     // Applications
-    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy', [vo])) {
+    //TODO delete this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy', [vo])
+    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy', [vo]) ||
+        this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy', [vo])) {
       links.push({
         label: 'MENU_ITEMS.VO.APPLICATIONS',
         url: [`/organizations/${vo.id}/applications`],
@@ -831,7 +833,9 @@ export class SideMenuItemService {
     }
 
     //Applications
-    if (this.authResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [group])) {
+    //TODO delete this.authResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [group])
+    if (this.authResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [group]) ||
+        this.authResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [group])) {
       links.push({
         label: 'MENU_ITEMS.GROUP.APPLICATIONS',
         url: [`/organizations/${group.voId}/groups/${group.id}/applications`],
