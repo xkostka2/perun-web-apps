@@ -73,7 +73,7 @@ export class FacilitySelectPageComponent implements OnInit, AfterViewChecked {
     dialogRef.afterClosed().subscribe(facilityCreated => {
       if (facilityCreated) {
         this.loading = true;
-        this.initAuthService.loadPrincipal().then(() => this.refreshTable());
+        this.refreshTable();
       }
     });
   }

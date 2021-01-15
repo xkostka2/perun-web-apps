@@ -97,7 +97,7 @@ export class VoSelectPageComponent implements OnInit, AfterViewChecked{
     dialogRef.afterClosed().subscribe( isVoCreated => {
       if (isVoCreated){
         this.loading = true;
-        this.initAuthService.loadPrincipal().then(() => this.refreshTable());
+        this.refreshTable();
       }
     });
   }
