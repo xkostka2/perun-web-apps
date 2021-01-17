@@ -27,9 +27,8 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
 
   vos: Vo[] = [];
   groups: Group[] = [];
-  fakeGroup: Group;
   selectedVo: Vo;
-  selectedGroup: Group;
+  selectedGroup: Group = null;
   privilegeMessage: string;
   noFormMessage: string;
   theme: string;
@@ -48,19 +47,12 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
     translateService.get('DIALOGS.APPLICATION_FORM_COPY_ITEMS.NO_FORM').subscribe(res => this.noFormMessage = res);
   }
 
+  nameFunction = (group: Group) => group.name;
+
   ngOnInit() {
     this.loading = true;
     this.theme = this.data.theme;
     this.translateService.get('DIALOGS.APPLICATION_FORM_COPY_ITEMS.NO_GROUP_SELECTED').subscribe( text => {
-      this.fakeGroup = {
-        id: -1,
-        name: text,
-        voId: 0,
-        parentGroupId: 0,
-        shortName: '',
-        description: '',
-        beanName: 'Group'
-      };
 
       this.voService.getMyVos().subscribe(vos => {
 
@@ -88,7 +80,7 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
     this.apiRequest.dontHandleErrorForNext();
     this.loading = true;
     if (this.data.groupId) { // checking if the dialog is for group or Vo
-      if (this.selectedGroup === this.fakeGroup) {   // no group selected
+      if (this.selectedGroup === null) {   // no group selected
         this.registrarManager.copyFormFromVoToGroup(this.selectedVo.id, this.data.groupId).subscribe(() => {
           this.notificatorService.showSuccess(this.successMessage);
           this.dialogRef.close(true);
@@ -116,7 +108,7 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
         });
       }
     } else {
-      if (this.selectedGroup === this.fakeGroup) {       // no group selected
+      if (this.selectedGroup === null) {       // no group selected
         this.registrarManager.copyFormFromVoToVo(this.selectedVo.id, this.data.voId).subscribe(() => {
           this.notificatorService.showSuccess(this.successMessage);
           this.dialogRef.close(true);
@@ -154,12 +146,12 @@ export class ApplicationFormCopyItemsDialogComponent implements OnInit {
   getGroups() {
     if (this.selectedVo !== undefined) {
       this.groupService.getAllGroups(this.selectedVo.id).subscribe(groups => {
-        this.groups = [this.fakeGroup].concat(groups);
+        this.groups = groups;
       });
     } else {
-      this.groups = [this.fakeGroup];
+      this.groups = [];
     }
-    this.selectedGroup = this.fakeGroup;
+    this.selectedGroup = null;
   }
 
 }

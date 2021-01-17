@@ -61,6 +61,7 @@ import { MembersListComponent } from './members-list/members-list.component';
 import { TaskResultsListComponent } from './task-results-list/task-results-list.component';
 import { GroupSearchSelectComponent } from './group-search-select/group-search-select.component';
 import { MiddleClickRouterLinkDirective } from '@perun-web-apps/perun/directives';
+import { EntitySearchSelectComponent } from './entity-search-select/entity-search-select.component';
 import { ResourceSearchSelectComponent } from './resource-search-select/resource-search-select.component';
 import { MemberSearchSelectComponent } from './member-search-select/member-search-select.component';
 import { FacilitySearchSelectComponent } from './facility-search-select/facility-search-select.component';
@@ -168,7 +169,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     UserSearchSelectComponent,
     ExpirationSelectComponent,
     RecentlyViewedIconComponent,
-    FacilitySelectTableComponent
+    FacilitySelectTableComponent,
+    EntitySearchSelectComponent,
   ],
   exports: [
     VoSelectTableComponent,
@@ -205,7 +207,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     UserSearchSelectComponent,
     ExpirationSelectComponent,
     RecentlyViewedIconComponent,
-    FacilitySelectTableComponent
+    FacilitySelectTableComponent,
+    EntitySearchSelectComponent,
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

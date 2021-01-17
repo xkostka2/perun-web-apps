@@ -1,0 +1,30 @@
+<mat-form-field class="w-100">
+  <mat-select
+    (openedChange)="openChange($event)"
+    placeholder="{{selectPlaceholder}}"
+    [formControl]="entitiesCtrl">
+    <mat-option>
+      <ngx-mat-select-search
+
+        placeholderLabel="{{findPlaceholder}}"
+        noEntriesFoundLabel="{{noEntriesText}}"
+        [clearSearchInput]="false"
+        [formControl]="entityFilterCtrl">
+      </ngx-mat-select-search>
+    </mat-option>
+    <mat-option class="selected-options-bottom" *ngIf="entitiesCtrl?.value" [value]="entitiesCtrl?.value">
+      {{mainTextFunction(entitiesCtrl?.value)}} <span class="text-muted muted">{{secondaryTextFunction(entitiesCtrl?.value)}}</span>
+    </mat-option>
+    <cdk-virtual-scroll-viewport
+      itemSize="48"
+      [style.height.px]="getViewportHeight()"
+      #scrollViewport
+      [minBufferPx]="5 * 48"
+      [maxBufferPx]="10 * 48">
+      <mat-option *cdkVirtualFor="let entity of filteredEntities | async" [value]="entity">
+        {{mainTextFunction(entity)}} <span class="text-muted muted">{{secondaryTextFunction(entity)}}</span>
+      </mat-option>
+    </cdk-virtual-scroll-viewport>
+  </mat-select>
+</mat-form-field>
+

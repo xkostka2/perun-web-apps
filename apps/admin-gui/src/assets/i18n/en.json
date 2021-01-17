@@ -2067,7 +2067,7 @@
         "GROUP_SEARCH_SELECT": {
           "SELECT_GROUP": "Select group",
           "FIND_GROUP": "Find group...",
-          "NO_GROUP_FOUND": "No matching found"
+          "NO_GROUP_FOUND": "No matching group found"
         },
         "VO_SELECT_TABLE": {
           "ID": "Id",
