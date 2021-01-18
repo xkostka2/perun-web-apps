@@ -286,7 +286,7 @@
       "ADD_MEMBER": "Add",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
-      "LIST_MEMBERS": "List members",
+      "LIST_MEMBERS": "List all members",
       "SEARCH_ALERT_PART_1": "In this VO are",
       "SEARCH_ALERT_PART_2": "members and load all of them would take a long time. You can search particular member by name, login or email. Also, you can list all valid members.",
       "NO_MEMBERS_ALERT": "No members found.",
@@ -515,7 +515,8 @@
       "NO_MEMBERS_ALERT": "No members found.",
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
-      "EMPTY_SEARCH": "Search field cannot be empty"
+      "EMPTY_SEARCH": "Search field cannot be empty",
+      "FILTER_STATUS": "Select Status"
     },
     "RESOURCES": {
       "TITLE": "Resources",
