@@ -28,7 +28,7 @@ export class CreateAttributeDefinitionDialogComponent implements OnInit {
   definitionTypes: string[] = ['def', 'opt', 'virt'];
   definitionType = '';
 
-  valueTypes: string[] = ['String', 'Integer', 'Boolean', 'Array', 'LinkedHashMap', 'LargeString', 'LargeArrayList'];
+  valueTypes: string[] = ['String', 'Integer', 'Boolean', 'Array', 'LinkedHashMap'];
   valueType = '';
 
   entity: string;
@@ -179,14 +179,6 @@ export class CreateAttributeDefinitionDialogComponent implements OnInit {
       }
       case 'LinkedHashMap': {
         this.attDef.type = 'java.util.LinkedHashMap';
-        break;
-      }
-      case 'LargeString': {
-        this.attDef.type = 'java.lang.LargeString';
-        break;
-      }
-      case 'LargeArrayList': {
-        this.attDef.type = 'java.util.LargeArrayList';
         break;
       }
     }
