@@ -25,6 +25,8 @@
     <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 
     <perun-web-apps-members-list
+      [pageSize]="pageSize"
+      (page)="pageChanged($event)"
       *ngIf="firstSearchDone"
       [hidden]="loading"
       [members]="members"

@@ -7,6 +7,8 @@ import { formatDate } from '@angular/common';
 import { FormControl, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Urns } from '@perun-web-apps/perun/urns';
+import { PageEvent } from '@angular/material/paginator';
+import { TableConfigService, TABLE_ADD_SPONSORED_MEMBERS } from '@perun-web-apps/config/table-config';
 
 export interface SponsorExistingMemberDialogData {
   voId: number
@@ -25,11 +27,15 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
               private store: StoreService,
               private membersService: MembersManagerService,
               private notificator: NotificatorService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private tableConfigService: TableConfigService) {
   }
 
   loading = false;
   theme: string;
+
+  pageSize: number;
+  tableId = TABLE_ADD_SPONSORED_MEMBERS;
 
   expiration = 'never';
   searchCtrl: FormControl = new FormControl('', [Validators.required]);
@@ -40,6 +46,7 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.theme = this.data.theme;
+    this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
   }
 
   onCancel() {
@@ -97,5 +104,10 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
       this.members = members.filter(member => !member.sponsored);
       this.loading = false;
     }, () => this.loading = false);
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
   }
 }
