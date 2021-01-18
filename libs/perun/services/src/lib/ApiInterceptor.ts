@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { RPCError } from '@perun-web-apps/perun/models';
@@ -10,6 +10,8 @@ import { ApiRequestConfigurationService } from './api-request-configuration.serv
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionExpirationDialogComponent } from '@perun-web-apps/perun/session-expiration';
+import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
+import { InitAuthService } from './init-auth.service';
 
 
 @Injectable()
@@ -20,7 +22,8 @@ export class ApiInterceptor implements HttpInterceptor {
     private apiRequestConfiguration: ApiRequestConfigurationService,
     private notificator: NotificatorService,
     private store: StoreService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private initAuthService: InitAuthService
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -50,8 +53,14 @@ export class ApiInterceptor implements HttpInterceptor {
     // Also handle errors globally, if not disabled
     const shouldHandleError = this.apiRequestConfiguration.shouldHandleError();
 
+    const shouldReloadPrincipal = req.method === "POST";
+
     return next.handle(req).pipe(
-      tap(x => x, err => {
+      tap(x => {
+      if (x instanceof HttpResponse && shouldReloadPrincipal) {
+        this.initAuthService.loadPrincipal();
+      }
+      }, err => {
         // Handle this err
         const errRpc = this.formatErrors(err, req);
         if (errRpc === undefined) {

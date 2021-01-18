@@ -72,7 +72,7 @@ export class GroupSubgroupsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(groupCreated => {
       if(groupCreated) {
         this.loading = true;
-        this.initAuthService.loadPrincipal().then(() => this.refreshTable());
+        this.refreshTable();
       }
     });
   }

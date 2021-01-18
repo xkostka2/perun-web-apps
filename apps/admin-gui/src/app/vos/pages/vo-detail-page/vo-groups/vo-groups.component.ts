@@ -79,7 +79,7 @@ export class VoGroupsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(groupCreated => {
       if (groupCreated) {
         this.loading = true;
-        this.initAuthService.loadPrincipal().then(() => this.loadAllGroups());
+        this.loadAllGroups();
       }
     });
   }
