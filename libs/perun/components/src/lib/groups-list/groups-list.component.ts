@@ -90,13 +90,19 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   memberId: number;
 
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+
+  @Input()
+  recentIds: number[];
+
   @Output()
   page = new EventEmitter<PageEvent>();
 
   @Output()
   refreshTable = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['select', 'id', 'vo', 'name', 'description','expiration', 'menu'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description','expiration', 'menu'];
   dataSource: MatTableDataSource<Group | RichGroup>;
 
   exporting = false;
@@ -113,7 +119,6 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
   };
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   @HostListener('window:resize', ['$event'])
   shouldHideButtons() {
@@ -157,6 +162,14 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
               return this.voNames.get(item.voId).toLowerCase();
             }
             break;
+          }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
           }
           default: return item[property];
         }

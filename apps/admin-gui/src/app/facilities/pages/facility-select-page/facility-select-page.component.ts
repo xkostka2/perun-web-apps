@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, HostBinding, OnInit } from '@angular/core';
 import {SideMenuService} from '../../../core/services/common/side-menu.service';
-import { AuthzResolverService, FacilitiesManagerService, RichFacility } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig, getRecentlyVisited, getRecentlyVisitedIds } from '@perun-web-apps/perun/utils';
+import { FacilitiesManagerService, RichFacility } from '@perun-web-apps/perun/openapi';
+import { getDefaultDialogConfig, getRecentlyVisitedIds } from '@perun-web-apps/perun/utils';
 import {
   TABLE_FACILITY_SELECT,
   TableConfigService
@@ -11,7 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateFacilityDialogComponent } from '../../../shared/components/dialogs/create-facility-dialog/create-facility-dialog.component';
 import { DeleteFacilityDialogComponent } from '../../../shared/components/dialogs/delete-facility-dialog/delete-facility-dialog.component';
-import { GuiAuthResolver, InitAuthService, StoreService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, InitAuthService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-facility-select-page',
@@ -55,7 +55,7 @@ export class FacilitySelectPageComponent implements OnInit, AfterViewChecked {
     this.loading = true;
     this.facilityManager.getRichFacilities().subscribe(facilities => {
       this.selection.clear();
-      this.facilities = getRecentlyVisited('facilities', facilities);
+      this.facilities = facilities;
       this.recentIds = getRecentlyVisitedIds('facilities');
       this.loading = false;
     });

@@ -1,12 +1,11 @@
-import { AfterViewChecked, AfterViewInit, Component, HostBinding, OnInit } from '@angular/core';
-import {SideMenuService} from '../../../core/services/common/side-menu.service';
-import { AuthzResolverService, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig, getRecentlyVisited, getRecentlyVisitedIds } from '@perun-web-apps/perun/utils';
+import { AfterViewChecked, Component, HostBinding, OnInit } from '@angular/core';
+import { SideMenuService } from '../../../core/services/common/side-menu.service';
+import { Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import { getDefaultDialogConfig, getRecentlyVisitedIds } from '@perun-web-apps/perun/utils';
 import {
   ApiRequestConfigurationService,
   GuiAuthResolver, InitAuthService,
-  NotificatorService,
-  StoreService
+  NotificatorService
 } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveVoDialogComponent } from '../../../shared/components/dialogs/remove-vo-dialog/remove-vo-dialog.component';
@@ -70,7 +69,7 @@ export class VoSelectPageComponent implements OnInit, AfterViewChecked{
     this.selection.clear();
     this.apiRequest.dontHandleErrorForNext();
     this.voService.getMyVos().subscribe(vos => {
-      this.vos = getRecentlyVisited('vos', vos);
+      this.vos = vos;
       this.recentIds = getRecentlyVisitedIds('vos');
       this.loading = false;
     }, error => {

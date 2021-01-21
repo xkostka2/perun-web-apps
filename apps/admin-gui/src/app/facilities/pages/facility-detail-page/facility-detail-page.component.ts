@@ -4,7 +4,7 @@ import { fadeIn } from '@perun-web-apps/perun/animations';
 import { SideMenuService } from '../../../core/services/common/side-menu.service';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
 import { FacilitiesManagerService, Facility } from '@perun-web-apps/perun/openapi';
-import { addRecentlyVisited, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { addRecentlyVisited, addRecentlyVisitedObject, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import {
@@ -50,6 +50,7 @@ export class FacilityDetailPageComponent implements OnInit {
         this.editFacilityAuth = this.guiAuthResolver.isAuthorized('updateFacility_Facility_policy',[this.facility]);
 
         addRecentlyVisited('facilities', this.facility);
+        addRecentlyVisitedObject(this.facility);
         this.loading = false;
       }, () => this.loading = false);
     });

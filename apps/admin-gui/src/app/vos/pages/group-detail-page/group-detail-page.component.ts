@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
 import { fadeIn } from '@perun-web-apps/perun/animations';
 import { GroupsManagerService, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { addRecentlyVisited, addRecentlyVisitedObject, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import { Urns } from '@perun-web-apps/perun/urns';
@@ -60,6 +60,8 @@ export class GroupDetailPageComponent implements OnInit {
         this.vo = vo;
         this.groupService.getGroupById(groupId).subscribe( group => {
           this.group = group;
+          addRecentlyVisited('groups', this.group);
+          addRecentlyVisitedObject(this.group);
           if (this.guiAuthResolver.isAuthorized('getRichGroupByIdWithAttributesByNames_int_List<String>_policy', [this.group])) {
             this.groupService.getRichGroupByIdWithAttributesByNames(groupId, this.attrNames).subscribe(richGroup => {
               this.group = richGroup;

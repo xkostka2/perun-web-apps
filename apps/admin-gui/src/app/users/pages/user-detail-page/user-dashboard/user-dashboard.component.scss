@@ -11,22 +11,21 @@
   width: 100%;
 }
 
-
-.cover-image {
-  transform: scale(1.8);
-  margin-left: 0.9rem;
+.home-image {
+  transform: scale(1.4);
   margin-right: 0.7rem;
+  margin-left: 0.6rem;
 }
 
-.mat-card-header {
-  flex-wrap: wrap;
+.text-align {
+  text-align: center;
+  font-size: 1.25rem;
 }
 
-.dashboard-icon {
-  vertical-align: middle;
-  transform:scale(0.8);
+.text-bigger {
+  font-size: 1.1rem;
 }
 
-.card-title {
-  font-size: 1.4rem;
+.user-icon {
+  vertical-align: top;
 }

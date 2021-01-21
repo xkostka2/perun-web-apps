@@ -409,4 +409,13 @@ export class GuiAuthResolver {
     }
     return false;
   }
+
+  public getPrimaryObjectOfRole(role: string): string {
+    for (const rule of this.allRolesManagementRules) {
+      if (rule.roleName === role) {
+        return rule.primaryObject;
+      }
+    }
+    return '';
+  }
 }

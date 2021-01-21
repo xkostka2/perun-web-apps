@@ -46,7 +46,7 @@ export class AddMemberGroupDialogComponent implements OnInit {
     Urns.GROUP_LAST_STRUCTURE_SYNC_TIMESTAMP
   ];
 
-  hideColumns = [ 'vo', 'expiration','menu' ];
+  hideColumns = [ 'recent', 'vo', 'expiration','menu' ];
   filterValue = "";
 
   ngOnInit(): void {

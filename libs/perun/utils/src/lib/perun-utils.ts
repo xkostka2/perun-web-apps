@@ -252,43 +252,17 @@ export function delay(ms: number) {
 }
 
 /**
- * Returns array with recently used entities at the top of array.
- *
- * @param key of localStorage
- * @param array of all entities
- */
-export function getRecentlyVisited(key: string, array: any[]): any[] {
-  const recentIds: number[] = JSON.parse(localStorage.getItem(key));
-  if (recentIds) {
-    const recentlyVisited: any[] = [];
-    for (let i = 0; i < recentIds.length; i ++) {
-      array.forEach((item, index) => {
-        if (item.id === recentIds[i]) {
-          recentlyVisited.push(item);
-          array.splice(index, 1);
-        }
-      });
-    }
-    for (let i = recentlyVisited.length - 1; i >= 0; i--) {
-      array.unshift(recentlyVisited[i]);
-    }
-  }
-  return array;
-}
-
-/**
  * Returns saved ids for given key.
  *
  * @param key of local storage
  */
-export function getRecentlyVisitedIds(key: string): number[] {
+export function getRecentlyVisitedIds(key: string): any[] {
   const recentIds: number[] = JSON.parse(localStorage.getItem(key));
   if (recentIds) {
     return recentIds;
   }
   return [];
 }
-
 
 /**
  * Add entity that was just visited to localStorage.
@@ -301,12 +275,12 @@ export function addRecentlyVisited(key: string, item: any) {
     // if user not have any in local storage
     const recent: number[] = [];
     recent.unshift(item.id);
-    localStorage.setItem('vos', JSON.stringify(recent));
+    localStorage.setItem(key, JSON.stringify(recent));
   } else {
     const recent: number[] = JSON.parse(localStorage.getItem(key));
-    const index = indexOfVo(recent, item.id);
+    const index = indexOfEntity(recent, item.id);
     if (index > 0) {
-      // if vo is in recent but not of first place, then we remove it to placed it first
+      // if entity is in recent but not of first place, then we remove it to placed it first
       recent.splice(index, 1);
     }
     if (index !== 0) {
@@ -321,7 +295,48 @@ export function addRecentlyVisited(key: string, item: any) {
   }
 }
 
-export function indexOfVo(recent: number[], id: number) {
+/**
+ * Add object that was just visited to 'recent' localStorage.
+ *
+ * @param item entity that was visited
+ */
+export function addRecentlyVisitedObject(item: any) {
+  if (localStorage.getItem('recent') === null) {
+    // if user not have any in local storage
+    const recent = [{id: item.id, name: item.name, type: item.beanName, voId: item.voId}];
+    localStorage.setItem('recent', JSON.stringify(recent));
+  } else {
+    const recent: any[] = JSON.parse(localStorage.getItem('recent'));
+    const object = {id: item.id, name: item.name, type: item.beanName, voId: item.voId};
+    const index = indexOfObject(recent, object);
+    if (index > 0) {
+      // if object is in recent but not of first place, then we remove it to placed it first
+      recent.splice(index, 1);
+    }
+    if (index !== 0) {
+      // place the element as first
+      recent.unshift(object);
+    }
+    if (recent.length > 5) {
+      // pop last element if length exceed 5 vo
+      recent.pop();
+    }
+    localStorage.setItem('recent', JSON.stringify(recent));
+  }
+}
+
+export function indexOfObject(recent: any[], object: any) {
+  for (let i = 0; i < recent.length; i++) {
+    if (recent[i].id === object.id) {
+      if (recent[i].type === object.type) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+
+export function indexOfEntity(recent: number[], id: number) {
   for (let i = 0; i < recent.length; i++) {
     if (recent[i] === id) {
       return i;

@@ -30,7 +30,7 @@
     [placeholder]="'FACILITY_MANAGEMENT.FILTER_PLACEHOLDER'">
   </perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <app-facility-select-table
+  <perun-web-apps-facility-select-table
     [pageSize]="pageSize"
     (page)="pageChanged($event)"
     *ngIf="!loading"
@@ -38,5 +38,5 @@
     [filterValue]="filterValue"
     [facilities]="facilities"
     [recentIds]="recentIds">
-  </app-facility-select-table>
+  </perun-web-apps-facility-select-table>
 </div>
