@@ -18,7 +18,7 @@
       <mat-option value="rejected">{{'VO_DETAIL.APPLICATION.SELECTION_REJECTED' | translate}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'VO_DETAIL.APPLICATION.FILTER'"></perun-web-apps-immediate-filter>
+  <app-debounce-filter (filter)="applyFilter($event)" [placeholder]="'VO_DETAIL.APPLICATION.FILTER'"></app-debounce-filter>
 </div>
 <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 <div *ngIf="!loading">
