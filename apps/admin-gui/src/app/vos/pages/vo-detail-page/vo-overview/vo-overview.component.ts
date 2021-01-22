@@ -80,9 +80,7 @@ export class VoOverviewComponent implements OnInit {
     }
 
     // Applications
-    //TODO delete this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy',[this.vo])
-    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy',[this.vo]) ||
-        this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy',[this.vo])) {
+    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy',[this.vo])) {
       this.navItems.push({
         cssIcon: 'perun-applications',
         url: `/organizations/${this.vo.id}/applications`,
