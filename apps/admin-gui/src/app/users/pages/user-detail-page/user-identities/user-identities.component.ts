@@ -12,6 +12,8 @@ import { AddUserExtSourceDialogComponent } from '../../../../shared/components/d
 import { ActivatedRoute } from '@angular/router';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { RemoveUserExtSourceDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { TABLE_USER_IDENTITIES, TableConfigService } from '@perun-web-apps/config/table-config';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-identities',
@@ -25,14 +27,18 @@ export class UserIdentitiesComponent implements OnInit {
   userId: number;
   hiddenColumns = ['mail'];
   loading: boolean;
+  pageSize: number;
+  tableId = TABLE_USER_IDENTITIES;
 
   constructor(private usersManagerService: UsersManagerService,
               private storage: StoreService,
               private registrarManagerService: RegistrarManagerService,
               private dialog:MatDialog,
-              protected route: ActivatedRoute) { }
+              protected route: ActivatedRoute,
+              private tableConfigService: TableConfigService) { }
 
   ngOnInit() {
+    this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.parent.params.subscribe(params => {
       this.userId = params['userId'];
     });
@@ -75,5 +81,10 @@ export class UserIdentitiesComponent implements OnInit {
         this.refreshTable();
       }
     });
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
   }
 }
