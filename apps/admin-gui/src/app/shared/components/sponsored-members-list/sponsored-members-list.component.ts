@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { Attribute, AttributesManagerService, MemberWithSponsors, Vo } from '@perun-web-apps/perun/openapi';
+import { AttributesManagerService, MemberWithSponsors, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,7 +16,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig, parseFullName, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService, TableCheckbox } from '@perun-web-apps/perun/services';
 import { PasswordResetRequestDialogComponent } from '../dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 
 @Component({
@@ -29,7 +29,8 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   constructor(private dialog: MatDialog,
               private authResolver: GuiAuthResolver,
               private storeService: StoreService,
-              private attributesManager: AttributesManagerService) { }
+              private attributesManager: AttributesManagerService,
+              private tableCheckbox: TableCheckbox) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -125,15 +126,11 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: MemberWithSponsors): string {

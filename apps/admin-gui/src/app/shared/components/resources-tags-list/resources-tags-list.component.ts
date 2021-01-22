@@ -12,7 +12,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
-import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import { ResourcesManagerService, ResourceTag } from '@perun-web-apps/perun/openapi';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
@@ -27,7 +27,8 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
   constructor( private resourceManager: ResourcesManagerService,
                private notificator: NotificatorService,
                private translator: TranslateService,
-               private authResolver: GuiAuthResolver) { }
+               private authResolver: GuiAuthResolver,
+               private tableCheckbox: TableCheckbox) { }
 
   @Input()
   resourceTags: ResourceTag[] = [];
@@ -48,7 +49,11 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   private sort: MatSort;
 
@@ -80,15 +85,11 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: ResourceTag): string {

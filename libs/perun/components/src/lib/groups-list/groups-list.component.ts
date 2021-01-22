@@ -16,7 +16,7 @@ import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/o
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent, GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
@@ -42,7 +42,8 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   constructor(private dialog: MatDialog,
               private authResolver: GuiAuthResolver,
-              private voService: VosManagerService) { }
+              private voService: VosManagerService,
+              private tableCheckbox: TableCheckbox) { }
 
   @Output()
   moveGroup = new EventEmitter<Group>();
@@ -107,7 +108,11 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   removeAuth: boolean;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   @HostListener('window:resize', ['$event'])
@@ -167,24 +172,16 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  canBeSelected(group: Group) {
-    return (group.name !== 'members' || !this.disableMembers) && !this.disableSelect(group);
+  canBeSelected = (group: Group): boolean => {
+     return (group.name !== 'members' || !this.disableMembers) && !this.disableSelect(group);
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.filter(grp => this.canBeSelected(grp)).length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => {
-        if (this.canBeSelected(row)) {
-          this.selection.select(row);
-        }
-      });
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,true, this.canBeSelected);
 
     if(this.authType){
       this.removeAuth = this.setAuth();

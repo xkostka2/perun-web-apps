@@ -16,7 +16,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AttributeDefinition } from '@perun-web-apps/perun/openapi';
 import { EditAttributeDefinitionDialogComponent } from '../dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-attr-def-list',
@@ -26,7 +26,8 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 export class AttrDefListComponent implements OnChanges, AfterViewInit {
 
   constructor(private dialog: MatDialog,
-              private authResolver: GuiAuthResolver) { }
+              private authResolver: GuiAuthResolver,
+              private tableCheckbox: TableCheckbox) { }
 
   @Input()
   definitions: AttributeDefinition[];
@@ -53,7 +54,11 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   displayedColumns: string[] = ['select', 'id', 'friendlyName', 'entity', 'namespace', 'type', 'unique'];
   dataSource: MatTableDataSource<AttributeDefinition>;
@@ -94,15 +99,11 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
   }
 
   checkboxLabel(row?: AttributeDefinition): string {
