@@ -1,6 +1,6 @@
 <div class="container-fluid pl-xl-5 pr-xl-5 user-theme" *ngIf="user !== undefined">
   <h1 class="page-title d-flex">
-    <mat-icon svgIcon='perun-home-white' class="home-image"></mat-icon>
+    <mat-icon svgIcon='perun-home-white' class="home-image perun-icon"></mat-icon>
     <span class="pt-1">{{'USER_DETAIL.DASHBOARD.TITLE' | translate}} {{this.user | userFullName}}</span>
   </h1>
   <div *ngIf="isOnlySelfRole">
@@ -34,7 +34,7 @@
       {{'USER_DETAIL.DASHBOARD.RECENTLY_VIEWED' | translate}}
     </div>
     <app-perun-web-apps-dashboard-recently-viewed-button-field></app-perun-web-apps-dashboard-recently-viewed-button-field>
-    <div class="page-subtitle mt-4">
+    <div *ngIf="roleNames.length > 0" class="page-subtitle mt-4">
       {{'USER_DETAIL.DASHBOARD.MANAGEABLE_ENTITIES' | translate}}
     </div>
     <div>
