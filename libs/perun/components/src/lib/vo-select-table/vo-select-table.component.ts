@@ -46,6 +46,9 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
   @Input()
   disableRouting = false;
 
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
 
@@ -60,7 +63,6 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<Vo>;
   exporting = false;
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
@@ -86,6 +88,14 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
         switch (property) {
           case 'id': {
             return +item.id;
+          }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
           }
           case 'shortName' : {
             return item.shortName.toLocaleLowerCase();

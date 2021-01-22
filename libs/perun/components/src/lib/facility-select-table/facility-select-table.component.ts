@@ -11,17 +11,18 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Host, RichFacility } from '@perun-web-apps/perun/openapi';
+import { RichFacility } from '@perun-web-apps/perun/openapi';
 import { parseTechnicalOwnersNames, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
-  selector: 'app-facility-select-table',
+  selector: 'perun-web-apps-facility-select-table',
   templateUrl: './facility-select-table.component.html',
   styleUrls: ['./facility-select-table.component.scss']
 })
 export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
+
   constructor(private authResolver: GuiAuthResolver) { }
 
   @Input()
@@ -42,6 +43,9 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   @Input()
   selection: SelectionModel<RichFacility>;
 
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
 
@@ -57,7 +61,6 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   private sort: MatSort;
 
   dataSource: MatTableDataSource<RichFacility>;
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
@@ -65,7 +68,6 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
     }
     this.dataSource = new MatTableDataSource<RichFacility>(this.facilities);
     this.setDataSource();
-    this.dataSource.filter = this.filterValue;
   }
 
   ngAfterViewInit(): void {
@@ -74,6 +76,25 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'id': {
+            return +item.id;
+          }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
+          }
+          case 'name' : {
+            return item.name.toLocaleLowerCase();
+          }
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filterPredicate = ((data, filter) => {
@@ -92,6 +113,7 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
         }
         return false;
       });
+      this.dataSource.filter = this.filterValue;
     }
   }
 

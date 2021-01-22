@@ -1,0 +1,47 @@
+<div class="card p-3">
+  <div class="flex-column card-title">
+    <mat-icon [svgIcon]='svgIcon' class="cover-image"></mat-icon>
+    {{this.title | translate}}
+    <span matTooltip="{{this.roleTooltipInfo | translate }}"
+          matTooltipPosition="above">
+      <mat-icon class="dashboard-icon">info_outline</mat-icon>
+    </span>
+  </div>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <span *ngIf="primaryObject == 'Vo'">
+      <perun-web-apps-vo-select-table [pageSizeOptions]="null"
+                                      [pageSize]="5"
+                                      [displayedColumns]="['id', 'recent', 'shortName', 'name']"
+                                      [recentIds]="this.recentIds"
+                                      [vos]="this.objects">
+      </perun-web-apps-vo-select-table>
+    </span>
+    <span *ngIf="primaryObject == 'Group'">
+      <perun-web-apps-groups-list [pageSizeOptions]="null"
+                                  [pageSize]="5"
+                                  [groups]="this.objects"
+                                  [recentIds]="recentIds"
+                                  [hideColumns]="['select', 'expiration', 'menu']">
+      </perun-web-apps-groups-list>
+    </span>
+    <span *ngIf="primaryObject == 'Resource'">
+      <perun-web-apps-resources-list [pageSizeOptions]="null"
+                                     [pageSize]="5"
+                                     [resources]="this.objects"
+                                     [displayedColumns]="['id', 'recent', 'name', 'vo', 'facility']"
+                                     [recentIds]="recentIds"
+                                     [routingVo]="true">
+      </perun-web-apps-resources-list>
+    </span>
+    <span *ngIf="primaryObject == 'Facility'">
+      <perun-web-apps-facility-select-table [pageSizeOptions]="null"
+                                 [pageSize]="5"
+                                 [facilities]="this.objects"
+                                 [recentIds]="recentIds"
+                                 [displayedColumns]="['id', 'recent', 'name', 'description']">
+      </perun-web-apps-facility-select-table>
+    </span>
+  </div>
+
+</div>

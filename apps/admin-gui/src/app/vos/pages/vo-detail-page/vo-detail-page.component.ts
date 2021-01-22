@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
 import { fadeIn } from '@perun-web-apps/perun/animations';
 import { Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { addRecentlyVisited, addRecentlyVisitedObject, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import {
@@ -49,6 +49,9 @@ export class VoDetailPageComponent implements OnInit {
         const sideMenuItem = this.sideMenuItemService.parseVo(vo);
 
         this.sideMenuService.setAccessMenuItems([sideMenuItem]);
+
+        addRecentlyVisited('vos', this.vo);
+        addRecentlyVisitedObject(this.vo);
 
         this.loading = false;
       }, () => this.loading = false);

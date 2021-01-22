@@ -11,7 +11,7 @@
              [dataSource]="dataSource"
              class="w-100"
              mat-table matSort
-             matSortActive="name"
+             matSortActive="recent"
              matSortDirection="asc"
              matSortDisableClear
              matTableExporter>
@@ -44,6 +44,16 @@
           <th *matHeaderCellDef mat-header-cell
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.GROUPS_LIST.TABLE_GROUP_ID' | translate}}</th>
           <td *matCellDef="let group" class="static-column-size" mat-cell>{{group.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="recent">
+          <th *matHeaderCellDef mat-header-cell>
+          </th>
+          <td *matCellDef="let resource" mat-cell>
+            <perun-web-apps-recently-viewed-icon
+              [recentIds]="recentIds"
+              [id]="resource.id">
+            </perun-web-apps-recently-viewed-icon>
+          </td>
         </ng-container>
         <ng-container matColumnDef="vo">
           <th *matHeaderCellDef mat-header-cell

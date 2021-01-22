@@ -17,7 +17,7 @@
   (page)="pageChanged($event)"
   [pageSize]="pageSize"
   [groups]="membersGroups"
-  [hideColumns]="['select', 'expiration','menu']"
+  [hideColumns]="['select', 'expiration','menu', 'recent']"
   [disableMembers]="false"
   [filter]="memberFilterValue">
 </perun-web-apps-groups-list>
@@ -37,7 +37,7 @@
     (page)="adminPageChanged($event)"
     [pageSize]="adminPageSize"
     [groups]="adminsGroups"
-    [hideColumns]="['select', 'expiration', 'menu']"
+    [hideColumns]="['select', 'expiration', 'menu', 'recent']"
     [disableMembers]="false"
     [filter]="adminFilterValue">
   </perun-web-apps-groups-list>

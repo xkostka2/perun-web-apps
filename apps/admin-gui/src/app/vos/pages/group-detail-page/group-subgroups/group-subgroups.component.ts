@@ -50,7 +50,7 @@ export class GroupSubgroupsComponent implements OnInit {
   createAuth: boolean;
   deleteAuth: boolean;
   routeAuth: boolean;
-  hideColumns: string[] = [];
+  hideColumns: String[] = ['expiration', 'recent', 'vo'];
 
   @ViewChild('tree', {})
   tree: GroupsTreeComponent;
@@ -106,7 +106,7 @@ export class GroupSubgroupsComponent implements OnInit {
     if (this.groups.length !== 0) {
       this.routeAuth = this.guiAuthResolver.isAuthorized('getGroupById_int_policy', [this.groups[0]]);
     }
-    this.hideColumns = this.deleteAuth ? ['vo', 'expiration'] : ['select', 'vo', 'expiration']
+    this.hideColumns = this.deleteAuth ? ['vo', 'expiration', 'recent'] : ['select', 'vo', 'expiration', 'recent']
   }
 
   deleteGroup() {

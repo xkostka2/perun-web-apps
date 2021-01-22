@@ -44,9 +44,13 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   @Input()
   routingVo = false;
   @Input()
-  displayedColumns: string[] = ['select', 'id', 'name', 'vo', 'facility', 'tags', 'description'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'vo', 'facility', 'tags', 'description'];
   @Input()
   groupToResource: Group;
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  @Input()
+  recentIds: number[];
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
@@ -66,7 +70,6 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
   };
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.guiAuthResolver.isPerunAdmin()){
@@ -80,6 +83,25 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'id': {
+            return +item.id;
+          }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
+          }
+          case 'name' : {
+            return item.name.toLocaleLowerCase();
+          }
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
