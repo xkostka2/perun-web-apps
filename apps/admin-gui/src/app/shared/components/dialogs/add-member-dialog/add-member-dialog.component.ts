@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MembersService } from '@perun-web-apps/perun/services';
 import {
+  Candidate,
   Group,
   GroupsManagerService,
   MemberCandidate, MembersManagerService,
@@ -180,7 +181,7 @@ export class AddMemberDialogComponent implements OnInit {
 
   private addCandidateToVo(selectedMemberCandidate: MemberCandidate) {
     this.memberService.createMemberForCandidate(
-      this.data.entityId, selectedMemberCandidate.candidate).subscribe(member => {
+      this.data.entityId, this.createCandidate(selectedMemberCandidate.candidate)).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();
@@ -218,7 +219,7 @@ export class AddMemberDialogComponent implements OnInit {
       voId: this.data.group.voId
     }
     this.memberService.createMemberForCandidateWithGroups(
-      this.data.voId, selectedMemberCandidate.candidate, [group]).subscribe(member => {
+      this.data.voId, this.createCandidate(selectedMemberCandidate.candidate), [group]).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();
@@ -256,5 +257,18 @@ export class AddMemberDialogComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  //perun is expecting precisely this set of values that will be in the object Candidate
+  private createCandidate(candidate: Candidate): any {
+    return { userExtSource: candidate.userExtSource,
+      additionalUserExtSources: candidate.additionalUserExtSources,
+      attributes: candidate.attributes,
+      firstName: candidate.firstName,
+      lastName: candidate.lastName,
+      middleName: candidate.middleName,
+      titleBefore: candidate.titleBefore,
+      titleAfter: candidate.titleAfter,
+      id: candidate.id};
   }
 }
