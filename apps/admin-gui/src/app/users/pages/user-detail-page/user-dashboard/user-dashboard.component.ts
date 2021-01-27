@@ -30,6 +30,9 @@ export class UserDashboardComponent implements OnInit {
   userProfileUrl = '';
   roleNames: string[];
   isOnlySelfRole = false;
+  rightSettingOpened = false;
+  recentlyViewedShow = true;
+  rolesToShow: string[] = [];
   allowedRoles = ['VOADMIN', 'GROUPADMIN', 'FACILITYADMIN', 'SPONSOR', 'RESOURCEADMIN', 'TOPGROUPCREATOR',
     'VOOBSERVER', 'GROUPOBSERVER', 'FACILITYOBSERVER', 'RESOURCEOBSERVER'];
 
@@ -41,11 +44,51 @@ export class UserDashboardComponent implements OnInit {
     this.isOnlySelfRole = allUserRoles.toString() === ['SELF'].toString();
     this.roleNames = this.allowedRoles.filter(value => {
       return allUserRoles.includes(value);
-    } );
+    });
+    this.getDashboardSettings();
     this.sideMenuService.setHomeItems([]);
   }
 
   goToUserProfile() {
     window.open(this.userProfileUrl);
+  }
+
+  recentlyViewedChanged() {
+    localStorage.setItem('showRecentlyViewed', JSON.stringify(this.recentlyViewedShow));
+  }
+
+  private getDashboardSettings() {
+    const recentlyViewedShow = JSON.parse(localStorage.getItem('showRecentlyViewed'));
+    (recentlyViewedShow === null) ? this.recentlyViewedShow = true : this.recentlyViewedShow = recentlyViewedShow;
+
+    const rolesToShow = JSON.parse(localStorage.getItem('rolesToShow'));
+    (rolesToShow === null) ? this.rolesToShow = this.roleNames : this.rolesToShow = rolesToShow;
+  }
+
+  changeRoleView(roleName: string) {
+    if (this.isRoleShowed(roleName)) {
+      this.rolesToShow = this.rolesToShow.filter(obj => obj !== roleName);
+    } else {
+      const newRolesToShow = [];
+      for (const role of this.roleNames) {
+        if (this.isRoleShowed(role)) {
+          newRolesToShow.push(role);
+        }
+        if (role === roleName) {
+          newRolesToShow.push(role);
+        }
+      }
+      this.rolesToShow = newRolesToShow;
+    }
+    localStorage.setItem('rolesToShow', JSON.stringify(this.rolesToShow));
+  }
+
+  isRoleShowed(roleName: string): boolean {
+    for (const role of this.rolesToShow) {
+      if (role === roleName) {
+        return true;
+      }
+    }
+    return false;
   }
 }
