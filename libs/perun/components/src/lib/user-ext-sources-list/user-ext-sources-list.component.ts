@@ -1,11 +1,21 @@
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { RichUserExtSource, UserExtSource } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-user-ext-sources-list',
@@ -34,6 +44,10 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   loginHeader: string;
   @Input()
   disableRouting: boolean;
+  @Output()
+  page = new EventEmitter<PageEvent>();
+
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -69,8 +83,36 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   setDataSource() {
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'id' : {
+            if (item.userExtSource) {
+              return item.userExtSource.id;
+            }
+            break;
+          }
+          case 'extSourceName': {
+            if (item.userExtSource) {
+              return item.userExtSource.extSource.name.toLowerCase();
+            }
+            break;
+          }
+          case 'login': {
+            if (item.userExtSource) {
+              return item.userExtSource.login.toLowerCase();
+            }
+            break;
+          }
+          case 'lastAccess': {
+            if (item.userExtSource) {
+              return item.userExtSource.lastAccess;
+            }
+            break;
+          }
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;
@@ -79,5 +121,9 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
 
   checkboxLabel(row?: RichUserExtSource): string {
     return `${this.selection.isSelected(row.userExtSource) ? 'deselect' : 'select'} row ${row.userExtSource.id + 1}`;
+  }
+
+  pageChanged(event: PageEvent) {
+    this.page.emit(event);
   }
 }

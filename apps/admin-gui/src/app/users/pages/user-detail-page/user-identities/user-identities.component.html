@@ -1,4 +1,4 @@
-<h1 class="page-subtitle mb-5">{{'USER_DETAIL.IDENTITIES.TITLE'|translate}}</h1>
+<h1 class="page-subtitle">{{'USER_DETAIL.IDENTITIES.TITLE'|translate}}</h1>
 <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
 <button (click)="addIdentity()" color="accent" mat-flat-button>{{'USER_DETAIL.IDENTITIES.ADD'|translate}}</button>
 <button (click)="removeIdentity()" [disabled]="selection.selected.length === 0" class="ml-2" color="warn" mat-flat-button>{{'USER_DETAIL.IDENTITIES.REMOVE'|translate}}</button>
@@ -11,5 +11,7 @@
     [hideColumns]="hiddenColumns"
     [selection]="selection"
     [userExtSources]="userExtSources"
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)"
   ></perun-web-apps-user-ext-sources-list>
 </div>
