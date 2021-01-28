@@ -1860,7 +1860,10 @@
       "CARD_TITLE_FACILITYOBSERVER": "Observer in Facilities",
       "ROLE_INFO_FACILITYOBSERVER": "You can observe facilities that are listed below",
       "CARD_TITLE_RESOURCEOBSERVER": "Observer in Resources",
-      "ROLE_INFO_RESOURCEOBSERVER": "You can observe resources that are listed below"
+      "ROLE_INFO_RESOURCEOBSERVER": "You can observe resources that are listed below",
+      "DASHBOARD_SETTINGS": "Dashboard Settings",
+      "SHOW_RECENTLY_VIEWED": "Show Recently viewed",
+      "SHOW_ROLES": "Show roles"
     },
     "OVERVIEW": {
       "GENERAL_SETTINGS": "General settings"

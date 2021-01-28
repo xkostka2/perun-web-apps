@@ -30,6 +30,9 @@ export class UserDashboardComponent implements OnInit {
   userProfileUrl = '';
   roleNames: string[];
   isOnlySelfRole = false;
+  rightSettingOpened = false;
+  recentlyViewedShow = true;
+  rolesToHide: string[] = [];
   allowedRoles = ['VOADMIN', 'GROUPADMIN', 'FACILITYADMIN', 'SPONSOR', 'RESOURCEADMIN', 'TOPGROUPCREATOR',
     'VOOBSERVER', 'GROUPOBSERVER', 'FACILITYOBSERVER', 'RESOURCEOBSERVER'];
 
@@ -41,11 +44,51 @@ export class UserDashboardComponent implements OnInit {
     this.isOnlySelfRole = allUserRoles.toString() === ['SELF'].toString();
     this.roleNames = this.allowedRoles.filter(value => {
       return allUserRoles.includes(value);
-    } );
+    });
+    this.getDashboardSettings();
     this.sideMenuService.setHomeItems([]);
   }
 
   goToUserProfile() {
     window.open(this.userProfileUrl);
+  }
+
+  recentlyViewedChanged() {
+    localStorage.setItem('showRecentlyViewed', JSON.stringify(this.recentlyViewedShow));
+  }
+
+  private getDashboardSettings() {
+    const recentlyViewedShow = JSON.parse(localStorage.getItem('showRecentlyViewed'));
+    (recentlyViewedShow === null) ? this.recentlyViewedShow = true : this.recentlyViewedShow = recentlyViewedShow;
+
+    const rolesToHide = JSON.parse(localStorage.getItem('rolesToHide'));
+    (rolesToHide === null) ? this.rolesToHide = [] : this.rolesToHide = rolesToHide;
+  }
+
+  changeRoleView(roleName: string) {
+    if (!this.isRoleShowed(roleName)) {
+      this.rolesToHide = this.rolesToHide.filter(obj => obj !== roleName);
+    } else {
+      const newRolesTohide = [];
+      for (const role of this.roleNames) {
+        if (!this.isRoleShowed(role)) {
+          newRolesTohide.push(role);
+        }
+        if (role === roleName) {
+          newRolesTohide.push(role);
+        }
+      }
+      this.rolesToHide = newRolesTohide;
+    }
+    localStorage.setItem('rolesToHide', JSON.stringify(this.rolesToHide));
+  }
+
+  isRoleShowed(roleName: string): boolean {
+    for (const role of this.rolesToHide) {
+      if (role === roleName) {
+        return false;
+      }
+    }
+    return true;
   }
 }
