@@ -88,7 +88,7 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
         switch (property) {
           case 'id' : {
             if (item.userExtSource) {
-              return +item.userExtSource.id;
+              return item.userExtSource.id;
             }
             break;
           }
