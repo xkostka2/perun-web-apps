@@ -76,7 +76,7 @@
         mat-row
         class="dark-hover-list-item"
         *matRowDef="let serviceState; columns: displayedColumns;"
-        [class.disable-outline]="disableRouting"
+        [class.disable-outline]="disableRouting || !serviceState.task"
         [class.make-yellow]="serviceState.status === 'WARNING'"
         [class.make-green]="serviceState.status === 'DONE'"
         [class.make-red]="serviceState.status === 'GENERROR' || serviceState.status === 'SENDERROR' || serviceState.status === 'ERROR'"
