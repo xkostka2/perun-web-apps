@@ -180,8 +180,8 @@ export class AddMemberDialogComponent implements OnInit {
   }
 
   private addCandidateToVo(selectedMemberCandidate: MemberCandidate) {
-    this.memberService.createMemberForCandidate(
-      this.data.entityId, this.createCandidate(selectedMemberCandidate.candidate)).subscribe(member => {
+    this.membersManagerService.createMemberForCandidate(
+      { vo: this.data.entityId, candidate: this.createCandidate(selectedMemberCandidate.candidate) }).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();
@@ -218,8 +218,10 @@ export class AddMemberDialogComponent implements OnInit {
       name: this.data.group.name,
       voId: this.data.group.voId
     }
-    this.memberService.createMemberForCandidateWithGroups(
-      this.data.voId, this.createCandidate(selectedMemberCandidate.candidate), [group]).subscribe(member => {
+    this.membersManagerService.createMemberForCandidate({
+      vo: this.data.voId,
+      candidate: this.createCandidate(selectedMemberCandidate.candidate),
+      groups: [group]}).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();
