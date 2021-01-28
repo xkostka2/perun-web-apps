@@ -32,7 +32,7 @@ export class UserDashboardComponent implements OnInit {
   isOnlySelfRole = false;
   rightSettingOpened = false;
   recentlyViewedShow = true;
-  rolesToShow: string[] = [];
+  rolesToHide: string[] = [];
   allowedRoles = ['VOADMIN', 'GROUPADMIN', 'FACILITYADMIN', 'SPONSOR', 'RESOURCEADMIN', 'TOPGROUPCREATOR',
     'VOOBSERVER', 'GROUPOBSERVER', 'FACILITYOBSERVER', 'RESOURCEOBSERVER'];
 
@@ -61,34 +61,34 @@ export class UserDashboardComponent implements OnInit {
     const recentlyViewedShow = JSON.parse(localStorage.getItem('showRecentlyViewed'));
     (recentlyViewedShow === null) ? this.recentlyViewedShow = true : this.recentlyViewedShow = recentlyViewedShow;
 
-    const rolesToShow = JSON.parse(localStorage.getItem('rolesToShow'));
-    (rolesToShow === null) ? this.rolesToShow = this.roleNames : this.rolesToShow = rolesToShow;
+    const rolesToHide = JSON.parse(localStorage.getItem('rolesToHide'));
+    (rolesToHide === null) ? this.rolesToHide = [] : this.rolesToHide = rolesToHide;
   }
 
   changeRoleView(roleName: string) {
-    if (this.isRoleShowed(roleName)) {
-      this.rolesToShow = this.rolesToShow.filter(obj => obj !== roleName);
+    if (!this.isRoleShowed(roleName)) {
+      this.rolesToHide = this.rolesToHide.filter(obj => obj !== roleName);
     } else {
-      const newRolesToShow = [];
+      const newRolesTohide = [];
       for (const role of this.roleNames) {
-        if (this.isRoleShowed(role)) {
-          newRolesToShow.push(role);
+        if (!this.isRoleShowed(role)) {
+          newRolesTohide.push(role);
         }
         if (role === roleName) {
-          newRolesToShow.push(role);
+          newRolesTohide.push(role);
         }
       }
-      this.rolesToShow = newRolesToShow;
+      this.rolesToHide = newRolesTohide;
     }
-    localStorage.setItem('rolesToShow', JSON.stringify(this.rolesToShow));
+    localStorage.setItem('rolesToHide', JSON.stringify(this.rolesToHide));
   }
 
   isRoleShowed(roleName: string): boolean {
-    for (const role of this.rolesToShow) {
+    for (const role of this.rolesToHide) {
       if (role === roleName) {
-        return true;
+        return false;
       }
     }
-    return false;
+    return true;
   }
 }

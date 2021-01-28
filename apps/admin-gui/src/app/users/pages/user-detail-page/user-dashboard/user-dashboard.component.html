@@ -57,12 +57,13 @@
           </div>
           <app-perun-web-apps-dashboard-recently-viewed-button-field></app-perun-web-apps-dashboard-recently-viewed-button-field>
         </span>
-        <div *ngIf="rolesToShow.length > 0" class="page-subtitle mt-4">
+        <div *ngIf="rolesToHide.toString() !== roleNames.toString()" class="page-subtitle mt-4">
           {{'USER_DETAIL.DASHBOARD.MANAGEABLE_ENTITIES' | translate}}
         </div>
         <div>
-          <div *ngFor="let roleName of this.rolesToShow" class="mb-3">
+          <div *ngFor="let roleName of this.roleNames" class="mb-3">
             <app-perun-web-apps-dashboard-card
+              *ngIf="this.isRoleShowed(roleName)"
               [roleName]="roleName"
               [role]="this.roles[roleName]">
             </app-perun-web-apps-dashboard-card>
