@@ -1,7 +1,7 @@
 {
   "MENU_ITEMS": {
     "PROFILE": "Profil",
-    "IDENTITIES": "Identity",
+    "IDENTITIES": "Spojené identity",
     "SERVICES": "Služby",
     "GROUPS": "Skupiny",
     "VOS": "Organizace",
@@ -41,22 +41,20 @@
   },
   "PROFILE_PAGE": {
     "NAME": "Jméno",
-    "ORGANIZATION": "Organizace",
-    "PREFERRED_LANGUAGE": "Preferovaný jazyk",
-    "EMAIL": "Preferovaný email",
-    "TIMEZONE": "Časová zóna",
     "CHANGE_EMAIL": "Aktualizovat",
     "MAIL_CHANGE_SUCCESS": "Preferovaný email byl změněn"
   },
   "IDENTITIES": {
-    "IDP": "Vaše federované identity",
+    "IDP": "Vaše spojené identity",
     "CERT": "Vaše certifikáty",
     "OTHER": "Ostatní",
     "ADD": "Přidat",
     "REMOVE": "Odstranit",
     "EXT_SOURCE_NAME_CERT": "Poskytovatel certifikátu",
     "EXT_SOURCE_NAME_OTHER": "Jméno externího zdroje",
-    "LOGIN_CERT": "DN"
+    "LOGIN_CERT": "DN",
+    "LOGIN_IDP": "Připojená identita",
+    "OTHER_TOOLTIP": "Identity, které nebyly získány cez Konsolidátor identit"
   },
   "PRIVACY": {
     "TITLE": "Soukromí",
@@ -281,7 +279,7 @@
         },
         "USER_EXT_SOURCES_LIST": {
           "MAIL": "Email",
-          "EXT_SOURCE_NAME": "Federovaná identita",
+          "EXT_SOURCE_NAME": "Původ připojené identity",
           "LOGIN": "Jméno",
           "LAST_ACCESS": "Poslední použití",
           "NO_IDENTITIES": "Nenalezeny žádné identity",

@@ -14,6 +14,14 @@ import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 
+interface AdditionalAttribute {
+  attribute: Attribute;
+  displayName_en: string;
+  displayName_cz: string;
+  tooltip_en: string;
+  tooltip_cz: string;
+}
+
 @Component({
   selector: 'perun-web-apps-profile-page',
   templateUrl: './profile-page.component.html',
@@ -22,28 +30,14 @@ import { NotificatorService, StoreService } from '@perun-web-apps/perun/services
 export class ProfilePageComponent implements OnInit {
 
   currentLang = 'en';
-  languages = ['en', 'cz'];
+  languages = ['en', 'cs'];
   timeZones = moment.tz.names().filter(name => !name.startsWith('Etc/'));
 
   successMessage: string;
 
   userId: number;
   loading: boolean;
-
-  constructor(
-    private translateService: TranslateService,
-    private dialog: MatDialog,
-    private authzResolverService: AuthzResolverService,
-    private attributesManagerService: AttributesManagerService,
-    private usersManagerService: UsersManagerService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private translate: TranslateService,
-    private notificator: NotificatorService,
-    private storeService:StoreService
-  ) {
-    translate.get('PROFILE_PAGE.MAIL_CHANGE_SUCCESS').subscribe(res => this.successMessage = res);
-  }
+  additionalAttributes: AdditionalAttribute[] = [];
 
   languageAttribute: Attribute;
   timezoneAttribute: Attribute;
@@ -53,7 +47,19 @@ export class ProfilePageComponent implements OnInit {
   organization = '';
   currentTimezone = '';
 
-  additionalAttributes: Attribute[] = []
+  constructor(
+    public translateService: TranslateService,
+    private dialog: MatDialog,
+    private authzResolverService: AuthzResolverService,
+    private attributesManagerService: AttributesManagerService,
+    private usersManagerService: UsersManagerService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private notificator: NotificatorService,
+    private storeService: StoreService
+  ) {
+    translateService.get('PROFILE_PAGE.MAIL_CHANGE_SUCCESS').subscribe(res => this.successMessage = res);
+  }
 
   ngOnInit() {
     const params = this.route.snapshot.queryParamMap;
@@ -79,15 +85,6 @@ export class ProfilePageComponent implements OnInit {
       this.usersManagerService.getRichUserWithAttributes(this.userId).subscribe(richUser => {
         this.fullName = new UserFullNamePipe().transform(richUser);
 
-        const organizationAttribute = richUser.userAttributes.find(att => att.friendlyName === 'organization');
-        if (!organizationAttribute) {
-            this.organization = '-';
-        } else {
-          // @ts-ignore
-          this.organization = organizationAttribute.value;
-        }
-
-
         const emailAttribute = richUser.userAttributes.find(att => att.friendlyName === 'preferredMail');
         // @ts-ignore
         this.email = emailAttribute.value;
@@ -100,14 +97,34 @@ export class ProfilePageComponent implements OnInit {
         // @ts-ignore
         this.currentTimezone = this.timezoneAttribute && this.timezoneAttribute.value ? this.timezoneAttribute.value : '-';
 
-        const friendlyNames = this.storeService.get('profile_additional_attributes');
-        friendlyNames.forEach(friendlyName => {
-          const attribute = richUser.userAttributes.find(att => att.friendlyName === friendlyName)
-          if(attribute){
-            this.additionalAttributes.push(attribute);
+        const additionalAttributesSpecs = this.storeService.get('profile_page_attributes');
+        let count = 0;
+        additionalAttributesSpecs.forEach(spec => {
+          const attribute = richUser.userAttributes.find(att => att.friendlyName === spec.friendly_name);
+          if(!attribute){
+            this.attributesManagerService.getAttributeDefinitionByName(`urn:perun:user:attribute-def:${spec.is_virtual ? 'virt' : 'def'}:${spec.friendly_name}`).subscribe(att => {
+              this.additionalAttributes.push(<AdditionalAttribute>{
+                attribute: att,
+                displayName_en: spec.display_name_en && spec.display_name_en.length ? spec.display_name_en : att.displayName,
+                displayName_cz: spec.display_name_cz && spec.display_name_cz.length ? spec.display_name_cz : att.displayName,
+                tooltip_en: spec.tooltip_en ?? '',
+                tooltip_cz: spec.tooltip_cz ?? ''
+              });
+              count++;
+              this.loading = count !==additionalAttributesSpecs.length
+            })
+          } else {
+            count++;
+            this.additionalAttributes.push(<AdditionalAttribute>{
+              attribute: attribute,
+              displayName_en: spec.display_name_en && spec.display_name_en.length ? spec.display_name_en : attribute.displayName,
+              displayName_cz: spec.display_name_cz && spec.display_name_cz.length ? spec.display_name_cz : attribute.displayName,
+              tooltip_en: spec.tooltip_en ?? '',
+              tooltip_cz: spec.tooltip_cz ?? ''
+            });
           }
-        })
-        this.loading = false;
+          this.loading = count !==additionalAttributesSpecs.length
+        });
       });
     });
   }

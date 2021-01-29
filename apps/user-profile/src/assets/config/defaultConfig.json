@@ -19,8 +19,36 @@
   "consolidator_base_url": "https://perun-dev.cesnet.cz/",
   "registrar_base_url": "https://perun-dev.cesnet.cz/fed/registrar/",
   "pwd_reset_base_url": "https://perun-dev.cesnet.cz/fed/pwd-reset/",
-  "profile_additional_attributes": [
-    "login-namespace:einfra"
+  "profile_page_attributes": [
+    {
+      "friendly_name": "organization",
+      "display_name_en": "Organization",
+      "display_name_cz": "Organizace",
+      "tooltip_en": "tooltip en test",
+      "tooltip_cz": "tooltip cz test"
+    },
+    {
+      "friendly_name": "preferredLanguage",
+      "display_name_en": "Preferred language",
+      "display_name_cz": "Preferovaný jazyk",
+      "tooltip_en": "",
+      "tooltip_cz": ""
+    },
+    {
+      "friendly_name": "preferredMail",
+      "display_name_en": "Preferred mail",
+      "display_name_cz": "Preferovaný mail",
+      "tooltip_en": "",
+      "tooltip_cz": ""
+    },
+    {
+      "friendly_name": "timezone",
+      "display_name_en": "Timezone",
+      "display_name_cz": "Časová zóna",
+      "tooltip_en": "",
+      "tooltip_cz": "",
+      "is_virtual": false
+    }
   ],
   "display_identity_certificates": true,
   "external_services": [
