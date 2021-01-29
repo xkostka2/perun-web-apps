@@ -3,36 +3,36 @@
   <app-alert *ngIf="entityValues.length === 0 && !loading" alert_type="warn">{{noEntityMessage}}</app-alert>
 
   <div *ngIf="entityValues.length !== 0">
-    <div class="flex-row w-35">
-    <perun-web-apps-group-search-select
-      *ngIf="secondEntity === 'group'"
-      [groups]="entityValues"
-      (groupSelected)="specifySecondEntity($event)">
-    </perun-web-apps-group-search-select>
+    <div class="flex-row">
+      <perun-web-apps-group-search-select
+        *ngIf="secondEntity === 'group'"
+        [groups]="entityValues"
+        (groupSelected)="specifySecondEntity($event)">
+      </perun-web-apps-group-search-select>
 
-    <perun-web-apps-resource-search-select
-      *ngIf="secondEntity === 'resource'"
-      [resources]="entityValues"
-      (resourceSelected)="specifySecondEntity($event)">
-    </perun-web-apps-resource-search-select>
+      <perun-web-apps-resource-search-select
+        *ngIf="secondEntity === 'resource'"
+        [resources]="entityValues"
+        (resourceSelected)="specifySecondEntity($event)">
+      </perun-web-apps-resource-search-select>
 
-    <perun-web-apps-member-search-select
-      *ngIf="secondEntity === 'member'"
-      [members]="entityValues"
-      (memberSelected)="specifySecondEntity($event)">
-    </perun-web-apps-member-search-select>
+      <perun-web-apps-member-search-select
+        *ngIf="secondEntity === 'member'"
+        [members]="entityValues"
+        (memberSelected)="specifySecondEntity($event)">
+      </perun-web-apps-member-search-select>
 
-    <perun-web-apps-facility-search-select
-      *ngIf="secondEntity === 'facility'"
-      [facilities]="entityValues"
-      (facilitySelected)="specifySecondEntity($event)">
-    </perun-web-apps-facility-search-select>
+      <perun-web-apps-facility-search-select
+        *ngIf="secondEntity === 'facility'"
+        [facilities]="entityValues"
+        (facilitySelected)="specifySecondEntity($event)">
+      </perun-web-apps-facility-search-select>
 
-    <perun-web-apps-user-search-select
-      *ngIf="secondEntity === 'user'"
-      [users]="entityValues"
-      (userSelected)="specifySecondEntity($event)">
-    </perun-web-apps-user-search-select>
+      <perun-web-apps-user-search-select
+        *ngIf="secondEntity === 'user'"
+        [users]="entityValues"
+        (userSelected)="specifySecondEntity($event)">
+      </perun-web-apps-user-search-select>
     </div>
 
     <perun-web-apps-refresh-button (refresh)="getAttributes(specificSecondEntity.id)"></perun-web-apps-refresh-button>

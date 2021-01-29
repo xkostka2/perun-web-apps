@@ -43,6 +43,7 @@ export class NotificationsCopyMailsDialogComponent implements OnInit {
   selectedGroup: Group = null;
   theme: string;
   loading = false;
+  nameFunction = (group: Group) => group.name;
 
   ngOnInit() {
     this.theme = this.data.theme;

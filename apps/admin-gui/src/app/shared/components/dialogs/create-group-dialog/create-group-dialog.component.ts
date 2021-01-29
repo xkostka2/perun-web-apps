@@ -54,6 +54,7 @@ export class CreateGroupDialogComponent implements OnInit{
 
   successMessage: string;
   successSubGroupMessage: string;
+  nameFunction = (group: Group) => group.name;
 
   ngOnInit() {
     this.theme = this.data.theme;

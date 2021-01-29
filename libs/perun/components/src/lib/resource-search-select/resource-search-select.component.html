@@ -1,16 +1,9 @@
-<mat-form-field class="w-100">
-  <mat-select
-    placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.SELECT_RESOURCE' | translate}}"
-    [formControl]="resourceCtrl">
-    <mat-option>
-      <ngx-mat-select-search
-        placeholderLabel="{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.FIND_RESOURCE' | translate}}"
-        noEntriesFoundLabel="{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.NO_RESOURCE_FOUND' | translate}}"
-        [formControl]="resourceFilterCtrl">
-      </ngx-mat-select-search>
-    </mat-option>
-    <mat-option *ngFor="let resource of filteredResources | async" [value]="resource">
-      {{resource.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<perun-web-apps-entity-search-select
+  [entities]="resources"
+  (entitySelected)="this.resourceSelected.emit($event)"
+  [searchFunction]="nameFunction"
+  [mainTextFunction]="nameFunction"
+  [selectPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.SELECT_RESOURCE' | translate"
+  [findPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.FIND_RESOURCE' | translate"
+  [noEntriesText]="'SHARED_LIB.PERUN.COMPONENTS.RESOURCE_SEARCH_SELECT.NO_RESOURCE_FOUND' | translate">
+</perun-web-apps-entity-search-select>

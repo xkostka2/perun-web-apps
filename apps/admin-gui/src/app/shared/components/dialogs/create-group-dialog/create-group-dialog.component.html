@@ -37,6 +37,7 @@
       <perun-web-apps-group-search-select
         *ngIf="asSubgroup"
         class="long-input"
+        [disableAutoSelect]="true"
         [groups]="voGroups"
         (groupSelected)="selectedParent = $event">
       </perun-web-apps-group-search-select>

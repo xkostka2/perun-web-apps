@@ -1,16 +1,10 @@
-<mat-form-field class="w-100">
-  <mat-select
-    placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.SELECT_VO' | translate}}"
-    [formControl]="voCtrl">
-    <mat-option>
-      <ngx-mat-select-search
-        placeholderLabel="{{'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.FIND_VO' | translate}}"
-        noEntriesFoundLabel="{{'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.NO_VO_FOUND' | translate}}"
-        [formControl]="voFilterCtrl">
-      </ngx-mat-select-search>
-    </mat-option>
-    <mat-option *ngFor="let vo of filteredVos | async" [value]="vo">
-      {{vo.name}} <span class="text-muted"> {{vo.shortName}} </span>
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<perun-web-apps-entity-search-select
+  [entities]="vos"
+  (entitySelected)="this.voSelected.emit($event)"
+  [searchFunction]="searchFunction"
+  [mainTextFunction]="nameFunction"
+  [secondaryTextFunction]="shortNameFunction"
+  [selectPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.SELECT_VO' | translate"
+  [findPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.FIND_VO' | translate"
+  [noEntriesText]="'SHARED_LIB.PERUN.COMPONENTS.VO_SEARCH_SELECT.NO_VO_FOUND' | translate">
+</perun-web-apps-entity-search-select>

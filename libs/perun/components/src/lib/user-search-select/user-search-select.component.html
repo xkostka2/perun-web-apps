@@ -1,17 +1,9 @@
-<mat-form-field class="w-100">
-  <mat-select
-    placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.SELECT_USER' | translate}}"
-    [formControl]="userCtrl">
-    <mat-option>
-      <ngx-mat-select-search
-        placeholderLabel="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.FIND_USER' | translate}}"
-        noEntriesFoundLabel="{{'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.NO_USER_FOUND' | translate}}"
-        [formControl]="userFilterCtrl">
-      </ngx-mat-select-search>
-    </mat-option>
-    <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
-      {{user | userFullName}} <span class="text-muted muted">#{{user.id}}</span>
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-
+<perun-web-apps-entity-search-select
+  [entities]="users"
+  (entitySelected)="this.userSelected.emit($event)"
+  [searchFunction]="userFullNameFunction"
+  [mainTextFunction]="userFullNameFunction"
+  [selectPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.SELECT_USER' | translate"
+  [findPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.FIND_USER' | translate"
+  [noEntriesText]="'SHARED_LIB.PERUN.COMPONENTS.USER_SEARCH_SELECT.NO_USER_FOUND' | translate">
+</perun-web-apps-entity-search-select>
