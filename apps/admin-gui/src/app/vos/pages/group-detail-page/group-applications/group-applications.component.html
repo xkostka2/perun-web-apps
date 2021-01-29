@@ -19,6 +19,11 @@
     </mat-select>
   </mat-form-field>
   <app-debounce-filter (filter)="applyFilter($event)" [placeholder]="'VO_DETAIL.APPLICATION.FILTER'"></app-debounce-filter>
+  <perun-web-apps-date-range
+    [startDate]="startDate"
+    [endDate]="endDate"
+    (datePicker)="select()">
+  </perun-web-apps-date-range>
 </div>
 <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 <div *ngIf="!loading">

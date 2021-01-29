@@ -15,6 +15,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   imports: [
@@ -35,6 +37,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [
     MatCardModule,
@@ -53,6 +57,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ]
 })
 export class UiMaterialModule {}
