@@ -278,19 +278,22 @@ export class SideMenuItemService {
       url: [baseUrl,`attributes`],
       activatedRegex: `${regexStart}/\\d+/resources/\\d+/attributes$`
     });
-    links.push({
-      label: 'MENU_ITEMS.RESOURCE.SETTINGS',
-      url: [baseUrl, `settings`],
-      activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings$`,
-      children: [
-        {
-          label: 'MENU_ITEMS.RESOURCE.MANAGERS',
-          url: [baseUrl, `settings`, `managers`],
-          activatedRegex: `${regexStart}\\d+/resources/\\d+/settings/managers$`
-        }
-      ],
-      showChildrenRegex: `${regexStart}/\\d+/resources/\\d+/settings`
-    });
+
+    if (this.authResolver.isManagerPagePrivileged(resource)){
+      links.push({
+        label: 'MENU_ITEMS.RESOURCE.SETTINGS',
+        url: [baseUrl, `settings`],
+        activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings$`,
+        children: [
+          {
+            label: 'MENU_ITEMS.RESOURCE.MANAGERS',
+            url: [baseUrl, `settings`, `managers`],
+            activatedRegex: `${regexStart}/\\d+/resources/\\d+/settings/managers$`
+          }
+        ],
+        showChildrenRegex: `${regexStart}/\\d+/resources/\\d+/settings`
+      });
+    }
 
     return links;
   }
@@ -449,7 +452,7 @@ export class SideMenuItemService {
     }
 
     // Applications
-    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy', [vo])) {
+    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy', [vo])) {
       links.push({
         label: 'MENU_ITEMS.VO.APPLICATIONS',
         url: [`/organizations/${vo.id}/applications`],
@@ -475,7 +478,7 @@ export class SideMenuItemService {
 
     // Settings
     const extSourcesAuth = this.authResolver.isAuthorized('getVoExtSources_Vo_policy', [vo]);
-    const managersAuth = this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [vo]);
+    const managersAuth = this.authResolver.isManagerPagePrivileged(vo);
     const adminOrObserver = this.authResolver.isThisVoAdminOrObserver(vo.id);
 
     if (managersAuth || extSourcesAuth || adminOrObserver) {
@@ -711,15 +714,6 @@ export class SideMenuItemService {
         activatedRegex: '/facilities/\\d+/services-status'
       });
     }
-    // Service configuration
-    if (this.authResolver.isAuthorized('getAssignedServices_Facility_policy', [facility]) &&
-      this.authResolver.isAuthorized('getAssignedResources_Facility_policy', [facility])) {
-      links.push({
-        label: 'MENU_ITEMS.FACILITY.SERVICE_CONFIG',
-        url: [`/facilities/${facility.id}/service-config`],
-        activatedRegex: 'facilities/\\d+/service-config'
-      });
-    }
     // Service destination
     if (this.authResolver.isAuthorized('getAllRichDestinations_Facility_policy', [facility])) {
       links.push({
@@ -837,7 +831,7 @@ export class SideMenuItemService {
     }
 
     //Applications
-    if (this.authResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [group])) {
+    if (this.authResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [group])) {
       links.push({
         label: 'MENU_ITEMS.GROUP.APPLICATIONS',
         url: [`/organizations/${group.voId}/groups/${group.id}/applications`],
@@ -868,7 +862,7 @@ export class SideMenuItemService {
     });
 
     //SettingsManagers
-    if (this.authResolver.isAuthorized('getRichAdmins_Group_List<String>_boolean_boolean_policy', [group])) {
+    if (this.authResolver.isManagerPagePrivileged(group)) {
       settingsChildrenLinks.push({
         label: 'MENU_ITEMS.GROUP.MANAGERS',
         url: [`/organizations/${group.voId}/groups/${group.id}/settings/managers`],
@@ -904,13 +898,15 @@ export class SideMenuItemService {
     }
 
     //SettingsWithChildrenLinks
-    links.push({
-      label: 'MENU_ITEMS.GROUP.SETTINGS',
-      url: [`/organizations/${group.voId}/groups/${group.id}/settings`],
-      activatedRegex: '/organizations/\\d+/groups/\\d+/settings$',
-      children: settingsChildrenLinks,
-      showChildrenRegex: '/organizations/\\d+/groups/\\d+/settings'
-    });
+    if (settingsChildrenLinks.length !== 0){
+      links.push({
+        label: 'MENU_ITEMS.GROUP.SETTINGS',
+        url: [`/organizations/${group.voId}/groups/${group.id}/settings`],
+        activatedRegex: '/organizations/\\d+/groups/\\d+/settings$',
+        children: settingsChildrenLinks,
+        showChildrenRegex: '/organizations/\\d+/groups/\\d+/settings'
+      });
+    }
 
     return links;
   }

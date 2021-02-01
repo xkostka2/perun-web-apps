@@ -4,7 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
-  OnChanges, Output,
+  OnChanges, OnInit, Output,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -16,7 +16,7 @@ import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/o
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent, GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
@@ -28,9 +28,9 @@ import {
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss']
 })
-export class GroupsListComponent implements  AfterViewInit, OnChanges {
+export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
-  displayButtons: boolean;
+  displayButtons = window.innerWidth > 800;
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -42,7 +42,8 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
 
   constructor(private dialog: MatDialog,
               private authResolver: GuiAuthResolver,
-              private voService: VosManagerService) { }
+              private voService: VosManagerService,
+              private tableCheckbox: TableCheckbox) { }
 
   @Output()
   moveGroup = new EventEmitter<Group>();
@@ -89,13 +90,19 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
   @Input()
   memberId: number;
 
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+
+  @Input()
+  recentIds: number[];
+
   @Output()
   page = new EventEmitter<PageEvent>();
 
   @Output()
   refreshTable = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['select', 'id', 'vo', 'name', 'description','expiration', 'menu'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description','expiration', 'menu'];
   dataSource: MatTableDataSource<Group | RichGroup>;
 
   exporting = false;
@@ -107,14 +114,20 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
 
   removeAuth: boolean;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @HostListener('window:resize', ['$event'])
   shouldHideButtons() {
-    this.displayButtons = window.innerWidth > 1300;
+    this.displayButtons = window.innerWidth > 800;
   }
 
+  ngOnInit(): void {
+    this.shouldHideButtons();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
@@ -150,6 +163,14 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
             }
             break;
           }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
+          }
           default: return item[property];
         }
       };
@@ -164,24 +185,16 @@ export class GroupsListComponent implements  AfterViewInit, OnChanges {
     }
   }
 
-  canBeSelected(group: Group) {
-    return (group.name !== 'members' || !this.disableMembers) && !this.disableSelect(group);
+  canBeSelected = (group: Group): boolean => {
+     return (group.name !== 'members' || !this.disableMembers) && !this.disableSelect(group);
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.filter(grp => this.canBeSelected(grp)).length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => {
-        if (this.canBeSelected(row)) {
-          this.selection.select(row);
-        }
-      });
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,true, this.canBeSelected);
 
     if(this.authType){
       this.removeAuth = this.setAuth();

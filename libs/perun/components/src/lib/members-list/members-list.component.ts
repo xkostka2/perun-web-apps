@@ -21,7 +21,7 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-members-list',
@@ -31,7 +31,8 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 export class MembersListComponent implements OnChanges, AfterViewInit {
 
   constructor(private dialog: MatDialog,
-              private authResolver: GuiAuthResolver) { }
+              private authResolver: GuiAuthResolver,
+              private tableCheckbox: TableCheckbox) { }
 
   private sort: MatSort;
 
@@ -40,7 +41,11 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @Input()
   showGroupStatuses: boolean;
@@ -142,16 +147,12 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+   isAllSelected() {
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
   }
 
   checkboxLabel(row?: RichMember): string {

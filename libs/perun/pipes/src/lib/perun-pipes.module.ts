@@ -19,6 +19,7 @@ import { MemberLoginsPipe} from './member-logins.pipe';
 import { GroupExpirationPipe } from './group-expiration.pipe';
 import { MemberOrganizationPipe } from './member-organization.pipe';
 import { ParseDatePipe } from './parse-date.pipe';
+import { TechnicalOwnersPipe } from './technical-owners.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ParseDatePipe } from './parse-date.pipe';
     MemberLoginsPipe,
     MemberOrganizationPipe,
     GroupExpirationPipe,
-    ParseDatePipe
+    ParseDatePipe,
+    TechnicalOwnersPipe
   ],
   exports: [
     ResourceTagsToStringPipe,
@@ -63,7 +65,8 @@ import { ParseDatePipe } from './parse-date.pipe';
     MemberLoginsPipe,
     GroupExpirationPipe,
     MemberOrganizationPipe,
-    ParseDatePipe
+    ParseDatePipe,
+    TechnicalOwnersPipe
   ],
   imports: [CommonModule],
 })

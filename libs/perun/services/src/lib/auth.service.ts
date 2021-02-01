@@ -131,17 +131,48 @@ export class AuthService {
   }
 
   /**
+   * This method serves as a simple check
+   * that decides if the page user
+   * is accessing is valid.
+   *
+   * @param path current url path
+   * @return true if path is valid, false otherwise
+   */
+  private isPotentiallyValidPath(path: string): boolean {
+    const validPaths = ['/home', '/organizations', '/facilities', '/myProfile', '/admin'];
+    if (path === '/'){
+      return true;
+    }
+    for (const validPath of validPaths){
+      if (path.startsWith(validPath)) {
+        return  true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Check if the user is logged in and if not,
+   * prevent proxy overload by checking path validity and only then
    * save current path and start authentication;
+   *
+   * On invalid path doesn't start authentication
    *
    * @param path current url path
    * @param queryParams current url's query parameters
+   * @return true if user is logged in, false otherwise and an error
+   *         if given path is invalid
    */
   private verifyAuthentication(path: string, queryParams: string): Promise<any> {
     return this.isLoggedInPromise()
       .toPromise()
       .then(isLoggedIn => {
         if (!isLoggedIn) {
+          if (!this.isPotentiallyValidPath(path)) {
+            return new Promise<boolean>((resolve, reject) => reject("Invalid path"));
+          }
+
           sessionStorage.setItem('auth:redirect', path);
           sessionStorage.setItem('auth:queryParams', queryParams);
           console.log("STARTED AUTH");

@@ -8,7 +8,7 @@
         class="w-100"
         mat-table
         matSort
-        matSortActive="name"
+        matSortActive="recent"
         matSortDirection="asc"
         matSortDisableClear
         matTableExporter>
@@ -32,12 +32,10 @@
           <th *matHeaderCellDef mat-header-cell>
           </th>
           <td *matCellDef="let facility" mat-cell>
-            <mat-icon
-              *ngIf="recentIds.indexOf(facility.id) > -1"
-              class="align-bottom"
-              matTooltip="{{'VO_MANAGEMENT.TABLE.RECENT' | translate}}">
-              visibility
-            </mat-icon>
+            <perun-web-apps-recently-viewed-icon
+              [recentIds]="recentIds"
+              [id]="facility.id">
+            </perun-web-apps-recently-viewed-icon>
           </td>
         </ng-container>
         <ng-container matColumnDef="name">

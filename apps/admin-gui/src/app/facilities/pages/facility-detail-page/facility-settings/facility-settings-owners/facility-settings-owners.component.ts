@@ -7,6 +7,11 @@ import { AddFacilityOwnerDialogComponent } from '../../../../../shared/component
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { RemoveFacilityOwnerDialogComponent } from '../../../../../shared/components/dialogs/remove-facility-owner-dialog/remove-facility-owner-dialog.component';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { PageEvent } from '@angular/material/paginator';
+import {
+  TABLE_FACILITY_OWNERS,
+  TableConfigService
+} from '@perun-web-apps/config/table-config';
 
 @Component({
   selector: 'app-facility-settings-owners',
@@ -22,17 +27,22 @@ export class FacilitySettingsOwnersComponent implements OnInit {
   loading: boolean;
   filterValue: string;
   displayedColumns: string[] = ['id', 'name', 'contact', 'type'];
+  pageSize: number;
+  tableId = TABLE_FACILITY_OWNERS;
 
   addAuth: boolean;
   removeAuth: boolean;
 
   constructor(private facilitiesManagerService: FacilitiesManagerService,
+              private tableConfigService: TableConfigService,
               private route: ActivatedRoute,
               private dialog: MatDialog,
               private authResolver: GuiAuthResolver) {
   }
 
   ngOnInit(): void {
+    this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
+    this.filterValue = '';
     this.route.parent.parent.params.subscribe(params => {
       this.facilityId = parseInt(params['facilityId'], 10);
       this.facility = {
@@ -91,5 +101,10 @@ export class FacilitySettingsOwnersComponent implements OnInit {
         this.refreshTable();
       }
     });
+  }
+
+  pageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
   }
 }

@@ -1,6 +1,6 @@
 <div
   [class.hide-table]="exporting"
-  [hidden]="this.applications.length === 0 || dataSource.filteredData.length === 0"
+  [hidden]="this.applications.length === 0 || !dataSource || dataSource.filteredData.length === 0"
   class="card mt-2">
   <div class="card-body table-theme">
     <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
@@ -79,6 +79,7 @@
     </div>
 
     <mat-paginator
+      #paginator
       [length]="this.applications.length"
       [pageSize]="pageSize"
       (page)="pageChanged($event)"
@@ -93,6 +94,6 @@
   {{'VO_DETAIL.APPLICATION.NO_APPLICATION_FOUND' | translate}}
 </app-alert>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0 && applications.length !== 0" alert_type="warn">
+<app-alert *ngIf="!!dataSource && dataSource.filteredData.length === 0 && applications.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>

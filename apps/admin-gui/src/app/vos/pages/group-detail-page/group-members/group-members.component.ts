@@ -6,7 +6,7 @@ import { Urns } from '@perun-web-apps/perun/urns';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
-import { GroupsManagerService, RichGroup, RichMember } from '@perun-web-apps/perun/openapi';
+import { GroupsManagerService, MembersManagerService, RichGroup, RichMember } from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import { TABLE_GROUP_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
@@ -26,14 +26,14 @@ export class GroupMembersComponent implements OnInit {
   @HostBinding('class.router-component') true;
 
   constructor(
-    private membersService: MembersService,
     private groupService: GroupsManagerService,
     protected route: ActivatedRoute,
     protected router: Router,
     private tableConfigService: TableConfigService,
     private dialog: MatDialog,
     private guiAuthResolver: GuiAuthResolver,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private membersManager: MembersManagerService
   ) { }
 
   group: RichGroup;
@@ -75,12 +75,16 @@ export class GroupMembersComponent implements OnInit {
   inviteAuth: boolean;
   hideColumns: String[] = [];
 
+  statuses = new FormControl();
+  statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
+  selectedStatuses: string[] = ['VALID', 'INVALID'];
 
   ngOnInit() {
     this.loading = true;
     this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.selection = new SelectionModel<RichMember>(true, []);
+    this.statuses.setValue(this.selectedStatuses);
     this.memberAttrNames = this.memberAttrNames.concat(this.storeService.getLoginAttributeNames());
     this.route.parent.params.subscribe(parentParams => {
       const groupId = parentParams['groupId'];
@@ -198,18 +202,18 @@ export class GroupMembersComponent implements OnInit {
     this.selection.clear();
     switch (this.data) {
       case 'all': {
-        this.membersService.getCompleteRichMembersForGroup(this.group.id, this.memberAttrNames).subscribe(
+        this.membersManager.getCompleteRichMembersForGroup(this.group.id, false, this.selectedStatuses, this.memberAttrNames).subscribe(
           members => {
-            this.members = members;
-            this.setAuthRights();
-            this.loading = false;
-          },
+          this.members = members;
+          this.setAuthRights();
+          this.loading = false;
+        },
           () => this.loading = false
         );
         break;
       }
       case 'search': {
-        this.membersService.findCompleteRichMembersForGroup(this.group.id, this.searchControl.value, this.memberAttrNames).subscribe(
+        this.membersManager.findCompleteRichMembersForGroup(this.group.id, this.memberAttrNames, this.searchControl.value, false, this.selectedStatuses).subscribe(
           members => {
             this.members = members;
             this.setAuthRights();
@@ -226,5 +230,15 @@ export class GroupMembersComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  displaySelectedStatuses(): string {
+    if(this.selectedStatuses.length === this.statusList.length){
+      return 'ALL';
+    }
+    if(this.statuses.value){
+      return `${this.statuses.value[0]}  ${this.statuses.value.length > 1 ? ('(+' + (this.statuses.value.length - 1) +' '+ (this.statuses.value.length === 2 ? 'other)' : 'others)')) : ''}`;
+    }
+    return '';
   }
 }

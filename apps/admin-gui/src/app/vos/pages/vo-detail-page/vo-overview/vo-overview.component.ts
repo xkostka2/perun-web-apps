@@ -80,7 +80,7 @@ export class VoOverviewComponent implements OnInit {
     }
 
     // Applications
-    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_policy',[this.vo])) {
+    if (this.authResolver.isAuthorized('getApplicationsForVo_Vo_List<String>_Boolean_policy',[this.vo])) {
       this.navItems.push({
         cssIcon: 'perun-applications',
         url: `/organizations/${this.vo.id}/applications`,
@@ -108,7 +108,7 @@ export class VoOverviewComponent implements OnInit {
     });
 
     // Settings
-    if (this.authResolver.isAuthorized('getRichAdmins_Vo_String_List<String>_boolean_boolean_policy', [this.vo]) ||
+    if (this.authResolver.isManagerPagePrivileged(this.vo) ||
       this.authResolver.isAuthorized('getVoExtSources_Vo_policy', [this.vo]) ||
       this.authResolver.isThisVoAdminOrObserver(this.vo.id)) {
       this.navItems.push({

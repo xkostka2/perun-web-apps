@@ -25,3 +25,24 @@ mat-tree-node {
   overflow: hidden;
   white-space: nowrap;
 }
+
+.virtual-scroll-container {
+  overflow: auto;
+}
+
+cdk-tree-node {
+  display: block;
+}
+
+.node {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  flex: 1;
+  word-wrap: break-word;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
+}

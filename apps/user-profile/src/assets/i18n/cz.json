@@ -133,14 +133,14 @@
     "NO_MAILING_LISTS_ALERT": "Nemáte žádné seznamy adresátů v této organizaci"
   },
   "AUTHENTICATION": {
-    "TITLE": "Proti-phishingová ochrana",
+    "TITLE": "Bezpečnostní obrázek",
     "MFA": "Multi-factor authentication",
     "NEW_IMG": "Nový obrázek",
     "DELETE_IMG": "Vymazat obrázek",
-    "ANTI_PHISHING_INFO": "Tento obrázek se vám ukáže při přihlašovaní",
+    "ANTI_PHISHING_INFO": "Tento bezpečnostní obrázek se vám ukáže před tím, než zadáte heslo, ujistíte se tak, že se nepřihlašujete na podvrženou stránku",
     "MFA_TOGGLE": "Zapnout multi-factor authentication pro všechny služby",
     "DELETE_IMG_DIALOG_TITLE": "Vymazat proti-phishingový obrázek",
-    "DELETE_IMG_DIALOG_DESC": "Váš obrázek na ochranu proti phishingu bude odstraněn a nebude použit během autentizace.",
+    "DELETE_IMG_DIALOG_DESC": "Váš bezpečnostní obrázek bude odstraněn a nebude použit během autentizace.",
     "TYPE": "Typ",
     "NICKNAME": "Přezdívka",
     "REVOKE": "Zrušit",

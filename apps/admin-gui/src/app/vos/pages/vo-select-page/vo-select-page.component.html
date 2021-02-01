@@ -18,7 +18,12 @@
   <button mat-flat-button color="warn" (click)="onRemoveVo()" *ngIf="!loading && deleteAuth" [disabled]="selection.selected.length === 0">
     {{'VO_MANAGEMENT.REMOVE_VO' | translate}}
   </button>
-  <perun-web-apps-immediate-filter (filter)="applyFilter($event)" *ngIf="!loading" [placeholder]="'VO_MANAGEMENT.FILTER_PLACEHOLDER'"></perun-web-apps-immediate-filter>
+  <perun-web-apps-immediate-filter
+    *ngIf="!loading"
+    [autoFocus]="true"
+    (filter)="applyFilter($event)"
+    [placeholder]="'VO_MANAGEMENT.FILTER_PLACEHOLDER'">
+  </perun-web-apps-immediate-filter>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
   <perun-web-apps-vo-select-table *ngIf="!loading"
                                   (page)="pageChanged($event)"

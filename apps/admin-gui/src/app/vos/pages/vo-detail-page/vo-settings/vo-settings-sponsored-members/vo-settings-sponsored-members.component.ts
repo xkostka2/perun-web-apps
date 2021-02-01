@@ -9,6 +9,7 @@ import { CreateSponsoredMemberDialogComponent } from '../../../../../shared/comp
 import { GenerateSponsoredMembersDialogComponent } from '../../../../../shared/components/dialogs/generate-sponsored-members-dialog/generate-sponsored-members-dialog.component';
 import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { PageEvent } from '@angular/material/paginator';
+import { SponsorExistingMemberDialogComponent } from '../../../../../shared/components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
 
 @Component({
   selector: 'app-vo-settings-sponsored-members',
@@ -32,6 +33,7 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
 
   createAuth: boolean;
   generateAuth: boolean;
+  setSponsorshipAuth: boolean;
   routeAuth: boolean;
 
   //TODO uncomment when we need those parameters
@@ -67,6 +69,8 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
     this.createAuth = this.authResolver.isAuthorized('createSponsoredMember_Vo_String_Map<String_String>_String_User_LocalDate_policy',
       [this.vo, this.storeService.getPerunPrincipal().user]);
     this.generateAuth = this.authResolver.isAuthorized('createSponsoredMembers_Vo_String_List<String>_User_policy',
+      [this.vo, this.storeService.getPerunPrincipal().user]);
+    this.setSponsorshipAuth = this.authResolver.isAuthorized('setSponsorshipForMember_Member_User_LocalDate_policy',
       [this.vo, this.storeService.getPerunPrincipal().user]);
     if (this.members!== null && this.members.length !== 0){
       this.routeAuth = this.authResolver.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0].member]);
@@ -104,6 +108,28 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
     };
 
     const dialogRef = this.dialog.open(GenerateSponsoredMembersDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result){
+        this.loading = true;
+        this.authzResolver.getPerunPrincipal().subscribe(principal => {
+          this.storeService.setPerunPrincipal(principal);
+          this.refresh();
+        });
+      }
+    });
+  }
+
+  onSponsorExistingMember() {
+    const config = getDefaultDialogConfig();
+    config.width = '650px';
+    config.data = {
+      voId: this.voId,
+      theme: 'vo-theme',
+    };
+
+    const dialogRef = this.dialog.open(SponsorExistingMemberDialogComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {
 

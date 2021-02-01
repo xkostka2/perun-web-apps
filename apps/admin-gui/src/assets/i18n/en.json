@@ -7,6 +7,11 @@
     },
     "PAGE_NOT_FOUND": {
       "TITLE": "404: Page not found"
+    },
+    "PROXY_OVERLOAD_PREVENTION": {
+      "TITLE": "Page not found",
+      "MESSAGE": "The page you are trying to access is missing. If you wish to continue please click the button below that will redirect you to our home page.",
+      "ACTION": "Redirect"
     }
   },
   "NAV": {
@@ -68,8 +73,7 @@
       "ID": "Id",
       "NAME": "Name",
       "DESCRIPTION": "Description",
-      "TECHNICAL_OWNERS": "Technical owners",
-      "RECENT": "Recently viewed"
+      "TECHNICAL_OWNERS": "Technical owners"
     }
   },
   "USER_MANAGEMENT": {
@@ -281,8 +285,9 @@
       "ADD_MEMBER": "Add",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
-      "LIST_MEMBERS": "List members",
-      "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
+      "LIST_MEMBERS": "List all members",
+      "SEARCH_ALERT_PART_1": "In this VO are",
+      "SEARCH_ALERT_PART_2": "members and load all of them would take a long time. You can search particular member by name, login or email. Also, you can list all valid members.",
       "NO_MEMBERS_ALERT": "No members found.",
       "FILTER_STATUS": "Select Status",
       "INVITE": "Invite",
@@ -418,7 +423,8 @@
         "TITLE": "Sponsored members",
         "CREATE": "Create",
         "GENERATE": "Create in bulk",
-        "FILTER": "Filter by name or ID"
+        "FILTER": "Filter by name or ID",
+        "SPONSOR_EXISTING": "Sponsor existing member"
       }
     },
     "APPLICATION": {
@@ -499,15 +505,17 @@
     "SUBGROUP_INFO": "This group is a subgroup of ",
     "MEMBERS": {
       "TITLE": "Members",
+      "ACTIONS_DISABLED": "Actions with members are disabled, because this group is filled with members from external source.",
       "ADD_MEMBER": "Add",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
       "LIST_ALL": "List all members",
-      "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
+      "SEARCH_ALERT": "In this group are too many members and load all of them would take a long time. You can search particular member by name, login or email or list all members and wait for a while.",
       "NO_MEMBERS_ALERT": "No members found.",
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
-      "EMPTY_SEARCH": "Search field cannot be empty"
+      "EMPTY_SEARCH": "Search field cannot be empty",
+      "FILTER_STATUS": "Select Status"
     },
     "RESOURCES": {
       "TITLE": "Resources",
@@ -1703,6 +1711,17 @@
       "DESCRIPTION": "New version is available. Please, reload the page to apply the changes.",
       "LATER": "Got it! I will reload later",
       "RELOAD": "Reload"
+    },
+    "SPONSOR_EXISTING_MEMBER": {
+      "TITLE": "Sponsor existing member",
+      "CANCEL": "Cancel",
+      "SPONSOR": "Sponsor",
+      "SEARCH": "Search",
+      "DESCRIPTION": "Search by member name",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty",
+      "EXPIRATION": "Sponsorship expiration",
+      "BEGIN_SEARCH": "Search for members you would like to sponsor",
+      "SUCCESS": "Members successfully sponsored"
     }
   },
   "MEMBERS_LIST": {
@@ -1812,25 +1831,38 @@
     }
   },
   "USER_DETAIL": {
+    "DASHBOARD": {
+      "TITLE": "Welcome ",
+      "RECENTLY_VIEWED": "Recently viewed",
+      "NO_RECENTLY_VIEWED": "No recently viewed",
+      "NOT_MANAGER": "It looks like you don’t manage anything here.",
+      "NOT_MANAGER_INFO_NO_USER_PROFILE": "If you want to administrate information about yourself you can look on your profile",
+      "NOT_MANAGER_INFO": "If you want to administrate information about yourself please choose one of the options",
+      "GO_TO_MY_PROFILE": "See My profile",
+      "GO_TO_USER_PROFILE": "Go User Profile Application",
+      "MANAGEABLE_ENTITIES": "Manageable entities",
+      "CARD_TITLE_VOADMIN": "Manager in Organizations",
+      "ROLE_INFO_VOADMIN": "You can manage organizations that are listed below",
+      "CARD_TITLE_GROUPADMIN": "Manager in Groups",
+      "ROLE_INFO_GROUPADMIN": "You can manage groups that are listed below",
+      "CARD_TITLE_FACILITYADMIN": "Manager in Facilities",
+      "ROLE_INFO_FACILITYADMIN": "You can manage facilities that are listed below",
+      "CARD_TITLE_SPONSOR": "Sponsor in Organizations",
+      "ROLE_INFO_SPONSOR": "You can create sponsored members in organization that are listed below",
+      "CARD_TITLE_RESOURCEADMIN": "Manager in Resources",
+      "ROLE_INFO_RESOURCEADMIN": "You can manage resources that are listed below",
+      "CARD_TITLE_TOPGROUPCREATOR": "Group creator in Organizations",
+      "ROLE_INFO_TOPGROUPCREATOR": "You can create group in the organizations that are listed below",
+      "CARD_TITLE_VOOBSERVER": "Observer in Organizations",
+      "ROLE_INFO_VOOBSERVER": "You can observe organizations that are listed below",
+      "CARD_TITLE_GROUPOBSERVER": "Observer in Groups",
+      "ROLE_INFO_GROUPOBSERVER": "You can observe groups that are listed below",
+      "CARD_TITLE_FACILITYOBSERVER": "Observer in Facilities",
+      "ROLE_INFO_FACILITYOBSERVER": "You can observe facilities that are listed below",
+      "CARD_TITLE_RESOURCEOBSERVER": "Observer in Resources",
+      "ROLE_INFO_RESOURCEOBSERVER": "You can observe resources that are listed below"
+    },
     "OVERVIEW": {
-      "TITLE": "Home site",
-      "FULL_NAME": "Full name",
-      "USER_ID": "User ID",
-      "USER_TYPE": "User type",
-      "EDIT_NAME": "Edit name",
-      "MY_VO": "Manager in Organizations",
-      "MY_GROUPS": "Manager in Groups",
-      "MY_FACILITIES": "Manager in Facilities",
-      "MY_RESOURCES": "Manager in Resources",
-      "VO_WHERE_SPONSOR": "Sponsor in Organizations",
-      "VO_WHERE_TOP_GROUP_CREATOR": "Group creator in Organizations",
-      "FILTER": "Filter",
-      "VO_TOOLTIP_INFO": "Organizations where you are admin",
-      "GROUPS_TOOLTIP_INFO": "Groups where you are admin",
-      "RESOURCES_TOOLTIP_INFO": "Resources where you are admin",
-      "FACILITIES_TOOLTIP_INFO": "Facilities where you are admin",
-      "SPONSOR_TOOLTIP_INFO": "Organizations where you have role Sponsor",
-      "TOP_GROUP_CREATOR_TOOLTIP_INFO": "Organization where you have role Top group creator",
       "GENERAL_SETTINGS": "General settings"
     },
     "IDENTITIES": {
@@ -1893,7 +1925,8 @@
         "USER": "User",
         "GROUP": "Group",
         "NO_MANAGERS": "This role has no managers.",
-        "NO_GROUP_MANAGERS": "This role has no group managers."
+        "NO_GROUP_MANAGERS": "This role has no group managers.",
+        "NO_AVAILABLE_ROLES": "This entity has no available manager roles or you dont have privileges to manage them"
       },
       "EXT_SOURCES_LIST": {
         "ID": "ID",
@@ -2036,7 +2069,6 @@
         "VO_SELECT_TABLE": {
           "ID": "Id",
           "NAME": "Name",
-          "RECENT": "Recently viewed",
           "SHORTNAME": "Short name"
         },
         "VO_SEARCH_SELECT": {
@@ -2182,6 +2214,9 @@
           "TITLE": "Session expiration",
           "DESCRIPTION": "Your session has expired. Please sign in to continue.",
           "SIGN_IN": "Sign in"
+        },
+        "RECENTLY_VIEWED_ICON": {
+          "RECENT": "Recently viewed"
         }
       },
       "ORGANIZATIONS": {

@@ -26,7 +26,7 @@ export class ManagersPageComponent implements OnInit {
     private tableConfigService: TableConfigService,
     private authzService: AuthzResolverService,
     private storeService: StoreService,
-    public guiAuthResolver:GuiAuthResolver
+    public guiAuthResolver: GuiAuthResolver
   ) {
   }
 
@@ -49,7 +49,7 @@ export class ManagersPageComponent implements OnInit {
   selectionUsers = new SelectionModel<RichUser>(true, []);
   selectionGroups = new SelectionModel<Group>(true, []);
 
-  selected = 'user';
+  selectedMode = '';
   selectedRole: string;
 
   loading = false;
@@ -57,27 +57,53 @@ export class ManagersPageComponent implements OnInit {
   tableId = TABLE_GROUP_MANAGERS_PAGE;
   pageSize: number;
 
-  isAuthorized = false;
   routeAuth: boolean;
+  manageAuth: boolean;
+  roleModes: string[];
+
+  availableRolesPrivileges: Map<string, any> = new Map<string, any>();
 
   ngOnInit() {
+    this.loading = true;
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
-    this.selectedRole = this.availableRoles[0];
-    this.isAuthorized = this.guiAuthResolver.isPerunAdmin() ||
-      this.guiAuthResolver.isFacilityAdmin() ||
-      this.guiAuthResolver.isVoAdmin() ||
-      this.guiAuthResolver.isGroupAdmin();
+
+    this.guiAuthResolver.getRolesAuthorization(this.availableRoles, this.complementaryObject, this.availableRolesPrivileges);
+    this.availableRoles = this.availableRoles.filter(role => {
+      return this.availableRolesPrivileges.get(role).readAuth;
+    });
+
+    if (this.availableRoles.length !== 0){
+      this.selectedRole = this.availableRoles[0];
+    }
+
     this.routeAuth = this.guiAuthResolver.isPerunAdmin();
     this.changeUser();
   }
 
+  changeRolePrivileges() {
+    this.manageAuth = this.availableRolesPrivileges.get(this.selectedRole).manageAuth;
+    this.roleModes = this.availableRolesPrivileges.get(this.selectedRole).modes;
+    let roleHasThisMode = false;
+    for (const mode of this.roleModes){
+      if (this.selectedMode === mode.toLowerCase()){
+        roleHasThisMode = true;
+        break;
+      }
+    }
+    if (!roleHasThisMode){
+      this.selectedMode = this.roleModes[0].toLowerCase();
+    }
+  }
+
   changeUser() {
     this.loading = true;
+    this.changeRolePrivileges();
+
     let attributes = [
       Urns.USER_DEF_ORGANIZATION,
       Urns.USER_DEF_PREFERRED_MAIL];
     attributes = attributes.concat(this.storeService.getLoginAttributeNames());
-    if (this.selected === 'user') {
+    if (this.selectedMode === 'user') {
       this.authzService.getAuthzRichAdmins(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType,
         attributes,false, true).subscribe(managers => {
         this.managers = managers;
@@ -88,7 +114,7 @@ export class ManagersPageComponent implements OnInit {
         this.loading = false;
       });
     }
-    if (this.selected === 'group') {
+    if (this.selectedMode === 'group') {
       this.authzService.getAuthzAdminGroups(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType).subscribe(groups => {
         this.groups = groups;
         this.selectionUsers.clear();

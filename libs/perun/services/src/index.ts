@@ -11,4 +11,5 @@ export { NotificatorService } from './lib/notificator.service';
 export { NotificationStorageService } from './lib/notification-storage.service';
 export {ApiService} from './lib/api.service';
 export {ForceRouterService} from './lib/force-router.service';
+export {TableCheckbox} from './lib/table-checkbox.service';
 

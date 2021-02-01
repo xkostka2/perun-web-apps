@@ -51,7 +51,6 @@ import { DeleteAttributeDialogComponent } from './components/dialogs/delete-attr
 import { RemoveMembersDialogComponent } from './components/dialogs/remove-members-dialog/remove-members-dialog.component';
 import { SideMenuRootItemComponent } from './side-menu/side-menu-root-item/side-menu-root-item.component';
 import { DebuggerPageComponent } from './debugger-page/debugger-page.component';
-import { TechnicalOwnersPipe } from './pipes/technical-owners.pipe';
 import { RemoveResourceDialogComponent } from './components/dialogs/remove-resource-dialog/remove-resource-dialog.component';
 import { AddManagerDialogComponent } from './components/dialogs/add-manager-dialog/add-manager-dialog.component';
 import { RemoveManagerDialogComponent } from './components/dialogs/remove-manager-dialog/remove-manager-dialog.component';
@@ -136,7 +135,6 @@ import { RemoveGroupResourceDialogComponent } from './components/dialogs/remove-
 import { TwoEntityAttributePageComponent } from './components/two-entity-attribute-page/two-entity-attribute-page.component';
 import { UserLoginsPipe } from './pipes/user-logins.pipe';
 import { AttributeImportDialogComponent } from './components/dialogs/attribute-import-dialog/attribute-import-dialog.component';
-import { FacilitySelectTableComponent } from './components/facility-select-table/facility-select-table.component';
 import { HostsListComponent } from './components/hosts-list/hosts-list.component';
 import { BlacklistListComponent } from './components/blacklist-list/blacklist-list.component';
 import { SecurityTeamsListComponent } from './components/security-teams-list/security-teams-list.component';
@@ -177,6 +175,7 @@ import { CreateAttributeDialogComponent } from './components/dialogs/create-attr
 import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe';
 import { PasswordResetRequestDialogComponent } from './components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import { NewVersionDialogComponent } from './components/dialogs/new-version-dialog/new-version-dialog.component';
+import { SponsorExistingMemberDialogComponent } from './components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
 
 @NgModule({
   imports: [
@@ -265,7 +264,6 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     NotificatorComponent,
     AttributeTypeCleanPipe,
     NameSpaceToDefPipe,
-    TechnicalOwnersPipe,
     ApplicationFormItemTypePipe,
     DragDropModule,
     ApplicationFormWidgetDescriptionPipe,
@@ -297,7 +295,6 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     SideMenuRootItemComponent,
     DestinationListComponent,
     TwoEntityAttributePageComponent,
-    FacilitySelectTableComponent,
     HostsListComponent,
     BlacklistListComponent,
     SecurityTeamsListComponent,
@@ -330,7 +327,6 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     ApplicationRejectDialogComponent,
     RemoveMembersDialogComponent,
     DebuggerPageComponent,
-    TechnicalOwnersPipe,
     RemoveResourceDialogComponent,
     AddManagerDialogComponent,
     RemoveManagerDialogComponent,
@@ -390,7 +386,6 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     TwoEntityAttributePageComponent,
     UserLoginsPipe,
     AttributeImportDialogComponent,
-    FacilitySelectTableComponent,
     HostsListComponent,
     BlacklistListComponent,
     SecurityTeamsListComponent,
@@ -431,7 +426,8 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
     CreateAttributeDialogComponent,
     AttributeFriendlyNamePipe,
     PasswordResetRequestDialogComponent,
-    NewVersionDialogComponent
+    NewVersionDialogComponent,
+    SponsorExistingMemberDialogComponent
   ],
   providers: [
     AnyToStringPipe,

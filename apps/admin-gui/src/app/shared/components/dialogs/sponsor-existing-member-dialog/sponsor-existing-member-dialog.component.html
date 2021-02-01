@@ -1,0 +1,67 @@
+<div class="{{theme}}">
+  <h1 mat-dialog-title>{{'DIALOGS.SPONSOR_EXISTING_MEMBER.TITLE' | translate}}</h1>
+  <div mat-dialog-content>
+
+    <mat-form-field class="mr-2 search-field adjust-width">
+      <label>
+        <input matInput autocomplete="false" placeholder="{{'DIALOGS.SPONSOR_EXISTING_MEMBER.DESCRIPTION' | translate}}"
+               (keyup.enter)="onSearchByString()"
+               [formControl]="searchCtrl">
+      </label>
+      <mat-error>
+        {{'DIALOGS.SPONSOR_EXISTING_MEMBER.EMPTY_SEARCH_MESSAGE' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      class="ml-auto"
+      color="accent"
+      [disabled]="loading"
+      (click)="onSearchByString()">
+      {{'DIALOGS.SPONSOR_EXISTING_MEMBER.SEARCH' | translate}}
+    </button>
+
+    <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+
+    <perun-web-apps-members-list
+      [pageSize]="pageSize"
+      (page)="pageChanged($event)"
+      *ngIf="firstSearchDone"
+      [hidden]="loading"
+      [members]="members"
+      [selection]="selection"
+      [hideColumns]="['organization', 'logins']"
+      [disableRouting]="true">
+    </perun-web-apps-members-list>
+
+    <app-alert *ngIf="!firstSearchDone" alert_type="warn">
+      {{'DIALOGS.SPONSOR_EXISTING_MEMBER.BEGIN_SEARCH' | translate}}
+    </app-alert>
+
+    <div>
+      <br>
+      <h6>{{'DIALOGS.SPONSOR_EXISTING_MEMBER.EXPIRATION' | translate}}</h6>
+      <perun-web-apps-expiration-select
+        (datePicker)="setExpiration($event)">
+      </perun-web-apps-expiration-select>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="onCancel()">
+      {{'DIALOGS.SPONSOR_EXISTING_MEMBER.CANCEL' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="accent"
+      [disabled]="loading || selection.selected.length === 0"
+      (click)="onSubmit()">
+      {{'DIALOGS.SPONSOR_EXISTING_MEMBER.SPONSOR' | translate}}
+    </button>
+  </div>
+</div>

@@ -66,14 +66,17 @@ import { MemberSearchSelectComponent } from './member-search-select/member-searc
 import { FacilitySearchSelectComponent } from './facility-search-select/facility-search-select.component';
 import { UserSearchSelectComponent } from './user-search-select/user-search-select.component';
 import { ExpirationSelectComponent } from './expiration-select/expiration-select.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { RecentlyViewedIconComponent } from './recently-viewed-icon/recently-viewed-icon.component';
+import { FacilitySelectTableComponent } from './facility-select-table/facility-select-table.component'
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
     if (displayFormat === 'input') {
-      let day: string = date.getDate().toString();
+      const day: string = date.getDate().toString();
       // day = +day < 10 ? '0' + day : day;
-      let month: string = (date.getMonth() + 1).toString();
+      const month: string = (date.getMonth() + 1).toString();
       // month = +month < 10 ? '0' + month : month;
       const year = date.getFullYear();
       return `${day}.${month}.${year}`;
@@ -126,7 +129,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatRadioModule,
     MatOptionModule,
     MatSelectModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    ScrollingModule
   ],
   declarations: [
     VoSelectTableComponent,
@@ -162,7 +166,9 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MemberSearchSelectComponent,
     FacilitySearchSelectComponent,
     UserSearchSelectComponent,
-    ExpirationSelectComponent
+    ExpirationSelectComponent,
+    RecentlyViewedIconComponent,
+    FacilitySelectTableComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -197,7 +203,9 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MemberSearchSelectComponent,
     FacilitySearchSelectComponent,
     UserSearchSelectComponent,
-    ExpirationSelectComponent
+    ExpirationSelectComponent,
+    RecentlyViewedIconComponent,
+    FacilitySelectTableComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

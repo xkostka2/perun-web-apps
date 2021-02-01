@@ -8,7 +8,7 @@ import {
   AddEditNotificationDialogComponent
 } from '../../../shared/components/dialogs/add-edit-notification-dialog/add-edit-notification-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
-import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
 import { ApplicationMail, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 
@@ -24,7 +24,8 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
     private translate: TranslateService,
     private notificator: NotificatorService,
     private dialog: MatDialog,
-    private authResolver: GuiAuthResolver) {
+    private authResolver: GuiAuthResolver,
+    private tableCheckbox: TableCheckbox) {
   }
 
   @Input()
@@ -61,7 +62,11 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   private sort: MatSort;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -79,16 +84,11 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, "", this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    this.selectionChange.emit(this.selection);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, "", this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: ApplicationMail): string {

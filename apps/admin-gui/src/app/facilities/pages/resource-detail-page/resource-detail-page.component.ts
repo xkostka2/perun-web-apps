@@ -9,7 +9,7 @@ import {
   RichResource,
   VosManagerService
 } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { addRecentlyVisited, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { Resource } from '@perun-web-apps/perun/openapi';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
@@ -74,6 +74,7 @@ export class ResourceDetailPageComponent implements OnInit {
             this.loading = false;
           }, () => this.loading = false);
         }
+        addRecentlyVisited('resources', this.resource);
       });
     });
   }

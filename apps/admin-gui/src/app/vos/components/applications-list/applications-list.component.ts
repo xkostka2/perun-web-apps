@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -11,7 +12,6 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {Router} from '@angular/router';
 import { Application, Group, Member } from '@perun-web-apps/perun/openapi';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
@@ -23,11 +23,12 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
-  constructor(private authResolver: GuiAuthResolver) { }
+  constructor(
+    private authResolver: GuiAuthResolver,
+    private changeDetector: ChangeDetectorRef) { }
 
   @ViewChild(MatSort) set matSort(ms: MatSort) {
     this.sort = ms;
-    this.setDataSource();
   }
 
   @Input()
@@ -58,25 +59,30 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
   exporting = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator', {static: false}) paginator: MatPaginator;
   private sort: MatSort;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngAfterViewInit(): void {
-    this.setDataSource();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.dataSource = new MatTableDataSource<Application>(this.applications);
     this.setDataSource();
-    this.dataSource.filter = this.filterValue;
+    this.changeDetector.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.setDataSource();
   }
 
   setDataSource() {
-    if (!!this.dataSource) {
+    // don't set the data if the paginator was not loaded yet
+    if (!this.paginator) {
+      return;
+    }
+    if (!this.dataSource) {
+      this.dataSource = new MatTableDataSource<Application>();
+      this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
@@ -105,9 +111,10 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
           }
           default: return item[property];
         }
-      };
-      this.dataSource.paginator = this.paginator;
+      }
     }
+    this.dataSource.filter = this.filterValue;
+    this.dataSource.data = this.applications;
   }
 
 

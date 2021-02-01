@@ -14,7 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Group, RichResource } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-resources-list',
@@ -23,7 +23,8 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
-  constructor(private guiAuthResolver: GuiAuthResolver) { }
+  constructor(private guiAuthResolver: GuiAuthResolver,
+              private tableCheckbox: TableCheckbox) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -43,9 +44,13 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   @Input()
   routingVo = false;
   @Input()
-  displayedColumns: string[] = ['select', 'id', 'name', 'vo', 'facility', 'tags', 'description'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'vo', 'facility', 'tags', 'description'];
   @Input()
   groupToResource: Group;
+  @Input()
+  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  @Input()
+  recentIds: number[];
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
@@ -60,9 +65,11 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   addAuth = false;
 
+  private paginator: MatPaginator;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.guiAuthResolver.isPerunAdmin()){
@@ -76,6 +83,25 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'id': {
+            return +item.id;
+          }
+          case 'recent': {
+            if (this.recentIds) {
+              if (this.recentIds.indexOf(item.id) > -1) {
+                return '#'.repeat(this.recentIds.indexOf(item.id));
+              }
+            }
+            return item.name.toLocaleLowerCase();
+          }
+          case 'name' : {
+            return item.name.toLocaleLowerCase();
+          }
+          default: return item[property];
+        }
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
@@ -83,16 +109,12 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
     this.setAuth();
   }
 

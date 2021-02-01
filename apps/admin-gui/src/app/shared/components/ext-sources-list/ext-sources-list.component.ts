@@ -14,7 +14,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-ext-sources-list',
@@ -23,7 +23,8 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 })
 export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
 
-  constructor(private authResolver: GuiAuthResolver) {
+  constructor(private authResolver: GuiAuthResolver,
+              private tableCheckbox: TableCheckbox) {
   }
 
   @Input()
@@ -40,8 +41,11 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
   @Output()
   page = new EventEmitter<PageEvent>();
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  private paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -77,15 +81,11 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: ExtSource): string {

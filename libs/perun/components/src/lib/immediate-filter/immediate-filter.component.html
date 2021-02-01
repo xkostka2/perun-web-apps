@@ -1,4 +1,9 @@
 <mat-form-field class="filter-field ml-2">
   <input matInput [formControl]="formControl"
+         *ngIf="autoFocus"
+         perunWebAppsAutoFocus
+         placeholder="{{placeholder | translate}}">
+  <input matInput [formControl]="formControl"
+         *ngIf="!autoFocus"
          placeholder="{{placeholder | translate}}">
 </mat-form-field>

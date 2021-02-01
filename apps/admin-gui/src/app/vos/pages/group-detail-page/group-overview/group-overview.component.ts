@@ -1,8 +1,15 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { MenuItem } from '@perun-web-apps/perun/models';
 import { ActivatedRoute } from '@angular/router';
-import { Group, GroupsManagerService, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import {
+  AttributesManagerService,
+  Group,
+  GroupsManagerService,
+  Vo,
+  VosManagerService
+} from '@perun-web-apps/perun/openapi';
+import { ApiRequestConfigurationService, GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
+import { Urns } from '@perun-web-apps/perun/urns';
 
 @Component({
   selector: 'app-group-overview',
@@ -18,7 +25,10 @@ export class GroupOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private groupService: GroupsManagerService,
     private voService: VosManagerService,
-    private guiAuthResolver: GuiAuthResolver
+    private guiAuthResolver: GuiAuthResolver,
+    private apiRequest: ApiRequestConfigurationService,
+    private attributesManager: AttributesManagerService,
+    private notificator: NotificatorService
   ) {
   }
 
@@ -86,7 +96,7 @@ export class GroupOverviewComponent implements OnInit {
       });
     }
 
-    if (this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Vo_List<String>_policy', [this.group])) {
+    if (this.guiAuthResolver.isAuthorized('getApplicationsForGroup_Group_List<String>_policy', [this.group])) {
       this.navItems.push({
         cssIcon: 'perun-applications',
         url: `/organizations/${this.group.voId}/groups/${this.groupId}/applications`,
@@ -102,11 +112,29 @@ export class GroupOverviewComponent implements OnInit {
       style: 'group-btn'
     });
 
-    this.navItems.push({
-      cssIcon: 'perun-settings2',
-      url: `/organizations/${this.group.voId}/groups/${this.groupId}/settings`,
-      label: 'MENU_ITEMS.GROUP.SETTINGS',
-      style: 'group-btn'
+    //SettingsMembership
+    //not implemented in authorization....probably must be hardcoded
+    let expirationAuth = false;
+    this.apiRequest.dontHandleErrorForNext();
+    this.attributesManager.getGroupAttributeByName(this.group.id, Urns.GROUP_DEF_EXPIRATION_RULES).subscribe(() => {
+      expirationAuth = true;
+    }, error => {
+      if (error.name !== 'HttpErrorResponse') {
+        this.notificator.showRPCError(error);
+      }
     });
+
+    const managerAuth = this.guiAuthResolver.isManagerPagePrivileged(this.group);
+    const appFormAuth = this.guiAuthResolver.isAuthorized('group-getFormItems_ApplicationForm_AppType_policy', [this.group]);
+    const notificationAuth = this.guiAuthResolver.isAuthorized('group-getFormItems_ApplicationForm_AppType_policy', [this.group]);
+    const relationAuth = this.guiAuthResolver.isAuthorized('getGroupUnions_Group_boolean_policy', [this.group]);
+    if(expirationAuth || managerAuth || appFormAuth || notificationAuth || relationAuth){
+      this.navItems.push({
+        cssIcon: 'perun-settings2',
+        url: `/organizations/${this.group.voId}/groups/${this.groupId}/settings`,
+        label: 'MENU_ITEMS.GROUP.SETTINGS',
+        style: 'group-btn'
+      });
+    }
   }
 }

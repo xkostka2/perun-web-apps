@@ -155,7 +155,7 @@ export class SettingsAuthenticationComponent implements OnInit {
       this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, enforceMfaAttributeName).subscribe(attr => {
       if (sessionStorage.getItem('mfa_route')) {
         sessionStorage.removeItem('mfa_route');
-        this.mfaService.enableMfa(!attr || !attr.value, this.idToken, this.accessToken).subscribe(() => {
+        this.mfaService.enableMfa(!attr || !attr.value, this.idToken).subscribe(() => {
           // Should I do here something else than loadMFA()?
           this.loadMFA();
         }, () => this.loadMFA());
@@ -193,7 +193,7 @@ export class SettingsAuthenticationComponent implements OnInit {
                     data: parsedToken['data'],
                     used: parsedToken['used'],
                     type: parsedToken['type'].toUpperCase(),
-                    nickname: parsedToken['nickname']
+                    nickname: parsedToken['name']
                   });
                 });
               }

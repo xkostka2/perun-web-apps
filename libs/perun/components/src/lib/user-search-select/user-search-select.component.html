@@ -10,7 +10,7 @@
       </ngx-mat-select-search>
     </mat-option>
     <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
-      {{user | userFullName}}
+      {{user | userFullName}} <span class="text-muted muted">#{{user.id}}</span>
     </mat-option>
   </mat-select>
 </mat-form-field>

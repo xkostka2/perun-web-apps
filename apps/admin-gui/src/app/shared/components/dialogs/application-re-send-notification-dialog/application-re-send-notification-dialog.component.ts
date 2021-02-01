@@ -39,7 +39,7 @@ export class ApplicationReSendNotificationDialogComponent implements OnInit {
     this.loading = true;
     if (this.mailType === 'APP_REJECTED_USER') {
       this.registrarManager.sendMessage(
-        {applicationId: this.data.applicationId, mailType: this.mailType, reason: this.reason}).subscribe( () => {
+        {appId: this.data.applicationId, mailType: this.mailType, reason: this.reason}).subscribe( () => {
         this.translate.get('DIALOGS.RE_SEND_NOTIFICATION.SUCCESS').subscribe(successMessage => {
           this.notificator.showSuccess(successMessage);
           this.dialogRef.close();
@@ -47,7 +47,7 @@ export class ApplicationReSendNotificationDialogComponent implements OnInit {
       }, () => this.loading = false);
     } else {
       this.registrarManager.sendMessage(
-        {applicationId: this.data.applicationId, mailType: this.mailType}).subscribe( () => {
+        {appId: this.data.applicationId, mailType: this.mailType}).subscribe( () => {
         this.translate.get('DIALOGS.RE_SEND_NOTIFICATION.SUCCESS').subscribe(successMessage => {
           this.notificator.showSuccess(successMessage);
           this.dialogRef.close();

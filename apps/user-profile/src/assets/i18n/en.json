@@ -133,14 +133,14 @@
     "NO_MAILING_LISTS_ALERT": "You have no mailing lists assigned under this virtual organization"
   },
   "AUTHENTICATION": {
-    "TITLE": "Anti-phishing image",
+    "TITLE": "Security image",
     "MFA": "Multi-factor authentication",
     "NEW_IMG": "New image",
     "DELETE_IMG": "Delete image",
-    "ANTI_PHISHING_INFO": "You will be shown this anti-phishing image after you log in so you will know that you are visiting the right site",
+    "ANTI_PHISHING_INFO": "You will be shown this security image before you enter your password so you will know that you are visiting the right site",
     "MFA_TOGGLE": "Enforce multi-factor authentication for all services",
     "DELETE_IMG_DIALOG_TITLE": "Delete anti-phishing image",
-    "DELETE_IMG_DIALOG_DESC": "Your anti-phishing image will be deleted and will not be used during authentication process.",
+    "DELETE_IMG_DIALOG_DESC": "Your security image will be deleted and will not be used during authentication process.",
     "TYPE": "Type",
     "NICKNAME": "Nickname",
     "REVOKE": "Revoke",

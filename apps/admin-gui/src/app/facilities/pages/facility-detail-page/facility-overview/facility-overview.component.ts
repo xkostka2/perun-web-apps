@@ -77,16 +77,6 @@ export class FacilityOverviewComponent implements OnInit {
         style: 'facility-btn'
       });
     }
-    // Service configuration
-    if (this.authResolver.isAuthorized('getAssignedServices_Facility_policy', [this.facility]) &&
-      this.authResolver.isAuthorized('getAssignedResources_Facility_policy', [this.facility])) {
-      this.navItems.push({
-        cssIcon: 'perun-settings2',
-        url: `/facilities/${this.facility.id}/service-config`,
-        label: 'MENU_ITEMS.FACILITY.SERVICE_CONFIG',
-        style: 'facility-btn'
-      });
-    }
     // Service destination
     if (this.authResolver.isAuthorized('getAllRichDestinations_Facility_policy', [this.facility])) {
       this.navItems.push({
@@ -116,7 +106,7 @@ export class FacilityOverviewComponent implements OnInit {
 
     // Settings
     if (this.authResolver.isAuthorized('getBansForFacility_int_policy', [this.facility]) ||
-      this.authResolver.isAuthorized('getRichAdmins_Facility_List<String>_boolean_boolean_policy', [this.facility]) ||
+      this.authResolver.isManagerPagePrivileged(this.facility) ||
       this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility]) ||
       this.authResolver.isAuthorized('getAssignedSecurityTeams_Facility_policy', [this.facility])) {
       this.navItems.push({

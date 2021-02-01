@@ -16,6 +16,9 @@ export class ImmediateFilterComponent implements OnInit {
   @Output()
   filter = new EventEmitter<string>();
 
+  @Input()
+  autoFocus = false;
+
   formControl = new FormControl();
 
   ngOnInit(): void {

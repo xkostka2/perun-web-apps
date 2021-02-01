@@ -1514,3 +1514,8 @@ th, td.mat-cell {
 .mat-tab-icon {
   font-size: 16px !important;
 }
+
+// hack to make the content of the virtual scroll be limited by its width
+.cdk-virtual-scroll-content-wrapper {
+  contain: size !important;
+}
