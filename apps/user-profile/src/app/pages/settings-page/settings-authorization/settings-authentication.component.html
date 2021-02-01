@@ -5,12 +5,12 @@
 </div>
 <button (click)="onAddImg()" class="m-1" color="accent"
         mat-flat-button>{{'AUTHENTICATION.NEW_IMG' | customTranslate | translate}}</button>
-<button (click)="onDeleteImg()" class="m-1" color="warn"
+<button (click)="onDeleteImg()" class="m-1" color="warn" [disabled]="!imgAtt || !imgAtt.value"
         mat-flat-button>{{'AUTHENTICATION.DELETE_IMG' | customTranslate | translate}}</button>
 
 <h1 class="page-subtitle mt-5">{{'AUTHENTICATION.MFA' | customTranslate | translate}}</h1>
 <button (click)="addTOTP()" class="mr-2" color="accent" mat-flat-button>{{'AUTHENTICATION.ADD_TOTP' | customTranslate | translate}}</button>
-<button (click)="addWebAuthn()" class="mb-3" color="accent" mat-flat-button>{{'AUTHENTICATION.ADD_WEBAUTHN' | customTranslate | translate}}</button>
+<!--<button (click)="addWebAuthn()" class="mb-3" color="accent" mat-flat-button>{{'AUTHENTICATION.ADD_WEBAUTHN' | customTranslate | translate}}</button>-->
 
 <app-alert *ngIf="!tokens.length" alert_type="info">{{'AUTHENTICATION.NO_TOKENS' | customTranslate | translate}}</app-alert>
 <div [hidden]="!tokens.length">

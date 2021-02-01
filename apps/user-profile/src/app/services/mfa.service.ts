@@ -19,13 +19,13 @@ export class MfaService {
     return headers;
   }
 
-  enableMfa(value: boolean, idToken: string, accessToken: string): Observable<any> {
+  enableMfa(value: boolean, idToken: string): Observable<any> {
     const apiUrl = this.storeService.get('mfa','api_url');
     const path = `mfaEnabled`;
     const url = `${apiUrl}${path}`;
-    const body = `value=${value}&id_token=${idToken}`;
+    const body = `value=${value}`;
     const headers = new HttpHeaders();
-    headers.set('Authorization', `Bearer ${accessToken}`)
+    headers.set('Authorization', `Bearer ${idToken}`)
     return this.http.put(url, body, { headers: headers })
       .pipe(catchError(err => this.formatErrors(err)));
   }
