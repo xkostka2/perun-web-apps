@@ -12,12 +12,12 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { RichUser, Candidate, MemberCandidate, Attribute, Group, Vo } from '@perun-web-apps/perun/openapi';
+import { RichUser, Candidate, MemberCandidate, Attribute, Group} from '@perun-web-apps/perun/openapi';
 import {
   getCandidateEmail,
   getExtSourceNameOrOrganizationColumn,
   parseUserEmail,
-  parseVo, parseName, TABLE_ITEMS_COUNT_OPTIONS
+  parseVo, TABLE_ITEMS_COUNT_OPTIONS, customDataSourceFilterPredicate, customDataSourceSort
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -66,41 +66,41 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
 
   addAuth = false;
 
+  getDataForColumn(data: MemberCandidate, column: string, outerThis: MembersCandidatesListComponent): string{
+    switch (column) {
+      case 'status':
+        return data.member ? data.member.status ?? '' : '';
+      case 'fullName':
+        const user = data.richUser ? data.richUser : data.candidate
+        return user.lastName ? user.lastName : user.firstName ?? ''
+      case 'voExtSource':
+        return data.richUser ? parseVo(data.richUser) : getExtSourceNameOrOrganizationColumn(data.candidate);
+      case 'email':
+        if (data.richUser || data.member) {
+          return parseUserEmail(data.richUser);
+        }
+        return outerThis.getEmail(data);
+      case 'logins':
+        return outerThis.getLogins(data);
+      case 'alreadyMember':
+        return outerThis.getAlreadyMember(data);
+      case 'local':
+        return data.richUser ? "Local" : "External identity"
+      default:
+        return data[column];
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
 
-      this.dataSource.sortingDataAccessor = (memberCandidate, property) => {
-        switch (property) {
-          case 'status':
-            return memberCandidate.member ? memberCandidate.member.status : '';
-          case 'fullName':
-            let name;
-            if (memberCandidate.richUser) {
-              name = parseName(memberCandidate.richUser);
-            } else {
-              name = parseName(memberCandidate.candidate);
-            }
-            return name.toLowerCase();
-          case 'email':
-            if (memberCandidate.richUser || memberCandidate.member) {
-              return parseUserEmail(memberCandidate.richUser);
-            } else {
-              return this.getEmail(memberCandidate);
-            }
-          case 'voExtSource':
-            return memberCandidate.richUser ? parseVo(memberCandidate.richUser) : this.getOrganization(memberCandidate.candidate);
-          case 'logins':
-            return this.getLogins(memberCandidate);
-          case 'alreadyMember':
-            return this.getAlreadyMember(memberCandidate);
-          case 'local':
-            return memberCandidate.richUser ? 'Local' : 'External identity';
-          default:
-            return memberCandidate[property];
-        }
+      this.dataSource.filterPredicate = (data: MemberCandidate, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
-
+      this.dataSource.sortData = (data: MemberCandidate[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.paginator = this.paginator;
     }
   }

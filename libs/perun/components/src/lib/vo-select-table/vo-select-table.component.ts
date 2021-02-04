@@ -13,7 +13,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -38,7 +42,7 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
   selection: SelectionModel<Vo>;
 
   @Input()
-  displayedColumns: string[];
+  displayedColumns: string[] = [];
 
   @Input()
   pageSize = 10;
@@ -76,36 +80,35 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  getDataForColumn(data: Vo, column: string, otherThis: VoSelectTableComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'shortName':
+        return data.shortName;
+      case 'name':
+       return data.name;
+      case 'recent':
+        if (otherThis.recentIds) {
+          if (otherThis.recentIds.indexOf(data.id) > -1) {
+            return '#'.repeat(otherThis.recentIds.indexOf(data.id));
+          }
+        }
+        return data['name'];
+      default:
+        return data[column];
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: Vo, filter: string) => {
-        filter = filter.toLowerCase();
-        const dataStr = (data.id.toString() + data.name + data.shortName).toLowerCase();
-        return dataStr.indexOf(filter) !== -1;
+       return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Vo[], sort: MatSort) => {
+       return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.filter = this.filterValue;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'id': {
-            return +item.id;
-          }
-          case 'recent': {
-            if (this.recentIds) {
-              if (this.recentIds.indexOf(item.id) > -1) {
-                return '#'.repeat(this.recentIds.indexOf(item.id));
-              }
-            }
-            return item.name.toLocaleLowerCase();
-          }
-          case 'shortName' : {
-            return item.shortName.toLocaleLowerCase();
-          }
-          case 'name' : {
-            return item.name.toLocaleLowerCase();
-          }
-          default: return item[property];
-        }
-      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }

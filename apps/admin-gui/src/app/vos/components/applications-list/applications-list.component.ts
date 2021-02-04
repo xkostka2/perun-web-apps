@@ -12,8 +12,12 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Application, Group, Member } from '@perun-web-apps/perun/openapi';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { Application, Group, Member} from '@perun-web-apps/perun/openapi';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -75,6 +79,38 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
+  getDataForColumn(data: Application, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'createdAt':
+        return data.createdAt;
+      case 'type':
+        return data.type;
+      case 'state':
+        return data.state;
+      case 'user':
+        return data.user ?
+          data.user.lastName ? data.user.lastName : data.user.firstName ?? ''
+          :
+          data.createdBy.slice(data.createdBy.lastIndexOf('=')+1, data.createdBy.length);
+      case 'group':
+        return data.group ? data.group.name : '';
+      case 'modifiedBy':
+        const index = data.modifiedBy.lastIndexOf('/CN=');
+        if (index !== -1) {
+          const string =  data.modifiedBy.slice(index + 4, data.modifiedBy.length).replace('/unstructuredName=', ' ').toLowerCase();
+          if (string.lastIndexOf('\\') !== -1) {
+            return data.modifiedBy.slice(data.modifiedBy.lastIndexOf('=') + 1, data.modifiedBy.length);
+          }
+          return string;
+        }
+        return data.modifiedBy.toLowerCase();
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     // don't set the data if the paginator was not loaded yet
     if (!this.paginator) {
@@ -84,34 +120,12 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
       this.dataSource = new MatTableDataSource<Application>();
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'user': {
-            if (item.user) {
-              return item.user.firstName + '' + item.user.lastName;
-            }
-            return item.createdBy.slice(item.createdBy.lastIndexOf('=') + 1, item.createdBy.length);
-          }
-          case 'group': {
-            if (item.group) {
-              return item.group.name;
-            }
-            return '-';
-          }
-          case 'modifiedBy': {
-            const index = item.modifiedBy.lastIndexOf('/CN=');
-            if (index !== -1) {
-              const string =  item.modifiedBy.slice(index + 4, item.modifiedBy.length).replace('/unstructuredName=', ' ').toLowerCase();
-              if (string.lastIndexOf('\\') !== -1) {
-                return item.modifiedBy.slice(item.modifiedBy.lastIndexOf('=') + 1, item.modifiedBy.length);
-              }
-              return string;
-            }
-            return item.modifiedBy.toLowerCase();
-          }
-          default: return item[property];
-        }
-      }
+      this.dataSource.filterPredicate = (data: Application, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Application[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
     }
     this.dataSource.filter = this.filterValue;
     this.dataSource.data = this.applications;

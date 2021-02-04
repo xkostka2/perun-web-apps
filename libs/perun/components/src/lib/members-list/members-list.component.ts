@@ -13,11 +13,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
-import { RichMember } from '@perun-web-apps/perun/openapi';
+import { RichMember} from '@perun-web-apps/perun/openapi';
 import {
+  customDataSourceFilterPredicate, customDataSourceSort,
   getDefaultDialogConfig,
   parseEmail,
-  parseFullName, parseOrganization,
+  parseFullName, parseLogins, parseOrganization,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
@@ -83,12 +84,51 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   dataSource: MatTableDataSource<RichMember>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
+  getSortDataForColumn(data: RichMember, column: string, outerThis: MembersListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'fullName':
+        if(data.user){
+          return data.user.lastName ? data.user.lastName : data.user.firstName ?? ''
+        }
+        return ''
+      case 'status':
+        return  outerThis.showGroupStatuses ? data.groupStatus : data.status;
+      case 'organization':
+        return parseOrganization(data);
+      case 'email':
+        return parseEmail(data);
+      default:
+        return '';
+    }
+  }
+
+  getFilterDataForColumn(data: RichMember, column: string): string{
+    switch (column) {
+      case 'fullName':
+        if(data.user){
+          return data.user.lastName ? data.user.lastName : data.user.firstName ?? ''
+        }
+        return ''
+      case 'email':
+        return parseEmail(data);
+      case 'logins':
+        return parseLogins(data);
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
-      this.dataSource.filterPredicate =
-        (data: RichMember, filter: string) => parseFullName(data.user).toLowerCase().includes(filter.toLowerCase()) ||
-          data.id.toString(10).includes(filter);
+      this.dataSource.filterPredicate = (data: RichMember, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getFilterDataForColumn, this);
+      };
+      this.dataSource.sortData = (data: RichMember[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
+      };
       this.dataSource.filter = this.filter;
 
       this.dataSource.sort = this.sort;
@@ -108,28 +148,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
             return richMember[property];
         }
       };
-      this.dataSource.sortData = (data,sort) => {
-        const active = sort.active;
-        const direction = sort.direction;
-
-        if (!active || direction === '') { return data; }
-
-        return data.sort((a, b) => {
-          const valueA = this.dataSource.sortingDataAccessor(a, active);
-          const valueB = this.dataSource.sortingDataAccessor(b, active);
-
-          let comparatorResult = 0;
-          if (valueA != null && valueB != null) {
-            comparatorResult = valueA.toString().localeCompare(valueB.toString(), 'cs');
-          } else if (valueA != null) {
-            comparatorResult = 1;
-          } else if (valueB != null) {
-            comparatorResult = -1;
-          }
-          return comparatorResult * (direction === 'asc' ? 1 : -1);
-        });
-      }
-
       this.dataSource.paginator = this.paginator;
     }
   }

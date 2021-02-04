@@ -13,7 +13,12 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { getDefaultDialogConfig, parseFullName, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate, customDataSourceSort,
+  getDefaultDialogConfig,
+  parseFullName,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
 import { GuiAuthResolver, StoreService, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -81,29 +86,31 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
     this.routingStrategy = this.disableRouting;
   }
 
+  getDataForColumn(data: MemberWithSponsors, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.member.id.toString();
+      case 'name':
+        if(data.member.user){
+          return data.member.user.lastName ? data.member.user.lastName : data.member.user.firstName ?? ''
+        }
+        return ''
+      case 'sponsors':
+        return data.sponsors.map(s => parseFullName(s.user)).join();
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property){
-          case "id":
-            if(item.member){
-              return item.member.id;
-            }
-            break;
-          case "name":
-            if (item.member.user.lastName) {
-              return item.member.user.lastName.toLowerCase();
-            } else {
-              return parseFullName(item.member.user);
-            }
-          default: return item[property];
-        }
-      };
       this.dataSource.sort = this.sort;
 
-      this.dataSource.filterPredicate = (data: MemberWithSponsors, filter) => {
-        const dataAsStr = data.member.id.toString() + parseFullName(data.member.user);
-        return dataAsStr.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+      this.dataSource.filterPredicate = (data: MemberWithSponsors, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: MemberWithSponsors[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.filter = this.filterValue;
 

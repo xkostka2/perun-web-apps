@@ -10,10 +10,14 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Service } from '@perun-web-apps/perun/openapi';
+import { Service} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -75,8 +79,31 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     this.setDataSource();
   }
 
+  getDataForColumn(data: Service, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return data.name;
+      case 'enabled':
+        return data.enabled ? 'true' : 'false';
+      case 'script':
+        return data.script;
+      case 'description':
+        return data.description;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Service, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Service[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;

@@ -11,8 +11,12 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { RichFacility } from '@perun-web-apps/perun/openapi';
-import { parseTechnicalOwnersNames, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { RichFacility} from '@perun-web-apps/perun/openapi';
+import {
+  customDataSourceFilterPredicate, customDataSourceSort,
+  parseTechnicalOwnersNames,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -74,45 +78,38 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
     this.dataSource.paginator = this.paginator;
   }
 
+  getDataForColumn(data: RichFacility, column: string, otherThis: FacilitySelectTableComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return  data.name;
+      case 'description':
+        return data.description;
+      case 'technicalOwners':
+        return parseTechnicalOwnersNames(data.facilityOwners);
+      case 'recent':
+        if (otherThis.recentIds) {
+          if (otherThis.recentIds.indexOf(data.id) > -1) {
+            return '#'.repeat(otherThis.recentIds.indexOf(data.id));
+          }
+        }
+        return data['name'];
+      default:
+        return data[column];
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'id': {
-            return +item.id;
-          }
-          case 'recent': {
-            if (this.recentIds) {
-              if (this.recentIds.indexOf(item.id) > -1) {
-                return '#'.repeat(this.recentIds.indexOf(item.id));
-              }
-            }
-            return item.name.toLocaleLowerCase();
-          }
-          case 'name' : {
-            return item.name.toLocaleLowerCase();
-          }
-          default: return item[property];
-        }
-      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = ((data, filter) => {
-        const lowerCaseFilter = filter.trim().toLowerCase();
-        if (data.name.trim().toLowerCase().indexOf(lowerCaseFilter) !== -1) {
-          return true;
-        }
-        if (data.description !== null && data.description.trim().toLowerCase().indexOf(lowerCaseFilter) !== -1) {
-          return true;
-        }
-        if (data.id.toString(10).startsWith(filter)) {
-          return true;
-        }
-        if (this.displayedColumns.indexOf('technicalOwners') !== -1) {
-          return parseTechnicalOwnersNames(data.facilityOwners).toLowerCase().indexOf(lowerCaseFilter) !== -1;
-        }
-        return false;
-      });
+      this.dataSource.filterPredicate = (data: RichFacility, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: RichFacility[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.filter = this.filterValue;
     }
   }

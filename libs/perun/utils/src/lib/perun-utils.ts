@@ -9,10 +9,12 @@ import {
   RichMember,
   RichUser,
   User,
-  Candidate, ApplicationMail, ApplicationFormItem
+  Candidate, ApplicationMail, ApplicationFormItem, RichGroup
 } from '@perun-web-apps/perun/openapi';
 import { Attribute, AttributeDefinition } from '@perun-web-apps/perun/openapi';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { formatDate } from '@angular/common';
+import { MatSort } from '@angular/material/sort';
 
 
 
@@ -624,4 +626,42 @@ export function parseOrganization(richMember: RichMember): string {
     }
   }
   return organization;
+}
+
+export function getGroupExpiration(group: RichGroup): string{
+  const attribute = group.attributes.find(att => att.baseFriendlyName === 'groupMembershipExpiration');
+  if(attribute && attribute.value){
+    return attribute.value as unknown as string;
+  }
+  return 'Never';
+}
+
+export function parseDate(value: string): string{
+  if(!value || value.toLowerCase() === 'never'){
+    return value;
+  }
+  return formatDate(value, 'd.M.yyyy', 'en');
+}
+
+export function customDataSourceSort(data: any[], sort: MatSort, getDataForColumn: (data: any, column: string, outerThis: any) => string, outerThis:any){
+  const active = sort.active;
+  const direction = sort.direction;
+  if (!active || direction === '') {
+    return data;
+  }
+  return data.sort((a, b) => {
+    const dataStrA = getDataForColumn(a, active, outerThis);
+    const dataStrB = getDataForColumn(b, active, outerThis);
+    const collator = new Intl.Collator('cs',{numeric: true});
+    return collator.compare(dataStrA, dataStrB) * (direction === 'asc' ? 1 : -1);
+  });
+}
+
+export function customDataSourceFilterPredicate(data: any, filter: string, columns: string[], getDataForColumn: (data: any, column: string, outerThis: any) => string, outerThis: any){
+  filter = filter.toLowerCase();
+  let dataStr = '';
+  columns.forEach(col => {
+    dataStr+= ';' + getDataForColumn(data, col, outerThis);
+  });
+  return dataStr.toLowerCase().indexOf(filter) !== -1;
 }

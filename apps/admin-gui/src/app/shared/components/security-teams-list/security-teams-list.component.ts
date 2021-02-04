@@ -8,12 +8,16 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { SecurityTeam } from '@perun-web-apps/perun/openapi';
+import { SecurityTeam, Vo } from '@perun-web-apps/perun/openapi';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -67,9 +71,27 @@ export class SecurityTeamsListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue;
   }
 
+  getDataForColumn(data: SecurityTeam, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return data.name;
+      case 'description':
+        return data.description;
+      default:
+        return '';
+    }
+  }
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: SecurityTeam, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Vo[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }

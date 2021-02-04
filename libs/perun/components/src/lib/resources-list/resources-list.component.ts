@@ -11,9 +11,13 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Group, RichResource } from '@perun-web-apps/perun/openapi';
+import { Group, ResourceTag, RichResource } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -81,26 +85,47 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
     this.setAuth();
   }
 
+  getDataForColumn(data: RichResource, column: string, otherThis: ResourcesListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'vo':
+        return data.vo.name;
+      case 'name':
+        return  data.name;
+      case 'facility':
+        return data.facility.name;
+      case 'description':
+        return  data.description;
+      case 'recent':
+        if (otherThis.recentIds) {
+          if (otherThis.recentIds.indexOf(data.id) > -1) {
+            return '#'.repeat(otherThis.recentIds.indexOf(data.id));
+          }
+        }
+        return data['name'];
+      case 'tags':
+        if (!data.resourceTags) {
+          return data[column];
+        }
+        const tags = <[ResourceTag]>data.resourceTags;
+        let result = '';
+        tags.forEach(function (tag) {
+          result = result.concat(tag.tagName);
+        });
+        return result;
+      default:
+        return data[column];
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'id': {
-            return +item.id;
-          }
-          case 'recent': {
-            if (this.recentIds) {
-              if (this.recentIds.indexOf(item.id) > -1) {
-                return '#'.repeat(this.recentIds.indexOf(item.id));
-              }
-            }
-            return item.name.toLocaleLowerCase();
-          }
-          case 'name' : {
-            return item.name.toLocaleLowerCase();
-          }
-          default: return item[property];
-        }
+      this.dataSource.filterPredicate = (data: RichResource, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: RichResource[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

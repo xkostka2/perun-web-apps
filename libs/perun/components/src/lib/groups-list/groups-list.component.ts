@@ -13,7 +13,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate, customDataSourceSort,
+  getDefaultDialogConfig,
+  getGroupExpiration,
+  parseDate,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeExpirationDialogComponent, GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -152,34 +158,41 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
 
+  getDataForColumn(data: Group | RichGroup, column: string, otherThis: GroupsListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'vo':
+        return this.voNames.get(data.voId);
+      case 'name':
+        return  data.name;
+      case 'description':
+        return  data.description;
+      case 'expiration':
+        const expirationStr = getGroupExpiration(data);
+        return  parseDate(expirationStr);
+      case 'recent':
+        if (otherThis.recentIds) {
+          if (otherThis.recentIds.indexOf(data.id) > -1) {
+            return '#'.repeat(otherThis.recentIds.indexOf(data.id));
+          }
+        }
+        return data['name'];
+      default:
+        return data[column];
+    }
+  }
+
   setDataSource() {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'vo' :{
-            if (item.voId) {
-              return this.voNames.get(item.voId).toLowerCase();
-            }
-            break;
-          }
-          case 'recent': {
-            if (this.recentIds) {
-              if (this.recentIds.indexOf(item.id) > -1) {
-                return '#'.repeat(this.recentIds.indexOf(item.id));
-              }
-            }
-            return item.name.toLocaleLowerCase();
-          }
-          default: return item[property];
-        }
+      this.dataSource.filterPredicate = (data: Group|RichGroup, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Group[] | RichGroup[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.filterPredicate = (data: Group, filter: string) => {
-        filter = filter.toLowerCase();
-        const dataStr = (data.id.toString() + this.voNames.get(data.voId) + data.name + data.description).toLowerCase();
-        return dataStr.indexOf(filter) !== -1;
-      };
       this.dataSource.filter = this.filter;
       this.dataSource.paginator = this.paginator;
     }

@@ -8,12 +8,16 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {  Host } from '@perun-web-apps/perun/openapi';
+import { Host} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -73,19 +77,25 @@ export class HostsListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue;
   }
 
+  getDataForColumn(data: Host, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return  data.hostname;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'name' :{
-            if (item.hostname) {
-              return item.hostname;
-            }
-            break;
-          }
-          default: return item[property];
-        }
+      this.dataSource.filterPredicate = (data: Host, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Host[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.paginator = this.paginator;
     }

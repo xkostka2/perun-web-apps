@@ -8,12 +8,16 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { ExtSource } from '@perun-web-apps/perun/openapi';
+import { ExtSource, UserExtSource} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -72,8 +76,27 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
     this.setDataSource();
   }
 
+  getDataForColumn(data: ExtSource, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'type':
+        return data.type.substring(40);
+      case 'name':
+        return  data.name;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: UserExtSource, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: UserExtSource[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;
