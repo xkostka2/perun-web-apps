@@ -91,6 +91,13 @@
     },
     "perun-session-expiration": {
       "tags": []
+    },
+    "publications": {
+      "tags": []
+    },
+    "publications-e2e": {
+      "tags": [],
+      "implicitDependencies": ["publications"]
     }
   },
   "tasksRunnerOptions": {
