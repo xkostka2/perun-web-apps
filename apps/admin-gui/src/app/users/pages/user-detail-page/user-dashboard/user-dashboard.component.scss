@@ -31,9 +31,11 @@
 }
 
 .dashboard {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  position: relative;
+  min-height: calc(100vh - 64px - 200px);
+  margin-bottom: -60px !important;
+  padding-bottom: 50px;
+  top: -10px !important;
   left: 0;
   right: 0;
 }
