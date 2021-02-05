@@ -39,7 +39,7 @@ export class AddGroupResourceDialogComponent implements OnInit {
   ngOnInit(): void {
     this.theme = this.data.theme;
     this.loading = true;
-    this.resourcesManager.getResources(this.data.voId).subscribe(resources => {
+    this.resourcesManager.getRichResources(this.data.voId).subscribe(resources => {
       this.resources = resources.filter(res => !this.data.unwantedResources.includes(res.id));
       this.loading = false;
     }, () => this.loading = false );

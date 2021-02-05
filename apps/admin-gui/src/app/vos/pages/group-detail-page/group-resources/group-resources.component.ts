@@ -95,7 +95,7 @@ export class GroupResourcesComponent implements OnInit {
 
   addResource() {
     const config = getDefaultDialogConfig();
-    config.width = '750px';
+    config.width = '1000px';
     config.data = {theme: 'group-theme', group: this.group, voId: this.voId, unwantedResources: this.resources.map(res => res.id)};
 
     const dialogRef = this.dialog.open(AddGroupResourceDialogComponent, config);
