@@ -8,6 +8,8 @@ import {
   TableConfigService
 } from '@perun-web-apps/config/table-config';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { FormControl } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-group-applications',
@@ -40,6 +42,9 @@ export class GroupApplicationsComponent implements OnInit {
   tableId = TABLE_GROUP_APPLICATIONS_NORMAL;
   routeAuth = false;
 
+  startDate: FormControl;
+  endDate: FormControl;
+
   ngOnInit() {
     this.detailPageSize = this.tableConfigService.getTablePageSize(this.detailTableId);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
@@ -50,6 +55,8 @@ export class GroupApplicationsComponent implements OnInit {
         this.group = group;
         this.setData(['NEW', 'VERIFIED']);
       });
+      this.startDate = new FormControl(formatDate(this.yearAgo(),'yyyy-MM-dd','en-GB'));
+      this.endDate =new FormControl(formatDate(new Date(),'yyyy-MM-dd','en-GB'));
     });
   }
 
@@ -61,7 +68,7 @@ export class GroupApplicationsComponent implements OnInit {
 
 
   setData(state: string[]) {
-    this.registrarManager.getApplicationsForGroup(this.group.id, state).subscribe(applications => {
+    this.registrarManager.getApplicationsForGroup(this.group.id, state, formatDate(this.startDate.value, 'yyyy-MM-dd','en-GB'), formatDate(this.endDate.value, 'yyyy-MM-dd','en-GB')).subscribe(applications => {
       this.applications = applications;
       this.setAuth();
       this.loading = false;
@@ -92,17 +99,21 @@ export class GroupApplicationsComponent implements OnInit {
         break;
       }
       case 'all': {
-        this.registrarManager.getApplicationsForGroup(this.group.id).subscribe(applications => {
-          this.applications = applications;
-          this.setAuth();
-          this.loading = false;
-        });
+        this.setData(null);
         break;
       }
       default: {
         break;
       }
     }
+  }
+
+  yearAgo() {
+    const date = new Date();
+    const year = date.getFullYear() - 1;
+    const month = date.getMonth();
+    const day = date.getDate();
+    return new Date(year, month, day);
   }
 
   applyFilter(filterValue: string) {

@@ -436,10 +436,12 @@
       "SELECTION_PENDING": "Pending",
       "SELECTION_APPROVED": "Approved",
       "SELECTION_REJECTED": "Rejected",
+      "SHOW_GROUP_APPLICATIONS": "Show group applications",
       "TABLE_ID": "App ID",
       "TABLE_CREATED_DATE": "Created Date",
       "TABLE_TYPE": "Type",
       "TABLE_STATE": "State",
+      "TABLE_GROUPS_SELECTION": "Groups applications",
       "TABLE_SUBMITTED_BY": "Submitted by",
       "TABLE_LOA": "LoA",
       "TABLE_GROUP_NAME": "Group name",
@@ -461,6 +463,10 @@
         "REJECTED": "Rejected",
         "NEW": "Waiting for mail verification",
         "VERIFIED": "Submitted"
+      },
+      "DATE" : {
+        "START": "Start date",
+        "END": "End date"
       },
       "APPLICATION_DETAIL": {
         "TITLE": "Application detail",

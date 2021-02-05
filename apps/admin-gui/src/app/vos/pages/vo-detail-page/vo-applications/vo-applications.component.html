@@ -7,7 +7,7 @@
   <button mat-stroked-button *ngIf="showAllDetails" class="mr-2" (click)="this.showAllDetails = false">
     {{'VO_DETAIL.APPLICATION.SHOW_LESS_DETAILS' | translate}}
   </button>
-  <mat-form-field class="w-25 mr-2">
+  <mat-form-field class="input-width-250 mr-2">
     <mat-label>{{'VO_DETAIL.APPLICATION.TABLE_STATE' | translate}}</mat-label>
     <mat-select (selectionChange)="select()" [(value)]="state" disableOptionCentering>
       <mat-option value="all">{{'VO_DETAIL.APPLICATION.SELECTION_ALL' | translate}}</mat-option>
@@ -22,6 +22,16 @@
     [placeholder]="'VO_DETAIL.APPLICATION.FILTER'"
     (filter)="applyFilter($event)">
   </app-debounce-filter>
+  <perun-web-apps-date-range
+    [startDate]="startDate"
+    [endDate]="endDate"
+    (datePicker)="select()">
+  </perun-web-apps-date-range>
+  <div>
+    <mat-checkbox color="primary" [checked]="checked" (change)="showGroupApplications($event)">
+      {{'VO_DETAIL.APPLICATION.SHOW_GROUP_APPLICATIONS' | translate}}
+    </mat-checkbox>
+  </div>
 </div>
 <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
 <div *ngIf="!loading">
