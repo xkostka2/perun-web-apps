@@ -136,7 +136,7 @@ export class SettingsAuthenticationComponent implements OnInit {
       loadUserInfo: this.store.get('oidc_client', 'oauth_load_user_info'),
       automaticSilentRenew: true,
       silent_redirect_uri: this.store.get('oidc_client', 'oauth_silent_redirect_uri'),
-      extraQueryParams: { 'max_age': 0 }
+      extraQueryParams: { 'max_age': 0, 'acr_values': 'https://refeds.org/profile/mfa'}
       // max_age: 0
     };
   }

@@ -14,7 +14,7 @@
 
 <app-alert *ngIf="!tokens.length" alert_type="info">{{'AUTHENTICATION.NO_TOKENS' | customTranslate | translate}}</app-alert>
 <div [hidden]="!tokens.length">
-  <mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>
+<!--  <mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>-->
   <div [class.hide-table]="exporting" class="card mt-2">
     <div class="card-body">
       <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true"
