@@ -11,6 +11,7 @@ import { TABLE_GROUP_MANAGERS_PAGE, TableConfigService } from '@perun-web-apps/c
 import { PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-managers-page',
@@ -77,7 +78,7 @@ export class ManagersPageComponent implements OnInit {
     }
 
     this.routeAuth = this.guiAuthResolver.isPerunAdmin();
-    this.changeUser();
+    this.refreshUsers();
   }
 
   changeRolePrivileges() {
@@ -95,7 +96,19 @@ export class ManagersPageComponent implements OnInit {
     }
   }
 
-  changeUser() {
+  tabChanged(event: MatTabChangeEvent) {
+    this.loading = true;
+
+    if(event.index === 0) {
+      this.selectedMode = 'user';
+      this.refreshUsers();
+    } else {
+      this.selectedMode = 'group';
+      this.refreshGroups();
+    }
+  }
+
+  refreshUsers() {
     this.loading = true;
     this.changeRolePrivileges();
 
@@ -103,27 +116,27 @@ export class ManagersPageComponent implements OnInit {
       Urns.USER_DEF_ORGANIZATION,
       Urns.USER_DEF_PREFERRED_MAIL];
     attributes = attributes.concat(this.storeService.getLoginAttributeNames());
-    if (this.selectedMode === 'user') {
-      this.authzService.getAuthzRichAdmins(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType,
-        attributes,false, true).subscribe(managers => {
-        this.managers = managers;
-        this.selectionUsers.clear();
-        this.selectionGroups.clear();
-        this.loading = false;
-      }, () => {
-        this.loading = false;
-      });
-    }
-    if (this.selectedMode === 'group') {
-      this.authzService.getAuthzAdminGroups(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType).subscribe(groups => {
-        this.groups = groups;
-        this.selectionUsers.clear();
-        this.selectionGroups.clear();
-        this.loading = false;
-      }, () => {
-        this.loading = false;
-      });
-    }
+    this.authzService.getAuthzRichAdmins(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType,
+      attributes,false, true).subscribe(managers => {
+      this.managers = managers;
+      this.selectionUsers.clear();
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    });
+  }
+
+  refreshGroups() {
+    this.loading = true;
+    this.changeRolePrivileges();
+
+    this.authzService.getAuthzAdminGroups(this.selectedRole, this.complementaryObject.id, this.complementaryObjectType).subscribe(groups => {
+      this.groups = groups;
+      this.selectionGroups.clear();
+      this.loading = false;
+    }, () => {
+      this.loading = false;
+    });
   }
 
   addManager() {
@@ -138,8 +151,10 @@ export class ManagersPageComponent implements OnInit {
 
     const dialogRef = this.dialog.open(AddManagerDialogComponent, config);
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.changeUser();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        this.refreshUsers();
+      }
     });
   }
 
@@ -157,7 +172,7 @@ export class ManagersPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.changeUser();
+        this.refreshUsers();
       }
     });
   }
@@ -176,7 +191,7 @@ export class ManagersPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.changeUser();
+        this.refreshGroups();
       }
     });
   }
@@ -192,8 +207,10 @@ export class ManagersPageComponent implements OnInit {
     };
 
     const dialogRef = this.dialog.open(AddGroupManagerDialogComponent, config);
-    dialogRef.afterClosed().subscribe(() => {
-      this.changeUser();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        this.refreshGroups();
+      }
     });
   }
 

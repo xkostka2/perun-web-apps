@@ -1,68 +1,104 @@
 <h1 class="page-subtitle">
   {{'SHARED.COMPONENTS.MANAGERS_PAGE.TITLE' | translate}}
 </h1>
-<div *ngIf="availableRoles.length !== 0">
-  <perun-web-apps-refresh-button *ngIf="!loading" (refresh)="changeUser()"></perun-web-apps-refresh-button>
-  <button
-    *ngIf="!loading && manageAuth"
-    mat-flat-button
-    color="accent"
-    class="mr-2"
-    (click)="selectedMode === 'user' ? addManager() : addGroup()">
-    {{'SHARED.COMPONENTS.MANAGERS_PAGE.ADD' | translate}}
-  </button>
-  <button
-    *ngIf="!loading && manageAuth"
-    mat-flat-button
-    color="warn"
-    (click)="selectedMode === 'user' ? removeManager() : removeGroup()"
-    [disabled]="selectionUsers.selected.length === 0 && selectionGroups.selected.length === 0">
-    {{'SHARED.COMPONENTS.MANAGERS_PAGE.REMOVE' | translate}}
-  </button>
 
-  <mat-form-field *ngIf="!loading" class="ml-2">
-    <mat-label>{{'SHARED.COMPONENTS.MANAGERS_PAGE.SELECT_MODE' | translate}}</mat-label>
-    <mat-select [(value)]="selectedMode" (selectionChange)="changeUser()">
-      <mat-option *ngFor="let mode of roleModes" [value]="mode.toLowerCase()">
-        {{mode}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+  <mat-tab>
+    <ng-template matTabLabel>
+      {{'SHARED.COMPONENTS.MANAGERS_PAGE.USER' | translate}}
+    </ng-template>
+    <ng-template matTabContent>
+      <perun-web-apps-refresh-button class="mt-2" *ngIf="!loading" (refresh)="refreshUsers()"></perun-web-apps-refresh-button>
+      <button
+        *ngIf="!loading && manageAuth"
+        mat-flat-button
+        color="accent"
+        class="mr-2 mt-2"
+        (click)="addManager()">
+        {{'SHARED.COMPONENTS.MANAGERS_PAGE.ADD' | translate}}
+      </button>
 
-  <mat-form-field *ngIf="!loading" class="ml-2">
-    <mat-label>{{'SHARED.COMPONENTS.MANAGERS_PAGE.SELECT_ROLE' | translate}}</mat-label>
-    <mat-select [(value)]="selectedRole" (selectionChange)="changeUser()">
-      <mat-option *ngFor="let role of availableRoles" [value]="role">{{role | displayedRole}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-  <div *ngIf="!loading">
+      <button
+        *ngIf="!loading && manageAuth"
+        mat-flat-button
+        color="warn"
+        class="mr-2 mt-2"
+        (click)="removeManager()"
+        [disabled]="selectionUsers.selected.length === 0">
+        {{'SHARED.COMPONENTS.MANAGERS_PAGE.REMOVE' | translate}}
+      </button>
 
-    <app-alert *ngIf="managers && managers.length == 0 && selectedMode === 'user'" alert_type="warn">
-      {{'SHARED.COMPONENTS.MANAGERS_PAGE.NO_MANAGERS' | translate}}
-    </app-alert>
-    <app-users-list
-      (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      *ngIf="managers && managers.length > 0 && selectedMode === 'user'"
-      [users]="managers"
-      [disableRouting]="!routeAuth"
-      [displayedColumns]="manageAuth ? ['select', 'id', 'name', 'email', 'logins', 'organization'] : ['id', 'name', 'email', 'logins', 'organization']"
-      [selection]="selectionUsers">
-    </app-users-list>
+      <mat-form-field *ngIf="!loading" class="mr-2 mt-2">
+        <mat-label>{{'SHARED.COMPONENTS.MANAGERS_PAGE.SELECT_ROLE' | translate}}</mat-label>
+        <mat-select [(value)]="selectedRole" (selectionChange)="refreshUsers()">
+          <mat-option *ngFor="let role of availableRoles" [value]="role">{{role | displayedRole}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-    <perun-web-apps-groups-list
-      (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      *ngIf="groups && selectedMode === 'group' && !loading"
-      [hideColumns]="manageAuth ? ['menu', 'expiration', 'recent'] : ['select','expiration', 'menu', 'recent']"
-      [groups]="groups"
-      [selection]="selectionGroups"
-      [disableMembers]="false">
-    </perun-web-apps-groups-list>
-  </div>
-</div>
+      <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+
+      <div *ngIf="!loading">
+        <app-users-list
+          (page)="pageChanged($event)"
+          [pageSize]="pageSize"
+          *ngIf="managers"
+          [users]="managers"
+          [disableRouting]="!routeAuth"
+          [displayedColumns]="manageAuth ? ['select', 'id', 'name', 'email', 'logins', 'organization'] : ['id', 'name', 'email', 'logins', 'organization']"
+          [selection]="selectionUsers">
+        </app-users-list>
+      </div>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template matTabLabel>
+      {{'SHARED.COMPONENTS.MANAGERS_PAGE.GROUP' | translate}}
+    </ng-template>
+    <ng-template matTabContent>
+      <perun-web-apps-refresh-button class="mt-2" *ngIf="!loading" (refresh)="refreshGroups()"></perun-web-apps-refresh-button>
+      <button
+        *ngIf="!loading && manageAuth"
+        mat-flat-button
+        color="accent"
+        class="mr-2 mt-2"
+        (click)="addGroup()">
+        {{'SHARED.COMPONENTS.MANAGERS_PAGE.ADD' | translate}}
+      </button>
+
+      <button
+        *ngIf="!loading && manageAuth"
+        mat-flat-button
+        color="warn"
+        class="mr-2 mt-2"
+        (click)="removeGroup()"
+        [disabled]="selectionGroups.selected.length === 0">
+        {{'SHARED.COMPONENTS.MANAGERS_PAGE.REMOVE' | translate}}
+      </button>
+
+      <mat-form-field *ngIf="!loading" class="mr-2 mt-2">
+        <mat-label>{{'SHARED.COMPONENTS.MANAGERS_PAGE.SELECT_ROLE' | translate}}</mat-label>
+        <mat-select [(value)]="selectedRole" (selectionChange)="refreshGroups()">
+          <mat-option *ngFor="let role of availableRoles" [value]="role">{{role | displayedRole}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+
+      <div *ngIf="!loading">
+        <perun-web-apps-groups-list
+          (page)="pageChanged($event)"
+          [pageSize]="pageSize"
+          *ngIf="groups"
+          [hideColumns]="manageAuth ? ['menu', 'expiration', 'recent'] : ['select','expiration', 'menu', 'recent']"
+          [groups]="groups"
+          [selection]="selectionGroups"
+          [disableMembers]="false">
+        </perun-web-apps-groups-list>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
 
 <app-alert *ngIf="availableRoles.length === 0" alert_type="warn">
   {{'SHARED.COMPONENTS.MANAGERS_PAGE.NO_AVAILABLE_ROLES' | translate}}

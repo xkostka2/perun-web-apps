@@ -1925,8 +1925,8 @@
         "REMOVE": "Remove",
         "SELECT_MODE": "Select mode",
         "SELECT_ROLE": "Select role",
-        "USER": "User",
-        "GROUP": "Group",
+        "USER": "Users",
+        "GROUP": "Groups",
         "NO_MANAGERS": "This role has no managers.",
         "NO_GROUP_MANAGERS": "This role has no group managers.",
         "NO_AVAILABLE_ROLES": "This entity has no available manager roles or you dont have privileges to manage them"
@@ -2245,7 +2245,8 @@
         "NO_GROUPS": "No groups found.",
         "NO_ORGANIZATIONS": "No organizations found",
         "NO_FILTER_RESULTS_ALERT": "No results match given search criteria.",
-        "NO_MEMBERS": "No members found"
+        "NO_MEMBERS": "No members found",
+        "NO_USERS": "No users found."
       }
     }
   }

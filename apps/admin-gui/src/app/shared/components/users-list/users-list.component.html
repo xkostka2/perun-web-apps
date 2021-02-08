@@ -92,6 +92,10 @@
   </div>
 </div>
 
+<app-alert *ngIf="users.length === 0" alert_type="warn">
+  {{'SHARED_LIB.UI.ALERTS.NO_USERS' | translate}}
+</app-alert>
+
 <app-alert *ngIf="dataSource.filteredData.length === 0 && users.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
