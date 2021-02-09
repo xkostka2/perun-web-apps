@@ -283,6 +283,7 @@
     "MEMBERS": {
       "TITLE": "Members",
       "ADD_MEMBER": "Add",
+      "ADD_MEMBER_DISABLED": "You cannot add members manually into this Vo.",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
       "LIST_MEMBERS": "List all members",
@@ -513,6 +514,7 @@
       "TITLE": "Members",
       "ACTIONS_DISABLED": "Actions with members are disabled, because this group is filled with members from external source.",
       "ADD_MEMBER": "Add",
+      "ADD_MEMBER_DISABLED": "You cannot add members manually into this group.",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
       "LIST_ALL": "List all members",

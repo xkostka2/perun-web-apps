@@ -8,15 +8,17 @@
       [matTooltipDisabled]="!synchEnabled"
       [matTooltipPosition]="'above'"
       matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-      <button
-        (click)="onAddMember()"
-        *ngIf="addAuth"
-        [disabled]="synchEnabled"
-        class="mr-2"
-        color="accent"
-        mat-flat-button>
-      {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
-      </button>
+      <div matTooltip="{{'GROUP_DETAIL.MEMBERS.ADD_MEMBER_DISABLED' | translate}}" [matTooltipDisabled]="!blockManualMemberAdding">
+        <button
+          (click)="onAddMember()"
+          *ngIf="addAuth"
+          [disabled]="synchEnabled || blockManualMemberAdding"
+          class="mr-2"
+          color="accent"
+          mat-flat-button>
+          {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
+        </button>
+      </div>
     </span>
     <span
       [matTooltipDisabled]="!synchEnabled"

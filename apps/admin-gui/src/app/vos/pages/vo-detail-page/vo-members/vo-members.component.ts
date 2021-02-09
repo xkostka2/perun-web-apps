@@ -8,7 +8,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
 import { MembersService } from '@perun-web-apps/perun/services';
-import { MembersManagerService, RichMember, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  AttributesManagerService,
+  MembersManagerService,
+  RichMember,
+  Vo,
+  VosManagerService
+} from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { FormControl, Validators } from '@angular/forms';
 import { TABLE_VO_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
@@ -38,7 +44,8 @@ export class VoMembersComponent implements OnInit {
     private tableConfigService: TableConfigService,
     private dialog: MatDialog,
     private authzService: GuiAuthResolver,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private attributesManager: AttributesManagerService,
   ) { }
 
   vo: Vo;
@@ -71,6 +78,7 @@ export class VoMembersComponent implements OnInit {
   inviteAuth: boolean;
   routeAuth: boolean;
   count: number;
+  blockManualMemberAdding: boolean;
 
   ngOnInit() {
     this.loading = true;
@@ -81,17 +89,21 @@ export class VoMembersComponent implements OnInit {
     this.route.parent.params.subscribe(parentParams => {
       const voId = parentParams['voId'];
 
-      this.voService.getVoById(voId).subscribe(vo => {
-        this.vo = vo;
-        this.setAuthRights();
-        this.memberMethodService.getMembersCount(this.vo.id).subscribe( count => {
-          this.count = count;
-          if(count < 400) {
-            this.onListAll();
-          }
-          this.loading = false;
-        }, err=> this.loading = false);
-      }, err => this.loading = false);
+      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
+        this.blockManualMemberAdding = attrValue.value !== null;
+
+        this.voService.getVoById(voId).subscribe(vo => {
+          this.vo = vo;
+          this.setAuthRights();
+          this.memberMethodService.getMembersCount(this.vo.id).subscribe(count => {
+            this.count = count;
+            if (count < 400) {
+              this.onListAll();
+            }
+            this.loading = false;
+          });
+        });
+      });
     });
   }
 
