@@ -8,6 +8,8 @@ import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { NewVersionDialogComponent } from './shared/components/dialogs/new-version-dialog/new-version-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { version } from '../../../../package.json';
+import { NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +22,8 @@ export class AppComponent implements OnInit {
     private cache: CacheHelperService,
     private store: StoreService,
     private http: HttpClient,
-    private dialog:MatDialog
+    private dialog:MatDialog,
+    private router: Router
   ) {
 
     this.cache.init();
@@ -55,11 +58,56 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (sessionStorage.getItem("initPage") === null) {
+      sessionStorage.setItem("initPage", location.pathname);
+      sessionStorage.setItem("onInitPage", 'true');
+    }
+    this.store.setInitialPageId(1);
     this.principal = this.store.getPerunPrincipal();
     this.loadAppVersion();
     interval(30000).subscribe(() => {
       this.loadAppVersion();
     });
+    this.router.events
+      .pipe(
+        filter(
+          ( event ) => {
+            return( event instanceof NavigationStart );
+          }
+        )
+      )
+      .subscribe(
+        ( event: NavigationStart ) => {
+          //TODO FIX this method
+          this.updateInitAccessedPage(event);
+        });
+  }
+
+  //TODO fix this method
+  // only relevant in situation when user enters app on other than home page
+  // this method can falsely evaluate page as initial in this scenario:
+  // user accesses page A with url 'abc', page A is the initial page,
+  // user than navigates through application
+  // to page B with same url 'abc', user reloads application on page B
+  // continues to navigate through application
+  // if he accesses page B before page A (using forward/back buttons)
+  // page B will be falsely evaluated as initial
+  updateInitAccessedPage(event) {
+    if (event.url === sessionStorage.getItem("initPage")) {
+      if (event.navigationTrigger === "imperative" && event.id !== this.store.getInitialPageId()) {
+        sessionStorage.setItem("onInitPage", 'false');
+      }
+      if(event.navigationTrigger === 'popstate'){
+        if(event.restoredState.navigationId === this.store.getInitialPageId()) {
+          sessionStorage.setItem("onInitPage", 'true');
+          this.store.setInitialPageId(event.id);
+        } else {
+          sessionStorage.setItem("onInitPage", 'false');
+        }
+      }
+    } else {
+      sessionStorage.setItem("onInitPage", 'false');
+    }
   }
 
   loadAppVersion() {

@@ -21,6 +21,8 @@ export class BackButtonComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    if (sessionStorage.getItem("onInitPage") === 'false'){
+      this.location.back();
+    }
   }
 }
