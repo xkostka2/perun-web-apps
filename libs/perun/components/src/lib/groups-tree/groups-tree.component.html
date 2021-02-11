@@ -33,19 +33,19 @@
             </mat-icon>
           </button>
           <div class="w-50">
-          <span class="mr-2">
-            {{group.name}}
-          </span>
+            <span class="mr-2">
+              {{group.name}}
+            </span>
             <span *ngIf="authResolver.isPerunAdmin()" class="text-muted">
-            #{{group.id}}
-          </span>
+              #{{group.id}}
+            </span>
           </div>
           <div class="w-50 text-muted description-text" #rootDescription>
-          <span
-            matTooltip="{{group.description}}"
-            matTooltipPosition="before">
-            {{group.description}}
-          </span>
+            <span
+              matTooltip="{{group.description}}"
+              matTooltipPosition="before">
+              {{group.description}}
+            </span>
           </div>
         </div>
         <div class="group-buttons">
