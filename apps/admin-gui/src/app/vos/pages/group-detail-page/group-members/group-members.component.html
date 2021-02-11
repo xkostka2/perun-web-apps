@@ -1,51 +1,51 @@
 <div (keyup)="onKeyInput($event)">
   <h1 class="page-subtitle">{{'GROUP_DETAIL.MEMBERS.TITLE' | translate}}</h1>
+  <app-alert *ngIf="synchEnabled" alert_type="warn">
+    {{'GROUP_DETAIL.MEMBERS.ACTIONS_DISABLED' | translate}}
+  </app-alert>
   <div class="align-elements">
-  <span
-    [matTooltipDisabled]="!synchEnabled"
-    [matTooltipPosition]="'above'"
-    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-    <app-alert *ngIf="synchEnabled" alert_type="warn">
-      {{'GROUP_DETAIL.MEMBERS.ACTIONS_DISABLED' | translate}}
-    </app-alert>
-    <button
-      (click)="onAddMember()"
-      *ngIf="addAuth"
-      [disabled]="synchEnabled"
-      class="mr-2"
-      color="accent"
-      mat-flat-button>
-    {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
-  </button>
-  </span>
     <span
       [matTooltipDisabled]="!synchEnabled"
       [matTooltipPosition]="'above'"
       matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-    <button
-      (click)="onInviteMember()"
-      *ngIf="inviteAuth"
-      [disabled]="synchEnabled"
-      class="mr-2"
-      color="accent"
-      mat-flat-button>
-    {{'GROUP_DETAIL.MEMBERS.INVITE_MEMBER' | translate}}
-    </button>
-  </span>
+      <button
+        (click)="onAddMember()"
+        *ngIf="addAuth"
+        [disabled]="synchEnabled"
+        class="mr-2"
+        color="accent"
+        mat-flat-button>
+      {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
+      </button>
+    </span>
     <span
       [matTooltipDisabled]="!synchEnabled"
       [matTooltipPosition]="'above'"
       matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-     <button
-       (click)="onRemoveMembers()"
-       *ngIf="removeAuth"
-       [disabled]="selection.isEmpty() || synchEnabled"
-       class="mr-2"
-       color="warn"
-       mat-flat-button>
-    {{'GROUP_DETAIL.MEMBERS.REMOVE_MEMBERS' | translate}}
-  </button>
-  </span>
+      <button
+        (click)="onInviteMember()"
+        *ngIf="inviteAuth"
+        [disabled]="synchEnabled"
+        class="mr-2"
+        color="accent"
+        mat-flat-button>
+      {{'GROUP_DETAIL.MEMBERS.INVITE_MEMBER' | translate}}
+      </button>
+    </span>
+    <span
+      [matTooltipDisabled]="!synchEnabled"
+      [matTooltipPosition]="'above'"
+      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+       <button
+         (click)="onRemoveMembers()"
+         *ngIf="removeAuth"
+         [disabled]="selection.isEmpty() || synchEnabled"
+         class="mr-2"
+         color="warn"
+         mat-flat-button>
+         {{'GROUP_DETAIL.MEMBERS.REMOVE_MEMBERS' | translate}}
+       </button>
+    </span>
     <button (click)="onListAll()" class="mr-2" mat-stroked-button>
       {{'GROUP_DETAIL.MEMBERS.LIST_ALL' | translate}}
     </button>

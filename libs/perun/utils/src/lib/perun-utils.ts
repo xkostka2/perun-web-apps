@@ -303,11 +303,21 @@ export function addRecentlyVisited(key: string, item: any) {
 export function addRecentlyVisitedObject(item: any) {
   if (localStorage.getItem('recent') === null) {
     // if user not have any in local storage
-    const recent = [{id: item.id, name: item.name, type: item.beanName, voId: item.voId}];
+    let recent;
+    if (item.beanName === 'Group') {
+      recent = [{id: item.id, name: item.shortName, type: item.beanName, voId: item.voId}];
+    } else {
+      recent = [{id: item.id, name: item.name, type: item.beanName, voId: item.voId}];
+    }
     localStorage.setItem('recent', JSON.stringify(recent));
   } else {
     const recent: any[] = JSON.parse(localStorage.getItem('recent'));
-    const object = {id: item.id, name: item.name, type: item.beanName, voId: item.voId};
+    let object;
+    if (item.beanName === 'Group') {
+      object = {id: item.id, name: item.shortName, type: item.beanName, voId: item.voId};
+    } else {
+      object = {id: item.id, name: item.name, type: item.beanName, voId: item.voId};
+    }
     const index = indexOfObject(recent, object);
     if (index > 0) {
       // if object is in recent but not of first place, then we remove it to placed it first

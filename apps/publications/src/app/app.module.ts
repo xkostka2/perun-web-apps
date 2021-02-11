@@ -7,16 +7,14 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common
 import { ApiInterceptor, ApiService, CustomIconService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ApiModule, Configuration, ConfigurationParameters } from '@perun-web-apps/perun/openapi';
-import { UserProfileConfigService } from '../../../user-profile/src/app/services/user-profile-config.service';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { HttpLoaderFactory } from '../../../admin-gui/src/app/app.module';
 import { PublicationsConfigService } from './services/publications-config.service';
 import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../../../admin-gui/src/app/shared/shared.module';
-import { CoreModule } from '../../../admin-gui/src/app/core/core.module';
 import { MatIconModule } from '@angular/material/icon';
 import { GeneralModule } from '@perun-web-apps/general';
+import { UiMaterialModule } from '@perun-web-apps/ui/material';
+import { AppRoutingModule } from './app-routing.module';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -35,7 +33,7 @@ export function apiConfigFactory(store: StoreService): Configuration {
   return new Configuration(params);
 }
 
-const loadConfigs = (appConfig: UserProfileConfigService) => {
+const loadConfigs = (appConfig: PublicationsConfigService) => {
   return () => {
     return appConfig.loadConfigs();
   };
@@ -48,17 +46,17 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
     }),
     BrowserAnimationsModule,
-    SharedModule,
-    CoreModule,
+    UiMaterialModule,
     MatIconModule,
     GeneralModule,
     ApiModule,
     HttpClientModule,
+    AppRoutingModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
   ],
   providers: [
