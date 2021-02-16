@@ -9,11 +9,16 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { BanOnFacility, User } from '@perun-web-apps/perun/openapi';
+import { BanOnFacility, User} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  parseName,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -68,9 +73,27 @@ export class BlacklistListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue;
   }
 
+  getDataForColumn(data: [BanOnFacility, User], column: string): string{
+    switch (column) {
+      case 'userId':
+        return data[1].id.toString();
+      case 'reason':
+        return data[0].description;
+      case 'name':
+        return  parseName(data[1]);
+      default:
+        return '';
+    }
+  }
 
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: [BanOnFacility, User], filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: [BanOnFacility, User][], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }

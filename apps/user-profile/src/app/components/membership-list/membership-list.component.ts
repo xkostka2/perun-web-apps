@@ -13,7 +13,11 @@ import { MatPaginator} from '@angular/material/paginator';
 import { Attribute, Group, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 
 export interface Membership {
   entity: Vo | Group;
@@ -76,9 +80,28 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
+  getDataForColumn(data: Membership, column: string): string{
+    switch (column) {
+      case 'name':
+        return data.entity.name;
+      case 'description':
+        return 'description' in data.entity ? data.entity.description : '';
+      case 'expirationAttribute':
+        return data.expirationAttribute && data.expirationAttribute.value ? <string><unknown>data.expirationAttribute.value : 'never';
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Membership, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Membership[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;

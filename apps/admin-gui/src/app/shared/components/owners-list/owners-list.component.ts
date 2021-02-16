@@ -13,7 +13,11 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Group, Owner} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -69,8 +73,29 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
+  getDataForColumn(data: Owner, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return data.name;
+      case 'contact':
+        return  data.contact;
+      case 'type':
+        return data.type;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Owner, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Owner[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;

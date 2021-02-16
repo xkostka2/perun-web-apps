@@ -8,12 +8,17 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { TaskResult } from '@perun-web-apps/perun/openapi';
+import { TaskResult} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  parseDate,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -65,37 +70,41 @@ export class TaskResultsListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue;
   }
 
+  getDataForColumn(data: TaskResult, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'destination':
+        return data.destination.destination;
+      case 'type':
+        return  data.destination.type;
+      case 'service':
+        return data.service.name;
+      case 'status':
+        return data.status;
+      case 'time':
+        return  parseDate(data.timestamp.toString());
+      case 'returnCode':
+        return data.returnCode.toString();
+      case 'standardMessage':
+        return data.standardMessage;
+      case 'errorMessage':
+        return  data.errorMessage;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'status' :{
-            if (item.status) {
-              return item.status;
-            }
-            break;
-          }
-          case 'destination' :{
-            if (item.destination) {
-              return item.destination.destination;
-            }
-            break;
-          }
-          case 'time' :{
-            if (item.timestamp) {
-              return item.timestamp;
-            }
-            break;
-          }
-          default: return item[property];
-        }
-      };
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;
-      this.dataSource.filterPredicate = (result, filter) => {
-        return result.id.toString().includes(filter) || result.destination.destination.toLowerCase().includes(filter) ||
-          result.destination.type.includes(filter) || result.service.name.includes(filter) || result.status.includes(filter);
+      this.dataSource.filterPredicate = (data: TaskResult, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: TaskResult[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
     }
   }

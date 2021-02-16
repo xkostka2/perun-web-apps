@@ -259,6 +259,7 @@
         "DELETE_BUTTON": "Delete",
         "EDIT_BUTTON": "Edit",
         "SAVE_BUTTON": "Save",
+        "SEARCH": "Filter by ID or name",
         "DELETE_SUCCESS": "Resource tags were successfully deleted.",
         "CREATE_SUCCESS": "Resource tag was successfully created.",
         "NO_TAGS": "VO has no resource tags defined."

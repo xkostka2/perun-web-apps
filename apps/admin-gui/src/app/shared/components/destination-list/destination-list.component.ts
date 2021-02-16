@@ -9,11 +9,15 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { RichDestination } from '@perun-web-apps/perun/openapi';
+import { RichDestination, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -68,32 +72,35 @@ export class DestinationListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue.toLowerCase();
   }
 
+  getDataForColumn(data: RichDestination, column: string): string{
+    switch (column) {
+      case 'destinationId':
+        return data.id.toString();
+      case 'service':
+        return data.service.name;
+      case 'facility':
+        return  data.facility.name;
+      case 'destination':
+        return data.destination;
+      case 'type':
+        return data.type;
+      case 'status':
+        return data.blocked ? 'true' : 'false';
+      case 'propagationType':
+        return  data.propagationType;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'destinationId': {
-            return item.id
-          }
-          case 'service': {
-            return item.service.name;
-          }
-          case 'facility': {
-            return item.facility.name
-          }
-          default: return item[property];
-        }
+      this.dataSource.filterPredicate = (data: RichDestination, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
-      this.dataSource.filterPredicate = (data, filter) => {
-        let dataStr = '';
-        if(this.displayedColumns.includes('service')){
-          dataStr = data.service.name + data.id + data.destination + data.type + data.propagationType;
-        } else {
-          dataStr = data.facility.name + data.id + data.destination + data.type + data.propagationType;
-        }
-
-        return dataStr.toLowerCase().indexOf(filter) !== -1;
+      this.dataSource.sortData = (data: Vo[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.paginator = this.paginator;
     }

@@ -19,7 +19,6 @@ import { RegistrarManagerService } from './api/registrarManager.service';
 import { ResourcesManagerService } from './api/resourcesManager.service';
 import { ServicesManagerService } from './api/servicesManager.service';
 import { TasksManagerService } from './api/tasksManager.service';
-import { UserManagerService } from './api/userManager.service';
 import { UsersManagerService } from './api/usersManager.service';
 import { UtilsService } from './api/utils.service';
 import { VosManagerService } from './api/vosManager.service';
@@ -45,7 +44,6 @@ import { VosManagerService } from './api/vosManager.service';
     ResourcesManagerService,
     ServicesManagerService,
     TasksManagerService,
-    UserManagerService,
     UsersManagerService,
     UtilsService,
     VosManagerService ]

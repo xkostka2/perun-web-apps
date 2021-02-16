@@ -8,14 +8,18 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { RichUserExtSource, UserExtSource } from '@perun-web-apps/perun/openapi';
+import { RichUserExtSource, UserExtSource} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-user-ext-sources-list',
@@ -82,36 +86,31 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
     this.setDataSource();
   }
 
+  getDataForColumn(data: RichUserExtSource, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.userExtSource.id.toString();
+      case 'mail':
+        const attribute = data.attributes.find(att => att.friendlyName === 'mail');
+        return attribute ? attribute.value.toString() : 'N/A';
+      case 'extSourceName':
+        return  data.userExtSource.extSource.name;
+      case 'login':
+        return  data.userExtSource.login;
+      case 'lastAccess':
+        return  data.userExtSource.lastAccess.split('.')[0];
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     if (!!this.dataSource) {
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'id' : {
-            if (item.userExtSource) {
-              return item.userExtSource.id;
-            }
-            break;
-          }
-          case 'extSourceName': {
-            if (item.userExtSource) {
-              return item.userExtSource.extSource.name.toLowerCase();
-            }
-            break;
-          }
-          case 'login': {
-            if (item.userExtSource) {
-              return item.userExtSource.login.toLowerCase();
-            }
-            break;
-          }
-          case 'lastAccess': {
-            if (item.userExtSource) {
-              return item.userExtSource.lastAccess;
-            }
-            break;
-          }
-          default: return item[property];
-        }
+      this.dataSource.filterPredicate = (data: RichUserExtSource, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: RichUserExtSource[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

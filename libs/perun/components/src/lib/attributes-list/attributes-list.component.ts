@@ -14,8 +14,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {AttributeValueComponent} from './attribute-value/attribute-value.component';
-import { Attribute } from '@perun-web-apps/perun/openapi';
-import { filterCoreAttributes, isVirtualAttribute, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { Attribute} from '@perun-web-apps/perun/openapi';
+import {
+  customDataSourceFilterPredicate, customDataSourceSort,
+  filterCoreAttributes,
+  isVirtualAttribute,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -88,9 +93,28 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  getDataForColumn(data: Attribute, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'displayName':
+        return data.displayName;
+      case 'description':
+        return  data.description;
+      default:
+        return '';
+    }
+  }
+
   setDataSource() {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hiddenColumns.includes(x));
     if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Attribute, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Attribute[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.dataSource.filter = this.filterValue;
