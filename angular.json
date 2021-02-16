@@ -1162,6 +1162,128 @@
           }
         }
       }
+    },
+    "password-reset": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/password-reset",
+      "sourceRoot": "apps/password-reset/src",
+      "prefix": "perun-web-apps",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/password-reset",
+            "index": "apps/password-reset/src/index.html",
+            "main": "apps/password-reset/src/main.ts",
+            "polyfills": "apps/password-reset/src/polyfills.ts",
+            "tsConfig": "apps/password-reset/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/password-reset/src/favicon.ico",
+              "apps/password-reset/src/assets"
+            ],
+            "styles": ["apps/password-reset/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/password-reset/src/environments/environment.ts",
+                  "with": "apps/password-reset/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "password-reset:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "password-reset:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "password-reset:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/password-reset/tsconfig.app.json",
+              "apps/password-reset/tsconfig.spec.json",
+              "apps/password-reset/tsconfig.editor.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/password-reset/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/password-reset/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "password-reset-e2e": {
+      "root": "apps/password-reset-e2e",
+      "sourceRoot": "apps/password-reset-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/password-reset-e2e/cypress.json",
+            "tsConfig": "apps/password-reset-e2e/tsconfig.e2e.json",
+            "devServerTarget": "password-reset:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "password-reset:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/password-reset-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/password-reset-e2e/**/*"]
+          }
+        }
+      }
     }
   },
   "cli": {

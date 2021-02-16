@@ -98,6 +98,13 @@
     "publications-e2e": {
       "tags": [],
       "implicitDependencies": ["publications"]
+    },
+    "password-reset": {
+      "tags": []
+    },
+    "password-reset-e2e": {
+      "tags": [],
+      "implicitDependencies": ["password-reset"]
     }
   },
   "tasksRunnerOptions": {
