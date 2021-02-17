@@ -11,3 +11,4 @@ export * from './lib/member-email.pipe';
 export * from './lib/member-logins.pipe';
 export * from './lib/parse-date.pipe';
 export * from './lib/technical-owners.pipe';
+export * from './lib/filter-unique-objects.pipe';

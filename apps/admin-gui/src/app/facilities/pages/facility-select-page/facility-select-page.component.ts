@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, HostBinding, OnInit } from '@angular/core';
 import {SideMenuService} from '../../../core/services/common/side-menu.service';
-import { FacilitiesManagerService, RichFacility } from '@perun-web-apps/perun/openapi';
+import { EnrichedFacility, FacilitiesManagerService} from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig, getRecentlyVisitedIds } from '@perun-web-apps/perun/utils';
 import {
   TABLE_FACILITY_SELECT,
@@ -11,7 +11,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateFacilityDialogComponent } from '../../../shared/components/dialogs/create-facility-dialog/create-facility-dialog.component';
 import { DeleteFacilityDialogComponent } from '../../../shared/components/dialogs/delete-facility-dialog/delete-facility-dialog.component';
-import { GuiAuthResolver, InitAuthService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-facility-select-page',
@@ -28,18 +27,17 @@ export class FacilitySelectPageComponent implements OnInit, AfterViewChecked {
     private facilityManager: FacilitiesManagerService,
     private sideMenuService: SideMenuService,
     private tableConfigService: TableConfigService,
-    private dialog: MatDialog,
-    private authResolver: GuiAuthResolver,
-    private initAuthService: InitAuthService
+    private dialog: MatDialog
   ) { }
 
-  facilities: RichFacility[] = [];
+  facilities: EnrichedFacility[] = [];
   recentIds: number[] = [];
   loading: boolean;
   filterValue = '';
   pageSize: number;
   tableId = TABLE_FACILITY_SELECT;
-  selection = new SelectionModel<RichFacility>(false, []);
+  selection = new SelectionModel<EnrichedFacility>(false, []);
+  includeDestinations: boolean;
 
   ngOnInit() {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
@@ -53,7 +51,7 @@ export class FacilitySelectPageComponent implements OnInit, AfterViewChecked {
 
   refreshTable() {
     this.loading = true;
-    this.facilityManager.getRichFacilities().subscribe(facilities => {
+    this.facilityManager.getEnrichedFacilities().subscribe(facilities => {
       this.selection.clear();
       this.facilities = facilities;
       this.recentIds = getRecentlyVisitedIds('facilities');

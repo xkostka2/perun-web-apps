@@ -1,4 +1,4 @@
-<div class="card mt-3" [class.hide-table]="exporting" [hidden]="dataSource.filteredData.length === 0">
+<div class="card mt-3" [class.hide-table]="exporting" [hidden]="!dataSource || dataSource.filteredData.length === 0">
   <div class="card-body">
     <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
     <div class="overflow-auto">
@@ -26,7 +26,7 @@
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell
               mat-sort-header>{{'FACILITY_MANAGEMENT.TABLE.ID' | translate}}</th>
-          <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.id}}</td>
+          <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.facility.id}}</td>
         </ng-container>
         <ng-container matColumnDef="recent">
           <th *matHeaderCellDef mat-header-cell>
@@ -34,28 +34,48 @@
           <td *matCellDef="let facility" mat-cell>
             <perun-web-apps-recently-viewed-icon
               [recentIds]="recentIds"
-              [id]="facility.id">
+              [id]="facility.facility.id">
             </perun-web-apps-recently-viewed-icon>
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
           <th *matHeaderCellDef mat-header-cell
               mat-sort-header>{{'FACILITY_MANAGEMENT.TABLE.NAME' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.name}}</td>
+          <td *matCellDef="let facility" mat-cell>{{facility.facility.name}}</td>
         </ng-container>
         <ng-container matColumnDef="description">
           <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.DESCRIPTION' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.description}}</td>
+          <td *matCellDef="let facility" mat-cell>{{facility.facility.description}}</td>
         </ng-container>
         <ng-container matColumnDef="technicalOwners">
           <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.TECHNICAL_OWNERS' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.facilityOwners | technicalOwners}}</td>
+          <td *matCellDef="let facility" mat-cell>{{facility.owners | technicalOwners}}</td>
+        </ng-container>
+        <ng-container matColumnDef="destinations">
+          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.DESTINATIONS' | translate}}</th>
+          <td *matCellDef="let facility" mat-cell>
+            <perun-web-apps-object-list-values
+              (mouseenter)="disableRouting = true"
+              (mouseleave)="disableRouting = false"
+              [paramName]="'destination'"
+              [objects]="facility.destinations | filterUniqueObjects: filterValue:'destination'"></perun-web-apps-object-list-values>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="hosts">
+          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.HOSTS' | translate}}</th>
+          <td *matCellDef="let facility" mat-cell>
+            <perun-web-apps-object-list-values
+              (mouseenter)="disableRouting = true"
+              (mouseleave)="disableRouting = false"
+              [paramName]="'hostname'"
+              [objects]="facility.hosts | filterUniqueObjects: filterValue:'hostname'"></perun-web-apps-object-list-values>
+          </td>
         </ng-container>
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let facility; columns: displayedColumns;"
-          [routerLink]="['/facilities', facility.id]"
-          [perunWebAppsMiddleClickRouterLink]="['/facilities', facility.id]"
+          [routerLink]="disableRouting ? [] : ['/facilities', facility.facility.id]"
+          [perunWebAppsMiddleClickRouterLink]="['/facilities', facility.facility.id]"
           class="dark-hover-list-item"
           mat-row>
         </tr>
@@ -73,6 +93,6 @@
 
 <mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0" alert_type="warn">
+<app-alert *ngIf="!!dataSource && dataSource.filteredData.length === 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
