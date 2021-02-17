@@ -1,12 +1,18 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { GuiAuthResolver, MembersService, StoreService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
-import { GroupsManagerService, MembersManagerService, RichGroup, RichMember } from '@perun-web-apps/perun/openapi';
+import {
+  AttributesManagerService,
+  GroupsManagerService,
+  MembersManagerService,
+  RichGroup,
+  RichMember
+} from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import { TABLE_GROUP_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
@@ -33,7 +39,8 @@ export class GroupMembersComponent implements OnInit {
     private dialog: MatDialog,
     private guiAuthResolver: GuiAuthResolver,
     private storeService: StoreService,
-    private membersManager: MembersManagerService
+    private membersManager: MembersManagerService,
+    private attributesManager: AttributesManagerService,
   ) { }
 
   group: RichGroup;
@@ -74,6 +81,7 @@ export class GroupMembersComponent implements OnInit {
   routeAuth: boolean;
   inviteAuth: boolean;
   hideColumns: String[] = [];
+  blockManualMemberAdding: boolean;
 
   statuses = new FormControl();
   statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
@@ -88,18 +96,33 @@ export class GroupMembersComponent implements OnInit {
     this.memberAttrNames = this.memberAttrNames.concat(this.storeService.getLoginAttributeNames());
     this.route.parent.params.subscribe(parentParams => {
       const groupId = parentParams['groupId'];
+      const voId = parentParams['voId'];
 
-      this.groupService.getRichGroupByIdWithAttributesByNames(groupId, this.groupAttrNames).subscribe(group => {
-        this.group = group;
-        this.synchEnabled = this.isSynchronized();
-        this.setAuthRights();
-        this.groupService.getGroupMembersCount(this.group.id).subscribe( count => {
-          if(count < 400) {
-            this.onListAll();
-          }
-          this.loading = false;
-        }, err => this.loading = false);
-      }, err => this.loading = false);
+      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
+        this.blockManualMemberAdding = attrValue.value !== null;
+        if (this.blockManualMemberAdding !== true) {
+          this.attributesManager.getGroupAttributeByName(groupId, "urn:perun:group:attribute-def:def:blockManualMemberAdding").subscribe(groupAttrValue => {
+            this.blockManualMemberAdding = groupAttrValue.value !== null;
+            this.loadPage(groupId);
+          });
+        } else {
+          this.loadPage(groupId);
+        }
+      });
+    });
+  }
+
+  loadPage(groupId: number) {
+    this.groupService.getRichGroupByIdWithAttributesByNames(groupId, this.groupAttrNames).subscribe(group => {
+      this.group = group;
+      this.synchEnabled = this.isSynchronized();
+      this.setAuthRights();
+      this.groupService.getGroupMembersCount(this.group.id).subscribe( count => {
+        if(count < 400) {
+          this.onListAll();
+        }
+        this.loading = false;
+      });
     });
   }
 

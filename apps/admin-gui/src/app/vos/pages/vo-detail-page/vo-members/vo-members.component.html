@@ -1,14 +1,17 @@
 <div (keyup)="onKeyInput($event)" class="vo-theme">
   <h1 class="page-subtitle">{{'VO_DETAIL.MEMBERS.TITLE' | translate}}</h1>
   <div class="align-elements">
-    <button
-      *ngIf="addAuth"
-      mat-flat-button
-      color="accent"
-      class="mr-2"
-      (click)="onAddMember()">
-      {{'VO_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
-    </button>
+    <div matTooltip="{{'VO_DETAIL.MEMBERS.ADD_MEMBER_DISABLED' | translate}}" [matTooltipDisabled]="!blockManualMemberAdding">
+      <button
+        *ngIf="addAuth"
+        [disabled]="blockManualMemberAdding"
+        mat-flat-button
+        color="accent"
+        class="mr-2"
+        (click)="onAddMember()">
+        {{'VO_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
+      </button>
+    </div>
     <button
       *ngIf="inviteAuth"
       mat-flat-button
