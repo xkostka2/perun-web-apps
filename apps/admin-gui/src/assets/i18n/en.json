@@ -66,14 +66,16 @@
   },
   "FACILITY_MANAGEMENT": {
     "TITLE": "Select facility",
-    "FILTER_PLACEHOLDER": "Filter by name, id, description or owner",
+    "FILTER_PLACEHOLDER": "Filter by name, id, description, owner, host or destination",
     "CREATE": "Create",
     "DELETE": "Delete",
     "TABLE": {
       "ID": "Id",
       "NAME": "Name",
       "DESCRIPTION": "Description",
-      "TECHNICAL_OWNERS": "Technical owners"
+      "TECHNICAL_OWNERS": "Technical owners",
+      "DESTINATIONS": "Destinations",
+      "HOSTS": "Hosts"
     }
   },
   "USER_MANAGEMENT": {

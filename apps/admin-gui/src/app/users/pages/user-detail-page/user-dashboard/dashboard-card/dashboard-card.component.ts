@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-  AuthzResolverService, Facility,
+  AuthzResolverService, EnrichedFacility, Facility,
   Group,
   ResourcesManagerService,
-  RichFacility,
   RichResource,
   Vo
 } from '@perun-web-apps/perun/openapi';
@@ -31,7 +30,7 @@ export class DashboardCardComponent implements OnInit {
   svgIcon: string;
   title: string;
   roleTooltipInfo: string;
-  objects: Vo[] | Group[] | RichResource[] | RichFacility[];
+  objects: Vo[] | Group[] | RichResource[] | EnrichedFacility[];
   loading = false;
   recentIds =[];
 
@@ -73,7 +72,12 @@ export class DashboardCardComponent implements OnInit {
       }
       case 'Facility': {
         this.authzResolver.getFacilitiesWhereUserIsInRoles([this.roleName]).subscribe( facilities => {
-          this.objects = facilities;
+          this.objects = facilities.map(fac =>{
+            const ef: EnrichedFacility = {
+              facility: fac
+            };
+            return ef
+          });
           this.recentIds = getRecentlyVisitedIds('facilities')
           this.loading = false;
         });

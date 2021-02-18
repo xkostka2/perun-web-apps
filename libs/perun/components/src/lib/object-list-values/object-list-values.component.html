@@ -1,0 +1,23 @@
+<form class="d-flex w-100">
+  <div class="w-100">
+    <div class="mr-5">
+      <div *ngFor="let object of objects.slice(0, itemsShown)"
+           class="d-flex mb-1">
+          {{object[paramName]}}
+      </div>
+    </div>
+    <div>
+          <span
+            [matTooltip]="showMore ? 'Show less' : 'Show more'"
+            [matTooltipPosition]="'above'">
+          <button
+            *ngIf="objects.length > defaultItemsShown"
+            mat-icon-button
+            (click)="onShowChange()">
+            <mat-icon *ngIf="!showMore">more_horiz</mat-icon>
+            <mat-icon *ngIf="showMore">keyboard_arrow_up</mat-icon>
+          </button>
+          </span>
+    </div>
+  </div>
+</form>

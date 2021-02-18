@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -11,7 +11,7 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { RichFacility} from '@perun-web-apps/perun/openapi';
+import { EnrichedFacility} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate, customDataSourceSort,
   parseTechnicalOwnersNames,
@@ -25,12 +25,15 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
   templateUrl: './facility-select-table.component.html',
   styleUrls: ['./facility-select-table.component.scss']
 })
-export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
+export class FacilitySelectTableComponent implements OnChanges {
 
-  constructor(private authResolver: GuiAuthResolver) { }
+  constructor(
+    private authResolver: GuiAuthResolver,
+    private cd: ChangeDetectorRef
+  ) { }
 
   @Input()
-  facilities: RichFacility[];
+  facilities: EnrichedFacility[];
 
   @Input()
   recentIds: number[];
@@ -42,10 +45,10 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   pageSize = 10;
 
   @Input()
-  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'description', 'technicalOwners'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'description', 'technicalOwners', 'destinations', 'hosts'];
 
   @Input()
-  selection: SelectionModel<RichFacility>;
+  selection: SelectionModel<EnrichedFacility>;
 
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -60,58 +63,68 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+    this.setDataSource();
+    this.cd.detectChanges();
+  }
 
   private sort: MatSort;
+  private paginator: MatPaginator;
 
-  dataSource: MatTableDataSource<RichFacility>;
+  dataSource: MatTableDataSource<EnrichedFacility>;
+  disableRouting: boolean;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.dataSource = new MatTableDataSource<RichFacility>(this.facilities);
     this.setDataSource();
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  getDataForColumn(data: RichFacility, column: string, otherThis: FacilitySelectTableComponent): string{
+  getDataForColumn(data: EnrichedFacility, column: string, otherThis: FacilitySelectTableComponent): string{
     switch (column) {
       case 'id':
-        return data.id.toString();
+        return data.facility.id.toString();
       case 'name':
-        return  data.name;
+        return  data.facility.name;
       case 'description':
-        return data.description;
+        return data.facility.description;
       case 'technicalOwners':
-        return parseTechnicalOwnersNames(data.facilityOwners);
+        return parseTechnicalOwnersNames(data.owners);
       case 'recent':
         if (otherThis.recentIds) {
-          if (otherThis.recentIds.indexOf(data.id) > -1) {
-            return '#'.repeat(otherThis.recentIds.indexOf(data.id));
+          if (otherThis.recentIds.indexOf(data.facility.id) > -1) {
+            return '#'.repeat(otherThis.recentIds.indexOf(data.facility.id));
           }
         }
         return data['name'];
+      case 'destinations':
+        return data.destinations.map(d => d.destination).join(' ; ')
+      case 'hosts':
+        return data.hosts.map(d => d.hostname).join(' ; ')
       default:
         return data[column];
     }
   }
 
   setDataSource() {
-    if (!!this.dataSource) {
+    if (!this.paginator) {
+      return;
+    }
+    if (!this.dataSource) {
+      this.dataSource = new MatTableDataSource<EnrichedFacility>();
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.dataSource.filterPredicate = (data: RichFacility, filter: string) => {
+      this.dataSource.filterPredicate = (data: EnrichedFacility, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
-      this.dataSource.sortData = (data: RichFacility[], sort: MatSort) => {
+      this.dataSource.sortData = (data: EnrichedFacility[], sort: MatSort) => {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
-      this.dataSource.filter = this.filterValue;
     }
+    this.dataSource.filter = this.filterValue;
+    this.dataSource.data = this.facilities;
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -129,11 +142,11 @@ export class FacilitySelectTableComponent implements AfterViewInit, OnChanges {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: RichFacility): string {
+  checkboxLabel(row?: EnrichedFacility): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.facility.id + 1}`;
   }
 
   pageChanged(event: PageEvent) {

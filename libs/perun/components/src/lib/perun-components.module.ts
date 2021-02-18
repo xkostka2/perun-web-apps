@@ -70,7 +70,8 @@ import { ExpirationSelectComponent } from './expiration-select/expiration-select
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { RecentlyViewedIconComponent } from './recently-viewed-icon/recently-viewed-icon.component';
 import { FacilitySelectTableComponent } from './facility-select-table/facility-select-table.component';
-import { DateRangeComponent } from './date-range/date-range.component'
+import { DateRangeComponent } from './date-range/date-range.component';
+import { ObjectListValuesComponent } from './object-list-values/object-list-values.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -173,6 +174,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     FacilitySelectTableComponent,
     EntitySearchSelectComponent,
     DateRangeComponent,
+    ObjectListValuesComponent
   ],
   exports: [
     VoSelectTableComponent,

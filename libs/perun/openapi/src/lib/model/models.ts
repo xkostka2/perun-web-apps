@@ -25,6 +25,7 @@ export * from './contactGroup';
 export * from './destination';
 export * from './destinationPropagationType';
 export * from './destinationType';
+export * from './enrichedFacility';
 export * from './enrichedHost';
 export * from './enrichedResource';
 export * from './extSource';
