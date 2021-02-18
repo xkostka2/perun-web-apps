@@ -4,9 +4,6 @@ import * as shape from 'd3-shape';
 import { Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  MembersService
-} from '@perun-web-apps/perun/services';
-import {
   FacilitiesManagerService,
   Facility,
   Group,
@@ -18,7 +15,7 @@ import {
   UsersManagerService,
   VosManagerService,
   ServicesManagerService,
-  User
+  User, MembersManagerService
 } from '@perun-web-apps/perun/openapi';
 
 @Component({
@@ -33,7 +30,7 @@ export class UserDestinationGraphComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private facilityManager: FacilitiesManagerService,
               private userService: UsersManagerService,
-              private memberService: MembersService,
+              private membersService: MembersManagerService,
               private serviceService: ServicesManagerService,
               private resourceManager: ResourcesManagerService,
               private groupService: GroupsManagerService,
@@ -80,7 +77,7 @@ export class UserDestinationGraphComponent implements OnInit {
         this.user = user;
         this.facilityManager.getFacilitiesByDestination(this.destination).subscribe( facilities => {
           this.facilities = facilities;
-          this.memberService.getMembersByUser(this.user.id).subscribe(membership => {
+          this.membersService.getMembersByUser(this.user.id).subscribe(membership => {
             this.membership = membership;
             if (this.membership.length === 0 || this.facilities.length === 0) {
               this.loading = false;

@@ -1,4 +1,3 @@
-export { MembersService } from './lib/members.service';
 export { PerunApiService } from './lib/perun-api-service';
 export { GuiAuthResolver } from './lib/gui-auth-resolver.service';
 export { AuthService } from './lib/auth.service';

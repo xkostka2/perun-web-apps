@@ -4,8 +4,8 @@ import {SideMenuItemService} from '../../../shared/side-menu/side-menu-item.serv
 import {SideMenuService} from '../../../core/services/common/side-menu.service';
 import {TranslateService} from '@ngx-translate/core';
 import {fadeIn} from '@perun-web-apps/perun/animations';
-import { GuiAuthResolver, MembersService } from '@perun-web-apps/perun/services';
-import { RichMember, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { MembersManagerService, RichMember, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 
 @Component({
   selector: 'app-member-detail-page',
@@ -21,7 +21,7 @@ export class MemberDetailPageComponent implements OnInit {
     private sideMenuItemService: SideMenuItemService,
     private translate: TranslateService,
     private sideMenuService: SideMenuService,
-    private membersService: MembersService,
+    private membersService: MembersManagerService,
     private voService: VosManagerService,
     private route: ActivatedRoute,
     private authResolver: GuiAuthResolver
