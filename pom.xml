@@ -75,6 +75,30 @@
             </configuration>
             <phase>generate-resources</phase>
           </execution>
+          <execution>
+            <id>publications</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>
+                run ng build publications -- --prod
+              </arguments>
+            </configuration>
+            <phase>generate-resources</phase>
+          </execution>
+          <execution>
+            <id>password-reset</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>
+                run ng build password-reset -- --prod
+              </arguments>
+            </configuration>
+            <phase>generate-resources</phase>
+          </execution>
         </executions>
       </plugin>
     </plugins>
