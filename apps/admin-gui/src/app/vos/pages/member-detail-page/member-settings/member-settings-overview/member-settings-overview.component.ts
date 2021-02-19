@@ -1,9 +1,8 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {SideMenuService} from '../../../../../core/services/common/side-menu.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {MenuItem} from '@perun-web-apps/perun/models';
-import { GuiAuthResolver, MembersService } from '@perun-web-apps/perun/services';
-import { Member, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import { Member, MembersManagerService, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 
 @Component({
   selector: 'app-member-settings-overview',
@@ -17,9 +16,8 @@ export class MemberSettingsOverviewComponent implements OnInit {
   constructor(
     private sideMenuService: SideMenuService,
     private voService: VosManagerService,
-    private memberService: MembersService,
+    private memberManager: MembersManagerService,
     protected route: ActivatedRoute,
-    private authResolver: GuiAuthResolver
   ) {
   }
 
@@ -33,7 +31,7 @@ export class MemberSettingsOverviewComponent implements OnInit {
     this.route.parent.parent.params.subscribe(grandParentParams => {
       const voId = grandParentParams['voId'];
       const memberId = grandParentParams['memberId'];
-      this.memberService.getMemberById(memberId).subscribe(member => {
+      this.memberManager.getMemberById(memberId).subscribe(member => {
         this.member = member;
 
         this.voService.getVoById(voId).subscribe(vo => {

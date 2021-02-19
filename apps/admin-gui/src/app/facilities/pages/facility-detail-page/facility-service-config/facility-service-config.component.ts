@@ -3,12 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import {
   FacilitiesManagerService,
   Facility,
-  Group,
+  Group, MembersManagerService,
   Resource,
   ResourcesManagerService, RichMember, Service, ServicesManagerService, Vo
 } from '@perun-web-apps/perun/openapi';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MembersService } from '@perun-web-apps/perun/services';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -29,7 +28,7 @@ export class FacilityServiceConfigComponent implements OnInit {
     private facilityManager: FacilitiesManagerService,
     private resourceManager: ResourcesManagerService,
     private serviceManager: ServicesManagerService,
-    private membersManager: MembersService,
+    private membersManager: MembersManagerService,
     private namePipe: UserFullNamePipe,
     private translate: TranslateService
   ) {
@@ -66,6 +65,7 @@ export class FacilityServiceConfigComponent implements OnInit {
 
   serviceAllTranslation: String;
   serviceNotSelectedTranslation: String;
+  allowedStatuses: string[] =  ['INVALID', 'VALID'];
 
   ngOnInit() {
     this.route.parent.params.subscribe(parentParams => {
@@ -126,7 +126,7 @@ export class FacilityServiceConfigComponent implements OnInit {
   onSelectedGroup(g: Group) {
     this.selectedGroup = g;
     if (this.selectedGroup !== undefined) {
-      this.membersManager.getCompleteRichMembersForGroup(this.selectedGroup.id, this.attrNames).subscribe(members => this.members = members);
+      this.membersManager.getCompleteRichMembersForGroup(this.selectedGroup.id, false, this.allowedStatuses, this.attrNames).subscribe(members => this.members = members);
       this.selectedMember = undefined;
     } else {
       this.members = undefined;

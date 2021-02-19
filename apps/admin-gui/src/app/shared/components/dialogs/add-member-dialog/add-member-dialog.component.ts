@@ -4,7 +4,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MembersService } from '@perun-web-apps/perun/services';
 import {
   Candidate,
   Group,
@@ -41,7 +40,6 @@ export class AddMemberDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<AddMemberDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AddMemberDialogData,
-    private memberService: MembersService,
     private membersManagerService: MembersManagerService,
     private groupService: GroupsManagerService,
     private voService: VosManagerService,
@@ -171,7 +169,7 @@ export class AddMemberDialogComponent implements OnInit {
   }
 
   private addUserToVo(selectedMemberCandidate: MemberCandidate) {
-    this.memberService.createMember(this.data.entityId, selectedMemberCandidate.richUser.id).subscribe(member => {
+    this.membersManagerService.createMemberForUser({vo: this.data.entityId, user: selectedMemberCandidate.richUser.id}).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();
@@ -196,8 +194,8 @@ export class AddMemberDialogComponent implements OnInit {
       name: this.data.group.name,
       voId: this.data.group.voId
     }
-    this.memberService.createMemberWithGroups(
-      this.data.voId, selectedMemberCandidate.richUser.id, [group]).subscribe(member => {
+    this.membersManagerService.createMemberForUser(
+      {vo: this.data.voId, user: selectedMemberCandidate.richUser.id, groups: [group]}).subscribe(member => {
       this.onAddSuccess();
       this.membersManagerService.validateMemberAsync(member.id).subscribe(() => {
         this.onValidateSuccess();

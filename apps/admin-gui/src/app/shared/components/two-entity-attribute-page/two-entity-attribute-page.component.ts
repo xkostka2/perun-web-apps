@@ -14,7 +14,6 @@ import { DeleteAttributeDialogComponent } from '../dialogs/delete-attribute-dial
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { EditAttributeDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { CreateAttributeDialogComponent } from '../dialogs/create-attribute-dialog/create-attribute-dialog.component';
-import { MembersService } from '@perun-web-apps/perun/services';
 import { Urns } from '@perun-web-apps/perun/urns';
 
 @Component({
@@ -29,7 +28,7 @@ export class TwoEntityAttributePageComponent implements OnInit {
               private resourcesManagerService: ResourcesManagerService,
               private facilitiesManagerService: FacilitiesManagerService,
               private groupsManagerService: GroupsManagerService,
-              private membersManagerService: MembersService,
+              private membersManager: MembersManagerService,
               private dialog:MatDialog) {
   }
 
@@ -52,6 +51,7 @@ export class TwoEntityAttributePageComponent implements OnInit {
   attributes: Attribute[] = [];
   selection = new SelectionModel<Attribute>(true, []);
   specificSecondEntity: Resource | Facility | Group | RichMember | User;
+  allowedStatuses: string[] =  ['INVALID', 'VALID'];
 
   loading = false;
   innerLoading = false;
@@ -94,7 +94,7 @@ export class TwoEntityAttributePageComponent implements OnInit {
             break;
           case 'member':
             // return one attribute because if an empty list is passed, all attributes are returned
-            this.membersManagerService.getCompleteRichMembersForGroup(this.firstEntityId, [Urns.MEMBER_CORE_ID]).subscribe(members => {
+            this.membersManager.getCompleteRichMembersForGroup(this.firstEntityId, false, this.allowedStatuses, [Urns.MEMBER_CORE_ID]).subscribe(members => {
               this.entityValues = members;
               this.preselectEntity();
               this.loading = false;

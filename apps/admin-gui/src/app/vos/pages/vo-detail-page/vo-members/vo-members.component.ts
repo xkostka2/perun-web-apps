@@ -7,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
-import { MembersService } from '@perun-web-apps/perun/services';
 import {
   AttributesManagerService,
   MembersManagerService,
@@ -34,8 +33,7 @@ export class VoMembersComponent implements OnInit {
   @HostBinding('class.router-component') true;
 
   constructor(
-    private membersService: MembersService,
-    private memberMethodService: MembersManagerService, //TODO change the name when the openapi MembersService will be implemented
+    private membersService: MembersManagerService,
     private sideMenuService: SideMenuService,
     private voService: VosManagerService,
     private route: ActivatedRoute,
@@ -95,7 +93,7 @@ export class VoMembersComponent implements OnInit {
         this.voService.getVoById(voId).subscribe(vo => {
           this.vo = vo;
           this.setAuthRights();
-          this.memberMethodService.getMembersCount(this.vo.id).subscribe(count => {
+          this.membersService.getMembersCount(this.vo.id).subscribe(count => {
             this.count = count;
             if (count < 400) {
               this.onListAll();
@@ -132,7 +130,7 @@ export class VoMembersComponent implements OnInit {
 
     this.selection.clear();
 
-    this.membersService.findCompleteRichMembers(this.vo.id, this.searchControl.value, this.attrNames, this.selectedStatuses).subscribe(
+    this.membersService.findCompleteRichMembersForVo(this.vo.id, this.attrNames, this.searchControl.value, this.selectedStatuses).subscribe(
       members => {
         this.members = members;
         this.setAuthRights();
@@ -147,7 +145,7 @@ export class VoMembersComponent implements OnInit {
     this.firstSearchDone = true;
 
     this.selection.clear();
-    this.membersService.getCompleteRichMembers(this.vo.id, this.attrNames, this.selectedStatuses).subscribe(
+    this.membersService.getCompleteRichMembersForVo(this.vo.id, this.selectedStatuses, this.attrNames).subscribe(
       members => {
         this.members = members;
         this.setAuthRights();

@@ -2,7 +2,7 @@ import {Component, HostBinding, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {SelectionModel} from '@angular/cdk/collections';
 import {AttributesListComponent} from '@perun-web-apps/perun/components';
-import { GuiAuthResolver, MembersService, NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
 import {TranslateService} from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
