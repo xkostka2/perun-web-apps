@@ -1,0 +1,6 @@
+{
+  "extends": "../../tslint.json",
+  "linterOptions": { "exclude": ["!**/*"] },
+  "rules": {},
+  "jsRules": { "no-empty": true }
+}

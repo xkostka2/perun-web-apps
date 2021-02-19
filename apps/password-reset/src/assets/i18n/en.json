@@ -1,0 +1,15 @@
+{
+  "DIALOGS": {
+    "PASSWORD_CHANGE": {
+      "TITLE_CHANGE": "Password change",
+      "TITLE_RESET": "Password reset",
+      "TITLE_ACTIVATION": "Account activation",
+      "OLD_PASSWORD": "Old password",
+      "NEW_PASSWORD": "New password",
+      "NEW_PASSWORD_CONFIRM": "Confirm new password",
+      "ERROR_EMPTY": "This field cannot be empty",
+      "ERROR_MATCH": "Passwords must match",
+      "SUBMIT": "Submit"
+    }
+  }
+}
