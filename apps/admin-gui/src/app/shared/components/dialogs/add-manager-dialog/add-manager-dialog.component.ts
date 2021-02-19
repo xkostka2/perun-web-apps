@@ -72,7 +72,7 @@ export class AddManagerDialogComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit(): void {
@@ -80,7 +80,7 @@ export class AddManagerDialogComponent implements OnInit {
     this.authzService.setRoleWithUserComplementaryObject({role: this.selectedRole, users: this.selection.selected.map(u => u.id), complementaryObject: this.data.complementaryObject}).subscribe(() => {
       this.notificator.showSuccess(this.successMessage);
       this.loading = false;
-      this.dialogRef.close();
+      this.dialogRef.close(true);
     }, () => this.loading = false);
   }
 
