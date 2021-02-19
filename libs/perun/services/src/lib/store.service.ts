@@ -13,6 +13,7 @@ export class StoreService {
   private instanceConfig;
   private defaultConfig;
   private principal: PerunPrincipal;
+  private initialPageId: number;
 
   constructor() { }
 
@@ -30,6 +31,14 @@ export class StoreService {
 
   getPerunPrincipal(): PerunPrincipal {
     return this.principal;
+  }
+
+  getInitialPageId(): number {
+    return this.initialPageId;
+  }
+
+  setInitialPageId(pageId: number) {
+    this.initialPageId = pageId;
   }
 
   getLoginAttributeNames(): Array<string> {

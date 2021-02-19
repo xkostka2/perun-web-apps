@@ -2,6 +2,11 @@
 <!--  <mat-icon>reply</mat-icon>-->
 <!--</button>-->
 
-<button [ngStyle]="{'color': backButtonColor }" mat-stroked-button class="mb-2 mt-2" (click)="goBack()" matTooltip="{{'Back' | translate}}">
+<button
+  [ngStyle]="{'color': backButtonColor }"
+  mat-stroked-button
+  class="mb-2 mt-2"
+  (click)="goBack()"
+  matTooltip="{{'Back' | translate}}">
   <mat-icon class="rotate">arrow_right_alt</mat-icon>
 </button>
