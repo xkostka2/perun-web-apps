@@ -133,7 +133,7 @@ export class FacilityServiceStatusComponent implements OnInit {
     this.blockAuth = this.authResolver.isAuthorized('blockServiceOnFacility_Service_Facility_policy', [this.facility]);
     this.allowAuth = this.authResolver.isAuthorized('unblockServiceOnFacility_Service_Facility_policy', [this.facility]);
     this.deleteAuth = this.authResolver.isAuthorized('deleteTask_Task_policy', [this.facility]);
-    this.routeAuth = this.authResolver.isAuthorized('getTaskResultsForGUIByTask_int_policy', [this.facility]);
+    this.routeAuth = this.authResolver.isAuthorized('getTaskResultsByTask_int_policy', [this.facility]);
   }
 
   applyFilter(filterValue: string) {
