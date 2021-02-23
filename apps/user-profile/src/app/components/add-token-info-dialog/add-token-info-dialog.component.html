@@ -1,0 +1,22 @@
+<!--<div mat-dialog-title>{{'DIALOGS.ADD_TOKEN_INFO.TITLE' | customTranslate | translate}}</div>-->
+<div>
+  <div mat-dialog-content>
+    <app-alert alert_type="info">{{'DIALOGS.ADD_TOKEN_INFO.INFO' | customTranslate | translate}}</app-alert>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      (click)="onCancel()"
+      class="ml-auto"
+      mat-flat-button>
+      {{'DIALOGS.ADD_TOKEN_INFO.CANCEL'| customTranslate | translate}}
+    </button>
+    <button
+      (click)="onAdd()"
+      class="ml-2"
+      color="accent"
+      mat-flat-button>
+      {{'DIALOGS.ADD_TOKEN_INFO.ADD'| customTranslate | translate}}
+    </button>
+  </div>
+
+</div>

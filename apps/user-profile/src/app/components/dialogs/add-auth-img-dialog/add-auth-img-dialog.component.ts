@@ -126,5 +126,6 @@ export class AddAuthImgDialogComponent implements OnInit {
     }
 
     this.newImage = generateImage();
+    this.imgTooLong = false;
   }
 }

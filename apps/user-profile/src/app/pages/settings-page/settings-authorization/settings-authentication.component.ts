@@ -11,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserManager, UserManagerSettings } from 'oidc-client';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { MfaService } from '../../../services/mfa.service';
+import { AddTokenInfoDialogComponent } from '../../../components/add-token-info-dialog/add-token-info-dialog.component';
 
 @Component({
   selector: 'perun-web-apps-settings-authentication',
@@ -64,7 +65,7 @@ export class SettingsAuthenticationComponent implements OnInit {
 
   onAddImg() {
     const config = getDefaultDialogConfig();
-    config.width = '400px';
+    config.width = '500px';
     config.data = { theme: 'user-theme', attribute: this.imgAtt };
 
     const dialogRef = this.dialog.open(AddAuthImgDialogComponent, config);
@@ -137,12 +138,14 @@ export class SettingsAuthenticationComponent implements OnInit {
       automaticSilentRenew: true,
       silent_redirect_uri: this.store.get('oidc_client', 'oauth_silent_redirect_uri'),
       extraQueryParams: { 'max_age': 0, 'acr_values': 'https://refeds.org/profile/mfa'}
-      // max_age: 0
     };
   }
 
   addTOTP() {
-    window.open('https://id.muni.cz/simplesaml/module.php/muni/register-totp.php', '_blank');
+    const config = getDefaultDialogConfig();
+    config.width = '600px';
+
+    this.dialog.open(AddTokenInfoDialogComponent, config);
   }
 
   addWebAuthn() {

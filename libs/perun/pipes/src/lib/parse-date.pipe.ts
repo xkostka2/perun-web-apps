@@ -10,7 +10,7 @@ export class ParseDatePipe implements PipeTransform {
     if(!value || value.toLowerCase() === 'never'){
       return value;
     }
-    return formatDate(value, `d.M.yyyy ${showTime ? 'H:mm:ss': ''}`, 'en');
+    return formatDate(value.replace(" ", "T"), `d.M.yyyy ${showTime ? 'H:mm:ss': ''}`, 'en');
   }
 
 }

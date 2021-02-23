@@ -1,17 +1,18 @@
 <div mat-dialog-title>{{'DIALOGS.ADD_AUTH_IMG.TITLE' | customTranslate | translate}}</div>
 <div class="{{theme}}">
   <div mat-dialog-content>
-    <app-alert alert_type="info">{{'DIALOGS.ADD_AUTH_IMG.INFO' | customTranslate | translate}}</app-alert>
+    <app-alert *ngIf="!newImage" alert_type="info">{{'DIALOGS.ADD_AUTH_IMG.INFO' | customTranslate | translate}}</app-alert>
     <app-alert *ngIf="imgTooLong" alert_type="error">{{'DIALOGS.ADD_AUTH_IMG.IMG_TOO_LONG' | customTranslate | translate}}</app-alert>
     <div *ngIf="newImage" class="center-content">
       <img [src]="newImage" alt="" class="img-size"/>
     </div>
-    <button (click)="generateImg()" class="mb-2" color="accent"
+    <button (click)="generateImg()" class="m-1" color="accent"
             mat-flat-button>{{'DIALOGS.ADD_AUTH_IMG.GENERATE' | customTranslate | translate}}</button>
-    <button (click)="fileInput.click()" color="accent" mat-flat-button>
+    <button (click)="fileInput.click()" color="accent" class="m-1" mat-flat-button>
       <span>{{'DIALOGS.ADD_AUTH_IMG.UPLOAD_IMG_LABEL'| customTranslate | translate}}</span>
       <input #fileInput (change)="handleInputChange($event)" accept="image/*" class="d-none" type="file"/>
     </button>
+    <app-alert *ngIf="newImage" alert_type="info">{{'DIALOGS.ADD_AUTH_IMG.DELAY_INFO' | customTranslate | translate}}</app-alert>
   </div>
   <div mat-dialog-actions>
     <button

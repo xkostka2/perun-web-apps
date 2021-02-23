@@ -140,7 +140,7 @@
     "DELETE_IMG_DIALOG_TITLE": "Delete anti-phishing image",
     "DELETE_IMG_DIALOG_DESC": "Your security image will be deleted and will not be used during authentication process.",
     "TYPE": "Type",
-    "NICKNAME": "Nickname",
+    "NAME": "Name",
     "REVOKE": "Revoke",
     "ADDED": "Added",
     "USED": "Used",
@@ -207,7 +207,13 @@
       "UPLOAD_IMG_LABEL": "Upload an image from your computer",
       "CANCEL": "Cancel",
       "ADD": "Save image",
-      "IMG_TOO_LONG": "The image size is more than 5kB."
+      "IMG_TOO_LONG": "The image size is more than 5kB.",
+      "DELAY_INFO": "New security image usually becomes effective in 5 minutes, in rare cases it might take a couple of hours."
+    },
+    "ADD_TOKEN_INFO": {
+      "INFO": "Get ready with your TOTP application (such as FreeOTP or Google Authenticator). Upon confirmation, a TOTP key and a QR code will be generated, which you have to immediately scan with your application. If you do not scan the QR code with your TOTP app, the key will be lost and cannot be recovered.",
+      "CANCEL": "Cancel",
+      "ADD": "Continue"
     }
   },
   "ALERTS": {
