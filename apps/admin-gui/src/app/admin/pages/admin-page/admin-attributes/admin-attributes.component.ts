@@ -5,7 +5,7 @@ import { DeleteAttributeDefinitionDialogComponent } from '../../../../shared/com
 import { MatDialog } from '@angular/material/dialog';
 // tslint:disable-next-line:max-line-length
 import { CreateAttributeDefinitionDialogComponent } from '../../../../shared/components/dialogs/create-attribute-definition-dialog/create-attribute-definition-dialog.component';
-import { filterCoreAttributesDefinitions, getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { AttributeDefinition, AttributesManagerService } from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import { TABLE_ADMIN_ATTRIBUTES, TableConfigService } from '@perun-web-apps/config/table-config';
@@ -75,7 +75,7 @@ export class AdminAttributesComponent implements OnInit {
   refreshTable() {
     this.loading = true;
     this.attributesManager.getAllAttributeDefinitions().subscribe(attrDefs => {
-      this.attrDefinitions = filterCoreAttributesDefinitions(attrDefs);
+      this.attrDefinitions = attrDefs;
       this.loading = false;
     });
   }

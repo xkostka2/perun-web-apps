@@ -25,7 +25,7 @@ export class CreateAttributeDefinitionDialogComponent implements OnInit {
   entities: string[] = ['facility', 'resource', 'group', 'group_resource', 'host', 'member', 'member_group',
     'member_resource', 'user', 'user_ext_source', 'user_facility', 'vo', 'entityless'];
 
-  definitionTypes: string[] = ['def', 'opt', 'virt'];
+  definitionTypes: string[] = ['def', 'opt', 'virt', 'core'];
   definitionType = '';
 
   valueTypes: string[] = ['String', 'Integer', 'Boolean', 'Array', 'LinkedHashMap'];
