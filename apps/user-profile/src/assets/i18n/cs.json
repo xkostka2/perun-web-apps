@@ -131,14 +131,22 @@
     "NO_MAILING_LISTS_ALERT": "Nemáte žádné seznamy adresátů v této organizaci"
   },
   "AUTHENTICATION": {
-    "TITLE": "Proti-phishingová ochrana",
-    "MFA": "Multi-factor authentication",
+    "TITLE": "Bezpečnostní obrázek",
+    "MFA": "Vícefázové ověření",
     "NEW_IMG": "Nový obrázek",
     "DELETE_IMG": "Vymazat obrázek",
-    "ANTI_PHISHING_INFO": "Tento obrázek se vám ukáže při přihlašovaní",
-    "MFA_TOGGLE": "Zapnout multi-factor authentication",
-    "DELETE_IMG_DIALOG_TITLE": "Vymazat anti-phishing image",
-    "DELETE_IMG_DIALOG_DESC": "Váš obrázek na ochranu proti phishingu bude odstraněn a nebude použit během autentizace."
+    "ANTI_PHISHING_INFO": "Tento bezpečnostní obrázek se vám ukáže před tím, než zadáte heslo, ujistíte se tak, že se nepřihlašujete na podvrženou stránku",
+    "MFA_TOGGLE": "Zapnout multi-factor authentication pro všechny služby",
+    "DELETE_IMG_DIALOG_TITLE": "Vymazat proti-phishingový obrázek",
+    "DELETE_IMG_DIALOG_DESC": "Váš bezpečnostní obrázek bude odstraněn a nebude použit během autentizace.",
+    "TYPE": "Typ",
+    "NAME": "Jméno",
+    "REVOKE": "Zrušit",
+    "ADDED": "Přidáno",
+    "USED": "Naposledy použito",
+    "NO_TOKENS": "Nemáte žádné tokeny pro multi-factor authentication.",
+    "ADD_WEBAUTHN": "Přidat zařízení Webauthn",
+    "ADD_TOTP": "Přidat zařízení TOTP"
   },
   "DIALOGS": {
     "CHANGE_EMAIL": {
@@ -194,12 +202,18 @@
     },
     "ADD_AUTH_IMG": {
       "TITLE": "Změna proti-phishingového obrázku",
-      "INFO": "Prosím, zvolte obrázek s velikostí alespoň 500x150 pixelů.",
-      "GENERATE": "Generate image",
-      "UPLOAD_IMG_LABEL": "Nahrát obrázek z vášho počítače",
+      "INFO": "Prosím, zvolte obrázek s velikostí maximálně 5kB.",
+      "GENERATE": "Generovat obrázek",
+      "UPLOAD_IMG_LABEL": "Nahrát obrázek z vašeho počítače",
       "CANCEL": "Zrušit",
       "ADD": "Uložit obrázek",
-      "LOAD_IMG": "Načítat obrázek"
+      "IMG_TOO_LONG": "Velikost obrázku je větší než 5kB",
+      "DELAY_INFO": "Změna bezpečnostního obrázku se projeví většinou do 5 minut, v ojedinělých případech může propagace změny trvat několik hodin."
+    },
+    "ADD_TOKEN_INFO": {
+      "INFO": "Mějte připravenou aplikaci pro TOTP (např. FreeOTP nebo Google Authenticator), po potvrzení dojde ihned k vytvoření TOTP klíče a QR kódu, který je potřeba naskenovat aplikací. Pokud nenaskenujete QR kód do TOTP aplikace, klíč bude ztracen a není možné ho obnovit.",
+      "CANCEL": "Zrušit",
+      "ADD": "Pokračovat"
     }
   },
   "ALERTS": {

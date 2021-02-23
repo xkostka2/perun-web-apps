@@ -10,6 +10,8 @@ import { RemoveStringValueDialogComponent } from '../../../components/dialogs/re
 import { TranslateService } from '@ngx-translate/core';
 import { UserManager, UserManagerSettings } from 'oidc-client';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MfaService } from '../../../services/mfa.service';
+import { AddTokenInfoDialogComponent } from '../../../components/add-token-info-dialog/add-token-info-dialog.component';
 
 @Component({
   selector: 'perun-web-apps-settings-authentication',
@@ -25,25 +27,25 @@ export class SettingsAuthenticationComponent implements OnInit {
   tokens: MFAToken[] = [];
   removeDialogDescription: string;
 
-  constructor(private dialog: MatDialog,
-              private attributesManagerService: AttributesManagerService,
-              private store: StoreService,
-              private translate: TranslateService,
-              private authService: AuthService) {
-    translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_TITLE').subscribe(res => this.removeDialogTitle = res);
-    translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_DESC').subscribe(res => this.removeDialogDescription = res);
-  }
-
-  displayedColumns: string[] = ['type', 'nickname', 'revoked', 'added', 'used'];
-  dataSource: MatTableDataSource<string>;
+  displayedColumns: string[] = ['type', 'nickname', 'added'];
+  dataSource: MatTableDataSource<MFAToken>;
+  @ViewChild('toggle')
+  toggle: MatSlideToggle;
   pageSize = 5;
   exporting = false;
   mfaAtt: Attribute;
   accessToken: string;
   idToken: string;
 
-  @ViewChild('toggle', { static: true })
-  toggle: MatSlideToggle;
+  constructor(private dialog: MatDialog,
+              private attributesManagerService: AttributesManagerService,
+              private store: StoreService,
+              private translate: TranslateService,
+              private authService: AuthService,
+              private mfaService: MfaService) {
+    translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_TITLE').subscribe(res => this.removeDialogTitle = res);
+    translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_DESC').subscribe(res => this.removeDialogDescription = res);
+  }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -55,47 +57,22 @@ export class SettingsAuthenticationComponent implements OnInit {
     this.translate.onLangChange.subscribe(() => {
       this.translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_TITLE').subscribe(res => this.removeDialogTitle = res);
       this.translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_DESC').subscribe(res => this.removeDialogDescription = res);
-    })
+    });
+
     this.loadMFA();
     this.loadImage();
   }
 
-  // img: string;
+  onAddImg() {
+    const config = getDefaultDialogConfig();
+    config.width = '500px';
+    config.data = { theme: 'user-theme', attribute: this.imgAtt };
 
-  private loadMFA() {
-    // this.img = this.transformTextToImg('123456');
+    const dialogRef = this.dialog.open(AddAuthImgDialogComponent, config);
 
-    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:mfaEnabled').subscribe(attr => {
-      if (!attr) {
-        this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:mfaEnabled').subscribe(att => {
-          this.mfaAtt = att as Attribute;
-        });
-      } else {
-        this.mfaAtt = attr;
-        if (this.mfaAtt.value) {
-          this.toggle.toggle();
-        }
-        // Make sure that it won't cause any problems if it is here
-        this.toggle.change.subscribe(() => {
-          if (this.toggle.checked) {
-            this.reAuthenticate();
-            // Set MFA on
-          } else {
-            // MFA is off
-          }
-        });
-
-        this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:mfaTokens').subscribe(mfaTokenAttr => {
-          if (!mfaTokenAttr) {
-            this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:mfaTokens').subscribe(att => {
-              mfaTokenAttr = att as Attribute;
-            });
-          } else {
-            if (mfaTokenAttr.value) {
-              this.tokens = attr.value as MFAToken[];
-            }
-          }
-        });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadImage();
       }
     });
   }
@@ -108,18 +85,10 @@ export class SettingsAuthenticationComponent implements OnInit {
   //   return canvas.toDataURL('image/png');
   // }
 
-  onAddImg() {
-    const config = getDefaultDialogConfig();
-    config.width = '550px';
-    config.data = { theme: 'user-theme', attribute: this.imgAtt };
-
-    const dialogRef = this.dialog.open(AddAuthImgDialogComponent, config);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadImage();
-      }
-    });
+  reAuthenticate() {
+    sessionStorage.setItem('mfa_route', '/profile/settings/auth');
+    this.authService.manager = new UserManager(this.getClientSettings());
+    this.authService.manager.signinRedirect();
   }
 
   onDeleteImg() {
@@ -143,9 +112,10 @@ export class SettingsAuthenticationComponent implements OnInit {
   }
 
   private loadImage() {
-    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, 'urn:perun:user:attribute-def:def:antiphishingImage').subscribe(attr => {
+    const imgAttributeName = this.store.get('mfa', 'security_image_attribute')
+    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, imgAttributeName).subscribe(attr => {
       if (!attr) {
-        this.attributesManagerService.getAttributeDefinitionByName('urn:perun:user:attribute-def:def:antiphishingImage').subscribe(att => {
+        this.attributesManagerService.getAttributeDefinitionByName(imgAttributeName).subscribe(att => {
           this.imgAtt = att as Attribute;
         });
       } else {
@@ -167,21 +137,83 @@ export class SettingsAuthenticationComponent implements OnInit {
       loadUserInfo: this.store.get('oidc_client', 'oauth_load_user_info'),
       automaticSilentRenew: true,
       silent_redirect_uri: this.store.get('oidc_client', 'oauth_silent_redirect_uri'),
-      extraQueryParams: { 'max_age': 0 }
-      // max_age: 0
+      extraQueryParams: { 'max_age': 0, 'acr_values': 'https://refeds.org/profile/mfa'}
     };
   }
 
-  reAuthenticate() {
-    this.authService.manager = new UserManager(this.getClientSettings());
-    this.authService.manager.signinRedirect();
+  addTOTP() {
+    const config = getDefaultDialogConfig();
+    config.width = '600px';
+
+    this.dialog.open(AddTokenInfoDialogComponent, config);
+  }
+
+  addWebAuthn() {
+    window.open('https://id.muni.cz/simplesaml/module.php/muni/register-webauthn.php', '_blank');
+  }
+
+    private loadMFA() {
+      const enforceMfaAttributeName = this.store.get('mfa', 'enforce_mfa_attribute')
+      const tokensAttributeName = this.store.get('mfa', 'tokens_attribute')
+      this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, enforceMfaAttributeName).subscribe(attr => {
+      if (sessionStorage.getItem('mfa_route')) {
+        sessionStorage.removeItem('mfa_route');
+        this.mfaService.enableMfa(!attr || !attr.value, this.idToken).subscribe(() => {
+          // Should I do here something else than loadMFA()?
+          this.loadMFA();
+        }, () => this.loadMFA());
+      } else {
+        if (!attr) {
+          this.attributesManagerService.getAttributeDefinitionByName(enforceMfaAttributeName).subscribe(att => {
+            this.mfaAtt = att as Attribute;
+          });
+        } else {
+          this.mfaAtt = attr;
+
+          if (this.toggle) {
+            if (this.mfaAtt.value) {
+              this.toggle.toggle();
+            }
+
+            this.toggle.change.subscribe(() => {
+              this.reAuthenticate();
+            });
+          }
+
+          this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, tokensAttributeName).subscribe(mfaTokenAttr => {
+            if (!mfaTokenAttr) {
+              this.attributesManagerService.getAttributeDefinitionByName(tokensAttributeName).subscribe(att => {
+                mfaTokenAttr = att as Attribute;
+              });
+            } else {
+              if (mfaTokenAttr.value) {
+                const tokenStrings = mfaTokenAttr.value as string[];
+                tokenStrings.forEach(token => {
+                  const parsedToken = JSON.parse(token);
+                  this.tokens.push({
+                    added: parsedToken['added'],
+                    revoked: parsedToken['revoked'],
+                    data: parsedToken['data'],
+                    used: parsedToken['used'],
+                    type: parsedToken['type'].toUpperCase(),
+                    nickname: parsedToken['name']
+                  });
+                });
+              }
+            }
+            this.dataSource = new MatTableDataSource<MFAToken>(this.tokens);
+          });
+        }
+      }
+    });
   }
 }
 
 export interface MFAToken {
   type: string;
   revoked: boolean;
+  nickname: string;
   added: string | Date;
   used: string | Date;
-  secret: string;
+  data: any;
 }

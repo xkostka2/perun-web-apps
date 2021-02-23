@@ -19,6 +19,7 @@ export class AddAuthImgDialogComponent implements OnInit {
   newImage = '';
   attribute: Attribute;
   radioBtn: string;
+  imgTooLong: boolean;
 
   constructor(private dialogRef: MatDialogRef<AddAuthImgDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: AddAuthImgDialogData,
@@ -47,6 +48,7 @@ export class AddAuthImgDialogComponent implements OnInit {
 
   _handleReaderLoaded(e) {
     const reader = e.target;
+    this.imgTooLong = reader.result.length >= 5120;
     this.newImage = reader.result;
   }
 
@@ -69,7 +71,7 @@ export class AddAuthImgDialogComponent implements OnInit {
     const MAX_COLOR 		= 200;				// Max value for a color component
     const MIN_COLOR 		= 120; 				// Min value for a color component
     const FILL_CHANCE 	= 0.5; 				// Chance of a square being filled [0, 1]
-    const SQUARE 		    = 100; 				// Size of a grid square in pixels
+    const SQUARE 		    = 20; 				// Size of a grid square in pixels
     const GRID 		      = 5; 				// Number of squares width and height
     const SIZE 		      = SQUARE * GRID; 	// Size of the canvas
     const FILL_COLOR 		= '#FFFFFF';			// canvas background color
@@ -124,5 +126,6 @@ export class AddAuthImgDialogComponent implements OnInit {
     }
 
     this.newImage = generateImage();
+    this.imgTooLong = false;
   }
 }

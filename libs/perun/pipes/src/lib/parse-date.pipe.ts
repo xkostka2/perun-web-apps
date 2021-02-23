@@ -6,11 +6,11 @@ import { formatDate } from '@angular/common';
 })
 export class ParseDatePipe implements PipeTransform {
 
-  transform(value: string): string {
+  transform(value: string, showTime?: boolean): string {
     if(!value || value.toLowerCase() === 'never'){
       return value;
     }
-    return formatDate(value, 'd.M.yyyy', 'en');
+    return formatDate(value.replace(" ", "T"), `d.M.yyyy ${showTime ? 'H:mm:ss': ''}`, 'en');
   }
 
 }
