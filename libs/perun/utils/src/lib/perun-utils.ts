@@ -401,10 +401,6 @@ export function findParent(group: number, groups: Group[]): Group[] {
   }
 }
 
-export function filterCoreAttributesDefinitions(attributesDef: AttributeDefinition[]): AttributeDefinition[] {
-  return attributesDef.filter(attribute => !attribute.namespace.includes('def:core'));
-}
-
 /**
  * Finds attribute with given attrName from given attributes.
  *
