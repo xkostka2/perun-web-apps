@@ -1,0 +1,19 @@
+<!--<router-outlet></router-outlet>-->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav [mode]="sidebarMode" [ngStyle]="{'background': sideMenuBgColor}"
+               [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
+    <perun-web-apps-side-menu [sideNav]="sidenav" class="overflow-hidden"></perun-web-apps-side-menu>
+  </mat-sidenav>
+  <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
+    <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
+<!--      <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>-->
+      <router-outlet></router-outlet>
+    </div>
+
+<!--    <div id="footer">-->
+<!--      <app-perun-footer></app-perun-footer>-->
+<!--    </div>-->
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

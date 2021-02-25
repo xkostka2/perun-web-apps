@@ -1,0 +1,10 @@
+{
+  "MENU_ITEMS": {
+    "ALL_PUBLICATIONS": "All publications",
+    "MY_PUBLICATIONS": "My publications",
+    "CREATE_PUBLICATION": "Create publications",
+    "AUTHORS": "Authors",
+    "CATEGORIES": "Categories",
+    "PUBLICATION_SYSTEMS": "Publication systems"
+  }
+}

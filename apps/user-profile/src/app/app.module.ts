@@ -193,7 +193,7 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     {
       provide: Configuration,
       useFactory: apiConfigFactory,
-      deps:[StoreService]
+      deps: [StoreService]
     },
     UserFullNamePipe,
     ApiInterceptor,
@@ -201,7 +201,10 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     {
       provide: PERUN_API_SERVICE,
       useClass: ApiService
-    },
+    }
+  ],
+  exports: [
+    SideMenuComponent
   ],
   bootstrap: [AppComponent]
 })

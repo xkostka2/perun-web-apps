@@ -1,0 +1,13 @@
+.nav-caption{
+  display: inline-block;
+  padding-left: 6px;
+}
+
+mat-list-item:hover{
+  background: var(--side-hover) !important;
+}
+
+.activated {
+  background: var(--side-active) !important;
+  color: var(--side-text-active) !important;
+}
