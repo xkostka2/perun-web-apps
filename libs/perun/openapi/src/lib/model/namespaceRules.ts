@@ -9,13 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Thanks } from './thanks';
 
 
-/**
- * input to createThanks
- */
-export interface InputCreateThanks { 
-    thanks?: Thanks;
+export interface NamespaceRules { 
+    namespaceName: string;
+    requiredAttributes?: Array<string>;
+    optionalAttributes?: Array<string>;
 }
 

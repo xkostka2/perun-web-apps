@@ -9,13 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Thanks } from './thanks';
 
 
-/**
- * input to createThanks
- */
-export interface InputCreateThanks { 
-    thanks?: Thanks;
+export interface SponsoredUserData { 
+    guestName?: string;
+    firstName?: string;
+    lastName?: string;
+    titleBefore?: string;
+    titleAfter?: string;
+    namespace?: string;
+    email?: string;
+    password?: string;
+    login?: string;
 }
 

@@ -84,14 +84,17 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
     const sponsoredMember: InputCreateSponsoredMember = {
       vo: this.data.voId,
-      firstName: this.firstName.value,
-      lastName: this.lastName.value,
-      titleAfter: this.titleAfter,
-      titleBefore: this.titleBefore,
-      namespace: this.namespace.value,
-      password: this.passwordReset ? '' : this.password.value,
+      userData: {
+        firstName: this.firstName.value,
+        lastName: this.lastName.value,
+        titleAfter: this.titleAfter,
+        titleBefore: this.titleBefore,
+        namespace: this.namespace.value,
+        password: this.passwordReset ? '' : this.password.value,
+        email: this.email.value,
+        login: this.login.value
+      },
       sponsor: this.store.getPerunPrincipal().userId,
-      email: this.email.value,
       sendActivationLink: this.passwordReset
     }
 
@@ -106,7 +109,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
       if(!!richMember && !!richMember.userAttributes){
         richMember.userAttributes
           .filter(attr => attr.baseFriendlyName === 'login-namespace')
-          .filter(attr => attr.friendlyNameParameter === 'mu')
+          .filter(attr => attr.friendlyNameParameter === this.namespace.value)
           .filter(attr => attr.value !== null)
           .forEach(attr => {
             this.loginThatWasSet = attr.value.toString();
