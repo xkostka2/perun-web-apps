@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ReportIssueDialogComponent } from '../components/report-issue-dialog/report-issue-dialog.component';
+import { ReportIssueDialogComponent } from '../report-issue-dialog/report-issue-dialog.component';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { version } from '../../../../../../package.json';
 
 @Component({
-  selector: 'app-perun-footer',
+  selector: 'perun-web-apps-footer',
   templateUrl: './perun-footer.component.html',
   styleUrls: ['./perun-footer.component.scss']
 })

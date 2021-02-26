@@ -13,3 +13,4 @@ export * from './lib/redirect-page/redirect-page.component';
 export * from './lib/groups-list/groups-list.component';
 export * from './lib/groups-tree/groups-tree.component';
 export * from './lib/expiration-select/expiration-select.component';
+export * from './lib/perun-footer/perun-footer.component'

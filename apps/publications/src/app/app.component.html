@@ -1,4 +1,4 @@
-<!--<router-outlet></router-outlet>-->
+<perun-web-apps-header [sideNav]="sidenav"></perun-web-apps-header>
 <mat-sidenav-container>
   <mat-sidenav #sidenav [mode]="sidebarMode" [ngStyle]="{'background': sideMenuBgColor}"
                [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
@@ -10,9 +10,9 @@
       <router-outlet></router-outlet>
     </div>
 
-<!--    <div id="footer">-->
-<!--      <app-perun-footer></app-perun-footer>-->
-<!--    </div>-->
+    <div id="footer">
+      <perun-web-apps-footer></perun-web-apps-footer>
+    </div>
 
   </mat-sidenav-content>
 </mat-sidenav-container>

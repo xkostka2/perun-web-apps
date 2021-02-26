@@ -2022,17 +2022,6 @@
         "NO_DESTINATIONS": "No destinations found"
       }
     },
-    "FOOTER": {
-      "ABOUT_PERUN": "About",
-      "HELP": "Help",
-      "PERUN_WEB": "Perun website",
-      "PERUN_TEAM": "Perun team",
-      "SUPPORT": "Support",
-      "USER_DOCUMENTATION": "Documentation",
-      "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
-      "REPORT_ISSUE": "Report Issue",
-      "PRIVACY_POLICY": "Privacy Policy"
-    },
     "IDENTITY_DETAIL": {
       "TITLE": "Identity detail",
       "ADD": "Add",
@@ -2232,6 +2221,17 @@
         },
         "RECENTLY_VIEWED_ICON": {
           "RECENT": "Recently viewed"
+        },
+        "FOOTER": {
+          "ABOUT_PERUN": "About",
+          "HELP": "Help",
+          "PERUN_WEB": "Perun website",
+          "PERUN_TEAM": "Perun team",
+          "SUPPORT": "Support",
+          "USER_DOCUMENTATION": "Documentation",
+          "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
+          "REPORT_ISSUE": "Report Issue",
+          "PRIVACY_POLICY": "Privacy Policy"
         }
       },
       "ORGANIZATIONS": {

@@ -1209,7 +1209,7 @@
               "apps/publications/src/favicon.ico",
               "apps/publications/src/assets"
             ],
-            "styles": ["apps/publications/src/styles.scss"],
+            "styles": ["apps/publications/src/styles.scss", "node_modules/bootstrap/dist/css/bootstrap.css"],
             "scripts": ["./node_modules/tinycolor2/dist/tinycolor-min.js"]
           },
           "configurations": {

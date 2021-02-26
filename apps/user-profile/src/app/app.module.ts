@@ -24,7 +24,6 @@ import { SettingsSambaPasswordComponent } from './pages/settings-page/settings-s
 import { SettingsMailingListsComponent } from './pages/settings-page/settings-mailing-lists/settings-mailing-lists.component';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { CustomIconService, StoreService } from '@perun-web-apps/perun/services';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -119,7 +118,6 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     SettingsMailingListsComponent,
     SideMenuComponent,
     HeaderComponent,
-    FooterComponent,
     PrivacyPageComponent,
     HomePageComponent,
     AddSshDialogComponent,
@@ -204,7 +202,7 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     }
   ],
   exports: [
-    SideMenuComponent
+    SideMenuComponent,
   ],
   bootstrap: [AppComponent]
 })

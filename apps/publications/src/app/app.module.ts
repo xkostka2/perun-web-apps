@@ -22,6 +22,10 @@ import { PublicationSystemsPageComponent } from './pages/publication-systems-pag
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { MatListModule } from '@angular/material/list';
+import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
+import { HeaderComponent } from './components/header/header.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -47,7 +51,7 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
 };
 
 @NgModule({
-  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent],
+  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({
@@ -65,7 +69,10 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     HttpClientModule,
     AppRoutingModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    PerunSharedComponentsModule,
+    MatMenuModule,
+    MatToolbarModule
   ],
   providers: [
     CustomIconService,
