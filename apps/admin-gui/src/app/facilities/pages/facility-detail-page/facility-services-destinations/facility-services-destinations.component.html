@@ -15,6 +15,28 @@
     [disabled]="selected.selected.length === 0"  (click)="removeDestination()">
     {{'FACILITY_DETAIL.SERVICES_DESTINATIONS.REMOVE' | translate}}
   </button>
+  <button
+    *ngIf="!loading && allowAuth"
+    mat-stroked-button
+    class="mr-2"
+    [disabled]="selected.selected.length === 0 || allSelectedAllowed()"
+    (click)="onAllow()">
+    <mat-icon>
+      check_circle_outline
+    </mat-icon>
+    {{'FACILITY_DETAIL.SERVICES_DESTINATIONS.ALLOW' | translate}}
+  </button>
+  <button
+    *ngIf="!loading && blockAuth"
+    mat-stroked-button
+    class="mr-2"
+    [disabled]="selected.selected.length === 0 || allSelectedBlocked()"
+    (click)="onBlock()">
+    <mat-icon>
+      block
+    </mat-icon>
+    {{'FACILITY_DETAIL.SERVICES_DESTINATIONS.BLOCK' | translate}}
+  </button>
   <perun-web-apps-immediate-filter
     [placeholder]="'FACILITY_DETAIL.SERVICES_DESTINATIONS.FILTER'"
     (filter)="applyFilter($event)"></perun-web-apps-immediate-filter>
