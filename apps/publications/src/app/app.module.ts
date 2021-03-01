@@ -26,6 +26,14 @@ import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
 import { HeaderComponent } from './components/header/header.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { CategoriesListComponent } from './components/categories-list/categories-list.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { AddCategoryDialogComponent } from './components/add-category-dialog/add-category-dialog.component';
+import { RemoveCategoryDialogComponent } from './components/remove-category-dialog/remove-category-dialog.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -51,7 +59,7 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
 };
 
 @NgModule({
-  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent],
+  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent, CategoriesListComponent, AddCategoryDialogComponent, RemoveCategoryDialogComponent],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({
@@ -72,7 +80,12 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     MatListModule,
     PerunSharedComponentsModule,
     MatMenuModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSortModule,
+    MatTableExporterModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    UiAlertsModule
   ],
   providers: [
     CustomIconService,

@@ -11,6 +11,40 @@
     "TITLE": "Publications",
     "LOGOUT": "Log out"
   },
+  "CATEGORIES_LIST": {
+    "ID": "Id",
+    "NAME": "Name",
+    "RANK": "Rank"
+  },
+  "CATEGORIES_PAGE": {
+    "TITLE": "Categories",
+    "CREATE": "Create",
+    "REMOVE": "Remove",
+    "FILTER": "Filter by name or rating",
+    "NO_FILTER_RESULTS": "No categories match the filter"
+  },
+  "DIALOGS": {
+    "ADD_CATEGORY": {
+      "TITLE": "Add category",
+      "NAME": "Name",
+      "FILL_NAME": "Name cannot be empty",
+      "RANK": "Rank",
+      "FILL_RANK": "Rank cannot be empty and have to contain at max 1 decimal digit",
+      "RANK_HINT": "Rank values like: 0.0 , 0.5 , 1.2 , etc.",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "First, fill name and rank",
+      "CREATE": "Create",
+      "SUCCESS": "Category successfully created"
+    },
+    "REMOVE_CATEGORY": {
+      "TITLE": "Delete category",
+      "DESCRIPTION": "Selected categories will be deleted.",
+      "ASK": "Are you sure, you want to continue?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Categories successfully removed"
+    }
+  },
   "SHARED_LIB": {
     "PERUN": {
       "COMPONENTS": {

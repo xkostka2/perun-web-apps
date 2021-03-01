@@ -1,0 +1,74 @@
+<div [class.hide-table]="exporting" [hidden]="dataSource.filteredData.length === 0 || categories.length === 0"
+     class="card mt-3">
+  <div class="card-body">
+    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"
+                                  class="ml-auto"></perun-web-apps-table-options>
+    <div class="overflow-auto">
+      <table #exporter="matTableExporter"
+             [dataSource]="dataSource"
+             class="w-100"
+             mat-table
+             matSort
+             matSortActive="recent"
+             matSortDirection="asc"
+             matSortDisableClear
+             matTableExporter>
+
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell>
+<!--            <mat-checkbox (change)="$event ? masterToggle() : null"-->
+<!--                          [aria-label]="checkboxLabel()"-->
+<!--                          [checked]="selection.hasValue() && isAllSelected()"-->
+<!--                          [indeterminate]="selection.hasValue() && !isAllSelected()"-->
+<!--                          color="primary">-->
+<!--            </mat-checkbox>-->
+          </th>
+          <td *matCellDef="let resource" class="static-column-size" mat-cell>
+            <mat-checkbox (change)="$event ? itemSelectionToggle(resource) : null"
+                          (click)="$event.stopPropagation()"
+                          [aria-label]="checkboxLabel(resource)"
+                          [checked]="selection.isSelected(resource)"
+                          color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef
+              mat-sort-header>{{'CATEGORIES_LIST.ID' | translate}}</th>
+          <td mat-cell class="static-column-size" *matCellDef="let category">{{category.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef
+              mat-sort-header>{{'CATEGORIES_LIST.NAME' | translate}}</th>
+          <td mat-cell *matCellDef="let category">{{category.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="rank">
+          <th mat-header-cell mat-sort-header
+              *matHeaderCellDef>{{'CATEGORIES_LIST.RANK' | translate}}</th>
+          <td mat-cell *matCellDef="let category">{{category.rank}}</td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let resource; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="this.categories.length"
+      [pageSize]="pageSize"
+      (page)="page.emit($event)"
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>
+
+<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
+
+<app-alert *ngIf="dataSource.filteredData.length === 0 && categories.length !== 0" alert_type="warn">
+  {{'CATEGORIES_PAGE.NO_FILTER_RESULTS' | translate}}
+</app-alert>
