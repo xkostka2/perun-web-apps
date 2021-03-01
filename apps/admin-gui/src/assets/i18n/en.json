@@ -175,7 +175,9 @@
       "FORCE_PROPAGATION": "Force propagation",
       "ALLOW": "Allow",
       "BLOCK": "Block",
-      "DELETE": "Delete Task",
+      "REMOVE": "Remove",
+      "REMOVE_TASK_RESULTS": "Task results",
+      "REMOVE_SERVICE_FROM_FACILITY": "Service from facility",
       "SUCCESS_FORCE_PROPAGATION": "Service propagation forced",
       "SUCCESS_ALLOW": "Services allowed",
       "SUCCESS_BLOCK": "Services blocked",
@@ -1619,6 +1621,26 @@
       "RESULT_ID": "Result id",
       "DESTINATION": "Destination",
       "TIME": "Time"
+    },
+    "REMOVE_SERVICE_FROM_FACILITY": {
+      "TITLE": "Remove service from facility",
+      "CHECKBOXES_DESCRIPTION": "You can also remove:",
+      "CHECKBOXES_DISABLED": "Enabled only for all resources",
+      "CHECKBOX_TASK_AND_TASK_RESULTS" : "Task and task results",
+      "CHECKBOX_TASK_RESULTS" : "Task results",
+      "CHECKBOX_DESTINATION" : "Destination",
+      "DESCRIPTION": "Following resources will be affected.",
+      "ASK": "Do you want to proceed?",
+      "SUCCESS": "Service was successfully removed",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove"
+    },
+    "DELETE_TASK": {
+      "TITLE": "This service is not assigned to any resource",
+      "DESCRIPTION": "You can delete task and task results.",
+      "SUCCESS": "Service was successfully deleted",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete"
     },
     "EDIT_APPLICATION_FORM_ITEM_DATA": {
       "TITLE": "Edit item: ",

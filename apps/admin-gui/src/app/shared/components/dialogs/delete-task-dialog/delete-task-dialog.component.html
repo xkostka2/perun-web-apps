@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>{{'DIALOGS.DELETE_TASK.TITLE' | translate}}</h1>
+<div class="{{theme}}">
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" mat-dialog-content>
+    <div class="font-weight-bold">
+      {{'DIALOGS.DELETE_TASK.DESCRIPTION' | translate}}
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="cancel()">
+      {{'DIALOGS.DELETE_TASK.CANCEL' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="warn"
+      [disabled]="loading"
+      (click)="remove()">
+      {{'DIALOGS.DELETE_TASK.DELETE' | translate}}
+    </button>
+  </div>
+</div>
