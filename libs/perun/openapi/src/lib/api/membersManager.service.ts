@@ -1959,6 +1959,72 @@ export class MembersManagerService {
     }
 
     /**
+     * Returns rich members by their IDs with specific attributes. When the list of attribute names is null or empty then rich members will be returned without attributes.
+     * @param ids list of ids List&lt;Integer&gt;
+     * @param attrNames list of attribute names List&lt;String&gt; or null
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getRichMembersByIds(ids: Array<number>, attrNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<RichMember>>;
+    public getRichMembersByIds(ids: Array<number>, attrNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichMember>>>;
+    public getRichMembersByIds(ids: Array<number>, attrNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichMember>>>;
+    public getRichMembersByIds(ids: Array<number>, attrNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (ids === null || ids === undefined) {
+            throw new Error('Required parameter ids was null or undefined when calling getRichMembersByIds.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (ids) {
+            ids.forEach((element) => {
+                queryParameters = queryParameters.append('ids[]', <any>element);
+            })
+        }
+        if (attrNames) {
+            attrNames.forEach((element) => {
+                queryParameters = queryParameters.append('attrNames[]', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<RichMember>>(`${this.configuration.basePath}/json/membersManager/getRichMembersByIds`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Gets members from VO who are sponsored.
      * @param vo id of Vo
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

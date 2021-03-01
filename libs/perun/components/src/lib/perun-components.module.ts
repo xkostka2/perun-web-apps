@@ -75,6 +75,7 @@ import { ObjectListValuesComponent } from './object-list-values/object-list-valu
 import { PerunFooterComponent } from './perun-footer/perun-footer.component';
 import { ReportIssueDialogComponent } from './report-issue-dialog/report-issue-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CreateGroupFormComponent } from './create-group-form/create-group-form.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -180,7 +181,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     DateRangeComponent,
     ObjectListValuesComponent,
     PerunFooterComponent,
-    ReportIssueDialogComponent
+    ReportIssueDialogComponent,
+    CreateGroupFormComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -221,7 +223,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     EntitySearchSelectComponent,
     DateRangeComponent,
     PerunFooterComponent,
-    ReportIssueDialogComponent
+    ReportIssueDialogComponent,
+    CreateGroupFormComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },
