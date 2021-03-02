@@ -55,17 +55,20 @@
         </ng-container>
         <ng-container matColumnDef="vo">
           <th mat-header-cell
-              *matHeaderCellDef>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_VO_NAME' | translate}}</th>
+              *matHeaderCellDef
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_VO_NAME' | translate}}</th>
           <td mat-cell *matCellDef="let resource">{{resource.vo.name}}</td>
         </ng-container>
         <ng-container matColumnDef="facility">
           <th mat-header-cell
-              *matHeaderCellDef>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_FACILITY_NAME' | translate}}</th>
+              *matHeaderCellDef
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_FACILITY_NAME' | translate}}</th>
           <td mat-cell *matCellDef="let resource">{{resource.facility.name}}</td>
         </ng-container>
         <ng-container matColumnDef="tags">
           <th mat-header-cell
-              *matHeaderCellDef>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_RESOURCE_TAGS' | translate}}</th>
+              *matHeaderCellDef
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_RESOURCE_TAGS' | translate}}</th>
           <td mat-cell *matCellDef="let resource">{{resource.resourceTags | resourceTagsToString}}</td>
         </ng-container>
         <ng-container matColumnDef="description">

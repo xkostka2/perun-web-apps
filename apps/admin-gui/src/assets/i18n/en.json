@@ -2098,7 +2098,7 @@
           "TABLE_VO_NAME": "Organization",
           "TABLE_FACILITY_NAME": "Facility name",
           "TABLE_RESOURCE_TAGS": "Tags",
-          "TABLE_SEARCH": "Filter by name, description or ID",
+          "TABLE_SEARCH": "Filter",
           "TABLE_RESOURCE_DESCRIPTION": "Description",
           "NO_RESOURCES_WARNING": "No resources assigned."
         },
