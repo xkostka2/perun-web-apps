@@ -43,8 +43,6 @@ export class CategoriesListComponent implements AfterViewInit, OnChanges {
   @Input()
   pageSize = 10;
   @Input()
-  disableRouting = false;
-  @Input()
   displayedColumns: string[] = ['select', 'id', 'name', 'rank'];
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;

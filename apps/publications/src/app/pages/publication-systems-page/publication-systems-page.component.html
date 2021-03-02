@@ -1,1 +1,14 @@
-<p>publication-systems-page works!</p>
+<div class="user-theme">
+  <h1 class="page-subtitle">{{'PUBLICATION_SYSTEMS_PAGE.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'PUBLICATION_SYSTEMS_PAGE.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <perun-web-apps-publication-systems-list
+    *ngIf="publicationSystems && !loading"
+    [publicationSystems]="publicationSystems"
+    [filterValue]="filterValue"
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)"></perun-web-apps-publication-systems-list>
+</div>

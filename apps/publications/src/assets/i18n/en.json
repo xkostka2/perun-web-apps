@@ -23,6 +23,17 @@
     "FILTER": "Filter by name or rating",
     "NO_FILTER_RESULTS": "No categories match the filter"
   },
+  "PUBLICATION_SYSTEMS_LIST": {
+    "ID": "Id",
+    "FRIENDLY_NAME": "Friendly name",
+    "LOGIN_NAMESPACE": "Login namespace",
+    "URL": "Url",
+    "TYPE": "Parser type"
+  },
+  "PUBLICATION_SYSTEMS_PAGE": {
+    "TITLE": "Publication systems",
+    "FILTER": "Filter by id, friendly name, namespace, url or parser type"
+  },
   "DIALOGS": {
     "ADD_CATEGORY": {
       "TITLE": "Add category",

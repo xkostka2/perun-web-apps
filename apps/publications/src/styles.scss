@@ -97,3 +97,7 @@ button {
 button:focus {
   outline: none !important;
 }
+
+th, td.mat-cell {
+  padding: 0.25rem !important;
+}
