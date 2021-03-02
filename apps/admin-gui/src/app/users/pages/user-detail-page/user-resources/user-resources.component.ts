@@ -44,4 +44,9 @@ export class UserResourcesComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
   }
+
+  resourceFilter(filterValue: string) {
+    this.filterValue = filterValue;
+  }
+
 }

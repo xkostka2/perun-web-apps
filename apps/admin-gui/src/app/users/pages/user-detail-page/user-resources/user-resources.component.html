@@ -1,5 +1,10 @@
 <div>
   <h1 class="page-subtitle">{{'USER_DETAIL.RESOURCES.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <perun-web-apps-immediate-filter
+          (filter)="resourceFilter($event)"
+          [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_SEARCH'">
+  </perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <perun-web-apps-resources-list
     [pageSize]="pageSize"
