@@ -5,7 +5,7 @@
 
   <div mat-dialog-content class="dialog-container" *ngIf="!loading && !successfullyCreated">
 
-    <app-alert color="error" *ngIf="this.functionalityNotSupported">
+    <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
     </app-alert>
 
@@ -98,12 +98,12 @@
     <div class="bigger-font mb-2">
       <mat-icon class="mr-2 mb-2">done</mat-icon>
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.USER' | translate}}
-          {{this.createdMember.user | userFullName}}
+        <i>{{this.createdMember.user | userFullName}}</i>
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.WAS_CREATED' | translate}}
     </div>
     <div>{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN' | translate}}: {{this.loginThatWasSet}}</div>
     <div>{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}: {{this.password.value}} </div>
-    <app-alert color="warn">{{'DIALOGS.CREATE_SPONSORED_MEMBER.COPY_INFORMATION' | translate}}</app-alert>
+    <app-alert alert_type="warn">{{'DIALOGS.CREATE_SPONSORED_MEMBER.COPY_INFORMATION' | translate}}</app-alert>
 
   </div>
 
