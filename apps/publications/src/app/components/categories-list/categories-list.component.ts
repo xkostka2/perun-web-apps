@@ -12,12 +12,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Category} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, getDefaultDialogConfig,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateRankDialogComponent } from '../update-rank-dialog/update-rank-dialog.component';
 
 @Component({
   selector: 'perun-web-apps-categories-list',
@@ -27,7 +29,8 @@ import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 export class CategoriesListComponent implements AfterViewInit, OnChanges {
 
   constructor(private guiAuthResolver: GuiAuthResolver,
-              private tableCheckbox: TableCheckbox) { }
+              private tableCheckbox: TableCheckbox,
+              private dialog: MatDialog) { }
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -49,6 +52,9 @@ export class CategoriesListComponent implements AfterViewInit, OnChanges {
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+
+  @Output()
+  refreshTable = new EventEmitter<void>();
 
   private sort: MatSort;
 
@@ -120,4 +126,17 @@ export class CategoriesListComponent implements AfterViewInit, OnChanges {
     this.selection.toggle(item);
   }
 
+  updateCategory(category) {
+    const config = getDefaultDialogConfig();
+    config.width = '400px';
+    config.data = category;
+
+    const dialogRef = this.dialog.open(UpdateRankDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refreshTable.emit();
+      }
+    });
+  }
 }

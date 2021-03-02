@@ -1,0 +1,38 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{"DIALOGS.UPDATE_RANK.TITLE" | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <div mat-dialog-content class="dialog-container">
+      <mat-form-field>
+        <input
+          matInput
+          required
+          placeholder="{{'DIALOGS.UPDATE_RANK.RANK' | translate}}"
+          [formControl]="rankCtrl">
+        <mat-error>
+          {{'DIALOGS.UPDATE_RANK.FILL_RANK' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <p class="mt-2">{{'DIALOGS.UPDATE_RANK.RANK_HINT' | translate}}</p>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-flat-button
+        class="ml-auto"
+        (click)="onCancel()">
+        {{'DIALOGS.UPDATE_RANK.CANCEL' | translate}}
+      </button>
+      <div matTooltip="{{'DIALOGS.UPDATE_RANK.TOOLTIP' | translate}}" matTooltipPosition="above"
+           [matTooltipDisabled]="rankCtrl.valid">
+        <button
+          mat-flat-button
+          class="ml-2"
+          color="accent"
+          [disabled]="rankCtrl.invalid"
+          (click)="onSubmit()">
+          {{'DIALOGS.UPDATE_RANK.UPDATE' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

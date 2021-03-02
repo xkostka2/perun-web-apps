@@ -26,6 +26,7 @@
     *ngIf="categories && !loading"
     [categories]="categories"
     [filterValue]="filterValue"
+    (refreshTable)="refreshTable()"
     [displayedColumns]="removeAuth ? ['select', 'id', 'name', 'rank'] : ['name', 'rank']"
     [pageSize]="pageSize"
     [selection]="selected"

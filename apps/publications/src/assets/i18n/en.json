@@ -54,6 +54,16 @@
       "CANCEL": "Cancel",
       "DELETE": "Delete",
       "SUCCESS": "Categories successfully removed"
+    },
+    "UPDATE_RANK": {
+      "TITLE": "Edit rank",
+      "RANK": "Rank",
+      "FILL_RANK": "Rank cannot be empty and have to contain at max 1 decimal digit",
+      "RANK_HINT": "Rank values like: 0.0 , 0.5 , 1.2 , etc.",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "Invalid rank value",
+      "UPDATE": "Update",
+      "SUCCESS": "Category successfully updated"
     }
   },
   "SHARED_LIB": {

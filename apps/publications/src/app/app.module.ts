@@ -35,6 +35,7 @@ import { RemoveCategoryDialogComponent } from './components/remove-category-dial
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { PublicationSystemsListComponent } from './components/publication-systems-list/publication-systems-list.component';
+import { UpdateRankDialogComponent } from './components/update-rank-dialog/update-rank-dialog.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -60,7 +61,7 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
 };
 
 @NgModule({
-  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent, CategoriesListComponent, AddCategoryDialogComponent, RemoveCategoryDialogComponent, PublicationSystemsListComponent],
+  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent, CategoriesListComponent, AddCategoryDialogComponent, RemoveCategoryDialogComponent, PublicationSystemsListComponent, UpdateRankDialogComponent],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({
