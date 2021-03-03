@@ -58,7 +58,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   searchString: string;
 
   @Input()
-  selection: SelectionModel<RichMember>;
+  selection: SelectionModel<RichMember> = new SelectionModel<RichMember>();
 
   @Input()
   hideColumns: string[] = [];

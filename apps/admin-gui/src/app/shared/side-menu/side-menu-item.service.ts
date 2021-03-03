@@ -130,6 +130,11 @@ export class SideMenuItemService {
           activatedRegex: `^/myProfile/attributes$`
         },
         {
+          label: 'MENU_ITEMS.USER.ROLES',
+          url: [`myProfile/roles`],
+          activatedRegex: `myProfile/roles`
+        },
+        {
           label: 'MENU_ITEMS.USER.SETTINGS',
           url: [`/myProfile/settings`],
           activatedRegex: `^/myProfile/settings$`,
@@ -586,18 +591,20 @@ export class SideMenuItemService {
       activatedRegex: `${regex}/attributes`
     });
 
+    // Roles
+    links.push({
+      label: 'MENU_ITEMS.USER.ROLES',
+        url: [`${path}/roles`],
+      activatedRegex: `^${path}/roles`
+    });
+
+
     // Settings
     links.push({
       label: 'MENU_ITEMS.ADMIN.SETTINGS',
       url: [`${path}/settings`],
       activatedRegex: `${regex}/settings$`,
-      children: [
-        {
-          label: 'MENU_ITEMS.USER.ROLES',
-          url: [`${path}/settings/roles`],
-          activatedRegex: `^${path}/settings/roles`
-        }
-      ],
+      children: [],
       showChildrenRegex: `${regex}/settings`
     });
 

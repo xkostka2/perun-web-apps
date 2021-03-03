@@ -136,6 +136,11 @@ const routes: Routes = [
         data: {animation: 'UserIdentityDetailPage'}
       },
       {
+        path: 'roles',
+        component: UserRolesComponent,
+        data: {animation: 'UserRolesPage'}
+      },
+      {
         path: 'settings',
         component: UserSettingsComponent,
         children: [
@@ -148,11 +153,6 @@ const routes: Routes = [
             path: 'facilityAttributes',
             component: UserSettingsFacilityAttributesComponent,
             data: {animation: 'UserSettingsFacilityAttributesPage', showPrincipal: false}
-          },
-          {
-            path: 'roles',
-            component: UserRolesComponent,
-            data: {animation: 'UserRolesPage'}
           },
           {
             path: 'service-identities',
