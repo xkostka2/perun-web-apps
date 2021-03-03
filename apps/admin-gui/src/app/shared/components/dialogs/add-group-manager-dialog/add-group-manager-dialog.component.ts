@@ -62,6 +62,7 @@ export class AddGroupManagerDialogComponent implements OnInit {
   groups: Group[] = [];
   selected: number;
   vos: Vo[] = [];
+  filterValue = '';
 
   selectedRole: Role;
   filteredOptions: Observable<Vo[]>;
@@ -126,5 +127,9 @@ export class AddGroupManagerDialogComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  applyFilter(filterValue: string) {
+    this.filterValue = filterValue;
   }
 }

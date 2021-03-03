@@ -971,7 +971,8 @@
       "SUCCESS": "Selected groups were added",
       "COUNT": "Count",
       "NO_GROUPS_FOUND": "No groups found",
-      "SELECT_VO": "Select organization"
+      "SELECT_VO": "Select organization",
+      "FILTER_GROUPS": "Filter groups by id, name or description"
     },
     "REMOVE_GROUPS": {
       "TITLE": "Confirm removal",
