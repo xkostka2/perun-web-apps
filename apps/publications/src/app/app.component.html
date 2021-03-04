@@ -4,7 +4,7 @@
                [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
     <perun-web-apps-side-menu [sideNav]="sidenav" class="overflow-hidden"></perun-web-apps-side-menu>
   </mat-sidenav>
-  <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner" style="padding-top: 64px">
+  <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
     <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
 <!--      <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>-->
       <router-outlet></router-outlet>

@@ -821,17 +821,6 @@
       "CREATE": "Create attribute",
       "CANCEL": "Cancel"
     },
-    "REPORT_ISSUE": {
-      "TITLE": "Report an issue",
-      "SUBJECT": "Subject",
-      "SUBJECT_ERROR": "Subject cannot be empty.",
-      "MESSAGE": "Message",
-      "MESSAGE_PLACEHOLDER": "Please describe the issue",
-      "MESSAGE_HINT": "Please try to describe in detail the problem.",
-      "CANCEL": "Cancel",
-      "SEND": "Send",
-      "SUCCESS": "Issue report was sended and got ticket number: "
-    },
     "MOVE_GROUP": {
       "TITLE": "Move group - ",
       "INFO": "Selected group will be moved (including all its sub-groups).",
@@ -2232,6 +2221,17 @@
           "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
           "REPORT_ISSUE": "Report Issue",
           "PRIVACY_POLICY": "Privacy Policy"
+        },
+        "REPORT_ISSUE": {
+          "TITLE": "Report an issue",
+          "SUBJECT": "Subject",
+          "SUBJECT_ERROR": "Subject cannot be empty.",
+          "MESSAGE": "Message",
+          "MESSAGE_PLACEHOLDER": "Please describe the issue",
+          "MESSAGE_HINT": "Please try to describe in detail the problem.",
+          "CANCEL": "Cancel",
+          "SEND": "Send",
+          "SUCCESS": "Issue report was sended and got ticket number: "
         }
       },
       "ORGANIZATIONS": {

@@ -24,10 +24,11 @@ export class UpdateRankDialogComponent implements OnInit {
 
   successMessage: string;
   loading: boolean;
-
+  categoryName = '';
   rankCtrl: FormControl;
 
   ngOnInit() {
+    this.categoryName = this.data.name;
     this.rankCtrl = new FormControl(this.data.rank, [Validators.required, Validators.pattern('^[0-9]+(\\.[0-9])?$')]);
   }
 

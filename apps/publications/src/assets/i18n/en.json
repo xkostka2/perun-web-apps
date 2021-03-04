@@ -56,7 +56,7 @@
       "SUCCESS": "Categories successfully removed"
     },
     "UPDATE_RANK": {
-      "TITLE": "Edit rank",
+      "TITLE": "Edit rank of category ",
       "RANK": "Rank",
       "FILL_RANK": "Rank cannot be empty and have to contain at max 1 decimal digit",
       "RANK_HINT": "Rank values like: 0.0 , 0.5 , 1.2 , etc.",
@@ -109,7 +109,7 @@
           "TABLE_VO_NAME": "Organization",
           "TABLE_FACILITY_NAME": "Facility name",
           "TABLE_RESOURCE_TAGS": "Tags",
-          "TABLE_SEARCH": "Filter by name, description or ID",
+          "TABLE_SEARCH": "Filter",
           "TABLE_RESOURCE_DESCRIPTION": "Description",
           "NO_RESOURCES_WARNING": "No resources assigned."
         },
@@ -253,6 +253,17 @@
           "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
           "REPORT_ISSUE": "Report Issue",
           "PRIVACY_POLICY": "Privacy Policy"
+        },
+        "REPORT_ISSUE": {
+          "TITLE": "Report an issue",
+          "SUBJECT": "Subject",
+          "SUBJECT_ERROR": "Subject cannot be empty.",
+          "MESSAGE": "Message",
+          "MESSAGE_PLACEHOLDER": "Please describe the issue",
+          "MESSAGE_HINT": "Please try to describe in detail the problem.",
+          "CANCEL": "Cancel",
+          "SEND": "Send",
+          "SUCCESS": "Issue report was sended and got ticket number: "
         }
       },
       "ORGANIZATIONS": {

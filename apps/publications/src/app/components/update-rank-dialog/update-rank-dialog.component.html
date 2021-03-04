@@ -1,5 +1,5 @@
 <div class="user-theme">
-  <h1 mat-dialog-title>{{"DIALOGS.UPDATE_RANK.TITLE" | translate}}</h1>
+  <h1 mat-dialog-title>{{"DIALOGS.UPDATE_RANK.TITLE" | translate}}{{categoryName}}</h1>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <div *ngIf="!loading">
     <div mat-dialog-content class="dialog-container">

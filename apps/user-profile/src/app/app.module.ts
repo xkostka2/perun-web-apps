@@ -75,6 +75,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddAuthImgDialogComponent } from './components/dialogs/add-auth-img-dialog/add-auth-img-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AddTokenInfoDialogComponent } from './components/add-token-info-dialog/add-token-info-dialog.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -135,7 +136,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     LocalizationLabelPipe,
     SettingsAuthenticationComponent,
     AddAuthImgDialogComponent,
-    AddTokenInfoDialogComponent
+    AddTokenInfoDialogComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

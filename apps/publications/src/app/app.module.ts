@@ -9,7 +9,6 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { PublicationsConfigService } from './services/publications-config.service';
 import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
 import { GeneralModule } from '@perun-web-apps/general';
 import { UiMaterialModule } from '@perun-web-apps/ui/material';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,20 +18,11 @@ import { CreatePublicationPageComponent } from './pages/create-publication-page/
 import { AuthorsPageComponent } from './pages/authors-page/authors-page.component';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { PublicationSystemsPageComponent } from './pages/publication-systems-page/publication-systems-page.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
-import { MatListModule } from '@angular/material/list';
-import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
 import { HeaderComponent } from './components/header/header.component';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { CategoriesListComponent } from './components/categories-list/categories-list.component';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableExporterModule } from 'mat-table-exporter';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { AddCategoryDialogComponent } from './components/add-category-dialog/add-category-dialog.component';
 import { RemoveCategoryDialogComponent } from './components/remove-category-dialog/remove-category-dialog.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { PublicationSystemsListComponent } from './components/publication-systems-list/publication-systems-list.component';
 import { UpdateRankDialogComponent } from './components/update-rank-dialog/update-rank-dialog.component';
@@ -73,20 +63,10 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     }),
     BrowserAnimationsModule,
     UiMaterialModule,
-    MatIconModule,
     GeneralModule,
     ApiModule,
     HttpClientModule,
     AppRoutingModule,
-    MatSidenavModule,
-    MatListModule,
-    PerunSharedComponentsModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatSortModule,
-    MatTableExporterModule,
-    MatPaginatorModule,
-    MatTooltipModule,
     UiAlertsModule
   ],
   providers: [

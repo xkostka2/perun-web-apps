@@ -23,10 +23,6 @@ export class SideMenuComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.items = this.sideMenuItemService.getSideMenuItems();
-  }
-
   private currentUrl: string;
   @Input()
   sideNav: MatSidenav;
@@ -34,6 +30,10 @@ export class SideMenuComponent implements OnInit {
   items: SideMenuItem[] = [];
   textColor = this.storeService.get('theme', 'sidemenu_text_color');
   iconColor = this.storeService.get('theme', 'sidemenu_item_icon_color');
+
+  ngOnInit() {
+    this.items = this.sideMenuItemService.getSideMenuItems();
+  }
 
   isActive(regexValue: string) {
     const regexp = new RegExp(regexValue);

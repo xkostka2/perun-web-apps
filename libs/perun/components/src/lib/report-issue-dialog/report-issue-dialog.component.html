@@ -1,30 +1,30 @@
-<h1 mat-dialog-title>{{'DIALOGS.REPORT_ISSUE.TITLE' | translate}}</h1>
+<h1 mat-dialog-title>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.TITLE' | translate}}</h1>
 <div mat-dialog-content class="dialog-container">
   <mat-form-field>
-    <mat-label>{{'DIALOGS.REPORT_ISSUE.SUBJECT' | translate}}</mat-label>
+    <mat-label>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SUBJECT' | translate}}</mat-label>
     <input
       matInput
       required
       type="text"
       [(ngModel)]="subject"
       #subjectModel=ngModel>
-    <mat-error *ngIf="subjectModel.invalid">{{'DIALOGS.REPORT_ISSUE.SUBJECT_ERROR' | translate}}</mat-error>
+    <mat-error *ngIf="subjectModel.invalid">{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SUBJECT_ERROR' | translate}}</mat-error>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>{{'DIALOGS.REPORT_ISSUE.MESSAGE' | translate}}</mat-label>
+    <mat-label>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE' | translate}}</mat-label>
     <textarea
       matInput
-      placeholder="{{'DIALOGS.REPORT_ISSUE.MESSAGE_PLACEHOLDER' | translate}}"
+      placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE_PLACEHOLDER' | translate}}"
       [(ngModel)]="message">
     </textarea>
-    <mat-hint>{{'DIALOGS.REPORT_ISSUE.MESSAGE_HINT' | translate}}</mat-hint>
+    <mat-hint>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE_HINT' | translate}}</mat-hint>
   </mat-form-field>
 </div>
 
 <div mat-dialog-actions>
   <div class="ml-auto">
     <button mat-button (click)="close()">
-      {{'DIALOGS.REPORT_ISSUE.CANCEL' | translate}}
+      {{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.CANCEL' | translate}}
     </button>
     <button
       (click)="sendBugReport()"
@@ -32,7 +32,7 @@
       class="ml-2"
       mat-flat-button
       color="accent">
-      {{'DIALOGS.REPORT_ISSUE.SEND' | translate}}
+      {{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SEND' | translate}}
     </button>
   </div>
 </div>

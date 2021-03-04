@@ -11,6 +11,12 @@
     "oauth_scopes": "openid profile perun_api perun_admin",
     "oauth_response_type": "id_token token"
   },
+  "footer_perun_web_web": "https://perun-aai.org/",
+  "footer_perun_team_web": "https://perun-aai.org/team",
+  "footer_privacy_policy_web": "https://perun-aai.org/",
+  "footer_users_documentation_web": "https://perun-aai.org/documentation/users-documentation",
+  "footer_administrator_documentation": "https://perun-aai.org/documentation/admin-documentation",
+  "footer_github_releases": "https://github.com/CESNET/perun-web-apps/releases",
   "footer_support_mail": "perun@cesnet.cz",
   "footer_copyright": [
     {
