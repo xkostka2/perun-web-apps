@@ -34,8 +34,9 @@
     <mat-form-field>
       <mat-select placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE' | translate}}"
                   required
+                  (valueChange)="onNamespaceChanged($event)"
                   [formControl]="namespace">
-        <mat-option (onSelectionChange)="changeNamespace(namespc)" *ngFor="let namespc of namespaceOptions" [value]="namespc">
+        <mat-option *ngFor="let namespc of namespaceOptions" [value]="namespc">
           {{namespc}}
         </mat-option>
       </mat-select>
@@ -51,24 +52,28 @@
       [matTooltipDisabled]="!login.disabled">
       <input matInput
              [formControl]="login"
-             required
              placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN' | translate}}">
       <mat-error *ngIf="login.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
     </mat-form-field>
 
-
-    <mat-checkbox
-      labelPosition="before"
-      (change)="passwordResetChange()"
-      [(ngModel)]="passwordReset">{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET' | translate}}
-    </mat-checkbox>
-    <mat-form-field
-      matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_DISABLED' | translate}}"
+    <span
+      matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET_DISABLED' | translate}}"
       matTooltipPosition="left"
-      [matTooltipDisabled]="!passwordReset">
+      [matTooltipDisabled]="!passwordResetDisabled">
+      <mat-checkbox
+        labelPosition="before"
+        [disabled]="passwordResetDisabled"
+        (change)="passwordResetChange()"
+        [(ngModel)]="passwordReset">{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET' | translate}}
+      </mat-checkbox>
+    </span>
+    <mat-form-field
+      [matTooltip]="getPasswordDisabledTooltip()"
+      matTooltipPosition="left"
+      [matTooltipDisabled]="!password.disabled">
       <input
         [disabled]=""
-        matInput [formControl]="password" required
+        matInput [formControl]="password"
         placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
       <mat-error *ngIf="password.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
     </mat-form-field>
