@@ -20,7 +20,7 @@
     "TITLE": "Categories",
     "CREATE": "Create",
     "REMOVE": "Remove",
-    "FILTER": "Filter by name or rating",
+    "FILTER": "Filter",
     "NO_FILTER_RESULTS": "No categories match the filter"
   },
   "PUBLICATION_SYSTEMS_LIST": {

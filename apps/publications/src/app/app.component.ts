@@ -13,7 +13,7 @@ export class AppComponent {
 
   public static minWidth = 992;
   sidebarMode: 'over' | 'push' | 'side' = 'side';
-  footerHeight = 180;
+  footerHeight = 200;
 
   sideMenuBgColor = this.store.get('theme', 'sidemenu_bg_color');
   contentBackgroundColor = this.store.get('theme', 'content_bg_color');
@@ -28,6 +28,6 @@ export class AppComponent {
   }
 
   getContentHeight() {
-    return 'calc(100vh - 64px - ' + this.footerHeight + 'px)';
+    return 'calc(100vh - 84px - ' + this.footerHeight + 'px)';
   }
 }

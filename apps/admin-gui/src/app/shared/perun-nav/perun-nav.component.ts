@@ -20,7 +20,7 @@ export class PerunNavComponent implements OnInit, AfterViewInit {
 
   constructor(private storeService: StoreService,
               private authService: AuthService,
-              private authzResolverService: AuthzResolverService,
+              public authzResolverService: AuthzResolverService,
               private dialog: MatDialog,
               private notificator: NotificatorService,
               private translateService: TranslateService,

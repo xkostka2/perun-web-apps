@@ -11,6 +11,17 @@
     "oauth_scopes": "openid profile perun_api perun_admin",
     "oauth_response_type": "id_token token"
   },
+  "footer_support_mail": "perun@cesnet.cz",
+  "footer_copyright": [
+    {
+      "name": "CESNET",
+      "webpage": "https://www.cesnet.cz/"
+    },
+    {
+      "name": "CERIT-SC",
+      "webpage": "https://www.cerit-sc.cz/"
+    }
+  ],
   "logo": "<svg width=\"60\" height=\"54\" viewBox=\"0 0 60 54\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M27 32.9419L20.9531 33.8569L27.7031 19.6736L21.8906 20.5471L28.0312 6.28058H19.4531L6.79688 20.8798L11.7656 39.1393L22.3125 43.673L27 32.9419Z\" fill=\"white\"/>\n<path d=\"M41.0625 7.19562L33.0469 18.8417L41.8125 17.5939L31.6406 32.318L40.0781 30.9454L24.7969 44.7544L30.6563 47.2916L49.2188 39.1809L53.4844 20.963L41.0625 7.19562Z\" fill=\"white\"/>\n</svg>\n",
   "theme": {
     "content_bg_color": "",
@@ -25,8 +36,8 @@
     "sidemenu_bg_color": "#263238",
     "sidemenu_border_color": "#071e24",
     "sidemenu_item_icon_color": "#ffffff",
-    "sidemenu_hover_color": "#00796b",
-    "sidemenu_active_color": "#005048",
+    "sidemenu_hover_color": "#566268",
+    "sidemenu_active_color": "#465258",
     "sidemenu_active_text_color": "#ffffff",
     "user_color": "#00796b"
   }

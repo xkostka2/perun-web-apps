@@ -35,7 +35,6 @@ export class PerunFooterComponent implements OnInit {
   currentYear = (new Date()).getFullYear();
 
   ngOnInit() {
-    console.log(this.backgroundColor);
     this.perunwebpage = this.storeService.get('footer_perun_web_web');
     this.perunTeamWebpage = this.storeService.get('footer_perun_team_web');
     this.privacyPolicy = this.storeService.get('footer_privacy_policy_web');

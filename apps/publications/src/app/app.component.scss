@@ -1,5 +1,5 @@
 #footer {
-  position: absolute;
+  position: relative;
   height: 200px;
   bottom: 0;
   width: 100%;
@@ -23,4 +23,13 @@
   position: relative;
   overflow-x: hidden;
   min-height: calc(100vh - 64px);
+}
+
+#nav-menu {
+  background: #102027;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  height: 64px;
+  max-height: 64px;
 }

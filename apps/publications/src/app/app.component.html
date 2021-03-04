@@ -1,10 +1,10 @@
-<perun-web-apps-header [sideNav]="sidenav"></perun-web-apps-header>
+<perun-web-apps-header [sideNav]="sidenav" id="nav-menu"></perun-web-apps-header>
 <mat-sidenav-container>
   <mat-sidenav #sidenav [mode]="sidebarMode" [ngStyle]="{'background': sideMenuBgColor}"
                [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
     <perun-web-apps-side-menu [sideNav]="sidenav" class="overflow-hidden"></perun-web-apps-side-menu>
   </mat-sidenav>
-  <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
+  <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner" style="padding-top: 64px">
     <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
 <!--      <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>-->
       <router-outlet></router-outlet>

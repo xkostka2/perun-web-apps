@@ -1,12 +1,12 @@
-<mat-toolbar [ngStyle]="{'background': bgColor}" class="sticky-top header-container" style="display: flex; justify-content: space-between;">
+<mat-toolbar [ngStyle]="{'background': bgColor}" class="header-container" style="display: flex; justify-content: space-between;">
   <div style=" display: flex; flex-direction: row;">
-    <button (click)="sideNav.toggle()" [ngStyle]="{'color': iconColor}" mat-icon-button>
+    <button (click)="sideNav.toggle()" [ngStyle]="{'color': iconColor}" mat-icon-button class="mt-auto mb-auto">
       <mat-icon>menu</mat-icon>
     </button>
 
     <a class="ml-3" [innerHTML]="logo" routerLink="/all-publications"></a>
-    <mat-icon svgIcon="perun-publications-white" style="height: 3rem; width: 3rem"></mat-icon>
-    <p [ngStyle]="{'color': textColor}" class="ml-3 mt-auto mb-auto">{{'HEADER.TITLE' | translate}}</p>
+    <mat-icon svgIcon="perun-publications-white" style="height: 3rem; width: 3rem; cursor: pointer; outline: 0" class="mt-auto mb-auto ml-2" routerLink="/all-publications"></mat-icon>
+    <p [ngStyle]="{'color': textColor}" class="ml-3 mt-auto mb-auto page-subtitle">{{'HEADER.TITLE' | translate}}</p>
   </div>
 
   <div id="nav-menu-user-info" [ngStyle]="{'color': textColor}">
