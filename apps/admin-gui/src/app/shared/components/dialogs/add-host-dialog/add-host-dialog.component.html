@@ -14,8 +14,11 @@
         required
         [formControl]="hostsCtrl">
       </textarea>
-      <mat-error>
+      <mat-error *ngIf="this.hostsCtrl.hasError('required')">
         {{'DIALOGS.ADD_HOST.EMPTY_MESSAGE' | translate}}
+      </mat-error>
+      <mat-error *ngIf="this.hostsCtrl.hasError('invalidHost')">
+        {{'DIALOGS.ADD_HOST.INVALID_HOST' | translate}}{{this.hostsCtrl.getError('invalidHost').value}}
       </mat-error>
     </mat-form-field>
     <div class="text-muted">{{'DIALOGS.ADD_HOST.HINT'| translate}}</div>

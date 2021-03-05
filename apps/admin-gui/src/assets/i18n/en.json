@@ -1388,11 +1388,11 @@
       "SELECTION_ALL": "All",
       "NO_SERVICE": "No service available",
       "CHOOSE_SERVICE": "You must choose service",
-      "TYPE_EMAIL": "Please type valid email",
       "IS_SERVICES_ONLY_ON_FACILITY": "Show only services on facility",
       "TYPE": "Type",
       "HOST": "Host",
       "REQUIRED_FIELD": "Destination value can't be empty.",
+      "INVALID_DESTINATION": "The specified value for the selected destination type is invalid.",
       "USE_FACILITY_HOST": "Use names of all facility's hosts",
       "PROPAGATION": "Propagation",
       "PROPAGATION_TYPE_PARALLEL": "PARALLEL - Data for all destinations and one service are pushed in parallel.",
@@ -1426,7 +1426,8 @@
       "HINT": "Enter one host per line. You can use \"[x-y]\" in hostname to generate hosts with numbers from x to y. This replacer can be specified multiple times in one hostname to generate MxN combinations.",
       "WARNING": "Please enter at least one hostname to add it to facility.",
       "SUCCESS": "Added hosts.",
-      "EMPTY_MESSAGE": "Hostnames cannot be empty"
+      "EMPTY_MESSAGE": "Hostnames cannot be empty",
+      "INVALID_HOST": "Invalid host name: "
     },
     "REMOVE_HOST": {
       "TITLE": "Confirm removal",
