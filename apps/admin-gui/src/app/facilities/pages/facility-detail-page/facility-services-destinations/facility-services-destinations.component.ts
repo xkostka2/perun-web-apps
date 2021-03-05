@@ -38,11 +38,12 @@ export class FacilityServicesDestinationsComponent implements OnInit {
               private translate: TranslateService,
               private notificator: NotificatorService,
               private route: ActivatedRoute,
-              private authResolver: GuiAuthResolver) { }
+              private authResolver: GuiAuthResolver,
+              private serviceManager: ServicesManagerService) { }
 
   facility: Facility;
   destinations: RichDestination[];
-  selected = new SelectionModel<RichResource>(true, []);
+  selected = new SelectionModel<RichDestination>(true, []);
   displayedColumns: string[] = ['select', 'destinationId', 'service', 'destination', 'type', 'propagationType'];
 
   filterValue = '';
@@ -53,6 +54,8 @@ export class FacilityServicesDestinationsComponent implements OnInit {
 
   addAuth: boolean;
   removeAuth: boolean;
+  allowAuth: boolean;
+  blockAuth: boolean;
 
   ngOnInit() {
 
@@ -82,9 +85,11 @@ export class FacilityServicesDestinationsComponent implements OnInit {
   setAuthRights(){
     this.addAuth = this.authResolver.isAuthorized('addDestination_Service_Facility_Destination_policy', [this.facility]);
     this.removeAuth = this.authResolver.isAuthorized('removeDestination_Service_Facility_Destination_policy', [this.facility]);
+    this.allowAuth = this.authResolver.isAuthorized('unblockServiceOnDestination_Service_int_policy', [this.facility]);
+    this.blockAuth = this.authResolver.isAuthorized('blockServiceOnDestination_Service_int_policy', [this.facility]);
 
-    this.displayedColumns = this.removeAuth ? ['select', 'destinationId', 'service', 'destination', 'type', 'propagationType'] :
-      ['destinationId', 'service', 'destination', 'type', 'propagationType'];
+    this.displayedColumns = this.removeAuth ? ['select', 'destinationId', 'service', 'destination', 'type', 'status', 'propagationType'] :
+      ['destinationId', 'service', 'destination', 'type', 'status', 'propagationType'];
   }
 
   addDestination() {
@@ -118,6 +123,42 @@ export class FacilityServicesDestinationsComponent implements OnInit {
     });
   }
 
+  blockServiceOnDestinations(destinations: RichDestination[]){
+    if (destinations.length === 0){
+      this.notificator.showSuccess(this.translate.instant('FACILITY_DETAIL.SERVICES_DESTINATIONS.BLOCK_SUCCESS'));
+      this.refreshTable();
+      return;
+    }
+
+    const destination = destinations.pop();
+    this.serviceManager.blockServiceOnDestination(destination.service.id, destination.id).subscribe(() => {
+      this.blockServiceOnDestinations(destinations);
+    }, () => this.loading = false);
+  }
+
+  onBlock() {
+    this.loading = true;
+    this.blockServiceOnDestinations(this.selected.selected);
+  }
+
+  allowServiceOnDestinations(destinations: RichDestination[]) {
+    if (destinations.length === 0){
+      this.notificator.showSuccess(this.translate.instant('FACILITY_DETAIL.SERVICES_DESTINATIONS.ALLOW_SUCCESS'));
+      this.refreshTable();
+      return;
+    }
+
+    const destination = destinations.pop();
+    this.serviceManager.unblockServiceOnDestinationById(destination.service.id, destination.id).subscribe(() => {
+      this.allowServiceOnDestinations(destinations);
+    }, () => this.loading = false);
+  }
+
+  onAllow() {
+    this.loading = true;
+    this.allowServiceOnDestinations(this.selected.selected);
+  }
+
   applyFilter(filterValue: string) {
     this.filterValue = filterValue;
   }
@@ -125,5 +166,13 @@ export class FacilityServicesDestinationsComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  allSelectedAllowed() {
+    return this.selected.selected.reduce((acc, destination) => acc && !destination.blocked, true);
+  }
+
+  allSelectedBlocked() {
+    return this.selected.selected.reduce((acc, destination) => acc && destination.blocked, true);
   }
 }

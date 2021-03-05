@@ -124,7 +124,11 @@
       "REMOVE": "Remove",
       "FILTER": "Filter",
       "REMOVE_SUCCESS": "Destinations were successfully removed",
-      "ADD_SUCCESS": "Destinations were successfully added"
+      "ADD_SUCCESS": "Destinations were successfully added",
+      "ALLOW": "Allow",
+      "BLOCK": "Block",
+      "ALLOW_SUCCESS": "Service was successfully allowed on destination",
+      "BLOCK_SUCCESS": "Service was successfully blocked on destination"
     },
     "SETTINGS": {
       "ATTRIBUTES": {
