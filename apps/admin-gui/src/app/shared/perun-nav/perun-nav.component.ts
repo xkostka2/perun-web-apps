@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthzResolverService, PerunPrincipal } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { StoreService } from '@perun-web-apps/perun/services';
 import { AuthService } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowNotificationHistoryDialogComponent } from '../components/dialogs/show-notification-history-dialog/show-notification-history-dialog.component';
@@ -20,8 +20,7 @@ export class PerunNavComponent implements OnInit, AfterViewInit {
 
   constructor(private storeService: StoreService,
               private authService: AuthService,
-              public authResolver: GuiAuthResolver,
-              private authzResolverService: AuthzResolverService,
+              public authzResolverService: AuthzResolverService,
               private dialog: MatDialog,
               private notificator: NotificatorService,
               private translateService: TranslateService,

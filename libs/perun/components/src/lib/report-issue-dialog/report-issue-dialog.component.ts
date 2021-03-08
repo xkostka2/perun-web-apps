@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
-import { version } from '../../../../../../../package.json';
+import { version } from '../../../../../../package.json';
 import { RTMessagesManagerService } from '@perun-web-apps/perun/openapi';
 
 @Component({
-  selector: 'app-perun-web-apps-report-issue-dialog',
+  selector: 'perun-web-apps-report-issue-dialog',
   templateUrl: './report-issue-dialog.component.html',
   styleUrls: ['./report-issue-dialog.component.scss']
 })

@@ -105,13 +105,11 @@ import { DebounceFilterComponent } from './components/debounce-filter/debounce-f
 import { DeleteAttributeDefinitionDialogComponent } from './components/dialogs/delete-attribute-definition-dialog/delete-attribute-definition-dialog.component';
 // tslint:disable-next-line:max-line-length
 import { CreateAttributeDefinitionDialogComponent } from './components/dialogs/create-attribute-definition-dialog/create-attribute-definition-dialog.component';
-import { PerunFooterComponent } from './perun-footer/perun-footer.component';
 import {MatTableExporterModule} from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { EditAttributeDefinitionDialogComponent } from './components/dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import { EntitylessAttributeKeysListComponent } from './components/entityless-attribute-keys-list/entityless-attribute-keys-list.component';
 import { ServicesListComponent } from './components/services-list/services-list.component';
-import { ReportIssueDialogComponent } from './components/report-issue-dialog/report-issue-dialog.component';
 import { RemoveVoDialogComponent } from './components/dialogs/remove-vo-dialog/remove-vo-dialog.component';
 import { CreateVoDialogComponent } from './components/dialogs/create-vo-dialog/create-vo-dialog.component';
 import { ShowNotificationHistoryDialogComponent } from './components/dialogs/show-notification-history-dialog/show-notification-history-dialog.component';
@@ -230,7 +228,6 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     PerunNavComponent,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule,
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
@@ -287,7 +284,6 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     AnimatedRouterOutletComponent,
     ResourcesTagsListComponent,
     DebounceFilterComponent,
-    PerunFooterComponent,
     CreateResourceDialogComponent,
     ExtSourcesListComponent,
     ExtSourceTypePipe,
@@ -362,11 +358,9 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     DebounceFilterComponent,
     DeleteAttributeDefinitionDialogComponent,
     CreateAttributeDefinitionDialogComponent,
-    PerunFooterComponent,
     EditAttributeDefinitionDialogComponent,
     EntitylessAttributeKeysListComponent,
     ServicesListComponent,
-    ReportIssueDialogComponent,
     RemoveVoDialogComponent,
     CreateVoDialogComponent,
     ShowNotificationHistoryDialogComponent,

@@ -1,0 +1,38 @@
+<h1 mat-dialog-title>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.TITLE' | translate}}</h1>
+<div mat-dialog-content class="dialog-container">
+  <mat-form-field>
+    <mat-label>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SUBJECT' | translate}}</mat-label>
+    <input
+      matInput
+      required
+      type="text"
+      [(ngModel)]="subject"
+      #subjectModel=ngModel>
+    <mat-error *ngIf="subjectModel.invalid">{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SUBJECT_ERROR' | translate}}</mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE' | translate}}</mat-label>
+    <textarea
+      matInput
+      placeholder="{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE_PLACEHOLDER' | translate}}"
+      [(ngModel)]="message">
+    </textarea>
+    <mat-hint>{{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.MESSAGE_HINT' | translate}}</mat-hint>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <div class="ml-auto">
+    <button mat-button (click)="close()">
+      {{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.CANCEL' | translate}}
+    </button>
+    <button
+      (click)="sendBugReport()"
+      [disabled]="subjectModel.invalid"
+      class="ml-2"
+      mat-flat-button
+      color="accent">
+      {{'SHARED_LIB.PERUN.COMPONENTS.REPORT_ISSUE.SEND' | translate}}
+    </button>
+  </div>
+</div>

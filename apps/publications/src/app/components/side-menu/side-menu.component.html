@@ -1,0 +1,11 @@
+<mat-nav-list>
+  <mat-list-item (click)="shouldHideMenu()" *ngFor="let item of items"
+                 [class.activated]="isActive(item.activatedRegex)" [ngStyle]="{'color': textColor}" disableRipple
+                 routerLink="{{item.link}}">
+    <mat-icon *ngIf="item.isSVG" [svgIcon]="item.icon"></mat-icon>
+    <mat-icon *ngIf="!item.isSVG" [ngStyle]="{'color': iconColor}">{{item.icon}}</mat-icon>
+    <span class="nav-caption">{{item.label | translate}}</span>
+  </mat-list-item>
+</mat-nav-list>
+
+

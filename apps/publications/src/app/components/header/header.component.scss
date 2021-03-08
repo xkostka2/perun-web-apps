@@ -1,0 +1,28 @@
+.header-container {
+  height: 64px !important;
+  display: flex;
+  justify-content: space-between;
+}
+
+#nav-menu-user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 16px;
+}
+
+.page-subtitle {
+  margin-bottom: 1.0rem;
+  font-size: 1.5rem;
+}
+
+.router-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  cursor: pointer;
+  outline: 0;
+}
+
+.router-icon-scale{
+  transform: scale(0.75);
+}

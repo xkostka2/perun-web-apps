@@ -52,7 +52,7 @@
   </button>
   <mat-menu #menu="matMenu">
     <button [routerLink]="['/myProfile']" mat-menu-item>{{'NAV.PROFILE' | translate}}</button>
-    <button mat-menu-item *ngIf="authResolver.isPerunAdmin()" (click)="reloadRoles()">
+    <button mat-menu-item *ngIf="authzResolverService.isPerunAdmin()" (click)="reloadRoles()">
       {{'NAV.RELOAD_ROLES' | translate}}
     </button>
     <button mat-menu-item *ngIf="logoutEnabled" (click)="onLogOut()">{{'NAV.LOGOUT' | translate}}</button>
