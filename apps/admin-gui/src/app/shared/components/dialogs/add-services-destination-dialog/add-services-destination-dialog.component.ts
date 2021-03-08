@@ -10,7 +10,7 @@ import {
   Service,
   ServicesManagerService
 } from '@perun-web-apps/perun/openapi';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 
 export interface  AddServicesDestinationDialogData {
   facility: Facility;
@@ -37,7 +37,7 @@ export class AddServicesDestinationDialogComponent implements OnInit {
   services: Service[] = [];
   serviceControl: FormControl;
   types: string[] = ['host', 'user@host', 'user@host:port','user@host-windows', 'host-windows-proxy',
-    'url', 'mail', 'semail', 'service-specific'];
+    'url', 'email', 'semail', 'service-specific'];
   selectedType = 'host';
   propagations: string[] = ['PARALLEL', 'DUMMY'];
   selectedPropagation  = 'PARALLEL';
@@ -45,12 +45,18 @@ export class AddServicesDestinationDialogComponent implements OnInit {
   useFacilityHost = false;
   loading = false;
   emailControl: FormControl;
+
   emailRegex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+  hostPattern = new RegExp("^(?!:\\/\\/)(?=.{1,255}$)((.{1,63}\\.){1,127}(?![0-9]*$)[a-z0-9-]+\\.?)$|^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+  urlPattern = new RegExp("[(http(s)?):\\/\\/(www\\.)?a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
+  userAtHostPattern = new RegExp("^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\\$)@(?:(?!:\\/\\/)(?=.{1,255}$)((.{1,63}\\.){1,127}(?![0-9]*$)[a-z0-9-]+\\.?)$|(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$)");
+  userAtHostPortPattern = new RegExp("^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\\$)@(?:(?!:\\/\\/)(?=.{1,255}$)((.{1,63}\\.){1,127}(?![0-9]*$)[a-z0-9-]+\\.?)|(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}):[0-9]+");
+  serviceSpecificPattern = new RegExp("^(?!-)[a-zA-Z0-9-_.:/]*$");
 
   ngOnInit() {
     this.loading = true;
     this.serviceControl = new FormControl(undefined, Validators.required);
-    this.destinationControl = new FormControl('', Validators.required);
+    this.destinationControl = new FormControl('', this.getDestinationValidator());
     this.emailControl = new FormControl("", [Validators.required, Validators.pattern(this.emailRegex)]);
     this.facilitiesManager.getHosts(this.data.facility.id).subscribe( hosts => {
       this.hosts = hosts;
@@ -58,6 +64,42 @@ export class AddServicesDestinationDialogComponent implements OnInit {
       this.getServices();
       this.loading = false;
     }, () => this.loading = false);
+  }
+
+  getDestinationValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      if (!control.value) {
+        return null;
+      }
+      let pattern: RegExp;
+      switch (this.selectedType) {
+        case 'host':
+        case 'host-windows-proxy':
+          pattern = this.hostPattern;
+          break;
+        case 'email':
+        case 'semail':
+          pattern = this.emailRegex;
+          break;
+        case 'url':
+          pattern = this.urlPattern;
+          break;
+        case 'user@host':
+        case 'user@host-windows':
+          pattern = this.userAtHostPattern;
+          break;
+        case 'user@host:port':
+          pattern = this.userAtHostPortPattern;
+          break;
+        case 'service-specific':
+          pattern = this.serviceSpecificPattern;
+          break;
+        default:
+          return null;
+      }
+
+      return pattern.test(control.value) ? null : {invalidDestination: {value: control.value}};
+    }
   }
 
   onCancel() {
@@ -124,17 +166,9 @@ export class AddServicesDestinationDialogComponent implements OnInit {
     return type;
   }
 
-  selectedTypeIsMail() {
-    return this.selectedType === 'mail' || this.selectedType === 'semail';
-  }
-
   invalidDestination() {
     if (this.selectedType === 'host' && this.useFacilityHost) {
       return false;
-    }
-
-    if (this.selectedTypeIsMail()){
-      return this.emailControl.invalid;
     }
 
     return this.destinationControl.invalid;

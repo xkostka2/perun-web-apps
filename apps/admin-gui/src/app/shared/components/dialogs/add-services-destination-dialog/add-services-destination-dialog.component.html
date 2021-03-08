@@ -23,39 +23,33 @@
     <mat-checkbox (change)="getServices()"
                   [(ngModel)]="servicesOnFacility">{{'DIALOGS.ADD_SERVICE_DESTINATION.IS_SERVICES_ONLY_ON_FACILITY' | translate}}</mat-checkbox>
     <mat-form-field>
-      <mat-select [(ngModel)]="selectedType" placeholder="{{'DIALOGS.ADD_SERVICE_DESTINATION.TYPE' | translate}}">
+      <mat-select [(ngModel)]="selectedType"
+                  placeholder="{{'DIALOGS.ADD_SERVICE_DESTINATION.TYPE' | translate}}"
+                  (selectionChange)="this.destinationControl.updateValueAndValidity()">
         <mat-option *ngFor="let type of types" [value]="type">
           {{getTypeForView(type)}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="!selectedTypeIsMail() && !(selectedType === 'host' && useFacilityHost)">
-      <label>
-        <input
-          [formControl]="destinationControl"
-          matInput
-          placeholder="{{getTypeForView(selectedType)}}"
-          required>
-      </label>
-      <mat-error *ngIf="selectedType === 'host' && !useFacilityHost && destinationControl.invalid">
+
+    <mat-form-field class="w-100" *ngIf="!(selectedType === 'host' && useFacilityHost)">
+      <input
+        [formControl]="destinationControl"
+        matInput
+        placeholder="{{getTypeForView(selectedType)}}"
+        required>
+      <mat-error *ngIf="selectedType === 'host' && !useFacilityHost && destinationControl.hasError('required')">
         {{'DIALOGS.ADD_SERVICE_DESTINATION.REQUIRED_FIELD' | translate}}
       </mat-error>
-    </mat-form-field>
-    <mat-form-field *ngIf="selectedTypeIsMail()">
-      <label>
-        <input
-          [formControl]="emailControl"
-          matInput
-          placeholder="{{getTypeForView(selectedType)}}"
-          required>
-      </label>
-      <mat-error *ngIf="emailControl.invalid">
-        {{'DIALOGS.ADD_SERVICE_DESTINATION.TYPE_EMAIL' | translate}}
+      <mat-error *ngIf="destinationControl.hasError('invalidDestination')">
+        {{'DIALOGS.ADD_SERVICE_DESTINATION.INVALID_DESTINATION' | translate}}
       </mat-error>
     </mat-form-field>
+
     <mat-checkbox *ngIf="selectedType === 'host'" [(ngModel)]="useFacilityHost">
       {{'DIALOGS.ADD_SERVICE_DESTINATION.USE_FACILITY_HOST' | translate}}
     </mat-checkbox>
+
     <mat-form-field>
       <mat-select [(ngModel)]="selectedPropagation"
                   placeholder="{{'DIALOGS.ADD_SERVICE_DESTINATION.PROPAGATION' | translate}}">

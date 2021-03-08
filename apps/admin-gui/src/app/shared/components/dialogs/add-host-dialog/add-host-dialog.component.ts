@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FacilitiesManagerService } from '@perun-web-apps/perun/openapi';
 import { NotificatorService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 
 export interface AddHostDialogData {
   theme: string;
@@ -31,10 +31,12 @@ export class AddHostDialogComponent implements OnInit {
   loading = false;
   hostsCtrl: FormControl;
 
+  hostPattern = new RegExp("^(?!:\\/\\/)(?=.{1,255}$)((.{1,63}\\.){1,127}(?![0-9]*$)[a-z0-9-]+\\.?)$|^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+
   ngOnInit(): void {
     this.theme = this.data.theme;
     this.facilityName= this.data.facilityName;
-    this.hostsCtrl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
+    this.hostsCtrl = new FormControl('', [Validators.required, this.hostsNameValidator()]);
     this.hostsCtrl.markAllAsTouched();
   }
 
@@ -46,7 +48,6 @@ export class AddHostDialogComponent implements OnInit {
     for (const name of hostNames){
       generatedHostNames = generatedHostNames.concat(this.parseHostName(name));
     }
-
     this.facilitiesManager.addHosts(this.data.facilityId, generatedHostNames).subscribe(() =>{
       this.notificator.showSuccess(this.translate.instant('DIALOGS.ADD_HOST.SUCCESS'));
       this.dialogRef.close(true);
@@ -55,6 +56,23 @@ export class AddHostDialogComponent implements OnInit {
 
   onCancel() {
     this.dialogRef.close(false);
+  }
+
+  hostsNameValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      let generatedHostNames: string[] = [];
+      const hostNames = control.value.split("\n");
+      for (const name of hostNames){
+        generatedHostNames = generatedHostNames.concat(this.parseHostName(name));
+      }
+      console.log(hostNames);
+      for (const host of generatedHostNames) {
+        if (!this.hostPattern.test(host)) {
+          return {invalidHost: {value: host}}
+        }
+      }
+      return null;
+    };
   }
 
   parseHostName(name: string){
