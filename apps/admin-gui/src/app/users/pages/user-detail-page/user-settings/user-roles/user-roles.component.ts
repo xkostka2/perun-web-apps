@@ -1,8 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import {
-  AuthzResolverService, FacilitiesManagerService, Facility,
-  Group, GroupsManagerService, Member, MembersManagerService,
-  PerunPrincipal, Resource, ResourcesManagerService, RichResource, User,
+  AuthzResolverService, EnrichedFacility, FacilitiesManagerService, Facility,
+  Group, GroupsManagerService, MembersManagerService,
+  PerunPrincipal, Resource, ResourcesManagerService, RichMember, RichResource, User,
   UsersManagerService,
   Vo,
   VosManagerService
@@ -46,10 +46,10 @@ export class UserRolesComponent implements OnInit {
   roleNames: string[] = [];
   groups: Group[] = [];
   vos: Vo[] = [];
-  facilities: Facility[] = [];
+  facilities: EnrichedFacility[] = [];
   users: User[] = [];
   resources: RichResource[] = [];
-  members: Member[] = [];
+  members: RichMember[] = [];
   outerLoading: boolean;
   loading: boolean;
   showDescription: boolean;
@@ -192,10 +192,10 @@ export class UserRolesComponent implements OnInit {
     this.loading = true;
     this.facilities = [];
     this.facilitiesManagerService.getFacilitiesWhereUserIsAdmin(this.userId).subscribe(facilities => {
-      this.facilities = facilities;
+      this.facilities = facilities.map(f => {return { facility: f } });
       this.loading = false;
     });
-  }
+  };
 
   getSelfData() {
     this.loading = true;
@@ -225,7 +225,7 @@ export class UserRolesComponent implements OnInit {
     this.resourcesManagerService.getRichResourcesByIds(resourceIds).subscribe(resources => {
       this.resources = resources;
       this.vos = this.resources.map(res => res.vo).filter((item, i, ar) => ar.indexOf(item) === i);
-      this.facilities = this.resources.map(res => res.facility).filter((item, i, ar) => ar.indexOf(item) === i);
+      this.facilities = this.resources.map(res => {return { facility: res.facility } }).filter((item, i, ar) => ar.indexOf(item) === i);
       this.loading = false;
     });
   }
@@ -235,10 +235,10 @@ export class UserRolesComponent implements OnInit {
     this.loading = true;
     const memberIds = this.roles.get('SPONSORSHIP').get('Member');
     this.members = [];
-    this.membersManagerService.getMembersByIds(memberIds).subscribe(members => {
-        this.members = members;
-        this.loading = false;
-      });
+    this.membersManagerService.getRichMembersByIds(memberIds).subscribe(members => {
+      this.members = members;
+      this.loading = false;
+    });
   }
 
   getGroupsAndVos(role: string) {
@@ -262,7 +262,7 @@ export class UserRolesComponent implements OnInit {
     this.facilities = [];
     const facilityIds = this.roles.get(role).get('Facility');
     this.facilitiesManagerService.getFacilitiesByIds(facilityIds).subscribe(facilities => {
-      this.facilities = facilities;
+      this.facilities = facilities.map(f => {return { facility: f } });
       this.loading = false;
     });
   }

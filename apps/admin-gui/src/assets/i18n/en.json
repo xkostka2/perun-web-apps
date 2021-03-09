@@ -2056,6 +2056,8 @@
     "SELF": "Self",
     "SELF_VOS": "Organizations you are member of",
     "SELF_IDENTITIES": "Identities linked to your Perun account",
+    "SELF_VOS_ADMIN": "Organizations where user is member",
+    "SELF_IDENTITIES_ADMIN": "User's identities",
     "FACILITYADMIN": "Facility admin",
     "FACILITYADMIN_FACILITIES": "Facilities you are manager of",
     "FACILITYOBSERVER": "Facility observer",

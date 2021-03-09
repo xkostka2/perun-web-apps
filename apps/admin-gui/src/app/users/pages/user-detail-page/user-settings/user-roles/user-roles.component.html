@@ -10,6 +10,9 @@
     </mat-expansion-panel-header>
     <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
     <div *ngIf="!loading">
+      <div *ngIf="!showDescription">
+        {{'ROLES.SELF_VOS_ADMIN' | translate}}
+      </div>
       <div *ngIf="showDescription">
         {{'ROLES.SELF_VOS' | translate}}
       </div>
@@ -20,6 +23,9 @@
       </perun-web-apps-vo-select-table>
 
       <div class="mt-5" *ngIf="users.length">
+        <div *ngIf="!showDescription">
+          {{'ROLES.SELF_IDENTITIES_ADMIN' | translate}}
+        </div>
         <div *ngIf="showDescription">
           {{'ROLES.SELF_IDENTITIES' | translate}}
         </div>
@@ -231,10 +237,10 @@
         {{'ROLES.FACILITYADMIN_FACILITIES' | translate}}
       </div>
 
-      <perun-web-apps-simple-facility-list
-        [displayedColumns]="['id', 'name']"
+      <perun-web-apps-facility-select-table
+        [displayedColumns]="['id', 'name', 'description']"
         [facilities]="facilities">
-      </perun-web-apps-simple-facility-list>
+      </perun-web-apps-facility-select-table>
     </div>
   </mat-expansion-panel>
 
@@ -251,10 +257,10 @@
         {{'ROLES.FACILITYOBSERVER_FACILITIES' | translate}}
       </div>
 
-      <perun-web-apps-simple-facility-list
-        [displayedColumns]="['id', 'name']"
+      <perun-web-apps-facility-select-table
+        [displayedColumns]="['id', 'name', 'description']"
         [facilities]="facilities">
-      </perun-web-apps-simple-facility-list>
+      </perun-web-apps-facility-select-table>
     </div>
   </mat-expansion-panel>
 
@@ -273,7 +279,7 @@
 
       <perun-web-apps-members-list
         [members]="members"
-        [hideColumns]="['checkbox', 'email', 'logins', 'status']"
+        [hideColumns]="['checkbox', 'email', 'logins', 'status', 'organization']"
       ></perun-web-apps-members-list>
     </div>
   </mat-expansion-panel>

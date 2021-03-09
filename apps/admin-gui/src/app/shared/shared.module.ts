@@ -176,7 +176,6 @@ import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe'
 import { PasswordResetRequestDialogComponent } from './components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import { NewVersionDialogComponent } from './components/dialogs/new-version-dialog/new-version-dialog.component';
 import { SponsorExistingMemberDialogComponent } from './components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
-import { SimpleFacilityListComponent } from './components/simple-facility-list/simple-facility-list.component';
 
 @NgModule({
   imports: [
@@ -310,8 +309,7 @@ import { SimpleFacilityListComponent } from './components/simple-facility-list/s
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
-    AttributeFriendlyNamePipe,
-    SimpleFacilityListComponent
+    AttributeFriendlyNamePipe
   ],
   declarations: [
     PerunNavComponent,
@@ -429,8 +427,7 @@ import { SimpleFacilityListComponent } from './components/simple-facility-list/s
     AttributeFriendlyNamePipe,
     PasswordResetRequestDialogComponent,
     NewVersionDialogComponent,
-    SponsorExistingMemberDialogComponent,
-    SimpleFacilityListComponent
+    SponsorExistingMemberDialogComponent
   ],
   providers: [
     AnyToStringPipe,
