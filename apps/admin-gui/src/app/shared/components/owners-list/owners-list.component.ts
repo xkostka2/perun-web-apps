@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Group, Owner} from '@perun-web-apps/perun/openapi';
+import { Owner} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -119,7 +119,7 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
     this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
   }
 
-  checkboxLabel(row?: Group): string {
+  checkboxLabel(row?: Owner): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }

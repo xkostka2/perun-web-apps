@@ -782,7 +782,8 @@
       "GROUPS": "Groups",
       "SETTINGS": "Advanced settings",
       "ORGANIZATIONS": "Organizations",
-      "SERVICES": "Services"
+      "SERVICES": "Services",
+      "OWNERS": "Owners"
     },
     "VISUALIZER": {
       "ATTR_DEPENDENCIES": "Modules dependencies",
@@ -1782,6 +1783,28 @@
       "EXPIRATION": "Sponsorship expiration",
       "BEGIN_SEARCH": "Search for members you would like to sponsor",
       "SUCCESS": "Members successfully sponsored"
+    },
+    "ADD_OWNER": {
+      "TITLE": "Create owner",
+      "NAME": "Name",
+      "FILL_NAME": "Name cannot be empty",
+      "CONTACT": "Contact",
+      "FILL_CONTACT": "Contact cannot be empty",
+      "CONTACT_FORMAT": "Invalid format, e.g. mail@domain.com",
+      "TYPE1": "Administrative",
+      "TYPE2": "Technical",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "Please, fill name and contact",
+      "CREATE": "Create",
+      "SUCCESS": "Owner successfully created"
+    },
+    "DELETE_OWNER": {
+      "TITLE": "Delete owner",
+      "DESCRIPTION": "Selected owners will be deleted.",
+      "ASK": "Are you sure, you want to continue?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Owners successfully removed"
     }
   },
   "MEMBERS_LIST": {
@@ -1838,6 +1861,12 @@
       "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
       "NO_USERS_FOUND": "No users found.",
       "EMPTY_SEARCH": "Search field cannot be empty"
+    },
+    "OWNERS": {
+      "TITLE": "Owners",
+      "ADD": "Create",
+      "DELETE": "Delete",
+      "FILTER": "Filter"
     },
     "VISUALIZER": {
       "ATTR_DEPENDENCIES": {

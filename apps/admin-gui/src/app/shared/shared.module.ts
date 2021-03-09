@@ -177,6 +177,8 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
 import { DeleteServiceFromFacilityComponent } from './components/dialogs/delete-service-from-facility/delete-service-from-facility.component';
 import { DeleteTaskDialogComponent } from './components/dialogs/delete-task-dialog/delete-task-dialog.component';
 import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-source-dialog/remove-ext-source-dialog.component';
+import { AddOwnerDialogComponent } from './components/add-owner-dialog/add-owner-dialog.component';
+import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/delete-owner-dialog.component';
 
 @NgModule({
   imports: [
@@ -426,8 +428,10 @@ import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-
     NewVersionDialogComponent,
     SponsorExistingMemberDialogComponent,
     DeleteServiceFromFacilityComponent,
-    DeleteTaskDialogComponent,
     RemoveExtSourceDialogComponent,
+    DeleteTaskDialogComponent,
+    AddOwnerDialogComponent,
+    DeleteOwnerDialogComponent
   ],
   providers: [
     AnyToStringPipe,
