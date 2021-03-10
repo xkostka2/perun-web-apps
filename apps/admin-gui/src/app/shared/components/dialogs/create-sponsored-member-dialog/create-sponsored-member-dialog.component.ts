@@ -1,13 +1,16 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  AuthzResolverService,
   InputCreateSponsoredMember,
   MembersManagerService,
   NamespaceRules,
   RichMember,
+  RichUser,
+  User,
   UsersManagerService
 } from '@perun-web-apps/perun/openapi';
-import { ApiRequestConfigurationService, StoreService } from '@perun-web-apps/perun/services';
+import { ApiRequestConfigurationService,GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import {
   AsyncValidatorFn,
   FormControl,
@@ -15,18 +18,23 @@ import {
   NgForm,
   ValidationErrors,
   ValidatorFn,
-  Validators
+  Validators,
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
 } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { Role } from '@perun-web-apps/perun/models';
 import { of, timer } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 
 export interface CreateSponsoredMemberDialogData {
-  entityId?: number
+  entityId?: number;
   voId?: number;
-  theme: string,
+  sponsors?: RichUser[];
+  theme: string;
 }
 
 /**
@@ -78,29 +86,18 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   emailRegx = /^(([^<>+()\[\]\\.,;:\s@"-#$%&=]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
 
-  firstName = new FormControl('', [Validators.required]);
-
-  lastName = new FormControl('', [Validators.required]);
-
-  titleBefore = '';
-
-  titleAfter = '';
-
-  passwordReset = false;
-  passwordResetDisabled = false;
-  password: FormControl;
+  userControl: FormGroup = null;
+  namespaceControl: FormGroup = null;
   passwordStateMatcher = new ImmediateStateMatcher();
 
-  namespace = new FormControl('', [Validators.required]);
+  voSponsors: RichUser[] = [];
 
-  login = new FormControl('', [Validators.required]);
-
-  email = new FormControl('', [Validators.required, Validators.pattern(this.emailRegx)]);
+  selectedSponsor: User = null;
+  sponsorType: string = null;
+  isSponsor = false;
+  isPerunAdmin = false;
 
   expiration = 'never';
-
-  private selectedNamespace: string;
-  showPassword = false;
 
   constructor(private dialogRef: MatDialogRef<CreateSponsoredMemberDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: CreateSponsoredMemberDialogData,
@@ -108,16 +105,33 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
               private apiRequestConfiguration: ApiRequestConfigurationService,
               private usersService: UsersManagerService,
               private store: StoreService,
-              private translator: TranslateService) {
-    this.password = new FormControl('', {
-      validators: [Validators.required],
-      asyncValidators: [loginAsyncValidator(null, usersService, apiRequestConfiguration)]
-    });
-  }
+              private translator: TranslateService,
+              private authzService: AuthzResolverService,
+              private guiAuthResolver: GuiAuthResolver,
+              private formBuilder: FormBuilder)  {  }
 
   ngOnInit(): void {
     this.loading = true;
     this.theme = this.data.theme;
+    this.voSponsors = this.data.sponsors;
+    this.isSponsor = this.guiAuthResolver.principalHasRole(Role.SPONSOR, 'Vo', this.data.voId);
+    this.isPerunAdmin = this.guiAuthResolver.isPerunAdmin();
+
+    this.userControl = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      titleBefore: [''],
+      titleAfter: ['']
+    });
+
+    this.namespaceControl = this.formBuilder.group({
+      namespace: ['', Validators.required],
+      login: ['', [Validators.required]],
+      password: ['', Validators.required, [loginAsyncValidator(null, this.usersService, this.apiRequestConfiguration)]],
+      passwordReset: [false, []],
+      showPassword: [false, []],
+      email: ['', [Validators.required, Validators.pattern(this.emailRegx)]]
+    });
 
     this.membersService.getAllNamespacesRules().subscribe(rules => {
       if (this.store.get('allow_empty_sponsor_namespace')) {
@@ -171,27 +185,28 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
     const sponsoredMember: InputCreateSponsoredMember = {
       vo: this.data.voId,
       userData: {
-        firstName: this.firstName.value,
-        lastName: this.lastName.value,
-        titleAfter: this.titleAfter,
-        titleBefore: this.titleBefore,
-        email: this.email.value
+        firstName: this.userControl.get('firstName').value,
+        lastName: this.userControl.get('lastName').value,
+        titleAfter: this.userControl.get('titleAfter').value,
+        titleBefore: this.userControl.get('titleBefore').value,
+        email: this.namespaceControl.get('email').value
       },
-      sponsor: this.store.getPerunPrincipal().userId,
+      sponsor: this.sponsorType === 'other' ? this.selectedSponsor.id : this.store.getPerunPrincipal().userId,
     }
 
-    const rules = this.parsedRules.get(this.namespace.value);
-    if (this.namespace.value !== 'No namespace') {
-      sponsoredMember.userData.namespace = this.namespace.value;
+    const namespace = this.namespaceControl.get('namespace').value;
+    const rules = this.parsedRules.get(namespace);
+    if (namespace !== 'No namespace') {
+      sponsoredMember.userData.namespace = namespace;
     }
 
     if (rules.login !== 'disabled') {
-      sponsoredMember.userData.login = this.login.value;
+      sponsoredMember.userData.login = this.namespaceControl.get('login').value;
     }
 
     if (rules.password !== 'disabled') {
-      sponsoredMember.sendActivationLink = this.passwordReset;
-      sponsoredMember.userData.password = this.password.value;
+      sponsoredMember.sendActivationLink = this.namespaceControl.get('passwordReset').value;
+      sponsoredMember.userData.password = this.namespaceControl.get('password').value;
     }
 
     if(this.expiration !== 'never'){
@@ -205,7 +220,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
       if(!!richMember && !!richMember.userAttributes){
         richMember.userAttributes
           .filter(attr => attr.baseFriendlyName === 'login-namespace')
-          .filter(attr => attr.friendlyNameParameter === this.namespace.value)
+          .filter(attr => attr.friendlyNameParameter === namespace)
           .filter(attr => attr.value !== null)
           .forEach(attr => {
             this.loginThatWasSet = attr.value.toString();
@@ -226,7 +241,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   }
 
-  enableFormControl(control: FormControl, validators: ValidatorFn[], asyncValidators: AsyncValidatorFn[] = []) {
+  enableFormControl(control: AbstractControl, validators: ValidatorFn[], asyncValidators: AsyncValidatorFn[] = []) {
     control.enable();
     control.clearValidators();
     control.clearAsyncValidators();
@@ -236,30 +251,41 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
   }
 
   onNamespaceChanged(namespc: string) {
-    this.selectedNamespace = namespc;
     const rules = this.parsedRules.get(namespc);
-    this.login.disable();
-    this.password.disable();
-    this.passwordReset = false;
-    this.passwordResetDisabled = true;
+    const login = this.namespaceControl.get('login');
+    const password = this.namespaceControl.get('password');
+    const passwordReset = this.namespaceControl.get('passwordReset');
+    const showPassword = this.namespaceControl.get('showPassword');
 
     if (rules.login !== 'disabled') {
       const validators = rules.login === 'optional' ? [] : [Validators.required];
-      this.enableFormControl(this.login, validators);
+      this.enableFormControl(login, validators);
+    } else {
+      login.disable();
+      login.setValue('');
     }
     if (rules.password !== 'disabled') {
       const validators = rules.password === 'optional' ? [] : [Validators.required];
-      this.enableFormControl(this.password, validators, [loginAsyncValidator(namespc, this.usersService, this.apiRequestConfiguration)])
-      this.passwordResetDisabled = false;
+      this.enableFormControl(password, validators, [loginAsyncValidator(namespc, this.usersService, this.apiRequestConfiguration)]);
+      this.enableFormControl(passwordReset, []);
+      this.enableFormControl(showPassword, []);
+    } else {
+      password.disable();
+      password.setValue('');
+      passwordReset.disable();
+      passwordReset.setValue(false);
+      showPassword.disable();
+      showPassword.setValue(false);
     }
   }
 
   passwordResetChange() {
-    if (this.passwordReset){
-      this.password.disable();
-      this.password.setValue('');
+    const password = this.namespaceControl.get('password');
+    if (this.namespaceControl.get('passwordReset').value){
+      password.disable();
+      password.setValue('');
     } else {
-      this.password.enable();
+      password.enable();
     }
   }
 
@@ -272,7 +298,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
   }
 
   getPasswordDisabledTooltip(): string {
-    if (this.passwordReset) {
+    if (this.namespaceControl.get('passwordReset').value) {
       return this.translator.instant('DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_VIA_EMAIL');
     } else {
       return this.translator.instant('DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_DISABLED');

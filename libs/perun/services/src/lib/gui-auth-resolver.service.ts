@@ -149,7 +149,7 @@ export class GuiAuthResolver {
     return mapOfBeans;
   }
 
-  private principalHasRole(role: string, perunBeanName: string, id: number): boolean {
+  public principalHasRole(role: string, perunBeanName: string, id: number): boolean {
     let convertedBeanName = perunBeanName;
     if (perunBeanName.startsWith('Rich')) {
       convertedBeanName = perunBeanName.substring(4);

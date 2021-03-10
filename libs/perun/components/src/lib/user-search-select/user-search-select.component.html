@@ -1,5 +1,6 @@
 <perun-web-apps-entity-search-select
   [entities]="users"
+  [disableAutoSelect]="disableAutoSelect"
   (entitySelected)="this.userSelected.emit($event)"
   [searchFunction]="userFullNameFunction"
   [mainTextFunction]="userFullNameFunction"
