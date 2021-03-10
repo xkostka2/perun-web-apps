@@ -77,6 +77,7 @@ import { ResourceSettingsManagersComponent } from '../facilities/pages/resource-
 import { ResourceAssignedServicesComponent } from '../facilities/pages/resource-detail-page/resource-assigned-services/resource-assigned-services.component';
 import { ResourceAssignedMembersComponent } from '../facilities/pages/resource-detail-page/resource-assigned-members/resource-assigned-members.component';
 import { VoSettingsSponsoredMembersComponent } from './pages/vo-detail-page/vo-settings/vo-settings-sponsored-members/vo-settings-sponsored-members.component';
+import { GroupSettingsExtsourcesComponent } from './pages/group-detail-page/group-settings/group-settings-extsources/group-settings-extsources.component';
 
 const routes: Routes = [
   {
@@ -329,6 +330,11 @@ const routes: Routes = [
             path: 'relations',
             component: GroupSettingsRelationsComponent,
             data: {animation: 'GroupSettingsRelationsPage'}
+          },
+          {
+            path: 'extsources',
+            component: GroupSettingsExtsourcesComponent,
+            data: {animation: 'GroupSettingsExtsourcesPage'}
           }
         ]
       },
