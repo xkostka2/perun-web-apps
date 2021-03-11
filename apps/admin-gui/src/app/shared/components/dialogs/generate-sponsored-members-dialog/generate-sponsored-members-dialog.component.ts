@@ -1,16 +1,22 @@
 import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  Attribute,
+  AttributesManagerService,
+  AuthzResolverService, Group, GroupsManagerService,
   InputCreateSponsoredMemberFromCSV,
-  MembersManagerService
+  MembersManagerService, RichGroup
 } from '@perun-web-apps/perun/openapi';
-import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableExporterDirective } from 'mat-table-exporter';
 import { formatDate } from '@angular/common';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Urns } from '@perun-web-apps/perun/urns';
+import { TABLE_VO_GROUPS, TableConfigService } from '@perun-web-apps/config/table-config';
 
 export interface GenerateSponsoredMembersDialogData {
   voId: number;
@@ -43,32 +49,73 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   emailRegx = /^(([^<>+()\[\]\\.,;:\s@"-#$%&=]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
 
   namespaceOptions: string[] = [];
-  namespace: FormControl = new FormControl('', Validators.required);
-  sponsoredMembers: FormControl = new FormControl('', [Validators.required, Validators.pattern(this.notEmptyRegex)]);
+  usersInfoFormGroup: FormGroup;
 
-  passwordReset = false;
+  passwordReset = null;
+  groupAssignment = null;
+  expiration = null;
 
-  expiration = 'never';
+  createGroupAuth: boolean;
+  assignableGroups: Group[] = [];
+  allVoGroups: Group[] = [];
+  selection = new SelectionModel<Group>(true, []);
+  manualMemberAddingBlocked = false;
+
+  name = '';
+  description = '';
+  asSubGroup = false;
+  parentGroup: Group = null;
+  groupIds: number[] = [];
+
+  submitDisabled = false;
+
+  filterValue = '';
+  tableId = TABLE_VO_GROUPS;
+  pageSize: number;
+
+  private groupAttrNames = [
+    Urns.GROUP_SYNC_ENABLED,
+    Urns.GROUP_BLOCK_MANUAL_MEMBER_ADDING
+  ];
 
   constructor(private dialogRef: MatDialogRef<GenerateSponsoredMembersDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: GenerateSponsoredMembersDialogData,
               private store: StoreService,
               private membersService: MembersManagerService,
               private notificator: NotificatorService,
-              private translate: TranslateService) { }
+              private translate: TranslateService,
+              private guiAuthResolver: GuiAuthResolver,
+              private groupsService: GroupsManagerService,
+              private attributesService: AttributesManagerService,
+              private formBuilder: FormBuilder,
+              private tableConfigService: TableConfigService) { }
 
   ngOnInit(): void {
     this.loading = true;
     this.theme = this.data.theme;
+    this.createGroupAuth = this.guiAuthResolver.isAuthorized('createGroup_Vo_Group_policy', [{id: this.data.voId , beanName: 'Vo'}]);
     this.parseNamespace();
     if (this.namespaceOptions.length === 0) {
       this.functionalityNotSupported = true;
     }
-    this.loading = false;
-  }
+    this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
+    this.usersInfoFormGroup = this.formBuilder.group({
+      namespace: ['', Validators.required],
+      sponsoredMembers: ['', [Validators.required, this.userInputValidator()]]
+    });
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.attributesService.getVoAttributes(this.data.voId).subscribe(attributes => {
+      this.manualMemberAddingBlocked = this.hasAttributeEnabled(attributes, 'blockManualMemberAdding')
+      if(this.manualMemberAddingBlocked !== true){
+        this.groupsService.getAllRichGroupsWithAttributesByNames(this.data.voId, this.groupAttrNames).subscribe(grps => {
+          this.allVoGroups = grps.filter(grp => grp.name !== 'members');
+          this.assignableGroups = this.filterAssignableGroups(grps);
+          this.loading = false;
+        }, () => this.loading = false);
+      } else {
+        this.loading = false;
+      }
+    }, () => this.loading = false);
   }
 
   parseNamespace(){
@@ -79,6 +126,23 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
         this.namespaceOptions.push(namespace.substring(index + 1, namespace.length));
       }
     }
+  }
+
+  private filterAssignableGroups(groups: RichGroup[]) {
+    const assignableGroups = [];
+    for (const grp of groups) {
+      if (!(this.hasAttributeEnabled(grp.attributes, 'synchronizationEnabled') ||
+        this.hasAttributeEnabled(grp.attributes, 'blockManualMemberAdding')) &&
+        this.guiAuthResolver.isAuthorized('addMembers_Group_List<Member>_policy', [grp])) {
+        assignableGroups.push(grp);
+      }
+    }
+    return assignableGroups;
+  }
+
+  hasAttributeEnabled(attr: Attribute[], attName: string) {
+    return attr.some( att =>
+      att.friendlyName === attName && att.value !== null && att.value.toString() === "true");
   }
 
   createOutputObjects(data: {[p: string]: {[p: string]: string}}) {
@@ -126,12 +190,12 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
 
   onGenerate(){
     this.loading = true;
-    const listOfMembers = this.sponsoredMembers.value.split("\n");
+    const listOfMembers = this.usersInfoFormGroup.get('sponsoredMembers').value.split("\n");
     const header = 'firstname;lastname;urn:perun:user:attribute-def:def:preferredMail;urn:perun:user:attribute-def:def:note';
     const generatedMemberNames: string[] = [];
     for (const line of listOfMembers){
       const parsedLine = this.parseMemberLine(line);
-      if (parsedLine !== 'error') {
+      if (parsedLine !== 'format' && parsedLine !== 'email') {
         if (parsedLine !== '') {
           generatedMemberNames.push(parsedLine);
         }
@@ -140,24 +204,18 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
         return;
       }
     }
-    // For testing purposes
-    // const fakeExportData = {
-    //   'meno1': {'status': 'ok', 'login': '123', 'password': '456'},
-    //   'meno2': {'status': 'ok', 'login': 'abc', 'password': 'wqeq'},
-    // }
-    // const fakeExportData = {"guest Zeman":{"password":"tmY@xwAz1D+L","login":"9137983","status":"OK"},
-    //   "guest Japonec":{"password":"tmY@xwAz1D+L","login":"9137983","status":"OK"},
-    // };
-    // console.log(fakeExportData);
-    //this.exportData(fakeExportData);
 
     const inputSponsoredMembersFromCSV: InputCreateSponsoredMemberFromCSV = {
       data: generatedMemberNames,
       header: header,
-      namespace: this.namespace.value,
+      namespace: this.usersInfoFormGroup.get('namespace').value,
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
-      sendActivationLink: this.passwordReset
+      sendActivationLink: this.passwordReset === "reset"
+    }
+
+    if (this.groupAssignment !== 'none') {
+      inputSponsoredMembersFromCSV.groups = this.groupIds;
     }
 
     if(this.expiration !== 'never'){
@@ -182,14 +240,33 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     }
     const memberAttributes = trimLine.split(';');
     if (memberAttributes.length !== 4) {      //check if all attributes are filled
-      this.notificator.showError(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_FORMAT') + ': ' + trimLine);
-      return 'error';
+      return 'format';
     }
     if (!memberAttributes[2].trim().match(this.emailRegx)) {      //check if the email is valid email
-      this.notificator.showError(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_EMAIL') + ': ' + memberAttributes[2]);
-      return 'error';
+      return 'email';
     }
     return memberAttributes[0].trim() + ';' + memberAttributes[1].trim() + ';' + memberAttributes[2].trim() + ';' + memberAttributes[3].trim();
+  }
+
+  userInputValidator(): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const listOfMembers = control.value.split("\n");
+      for (const line of listOfMembers){
+        const parsedLine = this.parseMemberLine(line);
+        if (parsedLine === 'format') {
+          return {invalidFormat: {value: line}};
+        }
+        if (parsedLine === 'email') {
+          return {invalidEmail: {value: line}};
+        }
+      }
+
+      return null;
+    };
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   pageChanged(event: PageEvent) {
@@ -201,6 +278,46 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
       this.expiration = 'never';
     } else {
       this.expiration = formatDate(newExpiration,'yyyy-MM-dd','en-GB');
+    }
+  }
+
+  groupTablePageChanged(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  applyFilter(filterValue: string) {
+    this.filterValue = filterValue;
+  }
+
+  groupAssigmentChanged() {
+    this.selection.clear();
+
+    this.name = '';
+    this.description = '';
+    this.asSubGroup = false;
+    this.parentGroup = null;
+  }
+
+  onSubmit() {
+    this.loading = true;
+    if (this.groupAssignment === "new") {
+      if (this.asSubGroup) {
+        this.groupsService.createGroupWithParentGroupNameDescription(this.parentGroup.id, this.name, this.description).subscribe(group => {
+          this.groupIds.push(group.id);
+          this.onGenerate();
+        }, () => this.loading = false);
+      } else {
+        this.groupsService.createGroupWithVoNameDescription(this.data.voId, this.name, this.description).subscribe(group => {
+          this.groupIds.push(group.id);
+          this.onGenerate();
+        }, () => this.loading = false);
+      }
+    } else {
+      if (this.groupAssignment === 'existing') {
+        this.groupIds = this.selection.selected.map(grp => grp.id);
+      }
+      this.onGenerate();
     }
   }
 

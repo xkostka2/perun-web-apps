@@ -14,3 +14,4 @@ export * from './lib/groups-list/groups-list.component';
 export * from './lib/groups-tree/groups-tree.component';
 export * from './lib/expiration-select/expiration-select.component';
 export * from './lib/perun-footer/perun-footer.component'
+export * from './lib/create-group-form/create-group-form.component';

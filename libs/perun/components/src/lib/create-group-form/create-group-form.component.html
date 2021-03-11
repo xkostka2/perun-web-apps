@@ -1,0 +1,40 @@
+<div class="dialog-container">
+  <mat-form-field (keyup)="emitName()">
+    <label class="w-100">
+      <input
+        [formControl]="nameControl"
+        matInput
+        placeholder="{{'DIALOGS.CREATE_GROUP.NAME' | translate}}"
+        required>
+    </label>
+    <mat-error>
+      {{invalidNameMessage.length ? invalidNameMessage : ('DIALOGS.CREATE_GROUP.FILL_VALUE' | translate)}}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field (keyup)="emitDescription()" class="mt-4">
+    <label class="w-100">
+          <textarea
+            [formControl]="descriptionControl"
+            matInput
+            placeholder="{{'DIALOGS.CREATE_GROUP.DESCRIPTION' | translate}}"
+            required></textarea>
+    </label>
+    <mat-error>
+      {{'DIALOGS.CREATE_GROUP.INVALID_DESCRIPTION' | translate}}
+    </mat-error>
+  </mat-form-field>
+  <mat-checkbox
+    *ngIf="isNotSubGroup"
+    (change)="emitAsSubGroup()"
+    [labelPosition]="'before'"
+    [(ngModel)]="asSubgroup">
+    {{'DIALOGS.CREATE_GROUP.AS_SUBGROUP' | translate}}
+  </mat-checkbox>
+  <perun-web-apps-group-search-select
+    *ngIf="asSubgroup"
+    class="long-input"
+    [disableAutoSelect]="true"
+    [groups]="voGroups"
+    (groupSelected)="emitParentGroup($event)">
+  </perun-web-apps-group-search-select>
+</div>

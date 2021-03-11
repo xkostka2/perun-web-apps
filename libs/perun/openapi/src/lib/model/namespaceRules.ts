@@ -11,7 +11,8 @@
  */
 
 
-export interface NamespaceRules { 
+export interface NamespaceRules {
+    defaultEmail?: string;
     namespaceName: string;
     requiredAttributes?: Array<string>;
     optionalAttributes?: Array<string>;
