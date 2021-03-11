@@ -178,6 +178,7 @@ import { DeleteTaskDialogComponent } from './components/dialogs/delete-task-dial
 import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-source-dialog/remove-ext-source-dialog.component';
 import { AddOwnerDialogComponent } from './components/add-owner-dialog/add-owner-dialog.component';
 import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/delete-owner-dialog.component';
+import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
 
 @NgModule({
   imports: [
@@ -308,7 +309,8 @@ import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/del
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
-    AttributeFriendlyNamePipe
+    AttributeFriendlyNamePipe,
+    StatisticsCardComponent
   ],
   declarations: [
     PerunNavComponent,
@@ -428,7 +430,8 @@ import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/del
     RemoveExtSourceDialogComponent,
     DeleteTaskDialogComponent,
     AddOwnerDialogComponent,
-    DeleteOwnerDialogComponent
+    DeleteOwnerDialogComponent,
+    StatisticsCardComponent
   ],
   providers: [
     AnyToStringPipe,

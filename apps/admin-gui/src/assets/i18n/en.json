@@ -308,7 +308,8 @@
       "CREATE_SERVICE_MEMBER": "Create service member",
       "ADD_MANAGER": "Add manager",
       "CREATE_GROUP": "Create group",
-      "ADD_MEMBER": "Add member"
+      "ADD_MEMBER": "Add member",
+      "MEMBERS_COUNT": "Members distribution"
     },
     "SETTINGS": {
       "EXPIRATION": {

@@ -5,8 +5,9 @@ import {MatDialog} from '@angular/material/dialog';
 import {SideMenuService} from '../../../../core/services/common/side-menu.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GuiAuthResolver} from '@perun-web-apps/perun/services';
-import { Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import { MembersManagerService, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-vo-overview',
@@ -22,16 +23,29 @@ export class VoOverviewComponent implements OnInit {
     private voService: VosManagerService,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected authResolver: GuiAuthResolver
+    protected authResolver: GuiAuthResolver,
+    private memberService: MembersManagerService
   ) {
   }
 
   vo: Vo;
   items: MenuItem[] = [];
-
   navItems: MenuItem[] = [];
 
   loading = false;
+
+  dataSource = new MatTableDataSource<string>();
+  displayedColumns = ['status', 'count'];
+
+  statuses: string[] = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
+  rowNames: string[] = ['Members', 'Valid', 'Invalid', 'Expired', 'Disabled'];
+  membersCount: Map<string, number> = new Map<string, number>([
+    ['members', 0],
+    ['valid', 0],
+    ['invalid', 0],
+    ['expired', 0],
+    ['disabled', 0]
+    ]);
 
   ngOnInit(): void {
     this.loading = true;
@@ -40,12 +54,30 @@ export class VoOverviewComponent implements OnInit {
 
       this.voService.getVoById(voId).subscribe(vo => {
         this.vo = vo;
+        this.dataSource = new MatTableDataSource<string>(this.rowNames);
 
-        // this.initItems();
-        this.initNavItems();
-        this.loading = false;
+        this.memberService.getMembersCount(this.vo.id).subscribe(count => {
+          this.membersCount.set('members', count);
+          this.getCount(this.statuses);
+
+        }, () => this.loading = false);
       }, () => this.loading = false);
     });
+  }
+
+  getCount(statuses: string[]) {
+    this.loading = true;
+    if (statuses.length === 0) {
+      this.initNavItems();
+      this.loading = false;
+      return
+    }
+
+    const status = statuses.pop();
+    this.memberService.getMembersWithStatusCount(this.vo.id, status).subscribe(count => {
+      this.membersCount.set(status.toLowerCase(), count);
+      this.getCount(statuses);
+    }, () => this.loading = false);
   }
 
   private initNavItems() {
