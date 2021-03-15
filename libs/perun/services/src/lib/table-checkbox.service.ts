@@ -28,11 +28,12 @@ export class TableCheckbox {
     this.pageIterator = 0;
     this.dataLength = filter === '' ? dataSource.data.length :
       dataSource.filteredData.length;
+    if (!nextPage) {
+      this.modulo = this.dataLength % pageSize;
+      this.pageEnd = this.modulo === 0 ? this.pageStart + pageSize : this.pageStart + this.modulo;
+    }
+
     if (filter === '') {
-      if (!nextPage) {
-        this.modulo = this.dataLength % pageSize;
-        this.pageEnd = this.modulo === 0 ? this.pageStart + pageSize : this.pageStart + this.modulo;
-      }
       dataSource.sortData(dataSource.data, sort).forEach(row => {
         if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd && canBeSelected(row)) {
           this.numCanBeSelected++;
@@ -40,12 +41,8 @@ export class TableCheckbox {
         this.pageIterator++;
       });
     } else {
-      if (!nextPage) {
-        this.modulo = this.dataLength % pageSize;
-        this.pageEnd = this.modulo === 0 ? this.pageStart + pageSize : this.pageStart + this.modulo;
-      }
       dataSource.sortData(dataSource.data, sort).forEach(row => {
-        if (dataSource.sortData(dataSource.filteredData, sort).includes(row)) {
+        if (dataSource.filteredData.includes(row)) {
           if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
             if (canBeSelected(row)) {
               this.numCanBeSelected++;
@@ -74,10 +71,8 @@ export class TableCheckbox {
 
   // checks all rendered checkboxes if they are able to check
   masterToggle(isAllSelected: boolean, selection: SelectionModel<any>, filter: string, dataSource: MatTableDataSource<any>, sort: MatSort, pageSize: number, pageIndex: number, someCheckboxDisabled: boolean, canBeSelected?) {
-    if (isAllSelected) {
-      selection.clear();
-    } else {
-      selection.clear();
+    selection.clear();
+    if (!isAllSelected) {
       this.itemsCheckedCounter = 0;
       this.pageStart = pageIndex*pageSize;
       this.pageEnd = this.pageStart+pageSize;
@@ -101,7 +96,7 @@ export class TableCheckbox {
       } else {
         if (someCheckboxDisabled) {
           dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (dataSource.sortData(dataSource.filteredData, sort).includes(row)) {
+            if (dataSource.filteredData.includes(row)) {
               if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd){
                 if (canBeSelected(row)) {
                   selection.select(row);
@@ -112,7 +107,7 @@ export class TableCheckbox {
           });
         } else {
           dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (dataSource.sortData(dataSource.filteredData, sort).includes(row)) {
+            if (dataSource.filteredData.includes(row)) {
               if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd){
                 selection.select(row);
               }
