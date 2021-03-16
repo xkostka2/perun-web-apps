@@ -5,8 +5,8 @@ import { TABLE_GROUP_RESOURCES_LIST, TableConfigService } from '@perun-web-apps/
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { AddCategoryDialogComponent } from '../../components/add-category-dialog/add-category-dialog.component';
-import { RemoveCategoryDialogComponent } from '../../components/remove-category-dialog/remove-category-dialog.component';
+import { AddCategoryDialogComponent } from '../../dialogs/add-category-dialog/add-category-dialog.component';
+import { RemoveCategoryDialogComponent } from '../../dialogs/remove-category-dialog/remove-category-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({

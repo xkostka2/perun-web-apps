@@ -2,10 +2,10 @@
   <h1 mat-dialog-title>{{'DIALOGS.ASSIGN_SERVICE_TO_RESOURCE.TITLE' | translate}}</h1>
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content>
-    <app-debounce-filter
+    <perun-web-apps-debounce-filter
       placeholder="{{'DIALOGS.ASSIGN_SERVICE_TO_RESOURCE.FILTER_DESCRIPTION' | translate}}"
       (filter)="applyFilter($event)">
-    </app-debounce-filter>
+    </perun-web-apps-debounce-filter>
     <app-services-list
       (page)="pageChanged($event)"
       [pageSize]="pageSize"

@@ -1,0 +1,30 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{"DIALOGS.REMOVE_PUBLICATION.TITLE" | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div mat-dialog-content class="dialog-container" *ngIf="!loading">
+    {{'DIALOGS.REMOVE_PUBLICATION.WARNING' | translate}}
+    <perun-web-apps-publications-list
+      [publications]="publications"
+      [routerPath]="null"
+      [displayedColumns]="['id', 'title', 'year']">
+    </perun-web-apps-publications-list>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="cancel()">
+      {{'DIALOGS.REMOVE_PUBLICATION.CANCEL' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      color="warn"
+      class="ml-2"
+      [disabled]="loading"
+      (click)="remove()">
+      {{'DIALOGS.REMOVE_PUBLICATION.REMOVE' | translate}}
+    </button>
+  </div>
+
+</div>
+

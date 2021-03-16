@@ -19,7 +19,7 @@ import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
-import { UpdateRankDialogComponent } from '../update-rank-dialog/update-rank-dialog.component';
+import { UpdateRankDialogComponent } from '../../dialogs/update-rank-dialog/update-rank-dialog.component';
 
 @Component({
   selector: 'perun-web-apps-categories-list',

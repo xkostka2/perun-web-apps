@@ -21,11 +21,19 @@ import { PublicationSystemsPageComponent } from './pages/publication-systems-pag
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CategoriesListComponent } from './components/categories-list/categories-list.component';
-import { AddCategoryDialogComponent } from './components/add-category-dialog/add-category-dialog.component';
-import { RemoveCategoryDialogComponent } from './components/remove-category-dialog/remove-category-dialog.component';
+import { AddCategoryDialogComponent } from './dialogs/add-category-dialog/add-category-dialog.component';
+import { RemoveCategoryDialogComponent } from './dialogs/remove-category-dialog/remove-category-dialog.component';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { PublicationSystemsListComponent } from './components/publication-systems-list/publication-systems-list.component';
-import { UpdateRankDialogComponent } from './components/update-rank-dialog/update-rank-dialog.component';
+import { UpdateRankDialogComponent } from './dialogs/update-rank-dialog/update-rank-dialog.component';
+import { AuthorsListComponent } from './components/authors-list/authors-list.component';
+import { PerunPipesModule } from '@perun-web-apps/perun/pipes';
+import { AuthorDetailComponent } from './pages/author-detail/author-detail.component';
+import { PublicationsListComponent } from './components/publications-list/publications-list.component';
+import { ShowCiteDialogComponent } from './dialogs/show-cite-dialog/show-cite-dialog.component';
+import { RemovePublicationDialogComponent } from './dialogs/remove-publication-dialog/remove-publication-dialog.component';
+import { PublicationFilterComponent } from './components/publication-filter/publication-filter.component';
+import { MomentDateModule } from '@angular/material-moment-adapter';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -51,7 +59,27 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
 };
 
 @NgModule({
-  declarations: [AppComponent, AllPublicationsPageComponent, MyPublicationsPageComponent, CreatePublicationPageComponent, AuthorsPageComponent, CategoriesPageComponent, PublicationSystemsPageComponent, SideMenuComponent, HeaderComponent, CategoriesListComponent, AddCategoryDialogComponent, RemoveCategoryDialogComponent, PublicationSystemsListComponent, UpdateRankDialogComponent],
+  declarations: [
+    AppComponent,
+    AllPublicationsPageComponent,
+    MyPublicationsPageComponent,
+    CreatePublicationPageComponent,
+    AuthorsPageComponent,
+    CategoriesPageComponent,
+    PublicationSystemsPageComponent,
+    SideMenuComponent,
+    HeaderComponent,
+    CategoriesListComponent,
+    AddCategoryDialogComponent,
+    RemoveCategoryDialogComponent,
+    PublicationSystemsListComponent,
+    UpdateRankDialogComponent,
+    AuthorsListComponent,
+    AuthorDetailComponent,
+    PublicationsListComponent,
+    ShowCiteDialogComponent,
+    RemovePublicationDialogComponent,
+    PublicationFilterComponent],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({
@@ -67,7 +95,8 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     ApiModule,
     HttpClientModule,
     AppRoutingModule,
-    UiAlertsModule
+    UiAlertsModule,
+    PerunPipesModule
   ],
   providers: [
     CustomIconService,
@@ -88,6 +117,7 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
       provide: PERUN_API_SERVICE,
       useClass: ApiService
     },
+    MomentDateModule
   ],
   bootstrap: [AppComponent],
 })

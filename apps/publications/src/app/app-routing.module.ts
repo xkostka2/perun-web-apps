@@ -6,6 +6,8 @@ import { CreatePublicationPageComponent } from './pages/create-publication-page/
 import { AuthorsPageComponent } from './pages/authors-page/authors-page.component';
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { PublicationSystemsPageComponent } from './pages/publication-systems-page/publication-systems-page.component';
+import { AuthorDetailComponent } from './pages/author-detail/author-detail.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -27,6 +29,10 @@ const routes: Routes = [
   {
     path: 'authors',
     component: AuthorsPageComponent
+  },
+  {
+    path: 'authors/:authorId',
+    component: AuthorDetailComponent,
   },
   {
     path: 'categories',

@@ -1,0 +1,61 @@
+<div class="mt-2">
+  <mat-form-field class="filter-field mr-2">
+    <input matInput [formControl]="title"
+           placeholder="{{'PUBLICATION_FILTER.TITLE_PLACEHOLDER' | translate}}">
+  </mat-form-field>
+  <mat-form-field class="filter-field mr-2">
+    <mat-label>{{'PUBLICATION_FILTER.SELECT_MODE' | translate}}</mat-label>
+    <mat-select [(value)]="selectedMode">
+      <mat-option value="isbn/issn">{{'PUBLICATION_FILTER.ISBN/ISSN' | translate}}</mat-option>
+      <mat-option value="doi">{{'PUBLICATION_FILTER.DOI' | translate}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="year-field mr-2">
+    <input matInput [formControl]="code"
+           placeholder="{{'PUBLICATION_FILTER.CODE_PLACEHOLDER' | translate}}">
+  </mat-form-field>
+  <mat-form-field class="filter-field mr-2">
+    <mat-label>{{'PUBLICATION_FILTER.SELECT_CATEGORY' | translate}}</mat-label>
+    <mat-select  [(value)]="selectedCategory">
+      <mat-option value="no_value">{{'PUBLICATION_FILTER.NO_CATEGORY_SELECTED' | translate}}</mat-option>
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{category.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="year-field mr-2" (click)="sdp.open()">
+    <mat-label>{{'PUBLICATION_FILTER.START_YEAR' | translate}}</mat-label>
+    <input matInput [matDatepicker]="sdp" [formControl]="startYear" class="disable" readonly>
+    <mat-datepicker-toggle matSuffix [for]="sdp"></mat-datepicker-toggle>
+    <mat-datepicker #sdp
+                    startView="multi-year"
+                    (yearSelected)="chosenStartYearHandler($event, sdp)"
+                    panelClass="example-month-picker">
+    </mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="year-field mr-2" (click)="edp.open()">
+    <mat-label>{{'PUBLICATION_FILTER.END_YEAR' | translate}}</mat-label>
+    <input matInput [matDatepicker]="edp" [formControl]="endYear">
+    <mat-datepicker-toggle matSuffix [for]="edp"></mat-datepicker-toggle>
+    <mat-datepicker #edp
+                    startView="multi-year"
+                    (yearSelected)="chosenEndYearHandler($event, edp)"
+                    panelClass="example-month-picker">
+    </mat-datepicker>
+  </mat-form-field>
+
+  <button
+    mat-stroked-button
+    class="mr-2"
+    (click)="filter()">
+    <mat-icon>search</mat-icon>
+    {{'PUBLICATION_FILTER.FILTER' | translate}}
+  </button>
+  <button
+    mat-stroked-button
+    (click)="clearFilter()">
+    <mat-icon>search_off</mat-icon>
+  </button>
+</div>
+

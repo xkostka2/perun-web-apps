@@ -1122,9 +1122,9 @@ export class CabinetManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'body', reportProgress?: boolean): Observable<PublicationForGUI>;
-    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PublicationForGUI>>;
-    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PublicationForGUI>>;
+    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<PublicationForGUI>>;
+    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PublicationForGUI>>>;
+    public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PublicationForGUI>>>;
     public findPublicationsByGUIFilter(title?: string, isbn?: string, doi?: string, id?: number, year?: number, category?: number, yearSince?: number, yearTill?: number, userId?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
@@ -1184,7 +1184,7 @@ export class CabinetManagerService {
         }
 
 
-        return this.httpClient.get<PublicationForGUI>(`${this.configuration.basePath}/json/cabinetManager/findPublicationsByGUIFilter`,
+        return this.httpClient.get<Array<PublicationForGUI>>(`${this.configuration.basePath}/json/cabinetManager/findPublicationsByGUIFilter`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -1203,9 +1203,9 @@ export class CabinetManagerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'body', reportProgress?: boolean): Observable<PublicationForGUI>;
-    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PublicationForGUI>>;
-    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PublicationForGUI>>;
+    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<PublicationForGUI>>;
+    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<PublicationForGUI>>>;
+    public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<PublicationForGUI>>>;
     public findSimilarPublications(title?: string, doi?: string, isbn?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: this.encoder});
@@ -1247,7 +1247,7 @@ export class CabinetManagerService {
         }
 
 
-        return this.httpClient.get<PublicationForGUI>(`${this.configuration.basePath}/json/cabinetManager/findSimilarPublications`,
+        return this.httpClient.get<Array<PublicationForGUI>>(`${this.configuration.basePath}/json/cabinetManager/findSimilarPublications`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

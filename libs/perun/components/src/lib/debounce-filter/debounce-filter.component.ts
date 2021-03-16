@@ -3,7 +3,7 @@ import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-debounce-filter',
+  selector: 'perun-web-apps-debounce-filter',
   templateUrl: './debounce-filter.component.html',
   styleUrls: ['./debounce-filter.component.scss']
 })

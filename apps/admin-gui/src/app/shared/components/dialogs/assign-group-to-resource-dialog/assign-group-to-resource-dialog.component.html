@@ -2,10 +2,10 @@
   <h1 mat-dialog-title>{{'DIALOGS.ASSIGN_GROUP_TO_RESOURCE.TITLE' | translate}}</h1>
   <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content class="dialog-container">
-    <app-debounce-filter
+    <perun-web-apps-debounce-filter
       placeholder="{{'DIALOGS.ASSIGN_GROUP_TO_RESOURCE.FILTER_DESCRIPTION' | translate}}"
       (filter)="applyFilter($event)">
-    </app-debounce-filter>
+    </perun-web-apps-debounce-filter>
 <!-- first do the functionality to this checkbox then you can show it<mat-checkbox-->
 <!--      color="primary"-->
 <!--      [(ngModel)]="checkGroups">-->

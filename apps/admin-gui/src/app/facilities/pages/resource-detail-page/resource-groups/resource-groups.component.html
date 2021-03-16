@@ -16,10 +16,10 @@
             {{'RESOURCE_DETAIL.ASSIGNED_GROUPS.REMOVE_GROUP' | translate}}
           </span>
 </button>
-<app-debounce-filter
+<perun-web-apps-debounce-filter
   [placeholder]="'RESOURCE_DETAIL.ASSIGNED_GROUPS.FILTER_GROUPS'"
   (filter)="applyFilter($event)">
-</app-debounce-filter>
+</perun-web-apps-debounce-filter>
 <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 <div class="mt-3" *ngIf="!loading && assignedGroups.length !== 0">
   <perun-web-apps-groups-list

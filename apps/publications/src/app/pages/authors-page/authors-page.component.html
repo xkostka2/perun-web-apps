@@ -1,1 +1,18 @@
-<p>authors-page works!</p>
+<div class="user-theme">
+
+  <h1 class="page-subtitle d-flex">
+    <mat-icon class="title-icon">assignment_ind</mat-icon>
+    <span class="ml-3 mt-1">{{'AUTHORS_PAGE.TITLE' | translate}}</span>
+  </h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <perun-web-apps-debounce-filter (filter)="applyFilter($event)"
+                       [placeholder]="'AUTHORS_PAGE.FILTER'"></perun-web-apps-debounce-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <perun-web-apps-authors-list
+    *ngIf="!loading"
+    [authors]="authors"
+    [filterValue]="filterValue"
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)">
+  </perun-web-apps-authors-list>
+</div>

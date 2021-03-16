@@ -18,10 +18,10 @@
       <mat-option value="rejected">{{'VO_DETAIL.APPLICATION.SELECTION_REJECTED' | translate}}</mat-option>
     </mat-select>
   </mat-form-field>
-  <app-debounce-filter
+  <perun-web-apps-debounce-filter
     [placeholder]="'VO_DETAIL.APPLICATION.FILTER'"
     (filter)="applyFilter($event)">
-  </app-debounce-filter>
+  </perun-web-apps-debounce-filter>
   <perun-web-apps-date-range
     [startDate]="startDate"
     [endDate]="endDate"
