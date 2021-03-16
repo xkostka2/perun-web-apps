@@ -532,7 +532,7 @@
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
       "EMPTY_SEARCH": "Search field cannot be empty",
-      "FILTER_STATUS": "Select Status"
+      "FILTER_STATUS": "Select group status (to filter)"
     },
     "RESOURCES": {
       "TITLE": "Resources",
