@@ -23,8 +23,8 @@ export class TableCheckbox {
   isAllSelectedWithDisabledCheckbox(rowsSelected: number, filter: string, pageSize: number, nextPage: boolean, pageIndex: number, dataSource: MatTableDataSource<any>, sort: MatSort, canBeSelected): boolean {
     this.numSelected = rowsSelected;
     this.numCanBeSelected = 0;
-    this.pageStart = pageIndex*pageSize;
-    this.pageEnd = this.pageStart+pageSize;
+    this.pageStart = pageIndex * pageSize;
+    this.pageEnd = this.pageStart + pageSize;
     this.pageIterator = 0;
     this.dataLength = filter === '' ? dataSource.data.length :
       dataSource.filteredData.length;
@@ -33,25 +33,13 @@ export class TableCheckbox {
       this.pageEnd = this.modulo === 0 ? this.pageStart + pageSize : this.pageStart + this.modulo;
     }
 
-    if (filter === '') {
-      dataSource.sortData(dataSource.data, sort).forEach(row => {
-        if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd && canBeSelected(row)) {
-          this.numCanBeSelected++;
-        }
-        this.pageIterator++;
-      });
-    } else {
-      dataSource.sortData(dataSource.data, sort).forEach(row => {
-        if (dataSource.filteredData.includes(row)) {
-          if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
-            if (canBeSelected(row)) {
-              this.numCanBeSelected++;
-            }
-          }
-          this.pageIterator++;
-        }
-      });
-    }
+    dataSource.sortData(dataSource.filteredData, sort).forEach(row => {
+      if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd && canBeSelected(row)) {
+        this.numCanBeSelected++;
+      }
+      this.pageIterator++;
+    });
+
     return this.numSelected === this.numCanBeSelected;
   }
 
@@ -65,7 +53,6 @@ export class TableCheckbox {
       this.modulo = this.dataLength % pageSize;
       this.numCanBeSelected = this.modulo = 0 ? pageSize : this.modulo;
     }
-    // this.numCanBeSelected = nextPage ? pageSize : this.modulo = 0 ? pageSize : this.modulo;
     return this.numSelected === this.numCanBeSelected;
   }
 
@@ -74,48 +61,23 @@ export class TableCheckbox {
     selection.clear();
     if (!isAllSelected) {
       this.itemsCheckedCounter = 0;
-      this.pageStart = pageIndex*pageSize;
-      this.pageEnd = this.pageStart+pageSize;
+      this.pageStart = pageIndex * pageSize;
+      this.pageEnd = this.pageStart + pageSize;
       this.pageIterator = 0;
-      if (filter === "") {
+
+      dataSource.sortData(dataSource.filteredData, sort).forEach(row => {
         if (someCheckboxDisabled) {
-          dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (canBeSelected(row) && this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
-              selection.select(row);
-            }
-            this.pageIterator++;
-          });
+          if (canBeSelected(row) && this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
+            selection.select(row);
+          }
         } else {
-          dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
-              selection.select(row);
-            }
-            this.pageIterator++;
-          });
+          if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd) {
+            selection.select(row);
+          }
         }
-      } else {
-        if (someCheckboxDisabled) {
-          dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (dataSource.filteredData.includes(row)) {
-              if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd){
-                if (canBeSelected(row)) {
-                  selection.select(row);
-                }
-              }
-              this.pageIterator++;
-            }
-          });
-        } else {
-          dataSource.sortData(dataSource.data, sort).forEach(row => {
-            if (dataSource.filteredData.includes(row)) {
-              if (this.pageStart <= this.pageIterator && this.pageIterator < this.pageEnd){
-                selection.select(row);
-              }
-              this.pageIterator++;
-            }
-          });
-        }
-      }
+
+        this.pageIterator++;
+      });
     }
   }
 
