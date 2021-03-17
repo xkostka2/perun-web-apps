@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{'DIALOGS.DELETE_OWNER.TITLE' | translate}}</h1>
+
+<mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+
+<div mat-dialog-content *ngIf="!loading">
+  <p>
+    {{'DIALOGS.DELETE_OWNER.DESCRIPTION' | translate}}
+  </p>
+
+  <div class="font-weight-bold">
+    {{'DIALOGS.DELETE_OWNER.ASK' | translate}}
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="w-100">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let owner"> {{owner.name}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="font-weight-bolder"></tr>
+    <tr mat-row *matRowDef="let owner; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+<div mat-dialog-actions *ngIf="!loading">
+  <button
+    mat-flat-button
+    class="ml-auto"
+    (click)="onCancel()">
+    {{'DIALOGS.DELETE_OWNER.CANCEL' | translate}}
+  </button>
+  <button
+    mat-flat-button
+    class="ml-2"
+    color="warn"
+    [disabled]="loading"
+    (click)="onSubmit()">
+    {{'DIALOGS.DELETE_OWNER.DELETE' | translate}}
+  </button>
+</div>

@@ -1,0 +1,32 @@
+<div class="user-theme">
+  <h1 class="page-subtitle">{{'ADMIN.OWNERS.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <button
+    *ngIf="addAuth"
+    mat-flat-button
+    color="accent"
+    (click)="addOwner()"
+    class="mr-2">
+    {{'ADMIN.OWNERS.ADD' | translate}}
+  </button>
+
+  <button
+    mat-flat-button
+    color="warn"
+    *ngIf="removeAuth"
+    [disabled]="!selected.selected.length"
+    (click)="removeOwner()">
+    {{'ADMIN.OWNERS.DELETE' | translate}}
+  </button>
+
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'ADMIN.OWNERS.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <app-owners-list
+    (page)="pageChanged($event)"
+    [pageSize]="pageSize"
+    *ngIf="!loading"
+    [filterValue]="filterValue"
+    [owners]="owners"
+    [selection]="selected"></app-owners-list>
+</div>

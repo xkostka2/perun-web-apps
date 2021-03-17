@@ -43,7 +43,7 @@ export class FacilitySettingsOverviewComponent implements OnInit {
     // Owners
     if(this.authResolver.isAuthorized('getOwners_Facility_policy', [this.facility])){
       this.items.push({
-        cssIcon: 'perun-user',
+        cssIcon: 'perun-owner-grey',
         url: `/facilities/${this.facility.id}/settings/owners`,
         label: 'MENU_ITEMS.FACILITY.OWNERS',
         style: 'facility-btn'

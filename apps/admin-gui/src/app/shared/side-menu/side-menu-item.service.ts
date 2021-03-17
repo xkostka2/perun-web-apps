@@ -181,6 +181,11 @@ export class SideMenuItemService {
           activatedRegex: '^/admin/users$'
         },
         {
+          label: 'MENU_ITEMS.ADMIN.OWNERS',
+          url: ['/admin/owners'],
+          activatedRegex: '^/admin/owners$'
+        },
+        {
           label: 'MENU_ITEMS.ADMIN.SERVICES',
           url: [`/admin/services`],
           activatedRegex: '^/admin/services$'
