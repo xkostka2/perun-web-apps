@@ -72,11 +72,23 @@
       matTooltipPosition="left"
       [matTooltipDisabled]="!password.disabled">
       <input
-        [disabled]=""
+        [type]="showPassword ? 'text' : 'password'"
         matInput [formControl]="password"
+        [errorStateMatcher]="passwordStateMatcher"
         placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
-      <mat-error *ngIf="password.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
+      <mat-spinner *ngIf="this.password.pending" matSuffix [diameter]="18" class="input-spinner"></mat-spinner>
+      <mat-icon *ngIf="this.password.dirty && this.password.errors !== null"
+                color="warn" matSuffix
+                [matTooltip]="this.password.getError('backendError')">
+        error
+      </mat-icon>
+      <mat-error *ngIf="password.hasError('required')">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
+      <mat-error *ngIf="password.hasError('backendError')">{{'DIALOGS.CREATE_SPONSORED_MEMBER.BACKEND_ERROR' | translate}}</mat-error>
     </mat-form-field>
+    <mat-checkbox class="example-margin"
+                  [(ngModel)]="showPassword">
+      {{'DIALOGS.CREATE_SPONSORED_MEMBER.SHOW_PASSWORD' | translate}}
+    </mat-checkbox>
 
     <!--        <mat-form-field class="">-->
     <!--          <label>-->

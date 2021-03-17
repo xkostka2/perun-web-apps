@@ -2,18 +2,60 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   InputCreateSponsoredMember,
-  MembersManagerService, NamespaceRules, RichMember
+  MembersManagerService,
+  NamespaceRules,
+  RichMember,
+  UsersManagerService
 } from '@perun-web-apps/perun/openapi';
-import { StoreService } from '@perun-web-apps/perun/services';
-import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { ApiRequestConfigurationService, StoreService } from '@perun-web-apps/perun/services';
+import {
+  AsyncValidatorFn,
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { of, timer } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 export interface CreateSponsoredMemberDialogData {
   entityId?: number
   voId?: number;
   theme: string,
 }
+
+/**
+ * State matcher that shows error on inputs whenever the input is changed and invalid (by default, the error
+ * is shown after leaving the input field)
+ */
+export class ImmediateStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!(control && control.invalid && control.dirty);
+  }
+}
+
+export const loginAsyncValidator =
+  (namespace: string, usersManager: UsersManagerService, apiRequestConfiguration: ApiRequestConfigurationService, time: number = 500) => {
+    return (input: FormControl) => {
+      return timer(time).pipe(
+        switchMap(() => {
+          apiRequestConfiguration.dontHandleErrorForNext();
+          if (namespace === null || namespace === 'No namespace') {
+            return of(null);
+          }
+          return usersManager.checkPasswordStrength(input.value, namespace)
+        }),
+        map(() => null),
+        // catch error and send it as a valid value
+        catchError(err => of({backendError: err.error.message.substr(err.error.message.indexOf(":")+1)})),
+      );
+    };
+  };
 
 @Component({
   selector: 'app-create-sponsored-member-dialog',
@@ -46,7 +88,8 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   passwordReset = false;
   passwordResetDisabled = false;
-  password = new FormControl('', [Validators.required]);
+  password: FormControl;
+  passwordStateMatcher = new ImmediateStateMatcher();
 
   namespace = new FormControl('', [Validators.required]);
 
@@ -56,11 +99,20 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   expiration = 'never';
 
+  private selectedNamespace: string;
+  showPassword = false;
+
   constructor(private dialogRef: MatDialogRef<CreateSponsoredMemberDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: CreateSponsoredMemberDialogData,
               private membersService: MembersManagerService,
+              private apiRequestConfiguration: ApiRequestConfigurationService,
+              private usersService: UsersManagerService,
               private store: StoreService,
               private translator: TranslateService) {
+    this.password = new FormControl('', {
+      validators: [Validators.required],
+      asyncValidators: [loginAsyncValidator(null, usersService, apiRequestConfiguration)]
+    });
   }
 
   ngOnInit(): void {
@@ -174,14 +226,17 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
 
   }
 
-  enableFormControl(control: FormControl, validators: ValidatorFn[] ) {
+  enableFormControl(control: FormControl, validators: ValidatorFn[], asyncValidators: AsyncValidatorFn[] = []) {
     control.enable();
     control.clearValidators();
+    control.clearAsyncValidators();
     control.setValidators(validators);
+    control.setAsyncValidators(asyncValidators);
     control.updateValueAndValidity();
   }
 
   onNamespaceChanged(namespc: string) {
+    this.selectedNamespace = namespc;
     const rules = this.parsedRules.get(namespc);
     this.login.disable();
     this.password.disable();
@@ -194,7 +249,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
     }
     if (rules.password !== 'disabled') {
       const validators = rules.password === 'optional' ? [] : [Validators.required];
-      this.enableFormControl(this.password, validators);
+      this.enableFormControl(this.password, validators, [loginAsyncValidator(namespc, this.usersService, this.apiRequestConfiguration)])
       this.passwordResetDisabled = false;
     }
   }
