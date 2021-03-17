@@ -75,7 +75,8 @@
     "END_YEAR": "End year",
     "FILTER": "Filter",
     "CODE_PLACEHOLDER": "Code",
-    "NO_CATEGORY_SELECTED": "No category selected"
+    "NO_CATEGORY_SELECTED": "No category selected",
+    "CLEAR_FILTER": "Clear filter"
   },
   "DIALOGS": {
     "ADD_CATEGORY": {
