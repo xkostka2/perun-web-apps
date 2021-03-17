@@ -606,6 +606,13 @@
         "FILTER": "Filter by name, id or description",
         "REVERSE_UNIONS": "Show reverse unions",
         "DELETE_TOOLTIP": "You don't have permission to remove some of the selected relations."
+      },
+      "EXT_SOURCES": {
+        "TITLE": "External sources",
+        "ADD": "Add",
+        "REMOVE": "Remove",
+        "FILTER": "Filter by ID, name or type",
+        "SUCCESS_REMOVED": "External source successfully removed: "
       }
     }
   },
@@ -752,7 +759,8 @@
       "EXPIRATION": "Membership",
       "APPLICATION_FORM": "Application form",
       "NOTIFICATIONS": "Notifications",
-      "RELATIONS": "Relations"
+      "RELATIONS": "Relations",
+      "EXTSOURCES": "External sources"
     },
     "MEMBER": {
       "OVERVIEW": "Overview",
@@ -1341,7 +1349,15 @@
       "FILTER": "Filter by ID, name or type",
       "CANCEL": "Cancel",
       "ADD": "Add",
-      "SUCCESS_ADDED": "External source successfully added: "
+      "SUCCESS_ADDED": "External sources were successfully added"
+    },
+    "REMOVE_EXT_SOURCES": {
+      "TITLE": "Remove external sources",
+      "DESCRIPTION": "Following external sources will be removed.",
+      "ASK": "Are you sure you want to proceed?",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove",
+      "SUCCESS_REMOVED": "External sources were successfully removed"
     },
     "EDIT_ATTRIBUTE_DEFINITION": {
       "COPY_FOR_IMPORT": "Copy for import",

@@ -897,6 +897,15 @@ export class SideMenuItemService {
       });
     }
 
+    //SettingsExtSources
+    if (this.authResolver.isAuthorized('getGroupExtSources_Group_policy', [group])) {
+      settingsChildrenLinks.push({
+        label: 'MENU_ITEMS.GROUP.EXTSOURCES',
+        url: [`/organizations/${group.voId}/groups/${group.id}/settings/extsources`],
+        activatedRegex: '/organizations/\\d+/groups/\\d+/settings/extsources$'
+      });
+    }
+
     //SettingsWithChildrenLinks
     if (settingsChildrenLinks.length !== 0){
       links.push({

@@ -1,0 +1,32 @@
+<div>
+  <h1 class="page-subtitle">{{'GROUP_DETAIL.SETTINGS.EXT_SOURCES.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <button
+    *ngIf="addAuth"
+    mat-flat-button
+    class="mr-2"
+    color="accent"
+    (click)="onAdd()">
+    {{'GROUP_DETAIL.SETTINGS.EXT_SOURCES.ADD' | translate}}
+  </button>
+  <button
+    *ngIf="removeAuth"
+    mat-flat-button
+    color="warn"
+    (click)="onRemove()"
+    [disabled]="selection.selected.length === 0">
+    {{'GROUP_DETAIL.SETTINGS.EXT_SOURCES.REMOVE' | translate}}
+  </button>
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'GROUP_DETAIL.SETTINGS.EXT_SOURCES.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <app-ext-sources-list
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)"
+    *ngIf="!loading"
+    [extSources]="extSources"
+    [hideColumns]="hideColumns"
+    [filterValue]="filterValue"
+    [selection]="selection">
+  </app-ext-sources-list>
+</div>

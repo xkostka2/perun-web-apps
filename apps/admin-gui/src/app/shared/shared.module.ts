@@ -176,6 +176,7 @@ import { NewVersionDialogComponent } from './components/dialogs/new-version-dial
 import { SponsorExistingMemberDialogComponent } from './components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
 import { DeleteServiceFromFacilityComponent } from './components/dialogs/delete-service-from-facility/delete-service-from-facility.component';
 import { DeleteTaskDialogComponent } from './components/dialogs/delete-task-dialog/delete-task-dialog.component';
+import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-source-dialog/remove-ext-source-dialog.component';
 
 @NgModule({
   imports: [
@@ -425,7 +426,8 @@ import { DeleteTaskDialogComponent } from './components/dialogs/delete-task-dial
     NewVersionDialogComponent,
     SponsorExistingMemberDialogComponent,
     DeleteServiceFromFacilityComponent,
-    DeleteTaskDialogComponent
+    DeleteTaskDialogComponent,
+    RemoveExtSourceDialogComponent,
   ],
   providers: [
     AnyToStringPipe,
