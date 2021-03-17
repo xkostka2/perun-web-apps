@@ -23,6 +23,37 @@
     "FILTER": "Filter",
     "NO_FILTER_RESULTS": "No categories match the filter"
   },
+  "AUTHORS_PAGE": {
+    "TITLE": "Authors",
+    "FILTER": "Filter"
+  },
+  "AUTHORS_LIST": {
+    "ID": "Id",
+    "NAME": "Name",
+    "ORGANIZATION": "Organization",
+    "EMAIL": "Email",
+    "NUMBER_OF_PUBLICATIONS": "Publications count",
+    "NO_AUTHORS": "No author were found."
+  },
+  "AUTHOR_DETAIL": {
+    "TITLE": " publications",
+    "REMOVE": "Remove"
+  },
+  "PUBLICATIONS_LIST": {
+    "TABLE_ID": "Id",
+    "TABLE_LOCK": "Lock",
+    "TABLE_TITLE": "Title",
+    "TABLE_REPORTED_BY": "Reported by",
+    "TABLE_YEAR": "Year",
+    "TABLE_CATEGORY": "Category",
+    "TABLE_THANKEDTO": "Thanks",
+    "TABLE_CITE": "Cite",
+    "NO_PUBLICATIONS_FOUND": "No publications found",
+    "SHOW_CITE": "Show cite",
+    "CHANGE_LOCK_SUCCESS": "Publication was successfully ",
+    "LOCKED": "locked",
+    "UNLOCKED": "unlocked"
+  },
   "PUBLICATION_SYSTEMS_LIST": {
     "ID": "Id",
     "FRIENDLY_NAME": "Friendly name",
@@ -33,6 +64,19 @@
   "PUBLICATION_SYSTEMS_PAGE": {
     "TITLE": "Publication systems",
     "FILTER": "Filter by id, friendly name, namespace, url or parser type"
+  },
+  "PUBLICATION_FILTER": {
+    "TITLE_PLACEHOLDER": "Title",
+    "SELECT_MODE": "Select mode",
+    "ISBN/ISSN": "isbn/issn",
+    "DOI": "doi",
+    "SELECT_CATEGORY": "Select category",
+    "START_YEAR": "Start year",
+    "END_YEAR": "End year",
+    "FILTER": "Filter",
+    "CODE_PLACEHOLDER": "Code",
+    "NO_CATEGORY_SELECTED": "No category selected",
+    "CLEAR_FILTER": "Clear filter"
   },
   "DIALOGS": {
     "ADD_CATEGORY": {
@@ -64,6 +108,16 @@
       "TOOLTIP": "Invalid rank value",
       "UPDATE": "Update",
       "SUCCESS": "Category successfully updated"
+    },
+    "SHOW_CITE": {
+      "TITLE": "Publication cite",
+      "OK": "Ok"
+    },
+    "REMOVE_PUBLICATION": {
+      "TITLE": "Confirm removal",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove",
+      "WARNING": "Following publications will be removed."
     }
   },
   "SHARED_LIB": {

@@ -9,7 +9,7 @@ import {
   RichMember,
   RichUser,
   User,
-  Candidate, ApplicationMail, ApplicationFormItem, RichGroup
+  Candidate, ApplicationMail, ApplicationFormItem, RichGroup, Author
 } from '@perun-web-apps/perun/openapi';
 import { Attribute, AttributeDefinition } from '@perun-web-apps/perun/openapi';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -670,4 +670,16 @@ export function customDataSourceFilterPredicate(data: any, filter: string, colum
     dataStr+= ';' + getDataForColumn(data, col, outerThis);
   });
   return dataStr.toLowerCase().indexOf(filter) !== -1;
+}
+
+export function parseAttribute(data: Author, nameOfAttribute: string) {
+  let attribute = '';
+  if (data.attributes) {
+    data.attributes.forEach(attr => {
+      if (attr.friendlyName === nameOfAttribute) {
+        attribute = <string><unknown>attr.value;
+      }
+    });
+  }
+  return attribute;
 }

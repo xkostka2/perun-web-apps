@@ -101,3 +101,20 @@ button:focus {
 th, td.mat-cell {
   padding: 0.25rem !important;
 }
+
+.page-subtitle {
+  margin-bottom: 1.0rem;
+  font-size: 1.5rem;
+}
+
+.dark-hover-list-item {
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
+}
+
+.title-icon {
+  font-size: 32px;
+}
+
+

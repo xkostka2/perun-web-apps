@@ -9,17 +9,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SponsoredUserData } from './sponsoredUserData';
 
 
 /**
  * input for createSponsoredMember
  */
 export interface InputCreateSponsoredMember { 
+    firstName: string;
+    lastName: string;
+    titleBefore?: string;
+    titleAfter?: string;
+    password: string;
+    email?: string;
     vo: number;
-    validityTo?: string;
     sponsor: number;
+    namespace: string;
+    validityTo?: string;
     sendActivationLink?: boolean;
-    userData: SponsoredUserData;
 }
 

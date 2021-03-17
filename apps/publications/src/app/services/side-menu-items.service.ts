@@ -33,7 +33,7 @@ export class SideMenuItemsService {
     });
     items.push({
       label: 'MENU_ITEMS.AUTHORS',
-      icon: 'groups',
+      icon: 'assignment_ind',
       link: '/authors',
       activatedRegex: '^/authors$',
       tabName: 'authors'

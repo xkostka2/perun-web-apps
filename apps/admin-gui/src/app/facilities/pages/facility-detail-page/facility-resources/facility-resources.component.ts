@@ -32,7 +32,6 @@ export class FacilityResourcesComponent implements OnInit {
               private authResolver: GuiAuthResolver) {
   }
 
-  @Input()
   facility: Facility;
   resources: RichResource[] = [];
   selected = new SelectionModel<RichResource>(true, []);

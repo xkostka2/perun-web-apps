@@ -21,11 +21,11 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-    <app-debounce-filter
+    <perun-web-apps-debounce-filter
       *ngIf="groups !== null && groups.length > 0 && !loading"
       placeholder="{{'DIALOGS.ADD_GROUPS.FILTER_GROUPS' | translate}}"
       (filter)="applyFilter($event)">
-    </app-debounce-filter>
+    </perun-web-apps-debounce-filter>
     <div class="overflow-hidden">
       <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
     </div>

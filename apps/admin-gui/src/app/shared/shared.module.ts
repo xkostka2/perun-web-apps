@@ -100,7 +100,6 @@ import {DisplayedRolePipe} from './pipes/displayed-role.pipe';
 import { AnimatedRouterOutletComponent } from './components/animated-router-outlet/animated-router-outlet.component';
 import { UserEmailPipe } from './pipes/user-email.pipe';
 import { ResourcesTagsListComponent } from './components/resources-tags-list/resources-tags-list.component';
-import { DebounceFilterComponent } from './components/debounce-filter/debounce-filter.component';
 // tslint:disable-next-line:max-line-length
 import { DeleteAttributeDefinitionDialogComponent } from './components/dialogs/delete-attribute-definition-dialog/delete-attribute-definition-dialog.component';
 // tslint:disable-next-line:max-line-length
@@ -288,7 +287,6 @@ import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/del
     ScrollingModule,
     AnimatedRouterOutletComponent,
     ResourcesTagsListComponent,
-    DebounceFilterComponent,
     CreateResourceDialogComponent,
     ExtSourcesListComponent,
     ExtSourceTypePipe,
@@ -360,7 +358,6 @@ import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/del
     AnimatedRouterOutletComponent,
     UserEmailPipe,
     ResourcesTagsListComponent,
-    DebounceFilterComponent,
     DeleteAttributeDefinitionDialogComponent,
     CreateAttributeDefinitionDialogComponent,
     EditAttributeDefinitionDialogComponent,
