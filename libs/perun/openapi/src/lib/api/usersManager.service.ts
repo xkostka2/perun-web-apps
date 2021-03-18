@@ -1729,21 +1729,21 @@ export class UsersManagerService {
 
     /**
      * Returns user ext source by its id.
-     * @param id numeric id
+     * @param userExtSource id of UserExtSource
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserExtSourceById(id: number, observe?: 'body', reportProgress?: boolean): Observable<UserExtSource>;
-    public getUserExtSourceById(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserExtSource>>;
-    public getUserExtSourceById(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserExtSource>>;
-    public getUserExtSourceById(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getUserExtSourceById.');
+    public getUserExtSourceById(userExtSource: number, observe?: 'body', reportProgress?: boolean): Observable<UserExtSource>;
+    public getUserExtSourceById(userExtSource: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserExtSource>>;
+    public getUserExtSourceById(userExtSource: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserExtSource>>;
+    public getUserExtSourceById(userExtSource: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (userExtSource === null || userExtSource === undefined) {
+            throw new Error('Required parameter userExtSource was null or undefined when calling getUserExtSourceById.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
-        if (id !== undefined && id !== null) {
-            queryParameters = queryParameters.set('id', <any>id);
+        if (userExtSource !== undefined && userExtSource !== null) {
+            queryParameters = queryParameters.set('userExtSource', <any>userExtSource);
         }
 
         let headers = this.defaultHeaders;

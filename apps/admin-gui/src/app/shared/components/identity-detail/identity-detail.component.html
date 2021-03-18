@@ -1,5 +1,5 @@
 <div>
-  <h1 class="page-subtitle">{{ 'SHARED.IDENTITY_DETAIL.TITLE' | translate}}</h1>
+  <h1 class="page-subtitle">{{ 'SHARED.IDENTITY_DETAIL.TITLE' | translate}} - {{this.userExtSource ? this.userExtSource.extSource.name : ''}}</h1>
   <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
   <button
     mat-flat-button

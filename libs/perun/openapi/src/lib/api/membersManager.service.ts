@@ -23,11 +23,13 @@ import { InputCreateMemberFromExtSource } from '../model/inputCreateMemberFromEx
 import { InputCreateSponsoredMember } from '../model/inputCreateSponsoredMember';
 import { InputCreateSponsoredMember1 } from '../model/inputCreateSponsoredMember1';
 import { InputCreateSponsoredMemberFromCSV } from '../model/inputCreateSponsoredMemberFromCSV';
+import { InputGetPaginatedMembers } from '../model/inputGetPaginatedMembers';
 import { InputSetSponsoredMember } from '../model/inputSetSponsoredMember';
 import { InputSpecificMember } from '../model/inputSpecificMember';
 import { Member } from '../model/member';
 import { MemberWithSponsors } from '../model/memberWithSponsors';
 import { NamespaceRules } from '../model/namespaceRules';
+import { PaginatedRichMembers } from '../model/paginatedRichMembers';
 import { PerunException } from '../model/perunException';
 import { RichMember } from '../model/richMember';
 import { RichUser } from '../model/richUser';
@@ -1832,6 +1834,68 @@ export class MembersManagerService {
         return this.httpClient.get<number>(`${this.configuration.basePath}/json/membersManager/getMembersCount`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get page of members from the given vo, with the given attributes.
+     * @param inputGetPaginatedMembers 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMembersPage(inputGetPaginatedMembers: InputGetPaginatedMembers, observe?: 'body', reportProgress?: boolean): Observable<PaginatedRichMembers>;
+    public getMembersPage(inputGetPaginatedMembers: InputGetPaginatedMembers, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PaginatedRichMembers>>;
+    public getMembersPage(inputGetPaginatedMembers: InputGetPaginatedMembers, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PaginatedRichMembers>>;
+    public getMembersPage(inputGetPaginatedMembers: InputGetPaginatedMembers, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (inputGetPaginatedMembers === null || inputGetPaginatedMembers === undefined) {
+            throw new Error('Required parameter inputGetPaginatedMembers was null or undefined when calling getMembersPage.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<PaginatedRichMembers>(`${this.configuration.basePath}/json/membersManager/getMembersPage`,
+            inputGetPaginatedMembers,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
