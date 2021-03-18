@@ -1,14 +1,20 @@
 <div>
   <h1 class="page-subtitle">{{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.TITLE' | translate}}</h1>
   <perun-web-apps-refresh-button (refresh)="refresh()"></perun-web-apps-refresh-button>
-  <button
-    *ngIf="!loading && createAuth"
-    mat-flat-button
-    color="accent"
-    class="mr-2"
-    (click)="onCreate()">
-    {{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.CREATE' | translate}}
-  </button>
+  <span
+    matTooltip="{{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.NO_SPONSORS' | translate}}"
+    [matTooltipDisabled]="!(findSponsorsAuth && voSponsors.length === 0)"
+    matTooltipPosition="above">
+    <button
+      *ngIf="!loading && createAuth"
+      [disabled]="findSponsorsAuth && voSponsors.length === 0"
+      mat-flat-button
+      color="accent"
+      class="mr-2"
+      (click)="onCreate()">
+      {{'VO_DETAIL.SETTINGS.SPONSORED_MEMBERS.CREATE' | translate}}
+    </button>
+  </span>
   <button
     *ngIf="!loading && generateAuth"
     mat-flat-button

@@ -435,7 +435,8 @@
         "CREATE": "Create",
         "GENERATE": "Create in bulk",
         "FILTER": "Filter by name or ID",
-        "SPONSOR_EXISTING": "Sponsor existing member"
+        "SPONSOR_EXISTING": "Sponsor existing member",
+        "NO_SPONSORS": "This organization has no members with the role SPONSOR"
       }
     },
     "APPLICATION": {
@@ -1701,7 +1702,21 @@
       "EXPIRATION": "Sponsorship expiration",
       "EXPIRE_DATE": "Expire to a date",
       "EXPIRE_NEVER": "Never expire",
-      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd"
+      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd",
+      "SELECT_SPONSOR": "Choose sponsor for created user",
+      "SELECT_SELF": "Make myself sponsor",
+      "SELECT_OTHER": "Select other sponsor from this organization",
+      "SELECT_SELF_DISABLED": "You must be sponsor in this organization",
+      "SELECT_OTHER_DISABLED": "You don't have permission to select other sponsor",
+      "NEXT": "Next",
+      "BACK": "Back",
+      "SUBMIT": "Submit",
+      "USER_LABEL": "User",
+      "NAMESPACE_LABEL": "Namespace",
+      "SPONSORSHIP_LABEL": "Sponsorship",
+      "USER_TITLE": "User name",
+      "NAMESPACE_TITLE": "Namespace details",
+      "SPONSORSHIP_TITLE": "Sponsorship options"
     },
     "GENERATE_SPONSORED_MEMBERS": {
       "TITLE": "Create sponsored members in bulk",

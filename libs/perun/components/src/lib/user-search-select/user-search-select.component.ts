@@ -14,6 +14,9 @@ export class UserSearchSelectComponent {
   @Input()
   users: User[];
 
+  @Input()
+  disableAutoSelect = false;
+
   @Output()
   userSelected = new EventEmitter<User>();
   userFullNameFunction = parseFullName;
