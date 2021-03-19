@@ -211,7 +211,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
       namespace: this.usersInfoFormGroup.get('namespace').value,
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
-      sendActivationLink: this.passwordReset === "reset"
+      sendActivationLinks: this.passwordReset === "reset"
     }
 
     if (this.groupAssignment !== 'none') {
