@@ -108,7 +108,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   @Output()
   refreshTable = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description','expiration', 'menu'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description', 'expiration', 'menu'];
   dataSource: MatTableDataSource<Group | RichGroup>;
 
   exporting = false;
@@ -338,5 +338,9 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
         this.refreshTable.emit();
       }
     });
+  }
+
+  canManageGroup(group: Group): boolean {
+    return this.authResolver.isThisGroupAdmin(group.id) || this.authResolver.isThisVoAdmin(group.voId);
   }
 }

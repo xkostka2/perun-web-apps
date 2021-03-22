@@ -115,7 +115,7 @@ export class ChangeExpirationDialogComponent implements OnInit {
         this.loading = false;
         this.notificator.showSuccess(this.successMessage);
         this.dialogRef.close(true);
-      });
+      }, () => this.loading = false);
     } else {
       this.attributesManagerService.setMemberAttribute({
         member: this.data.memberId,
@@ -124,7 +124,7 @@ export class ChangeExpirationDialogComponent implements OnInit {
         this.loading = false;
         this.notificator.showSuccess(this.successMessage);
         this.dialogRef.close(true);
-      });
+      }, () => this.loading = false);
 
     }
 
