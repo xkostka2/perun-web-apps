@@ -117,7 +117,7 @@
             <mat-icon
               *ngIf="this.namespaceControl.get('password').dirty && this.namespaceControl.get('password').errors !== null"
               color="warn" matSuffix
-              [matTooltip]="this.namespaceControl.get('password').getError('backendError')">
+              [matTooltip]="'DIALOGS.CREATE_SPONSORED_MEMBER.BACKEND_ERROR_LONG' | translate">
               error
             </mat-icon>
             <mat-error

@@ -1687,6 +1687,7 @@
       "EMAIL_ERROR": "Email is not valid",
       "LENGTH_ERROR": "Empty value is not allowed",
       "BACKEND_ERROR": "Entered password doesn't meet the selected namespace's criteria",
+      "BACKEND_ERROR_LONG": "Entered password doesn't match criteria for strong password and it can't be accepted. Please, make sure that the entered password is at least 8 characters long, contains at least one of: A-z, 0-9, and special characters.",
       "SHOW_PASSWORD": "Show password",
       "NAMESPACE_ERROR": "Selection of namespace is required",
       "FUNCTIONALITY_NOT_SUPPORTED": "This functionality is not yet supported.",
