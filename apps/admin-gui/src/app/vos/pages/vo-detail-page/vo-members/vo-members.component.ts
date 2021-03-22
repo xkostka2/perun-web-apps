@@ -2,7 +2,12 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 import { SideMenuService } from '../../../../core/services/common/side-menu.service';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
+import {
+  ApiRequestConfigurationService,
+  GuiAuthResolver,
+  NotificatorService,
+  StoreService
+} from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
@@ -44,6 +49,7 @@ export class VoMembersComponent implements OnInit {
     private authzService: GuiAuthResolver,
     private storeService: StoreService,
     private attributesManager: AttributesManagerService,
+    private apiRequest: ApiRequestConfigurationService,
   ) { }
 
   vo: Vo;
@@ -87,9 +93,7 @@ export class VoMembersComponent implements OnInit {
     this.route.parent.params.subscribe(parentParams => {
       const voId = parentParams['voId'];
 
-      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
-        this.blockManualMemberAdding = attrValue.value !== null;
-
+      this.isManualAddingBlocked(voId).then(() => {
         this.voService.getVoById(voId).subscribe(vo => {
           this.vo = vo;
           this.setAuthRights();
@@ -232,5 +236,20 @@ export class VoMembersComponent implements OnInit {
   pageChanged(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
+  }
+
+  isManualAddingBlocked(voId: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.apiRequest.dontHandleErrorForNext();
+      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
+        this.blockManualMemberAdding = attrValue.value !== null;
+        resolve();
+      }, error => {
+        if (error.error.name !== 'PrivilegeException') {
+          this.notificator.showError(error);
+        }
+        resolve();
+      });
+    });
   }
 }
