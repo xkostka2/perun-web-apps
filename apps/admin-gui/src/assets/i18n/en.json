@@ -805,6 +805,7 @@
       "SERVICE_IDENTITIES": "Service Identities",
       "IDENTITIES": "Identities",
       "PASSWORD_RESET": "Password reset",
+      "FACILITIES": "Facilities",
       "RESOURCES": "Resources",
       "ASSOCIATED_USERS": "Associated users",
       "ENTITY": "User",
@@ -1981,6 +1982,10 @@
       "ADD": "Add",
       "REMOVE": "Remove"
     },
+    "FACILITIES": {
+      "TITLE": "Facilities",
+      "FILTER_PLACEHOLDER": "Filter by id, name or description"
+    },
     "RESOURCES": {
       "TITLE": "Resources"
     },
@@ -2116,6 +2121,12 @@
         "BLOCKED": "Blocked",
         "PROPAGATION_TYPE": "Propagation type",
         "NO_DESTINATIONS": "No destinations found"
+      },
+      "FACILITIES_LIST": {
+        "ID": "Id",
+        "NAME": "Name",
+        "DESCRIPTION": "Description",
+        "NO_FACILITIES_WARNING": "No facilities found"
       }
     },
     "IDENTITY_DETAIL": {

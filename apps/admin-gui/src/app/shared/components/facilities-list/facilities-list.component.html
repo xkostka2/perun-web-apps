@@ -1,0 +1,58 @@
+<div [class.hide-table]="exporting" [hidden]="dataSource.filteredData.length === 0 || facilities.length === 0" class="card mt-3">
+  <div class="card-body">
+    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <div class="overflow-auto">
+      <table
+        #exporter="matTableExporter" [dataSource]="dataSource"
+        class="w-100"
+        mat-table
+        matSort matSortActive="id"
+        matSortDirection="asc" matSortDisableClear
+        matTableExporter>
+
+        <ng-container matColumnDef="id">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.ID' | translate}}</th>
+          <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.NAME' | translate}}</th>
+          <td *matCellDef="let facility" mat-cell>{{facility.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESCRIPTION' | translate}}</th>
+          <td *matCellDef="let facility" mat-cell>{{facility.description}}</td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          [routerLink]="disableRouting ? null : ['/facilities', facility.id]"
+          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/facilities', facility.id]"
+          *matRowDef="let facility; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row
+        >
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="this.facilities.length"
+      [pageSize]="pageSize"
+      (page)="page.emit($event)"
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>
+
+<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
+
+<app-alert *ngIf="dataSource.filteredData.length === 0 && facilities.length !== 0" alert_type="warn">
+  {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
+</app-alert>
+
+<app-alert *ngIf="facilities.length === 0" alert_type="warn">
+  {{'SHARED.COMPONENTS.FACILITIES_LIST.NO_FACILITIES_WARNING' | translate}}
+</app-alert>

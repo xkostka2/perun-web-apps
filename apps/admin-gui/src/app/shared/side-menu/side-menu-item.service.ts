@@ -577,6 +577,13 @@ export class SideMenuItemService {
       activatedRegex: `${regex}/identities`
     });
 
+    // Facilities
+    links.push({
+      label: 'MENU_ITEMS.USER.FACILITIES',
+      url: [`${path}/facilities`],
+      activatedRegex: `${regex}/facilities`
+    });
+
     // Resources
     links.push({
       label: 'MENU_ITEMS.USER.RESOURCES',
