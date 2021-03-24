@@ -83,7 +83,6 @@ $password-reset-theme: mat-light-theme($password-reset-primary, $password-reset-
   width: 100%;
 }
 
-.form-container {
-  display: flex;
-  flex-direction: column;
+.mat-tooltip {
+  font-size: 13px !important;
 }
