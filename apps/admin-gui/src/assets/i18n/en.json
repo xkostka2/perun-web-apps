@@ -360,6 +360,18 @@
           "TIMEZONE": "Selection of timezone",
           "AUTO_SUBMIT_BUTTON": "Submit button with auto-submit"
         },
+        "HIDDEN": {
+          "ALWAYS": "Always",
+          "NEVER": "Never",
+          "IF_PREFILLED": "If prefilled (self or other item, if dependency specified)",
+          "IF_EMPTY": "If empty (self or other item, if dependency specified)"
+        },
+        "DISABLED": {
+          "ALWAYS": "Always",
+          "NEVER": "Never",
+          "IF_PREFILLED": "If prefilled (self or other item)",
+          "IF_EMPTY": "If empty (self or other item)"
+        },
         "WIDGET_DESCRIPTION": {
           "HEADER": "Item is used to display customizable heading of form. Can have any HTML content.",
           "SUBMIT_BUTTON": "Button used to submit the form with custom label. All other form items are checked on valid input before submission. If it fails, form is not sent.",
@@ -1107,7 +1119,17 @@
       "ADD_OPTION": "Add option",
       "VALUE": "Value",
       "SORT_BY_LABEL_AZ": "Sort by label(A-Z)",
-      "SORT_BY_LABEL_ZA": "Sort by label(Z-A)"
+      "SORT_BY_LABEL_ZA": "Sort by label(Z-A)",
+      "UPDATABLE": "Updatable",
+      "UPDATABLE_DESCRIPTION": "If set, the user can edit this item after submission.",
+      "HIDDEN": "Hidden",
+      "HIDDEN_DESCRIPTION": "When the item should be hidden during the submission.",
+      "HIDDEN_DEPENDENCY": "Hidden dependency",
+      "HIDDEN_DEPENDENCY_DESCRIPTION": "Other form item, which is used to decide, if this one should be hidden.",
+      "DISABLED": "Disabled",
+      "DISABLED_DESCRIPTION": "When the item should be disabled during the submission.",
+      "DISABLED_DEPENDENCY": "Disabled dependency",
+      "DISABLED_DEPENDENCY_DESCRIPTION": "Other form item, which is used to decide, if this one should be disabled."
     },
     "APPLICATION_FORM_DELETE_MAIL": {
       "TITLE": "Confirm delete action",
@@ -2235,6 +2257,12 @@
           "SELECT_FACILITY": "Select facility",
           "FIND_FACILITY": "Find facility...",
           "NO_FACILITY_FOUND": "No matching facility found"
+        },
+        "APP_FORM_ITEM_SEARCH_SELECT": {
+          "SELECT_ITEM": "Select item",
+          "FIND_ITEM": "Find item...",
+          "NO_ITEM_FOUND": "No matching item found",
+          "NO_ITEM": "No item selected (empty value)"
         },
         "USER_SEARCH_SELECT": {
           "SELECT_USER": "Select user",

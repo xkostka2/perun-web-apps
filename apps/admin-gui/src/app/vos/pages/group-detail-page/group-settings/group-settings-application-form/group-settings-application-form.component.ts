@@ -112,7 +112,8 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
           voId: this.voId,
           groupId: this.groupId,
           applicationFormItem: success[1],
-          theme: 'group-theme'
+          theme: 'group-theme',
+          allItems: this.applicationFormItems
         };
 
         this.dialog.open(EditApplicationFormItemDialogComponent, config);

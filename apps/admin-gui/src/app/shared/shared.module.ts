@@ -180,6 +180,8 @@ import { AddOwnerDialogComponent } from './components/add-owner-dialog/add-owner
 import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/delete-owner-dialog.component';
 import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
 import { FacilitiesListComponent } from './components/facilities-list/facilities-list.component';
+import { ApplicationFormItemDisabledPipe } from './pipes/application-form-item-disabled.pipe';
+import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hidden.pipe';
 
 @NgModule({
   imports: [
@@ -434,7 +436,9 @@ import { FacilitiesListComponent } from './components/facilities-list/facilities
     AddOwnerDialogComponent,
     DeleteOwnerDialogComponent,
     StatisticsCardComponent,
-    FacilitiesListComponent
+    FacilitiesListComponent,
+    ApplicationFormItemDisabledPipe,
+    ApplicationFormItemHiddenPipe,
   ],
   providers: [
     AnyToStringPipe,

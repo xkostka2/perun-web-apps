@@ -14,7 +14,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { PerunBean } from '@perun-web-apps/perun/openapi';
+import { ApplicationFormItem, PerunBean } from '@perun-web-apps/perun/openapi';
 import { stringify } from 'querystring';
 
 @Component({
@@ -43,6 +43,9 @@ export class EntitySearchSelectComponent<T extends PerunBean> implements OnInit,
   @Input()
   disableAutoSelect = false;
 
+  @Input()
+  entity: T = null;
+
   @Output()
   entitySelected = new EventEmitter<T>();
 
@@ -68,9 +71,9 @@ export class EntitySearchSelectComponent<T extends PerunBean> implements OnInit,
 
 
   ngOnInit(): void {
-    this.entitiesCtrl.valueChanges.subscribe(user => this.entitySelected.emit(user));
+    this.entitiesCtrl.valueChanges.subscribe(entity => this.entitySelected.emit(entity));
 
-    if (!this.disableAutoSelect) {
+    if (!this.disableAutoSelect && this.entity === null) {
       this.entitiesCtrl.setValue(this.entities[0]);
     }
 
@@ -81,6 +84,10 @@ export class EntitySearchSelectComponent<T extends PerunBean> implements OnInit,
       .subscribe(() => {
         this.filterEntites();
       });
+
+    if (this.entity !== null) {
+      this.entitiesCtrl.setValue(this.entity);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

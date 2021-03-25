@@ -5,7 +5,7 @@
   "scripts": {
     "analyze": "webpack-bundle-analyzer",
     "build:stats": "ng build --stats-json",
-    "openapi-gen": "openapi-generator-cli generate -i https://raw.githubusercontent.com/CESNET/perun/master/perun-openapi/openapi.yml -g typescript-angular -o libs/perun/openapi/src/lib --skip-validate-spec",
+    "openapi-gen": "openapi-generator generate -i https://raw.githubusercontent.com/CESNET/perun/master/perun-openapi/openapi.yml -g typescript-angular -o libs/perun/openapi/src/lib",
     "ng": "nx",
     "nx": "nx",
     "start": "ng serve",

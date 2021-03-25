@@ -588,6 +588,11 @@ export function createNewApplicationFormItem(): ApplicationFormItem {
           perunSourceAttribute: null,
           regex: '',
           required: false,
+          updatable: true,
+          disabled: 'NEVER',
+          hidden: 'NEVER',
+          disabledDependencyItemId: null,
+          hiddenDependencyItemId: null,
           shortname: '',
           type: null };
 }

@@ -1,0 +1,12 @@
+<perun-web-apps-entity-search-select
+  [entities]="items"
+  [searchFunction]="searchFunction"
+  [mainTextFunction]="nameFunction"
+  [secondaryTextFunction]="secondaryFunction"
+  [entity]="item"
+  (entitySelected)="itemSelected.emit($event)"
+  [disableAutoSelect]="true"
+  [selectPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.APP_FORM_ITEM_SEARCH_SELECT.SELECT_ITEM' | translate"
+  [findPlaceholder]="'SHARED_LIB.PERUN.COMPONENTS.APP_FORM_ITEM_SEARCH_SELECT.FIND_ITEM' | translate"
+  [noEntriesText]="'SHARED_LIB.PERUN.COMPONENTS.APP_FORM_ITEM_SEARCH_SELECT.NO_ITEM_FOUND' | translate">
+</perun-web-apps-entity-search-select>

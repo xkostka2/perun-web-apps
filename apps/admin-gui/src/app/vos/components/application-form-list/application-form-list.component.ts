@@ -59,10 +59,12 @@ export class ApplicationFormListComponent implements OnChanges {
     const config = getDefaultDialogConfig();
     config.width = '600px';
     config.height = '600px';
-    config.data = {voId: this.applicationForm.vo.id,
+    config.data = {
+      voId: this.applicationForm.vo.id,
       group: this.applicationForm.group,
       applicationFormItem: applicationFormItem,
-      theme: this.theme
+      theme: this.theme,
+      allItems: this.applicationFormItems
     };
 
     const editDialog = this.dialog.open(EditApplicationFormItemDialogComponent, config);

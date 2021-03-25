@@ -15,3 +15,4 @@ export * from './lib/groups-tree/groups-tree.component';
 export * from './lib/expiration-select/expiration-select.component';
 export * from './lib/perun-footer/perun-footer.component'
 export * from './lib/create-group-form/create-group-form.component';
+export * from './lib/app-form-item-search-select/app-form-item-search-select.component';

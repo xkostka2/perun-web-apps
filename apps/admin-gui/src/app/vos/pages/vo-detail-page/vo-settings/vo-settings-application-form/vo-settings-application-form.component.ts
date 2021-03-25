@@ -96,7 +96,12 @@ export class VoSettingsApplicationFormComponent implements OnInit {
         config = getDefaultDialogConfig();
         config.width = '600px';
         config.height = '600px';
-        config.data = {voId: this.voId, applicationFormItem: success[1], theme: 'vo-theme'};
+        config.data = {
+          voId: this.voId,
+          applicationFormItem: success[1],
+          theme: 'vo-theme',
+          allItems: this.applicationFormItems
+        };
 
         this.dialog.open(EditApplicationFormItemDialogComponent, config);
         this.itemsChanged = true;

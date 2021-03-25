@@ -18,6 +18,7 @@ export interface ApplicationFormItem {
     id?: number;
     shortname?: string;
     required?: boolean;
+    updatable?: boolean;
     type?: Type;
     federationAttribute?: string;
     perunSourceAttribute?: string;
@@ -26,6 +27,27 @@ export interface ApplicationFormItem {
     applicationTypes?: Array<AppType>;
     ordnum?: number;
     i18n?: { [key: string]: ItemTexts; };
+    hiddenDependencyItemId?: number;
+    disabledDependencyItemId?: number;
+    hidden?: ApplicationFormItem.HiddenEnum;
+    disabled?: ApplicationFormItem.DisabledEnum;
     forDelete?: boolean;
 }
+export namespace ApplicationFormItem {
+    export type HiddenEnum = 'NEVER' | 'ALWAYS' | 'IF_PREFILLED' | 'IF_EMPTY';
+    export const HiddenEnum = {
+        NEVER: 'NEVER' as HiddenEnum,
+        ALWAYS: 'ALWAYS' as HiddenEnum,
+        IFPREFILLED: 'IF_PREFILLED' as HiddenEnum,
+        IFEMPTY: 'IF_EMPTY' as HiddenEnum
+    };
+    export type DisabledEnum = 'NEVER' | 'ALWAYS' | 'IF_PREFILLED' | 'IF_EMPTY';
+    export const DisabledEnum = {
+        NEVER: 'NEVER' as DisabledEnum,
+        ALWAYS: 'ALWAYS' as DisabledEnum,
+        IFPREFILLED: 'IF_PREFILLED' as DisabledEnum,
+        IFEMPTY: 'IF_EMPTY' as DisabledEnum
+    };
+}
+
 
