@@ -253,6 +253,10 @@ export class GuiAuthResolver {
     return this.hasAtLeasOne(Role.TOPGROUPCREATOR);
   }
 
+  public isCabinetAdmin(): boolean {
+    return this.hasAtLeasOne(Role.PERUNADMIN, Role.CABINETADMIN);
+  }
+
   isVoObserver(): boolean {
     return (this.hasAtLeasOne(Role.PERUNADMIN, Role.VOOBSERVER));
   }
