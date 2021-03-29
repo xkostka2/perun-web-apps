@@ -2918,6 +2918,76 @@ export class MembersManagerService {
     }
 
     /**
+     * For an existing member, assigns a new sponsor
+     * @param member id of Member
+     * @param sponsor id of sponsor
+     * @param validityTo date in format yyyy-mm-dd
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public sponsorMember(member: number, sponsor: number, validityTo?: string, observe?: 'body', reportProgress?: boolean): Observable<RichMember>;
+    public sponsorMember(member: number, sponsor: number, validityTo?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<RichMember>>;
+    public sponsorMember(member: number, sponsor: number, validityTo?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<RichMember>>;
+    public sponsorMember(member: number, sponsor: number, validityTo?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (member === null || member === undefined) {
+            throw new Error('Required parameter member was null or undefined when calling sponsorMember.');
+        }
+        if (sponsor === null || sponsor === undefined) {
+            throw new Error('Required parameter sponsor was null or undefined when calling sponsorMember.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (member !== undefined && member !== null) {
+            queryParameters = queryParameters.set('member', <any>member);
+        }
+        if (sponsor !== undefined && sponsor !== null) {
+            queryParameters = queryParameters.set('sponsor', <any>sponsor);
+        }
+        if (validityTo !== undefined && validityTo !== null) {
+            queryParameters = queryParameters.set('validityTo', <any>validityTo);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<RichMember>(`${this.configuration.basePath}/urlinjsonout/membersManager/sponsorMember`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Updates sponsorship validity. To change it to FOREVER, don\&#39;t pass the validityTo param, or pass it as null.
      * @param member id of Member
      * @param sponsor id of sponsor

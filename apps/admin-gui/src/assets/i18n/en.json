@@ -1831,6 +1831,7 @@
     "NAME": "Name",
     "STATUS": "Status",
     "GROUP_STATUS": "Group status",
+    "ALREADY_SPONSORED": "Already \nsponsored",
     "EMAIL": "Email",
     "LOGINS": "Logins",
     "ORGANIZATION": "Organization",

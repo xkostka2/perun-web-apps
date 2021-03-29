@@ -132,7 +132,7 @@ export class GroupMembersComponent implements OnInit {
     this.removeAuth = this.guiAuthResolver.isAuthorized('removeMembers_Group_List<Member>_policy', [this.group]);
     this.routeAuth = this.guiAuthResolver.isAuthorized('getMemberById_int_policy', [this.group]);
     this.inviteAuth = this.guiAuthResolver.isAuthorized('group-sendInvitation_Vo_Group_String_String_String_policy', [this.group]);
-    this.hideColumns = this.removeAuth ? [] : ['checkbox'];
+    this.hideColumns = this.removeAuth ? ['sponsored'] : ['checkbox', 'sponsored'];
   }
 
 
