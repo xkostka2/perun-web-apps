@@ -1,0 +1,30 @@
+<mat-toolbar [ngStyle]="{'background': bgColor}" class="header-container">
+  <div style=" display: flex; flex-direction: row;">
+    <button (click)="sideNav.toggle()" [ngStyle]="{'color': iconColor}" mat-icon-button class="mt-auto mb-auto">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <a [innerHTML]="logo" routerLink="/all-publications" class="router-icon-scale"></a>
+    <mat-icon svgIcon="perun-publications-white" class="mt-auto mb-auto router-icon ml-2 mr-4" routerLink="/all-publications"></mat-icon>
+    <p [ngStyle]="{'color': textColor}" class="mt-auto mb-auto page-subtitle">{{'HEADER.TITLE' | translate}}</p>
+  </div>
+
+  <div id="nav-menu-user-info" [ngStyle]="{'color': textColor}">
+    <button mat-button [matMenuTriggerFor]="menu">
+      <mat-icon [ngStyle]="{'color': iconColor}">
+        person
+      </mat-icon>
+      <span class="d-none d-lg-inline">
+    {{principal.user.titleBefore}}
+        {{principal.user.firstName}}
+        {{principal.user.middleName}}
+        {{principal.user.lastName}}
+        {{principal.user.titleAfter}}
+    </span>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onLogOut()">{{'HEADER.LOGOUT' | translate}}</button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+

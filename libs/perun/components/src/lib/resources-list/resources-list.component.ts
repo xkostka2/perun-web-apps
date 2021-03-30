@@ -58,6 +58,8 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  @Output()
+  allSelected = new EventEmitter();
 
   private sort: MatSort;
 
@@ -134,7 +136,9 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    const isAllSelected = this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    this.allSelected.emit(isAllSelected)
+    return isAllSelected;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */

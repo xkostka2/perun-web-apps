@@ -23,10 +23,10 @@
       {{'VO_DETAIL.GROUPS.DELETE_GROUP' | translate}}
     </button>
   </span>
-  <app-debounce-filter
+  <perun-web-apps-debounce-filter
     [placeholder]="'VO_DETAIL.GROUPS.FILTER'"
     (filter)="applyFilter($event)">
-  </app-debounce-filter>
+  </perun-web-apps-debounce-filter>
   <mat-slide-toggle #toggle (change)="removeAllGroups()" [(ngModel)]="showGroupList" class="mr-1" color="primary"
                     labelPosition="before">{{'VO_DETAIL.GROUPS.TREE_VIEW' | translate}}</mat-slide-toggle>
   <label [attr.for]="toggle.inputId">{{'VO_DETAIL.GROUPS.LIST_VIEW' | translate}}</label>

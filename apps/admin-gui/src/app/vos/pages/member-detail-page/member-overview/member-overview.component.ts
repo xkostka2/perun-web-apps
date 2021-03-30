@@ -12,7 +12,12 @@ import {
   MembersManagerService, RichMember, Sponsor,
   UsersManagerService, Vo
 } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import {
+  ApiRequestConfigurationService,
+  GuiAuthResolver,
+  NotificatorService,
+  StoreService
+} from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
 import { Urns } from '@perun-web-apps/perun/urns';
 
@@ -34,7 +39,9 @@ export class MemberOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public authResolver: GuiAuthResolver,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private apiRequest: ApiRequestConfigurationService,
+    private notificator: NotificatorService,
   ) {
   }
 
@@ -193,13 +200,21 @@ export class MemberOverviewComponent implements OnInit {
 
   private refreshData() {
     this.loading = true;
-    this.attributesManager.getMemberAttributeByName(this.member.id, Urns.MEMBER_DEF_EXPIRATION).subscribe(attr => {
-      this.expirationAtt = attr;
-      this.expiration = !attr.value ? this.translate.instant('MEMBER_DETAIL.OVERVIEW.NEVER_EXPIRES') : attr.value;
-      this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
-        this.member = member;
+    this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
+      this.member = member;
+      this.apiRequest.dontHandleErrorForNext();
+      this.attributesManager.getMemberAttributeByName(this.member.id, Urns.MEMBER_DEF_EXPIRATION).subscribe(attr => {
+        this.expirationAtt = attr;
+        this.expiration = !attr.value ? this.translate.instant('MEMBER_DETAIL.OVERVIEW.NEVER_EXPIRES') : attr.value;
         this.loading = false;
-      }, () => this.loading = false);
+      }, error => {
+        if (error.error.name !== 'PrivilegeException') {
+          this.notificator.showError(error);
+        } else {
+          this.membershipDataSource = new MatTableDataSource<string>(['Status']);
+        }
+        this.loading = false
+      });
     }, () => this.loading = false);
   }
 

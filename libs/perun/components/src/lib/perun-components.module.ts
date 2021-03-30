@@ -72,6 +72,11 @@ import { RecentlyViewedIconComponent } from './recently-viewed-icon/recently-vie
 import { FacilitySelectTableComponent } from './facility-select-table/facility-select-table.component';
 import { DateRangeComponent } from './date-range/date-range.component';
 import { ObjectListValuesComponent } from './object-list-values/object-list-values.component';
+import { PerunFooterComponent } from './perun-footer/perun-footer.component';
+import { ReportIssueDialogComponent } from './report-issue-dialog/report-issue-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CreateGroupFormComponent } from './create-group-form/create-group-form.component';
+import { DebounceFilterComponent } from './debounce-filter/debounce-filter.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -133,7 +138,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatOptionModule,
     MatSelectModule,
     NgxMatSelectSearchModule,
-    ScrollingModule
+    ScrollingModule,
+    MatDialogModule
   ],
   declarations: [
     VoSelectTableComponent,
@@ -174,7 +180,11 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     FacilitySelectTableComponent,
     EntitySearchSelectComponent,
     DateRangeComponent,
-    ObjectListValuesComponent
+    ObjectListValuesComponent,
+    PerunFooterComponent,
+    ReportIssueDialogComponent,
+    CreateGroupFormComponent,
+    DebounceFilterComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -214,6 +224,10 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     FacilitySelectTableComponent,
     EntitySearchSelectComponent,
     DateRangeComponent,
+    PerunFooterComponent,
+    ReportIssueDialogComponent,
+    CreateGroupFormComponent,
+    DebounceFilterComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

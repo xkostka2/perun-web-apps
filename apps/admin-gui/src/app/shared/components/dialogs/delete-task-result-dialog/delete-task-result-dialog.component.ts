@@ -37,17 +37,17 @@ export class DeleteTaskResultDialogComponent implements OnInit {
   }
 
   deleteResults(): void{
+    this.loading = true;
     if(this.taskResults.length === 0){
       this.dialogRef.close(true);
+      this.loading = false;
       this.notificator.showSuccess(this.translate.instant('DIALOGS.DELETE_TASK_RESULT.SUCCESS'));
       return;
     }
-    this.loading = true;
     this.taskManager.deleteTaskResultById(
       {taskResultId: this.taskResults.pop().id}
       ).subscribe(() =>{
       this.deleteResults();
-      this.loading = false;
     }, () => this.loading = false);
   }
 

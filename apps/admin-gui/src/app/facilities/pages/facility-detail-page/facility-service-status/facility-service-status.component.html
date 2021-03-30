@@ -30,10 +30,19 @@
     *ngIf="!loading && deleteAuth"
     mat-flat-button
     color="warn"
-    class="mr-2"
-    [disabled]="selected.selected.length === 0 || this.disableDeleteTaskButton" (click)="delete()">
-    {{'FACILITY_DETAIL.SERVICES_STATUS.DELETE' | translate}}
+    class="mr-2 dropdown-toggle"
+    matTooltip="{{'DIALOGS.REMOVE_SERVICE_FROM_FACILITY.CHECKBOXES_DISABLED' | translate}}"
+    [matTooltipDisabled]="!disableRemoveButton"
+    [disabled]="disableRemoveButton"
+    [matMenuTriggerFor]="menu">
+    {{'FACILITY_DETAIL.SERVICES_STATUS.REMOVE' | translate}}
   </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngIf="!taskIsNull" (click)="removeTaskResults()">
+      {{'FACILITY_DETAIL.SERVICES_STATUS.REMOVE_TASK_RESULTS' | translate}}
+    </button>
+    <button mat-menu-item (click)="removeServiceFromFacility()">{{'FACILITY_DETAIL.SERVICES_STATUS.REMOVE_SERVICE_FROM_FACILITY' | translate}}</button>
+  </mat-menu>
   <perun-web-apps-immediate-filter
       [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.TABLE_SEARCH'"
       (filter)="applyFilter($event)"></perun-web-apps-immediate-filter>

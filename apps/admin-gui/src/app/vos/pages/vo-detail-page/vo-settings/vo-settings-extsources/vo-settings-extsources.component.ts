@@ -12,6 +12,7 @@ import {
   TableConfigService
 } from '@perun-web-apps/config/table-config';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { RemoveExtSourceDialogComponent } from '../../../../../shared/components/dialogs/remove-ext-source-dialog/remove-ext-source-dialog.component';
 
 @Component({
   selector: 'app-vo-settings-extsources',
@@ -82,7 +83,7 @@ export class VoSettingsExtsourcesComponent implements OnInit {
     config.width = '1000px';
     config.data= {
       voId: this.voId,
-      voExtSources: this.extSources,
+      extSources: this.extSources,
       theme: 'vo-theme'
     };
 
@@ -95,12 +96,20 @@ export class VoSettingsExtsourcesComponent implements OnInit {
   }
 
   onRemove() {
-    for (const extSource of this.selection.selected) {
-      this.extSourceService.removeExtSourceWithVoSource(this.voId, extSource.id).subscribe(_ => {
-        this.notificator.showSuccess(this.successMessage + extSource.name);
+    const config = getDefaultDialogConfig();
+    config.width = '600px';
+    config.data= {
+      voId: this.voId,
+      extSources: this.selection.selected,
+      theme: 'vo-theme'
+    };
+
+    const dialogRef = this.dialog.open(RemoveExtSourceDialogComponent, config);
+    dialogRef.afterClosed().subscribe(removed => {
+      if (removed) {
         this.refreshTable();
-      });
-    }
+      }
+    });
   }
 
   pageChanged(event: PageEvent) {

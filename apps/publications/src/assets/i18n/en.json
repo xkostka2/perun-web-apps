@@ -1,3 +1,351 @@
 {
-
+  "MENU_ITEMS": {
+    "ALL_PUBLICATIONS": "All publications",
+    "MY_PUBLICATIONS": "My publications",
+    "CREATE_PUBLICATION": "Create publications",
+    "AUTHORS": "Authors",
+    "CATEGORIES": "Categories",
+    "PUBLICATION_SYSTEMS": "Publication systems"
+  },
+  "HEADER": {
+    "TITLE": "Publications",
+    "LOGOUT": "Log out"
+  },
+  "CATEGORIES_LIST": {
+    "ID": "Id",
+    "NAME": "Name",
+    "RANK": "Rank"
+  },
+  "CATEGORIES_PAGE": {
+    "TITLE": "Categories",
+    "CREATE": "Create",
+    "REMOVE": "Remove",
+    "FILTER": "Filter",
+    "NO_FILTER_RESULTS": "No categories match the filter"
+  },
+  "AUTHORS_PAGE": {
+    "TITLE": "Authors",
+    "FILTER": "Filter"
+  },
+  "AUTHORS_LIST": {
+    "ID": "Id",
+    "NAME": "Name",
+    "ORGANIZATION": "Organization",
+    "EMAIL": "Email",
+    "NUMBER_OF_PUBLICATIONS": "Publications count",
+    "NO_AUTHORS": "No author were found."
+  },
+  "AUTHOR_DETAIL": {
+    "TITLE": " publications",
+    "REMOVE": "Remove"
+  },
+  "PUBLICATIONS_LIST": {
+    "TABLE_ID": "Id",
+    "TABLE_LOCK": "Lock",
+    "TABLE_TITLE": "Title",
+    "TABLE_REPORTED_BY": "Reported by",
+    "TABLE_YEAR": "Year",
+    "TABLE_CATEGORY": "Category",
+    "TABLE_THANKEDTO": "Thanks",
+    "TABLE_CITE": "Cite",
+    "NO_PUBLICATIONS_FOUND": "No publications found",
+    "SHOW_CITE": "Show cite",
+    "CHANGE_LOCK_SUCCESS": "Publication was successfully ",
+    "LOCKED": "locked",
+    "UNLOCKED": "unlocked"
+  },
+  "PUBLICATION_SYSTEMS_LIST": {
+    "ID": "Id",
+    "FRIENDLY_NAME": "Friendly name",
+    "LOGIN_NAMESPACE": "Login namespace",
+    "URL": "Url",
+    "TYPE": "Parser type"
+  },
+  "PUBLICATION_SYSTEMS_PAGE": {
+    "TITLE": "Publication systems",
+    "FILTER": "Filter by id, friendly name, namespace, url or parser type"
+  },
+  "PUBLICATION_FILTER": {
+    "TITLE_PLACEHOLDER": "Title",
+    "SELECT_MODE": "Select mode",
+    "ISBN/ISSN": "isbn/issn",
+    "DOI": "doi",
+    "SELECT_CATEGORY": "Select category",
+    "START_YEAR": "Start year",
+    "END_YEAR": "End year",
+    "FILTER": "Filter",
+    "CODE_PLACEHOLDER": "Code",
+    "NO_CATEGORY_SELECTED": "No category selected",
+    "CLEAR_FILTER": "Clear filter"
+  },
+  "DIALOGS": {
+    "ADD_CATEGORY": {
+      "TITLE": "Add category",
+      "NAME": "Name",
+      "FILL_NAME": "Name cannot be empty",
+      "RANK": "Rank",
+      "FILL_RANK": "Rank cannot be empty and have to contain at max 1 decimal digit",
+      "RANK_HINT": "Rank values like: 0.0 , 0.5 , 1.2 , etc.",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "First, fill name and rank",
+      "CREATE": "Create",
+      "SUCCESS": "Category successfully created"
+    },
+    "REMOVE_CATEGORY": {
+      "TITLE": "Delete category",
+      "DESCRIPTION": "Selected categories will be deleted.",
+      "ASK": "Are you sure, you want to continue?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Categories successfully removed"
+    },
+    "UPDATE_RANK": {
+      "TITLE": "Edit rank of category ",
+      "RANK": "Rank",
+      "FILL_RANK": "Rank cannot be empty and have to contain at max 1 decimal digit",
+      "RANK_HINT": "Rank values like: 0.0 , 0.5 , 1.2 , etc.",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "Invalid rank value",
+      "UPDATE": "Update",
+      "SUCCESS": "Category successfully updated"
+    },
+    "SHOW_CITE": {
+      "TITLE": "Publication cite",
+      "OK": "Ok"
+    },
+    "REMOVE_PUBLICATION": {
+      "TITLE": "Confirm removal",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove",
+      "WARNING": "Following publications will be removed."
+    }
+  },
+  "SHARED_LIB": {
+    "PERUN": {
+      "COMPONENTS": {
+        "GROUPS_LIST": {
+          "TABLE_GROUP_ID": "Id",
+          "TABLE_VO_NAME": "Organization",
+          "TABLE_GROUP_NAME": "Name",
+          "TABLE_SEARCH": "Filter by name, description or ID",
+          "TABLE_GROUP_DESCRIPTION": "Description",
+          "TABLE_GROUP_EXPIRATION": "Expiration",
+          "DISABLED_HINT": "You cannot add members to this group or user is already member.",
+          "ALREADY_MEMBER_TOOLTIP": "User is already member of group",
+          "CREATE_RELATION_AUTH_TOOLTIP": "You don't have permission to create relation with this group.",
+          "SYNCHRONIZED_GROUP": "Group is filled with members from external source"
+        },
+        "GROUP_MENU": {
+          "MOVE": "Move group",
+          "RENAME": "Update name/description",
+          "COPY": "Copy group name to clipboard"
+        },
+        "GROUP_SEARCH_SELECT": {
+          "SELECT_GROUP": "Select group",
+          "FIND_GROUP": "Find group...",
+          "NO_GROUP_FOUND": "No matching group found"
+        },
+        "VO_SELECT_TABLE": {
+          "ID": "Id",
+          "NAME": "Name",
+          "SHORTNAME": "Short name"
+        },
+        "VO_SEARCH_SELECT": {
+          "SELECT_VO": "Select organization",
+          "FIND_VO": "Find organization...",
+          "NO_VO_FOUND": "No matching vo found"
+        },
+        "RESOURCES_LIST": {
+          "TITLE": "Resources",
+          "DELETE": "Remove selected",
+          "TABLE_RESOURCE_ID": "id",
+          "TABLE_RESOURCE_NAME": "Name",
+          "TABLE_VO_NAME": "Organization",
+          "TABLE_FACILITY_NAME": "Facility name",
+          "TABLE_RESOURCE_TAGS": "Tags",
+          "TABLE_SEARCH": "Filter",
+          "TABLE_RESOURCE_DESCRIPTION": "Description",
+          "NO_RESOURCES_WARNING": "No resources assigned."
+        },
+        "RESOURCE_SEARCH_SELECT": {
+          "SELECT_RESOURCE": "Select resource",
+          "FIND_RESOURCE": "Find resource...",
+          "NO_RESOURCE_FOUND": "No matching resource found"
+        },
+        "MEMBER_SEARCH_SELECT": {
+          "SELECT_MEMBER": "Select member",
+          "FIND_MEMBER": "Find member...",
+          "NO_MEMBER_FOUND": "No matching member found"
+        },
+        "FACILITY_SEARCH_SELECT": {
+          "SELECT_FACILITY": "Select facility",
+          "FIND_FACILITY": "Find facility...",
+          "NO_FACILITY_FOUND": "No matching facility found"
+        },
+        "USER_SEARCH_SELECT": {
+          "SELECT_USER": "Select user",
+          "FIND_USER": "Find user...",
+          "NO_USER_FOUND": "No matching user found"
+        },
+        "ATTRIBUTE_VALUE_LIST": {
+          "EDIT_DIALOG": {
+            "TITLE": "Edit attribute value",
+            "SUBMIT_BUTTON": "Submit",
+            "CANCEL_BUTTON": "Cancel"
+          },
+          "DELETE_DIALOG": {
+            "TITLE": "Delete attribute value",
+            "DESCRIPTION": "Do you really want to delete this attribute list value from list?",
+            "SUBMIT_BUTTON": "Delete",
+            "CANCEL_BUTTON": "Cancel"
+          }
+        },
+        "ATTRIBUTES_LIST": {
+          "FILTER": "Filter by id, name, value or description",
+          "ID": "Id",
+          "NAME": "Name",
+          "VALUE": "Value",
+          "DESCRIPTION": "Description",
+          "DISABLED_HINT": "You don't have permission to change this attribute.",
+          "EMPTY": "No settings found. Use 'Add' button to add new setting.",
+          "CHECKBOX_TOOLTIP": "You don't have privileges to edit this attribute"
+        },
+        "USER_DONT_EXIST": {
+          "TITLE": "Requested user (by ID or external identity) doesn't exist."
+        },
+        "TABLE_OPTIONS": {
+          "EXPORT_TO_FILE": "Export to file"
+        },
+        "NOTIFICATOR": {
+          "NOTIFICATION": {
+            "DEFAULT_ACTION": "Show",
+            "DIALOG_CLOSE": "Close",
+            "DIALOG_BUG_REPORT": "Report a bug",
+            "DEFAULT_RPC_ERROR_MESSAGE": "An operation failed.",
+            "PRIVILEGE_EXCEPTION": "You are not authorized to perform this action"
+          }
+        },
+        "USER_EXT_SOURCES_LIST": {
+          "MAIL": "Email",
+          "EXT_SOURCE_NAME": "Federated identity",
+          "LOGIN": "Login",
+          "LAST_ACCESS": "Last access",
+          "NO_IDENTITIES": "No external identities found",
+          "ID": "Id",
+          "LOA": "Level of assurance"
+        },
+        "BUG_REPORT": {
+          "TITLE": "Report a bug",
+          "SUBJECT": "Subject",
+          "SUBJECT_VALUE": "Reported error: ",
+          "SUBJECT_ERROR": "Subject cannot be empty.",
+          "MESSAGE": "Message",
+          "MESSAGE_PLACEHOLDER": "Please describe your problem and which of your actions lead to this problem.",
+          "MESSAGE_ERROR": "Please tell us something about the problem.",
+          "CANCEL": "Cancel",
+          "SEND": "Send",
+          "SUCCESS1": "Ticket with ID: ",
+          "SUCCESS2": " was created."
+        },
+        "REMOVE_USER_EXT_SOURCE": {
+          "TITLE": "Remove user's external identity",
+          "DESCRIPTION": "Following external identity will be removed",
+          "ASK": "Are you sure you want to continue?",
+          "CANCEL": "Cancel",
+          "REMOVE": "Remove",
+          "SUCCESS": "User external source successfully removed"
+        },
+        "PASSWORD_RESET": {
+          "TITLE": "Password reset",
+          "CHANGE_PASSWORD": "Change password",
+          "NAMESPACE": "Namespace",
+          "LOGIN": "Login",
+          "NOT_SUPPORTED": "Password reset is not supported for your current namespaces"
+        },
+        "SHOW_VALUE": {
+          "CLOSE": "Close",
+          "COPY": "Copy to clipboard"
+        },
+        "SERVICES_STATUS_LIST": {
+          "TABLE_SEARCH": "Filter by service name, id or state",
+          "TASK_ID": "Task ID",
+          "SERVICE_NAME": "Service",
+          "STATUS": "Status",
+          "BLOCKED": "Blocked",
+          "STARTED": "Started",
+          "ENDED": "Ended",
+          "NO_SERVICES_STATUS_WARNING": "No service configuration was propagated to this facility.",
+          "NOT_YET": "NOT YET"
+        },
+        "TASK_RESULTS_LIST": {
+          "RESULT_ID": "Result id",
+          "DESTINATION": "Destination",
+          "TYPE": "Type",
+          "SERVICE": "Service",
+          "STATUS": "Status",
+          "TIME": "Time",
+          "RETURN_CODE": "Return code",
+          "STANDARD_MESSAGE": "Standard message",
+          "ERROR_MESSAGE": "Error message",
+          "NO_RESULTS_WARNING": "No task results found"
+        },
+        "SESSION_EXPIRATION": {
+          "TITLE": "Session expiration",
+          "DESCRIPTION": "Your session has expired. Please sign in to continue.",
+          "SIGN_IN": "Sign in"
+        },
+        "RECENTLY_VIEWED_ICON": {
+          "RECENT": "Recently viewed"
+        },
+        "FOOTER": {
+          "ABOUT_PERUN": "About",
+          "HELP": "Help",
+          "PERUN_WEB": "Perun website",
+          "PERUN_TEAM": "Perun team",
+          "SUPPORT": "Support",
+          "USER_DOCUMENTATION": "Documentation",
+          "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
+          "REPORT_ISSUE": "Report Issue",
+          "PRIVACY_POLICY": "Privacy Policy"
+        },
+        "REPORT_ISSUE": {
+          "TITLE": "Report an issue",
+          "SUBJECT": "Subject",
+          "SUBJECT_ERROR": "Subject cannot be empty.",
+          "MESSAGE": "Message",
+          "MESSAGE_PLACEHOLDER": "Please describe the issue",
+          "MESSAGE_HINT": "Please try to describe in detail the problem.",
+          "CANCEL": "Cancel",
+          "SEND": "Send",
+          "SUCCESS": "Issue report was sended and got ticket number: "
+        }
+      },
+      "ORGANIZATIONS": {
+        "TITLE": "User organizations",
+        "FILTER": "Filter by name or ID",
+        "YOU_ARE_ADMIN": "Organizations where you are admin",
+        "YOU_ARE_MEMBER": "Organizations where you are member",
+        "USER_IS_ADMIN": "Organizations where user is admin",
+        "USER_IS_MEMBER": "Organizations where user is member"
+      },
+      "GROUPS": {
+        "MEMBER_GROUPS": "Member groups",
+        "ADMINS_GROUPS": "Groups where user is admin"
+      },
+      "REFRESH_BUTTON": "Refresh",
+      "SERVICES_CONFIGURATIONS": {
+        "ADD": "Add",
+        "SAVE": "Save"
+      }
+    },
+    "UI": {
+      "ALERTS": {
+        "NO_GROUPS": "No groups found.",
+        "NO_ORGANIZATIONS": "No organizations found",
+        "NO_FILTER_RESULTS_ALERT": "No results match given search criteria.",
+        "NO_MEMBERS": "No members found",
+        "NO_USERS": "No users found."
+      }
+    }
+  }
 }

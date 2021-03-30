@@ -1,0 +1,34 @@
+<div class="user-theme">
+  <h1 class="page-subtitle">{{'CATEGORIES_PAGE.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <button
+    *ngIf="addAuth"
+    mat-flat-button
+    color="accent"
+    (click)="addCategory()"
+    class="mr-2">
+    {{'CATEGORIES_PAGE.CREATE' | translate}}
+  </button>
+
+  <button
+    mat-flat-button
+    color="warn"
+    *ngIf="removeAuth"
+    [disabled]="!selected.selected.length"
+    (click)="removeCategory()">
+    {{'CATEGORIES_PAGE.REMOVE' | translate}}
+  </button>
+
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'CATEGORIES_PAGE.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <perun-web-apps-categories-list
+    *ngIf="categories && !loading"
+    [categories]="categories"
+    [filterValue]="filterValue"
+    (refreshTable)="refreshTable()"
+    [displayedColumns]="removeAuth ? ['select', 'id', 'name', 'rank'] : ['name', 'rank']"
+    [pageSize]="pageSize"
+    [selection]="selected"
+    (page)="pageChanged($event)"></perun-web-apps-categories-list>
+</div>

@@ -1,0 +1,56 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{"DIALOGS.ADD_OWNER.TITLE" | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <div mat-dialog-content class="dialog-container">
+      <mat-form-field>
+        <input
+          matInput
+          required
+          placeholder="{{'DIALOGS.ADD_OWNER.NAME' | translate}}"
+          [formControl]="nameCtrl">
+        <mat-error>
+          {{'DIALOGS.ADD_OWNER.FILL_NAME' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          required
+          placeholder="{{'DIALOGS.ADD_OWNER.CONTACT' | translate}}"
+          [formControl]="contactCtrl">
+        <mat-error *ngIf="contactCtrl.hasError('required')">
+          {{'DIALOGS.ADD_OWNER.FILL_CONTACT' | translate}}
+        </mat-error>
+        <mat-error *ngIf="contactCtrl.invalid && !contactCtrl.hasError('required')">
+          {{'DIALOGS.ADD_OWNER.CONTACT_FORMAT' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select [(value)]="type">
+          <mat-option value="1">{{'DIALOGS.ADD_OWNER.TYPE1' | translate}}</mat-option>
+          <mat-option value="0">{{'DIALOGS.ADD_OWNER.TYPE2' | translate}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-flat-button
+        class="ml-auto"
+        (click)="onCancel()">
+        {{'DIALOGS.ADD_OWNER.CANCEL' | translate}}
+      </button>
+      <div matTooltip="{{'DIALOGS.ADD_OWNER.TOOLTIP' | translate}}" matTooltipPosition="above"
+           [matTooltipDisabled]="nameCtrl.valid && contactCtrl.valid">
+        <button
+          mat-flat-button
+          class="ml-2"
+          color="accent"
+          [disabled]="nameCtrl.invalid || contactCtrl.invalid"
+          (click)="onSubmit()">
+          {{'DIALOGS.ADD_OWNER.CREATE' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

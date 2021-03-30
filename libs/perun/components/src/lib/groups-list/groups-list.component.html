@@ -76,6 +76,7 @@
           <td *matCellDef="let group" class="wrap-content" mat-cell>
             {{group | groupExpiration | parseDate}}
             <button
+              *ngIf="canManageGroup(group)"
               (click)="changeExpiration(group)"
               (mouseenter)="disabledRouting = true"
               (mouseleave)="disabledRouting = disableRouting"

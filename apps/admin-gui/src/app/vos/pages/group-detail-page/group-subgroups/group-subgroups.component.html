@@ -25,10 +25,10 @@
             {{'GROUP_DETAIL.SUBGROUPS.DELETE_GROUP' | translate}}
     </button>
   </span>
-  <app-debounce-filter
+  <perun-web-apps-debounce-filter
     [placeholder]="'GROUP_DETAIL.SUBGROUPS.FILTER'"
     (filter)="applyFilter($event)">
-  </app-debounce-filter>
+  </perun-web-apps-debounce-filter>
   <mat-slide-toggle #toggle (change)="selected.clear()" [(ngModel)]="showGroupList" class="mr-1" color="primary"
                     labelPosition="before">{{'GROUP_DETAIL.SUBGROUPS.TREE_VIEW' | translate}}</mat-slide-toggle>
   <label [attr.for]="toggle.inputId">{{'GROUP_DETAIL.SUBGROUPS.LIST_VIEW' | translate}}</label>

@@ -1,1 +1,120 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+
+@function mat-color($palette, $hue: default, $opacity: null) {
+  @if type-of($hue) == number and $hue >= 0 and $hue <= 1 {
+    @return mat-color($palette, default, $hue);
+  }
+
+  $color: map-get($palette, $hue);
+
+  @if (type-of($color) != color) {
+    @if ($opacity == null){
+      @return $color;
+    }
+
+    // Here is the change from the original function:
+    // If the $color resolved to something different from a color, we assume it is a CSS variable
+    // in the form of rgba(var(--rgba-css-var),a) and replace the 'a' value.
+    @return #{str-slice($color, 0, str-index($color, ',')) + $opacity + ')'};
+  }
+
+  @return rgba($color, if($opacity == null, opacity($color), $opacity));
+}
+
+
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$perun-primary: mat-palette($mat-gray, 900);
+$perun-accent: mat-palette($mat-green, 600);
+
+// The warn palette is optional (defaults to red).
+$perun-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($perun-theme);
+
+.user-theme {
+  $user-dynamic-colors:(
+    50 : rgba(var(--user-theme-primary-50), 1),
+    100 : rgba(var(--user-theme-primary-100), 1),
+    200 : rgba(var(--user-theme-primary-200), 1),
+    300 : rgba(var(--user-theme-primary-300), 1),
+    400 : rgba(var(--user-theme-primary-400), 1),
+    500 : rgba(var(--user-theme-primary-500), 1),
+    600 : rgba(var(--user-theme-primary-600), 1),
+    700 : rgba(var(--user-theme-primary-700), 1),
+    800 : rgba(var(--user-theme-primary-800), 1),
+    900 : rgba(var(--user-theme-primary-900), 1),
+    A100 : rgba(var(--user-theme-primary-A100), 1),
+    A200 : rgba(var(--user-theme-primary-A200), 1),
+    A400 : rgba(var(--user-theme-primary-A400), 1),
+    A700 : rgba(var(--user-theme-primary-A700), 1),
+    contrast: (
+      50: rgba(var(--user-theme-primary-contrast-50), 1),
+      100: rgba(var(--user-theme-primary-contrast-100), 1),
+      200: rgba(var(--user-theme-primary-contrast-200), 1),
+      300: rgba(var(--user-theme-primary-contrast-300), 1),
+      400: rgba(var(--user-theme-primary-contrast-400), 1),
+      500: rgba(var(--user-theme-primary-contrast-500), 1),
+      600: rgba(var(--user-theme-primary-contrast-600), 1),
+      700: rgba(var(--user-theme-primary-contrast-700), 1),
+      800: rgba(var(--user-theme-primary-contrast-800), 1),
+      900: rgba(var(--user-theme-primary-contrast-900), 1),
+      A100: rgba(var(--user-theme-primary-contrast-A100), 1),
+      A200: rgba(var(--user-theme-primary-contrast-A200), 1),
+      A400: rgba(var(--user-theme-primary-contrast-A400), 1),
+      A700: rgba(var(--user-theme-primary-contrast-A700), 1),
+    )
+  );
+
+  $user-primary: mat-palette($user-dynamic-colors, 500);
+  $user-accent: mat-palette($mat-green, 600);
+
+  $user-theme: mat-light-theme($user-primary, $user-accent);
+
+  @include angular-material-theme($user-theme);
+}
+
+button {
+  border-radius: 0 !important;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+th, td.mat-cell {
+  padding: 0.25rem !important;
+}
+
+.page-subtitle {
+  margin-bottom: 1.0rem;
+  font-size: 1.5rem;
+}
+
+.dark-hover-list-item {
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
+}
+
+.title-icon {
+  font-size: 32px;
+}
+
+

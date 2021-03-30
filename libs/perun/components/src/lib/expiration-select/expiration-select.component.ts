@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { formatDate } from '@angular/common';
 
@@ -11,7 +11,9 @@ export class ExpirationSelectComponent implements OnInit {
 
   constructor() { }
 
+  @Input()
   expiration = 'never';
+
   expirationControl = new FormControl(null);
   minDate: Date;
 

@@ -124,7 +124,11 @@
       "REMOVE": "Remove",
       "FILTER": "Filter",
       "REMOVE_SUCCESS": "Destinations were successfully removed",
-      "ADD_SUCCESS": "Destinations were successfully added"
+      "ADD_SUCCESS": "Destinations were successfully added",
+      "ALLOW": "Allow",
+      "BLOCK": "Block",
+      "ALLOW_SUCCESS": "Service was successfully allowed on destination",
+      "BLOCK_SUCCESS": "Service was successfully blocked on destination"
     },
     "SETTINGS": {
       "ATTRIBUTES": {
@@ -171,7 +175,9 @@
       "FORCE_PROPAGATION": "Force propagation",
       "ALLOW": "Allow",
       "BLOCK": "Block",
-      "DELETE": "Delete Task",
+      "REMOVE": "Remove",
+      "REMOVE_TASK_RESULTS": "Task results",
+      "REMOVE_SERVICE_FROM_FACILITY": "Service from facility",
       "SUCCESS_FORCE_PROPAGATION": "Service propagation forced",
       "SUCCESS_ALLOW": "Services allowed",
       "SUCCESS_BLOCK": "Services blocked",
@@ -302,7 +308,8 @@
       "CREATE_SERVICE_MEMBER": "Create service member",
       "ADD_MANAGER": "Add manager",
       "CREATE_GROUP": "Create group",
-      "ADD_MEMBER": "Add member"
+      "ADD_MEMBER": "Add member",
+      "MEMBERS_COUNT": "Members distribution"
     },
     "SETTINGS": {
       "EXPIRATION": {
@@ -428,7 +435,8 @@
         "CREATE": "Create",
         "GENERATE": "Create in bulk",
         "FILTER": "Filter by name or ID",
-        "SPONSOR_EXISTING": "Sponsor existing member"
+        "SPONSOR_EXISTING": "Sponsor existing member",
+        "NO_SPONSORS": "This organization has no members with the role SPONSOR"
       }
     },
     "APPLICATION": {
@@ -526,7 +534,7 @@
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
       "EMPTY_SEARCH": "Search field cannot be empty",
-      "FILTER_STATUS": "Select Status"
+      "FILTER_STATUS": "Select group status (to filter)"
     },
     "RESOURCES": {
       "TITLE": "Resources",
@@ -600,6 +608,13 @@
         "FILTER": "Filter by name, id or description",
         "REVERSE_UNIONS": "Show reverse unions",
         "DELETE_TOOLTIP": "You don't have permission to remove some of the selected relations."
+      },
+      "EXT_SOURCES": {
+        "TITLE": "External sources",
+        "ADD": "Add",
+        "REMOVE": "Remove",
+        "FILTER": "Filter by ID, name or type",
+        "SUCCESS_REMOVED": "External source successfully removed: "
       }
     }
   },
@@ -746,7 +761,8 @@
       "EXPIRATION": "Membership",
       "APPLICATION_FORM": "Application form",
       "NOTIFICATIONS": "Notifications",
-      "RELATIONS": "Relations"
+      "RELATIONS": "Relations",
+      "EXTSOURCES": "External sources"
     },
     "MEMBER": {
       "OVERVIEW": "Overview",
@@ -768,7 +784,8 @@
       "GROUPS": "Groups",
       "SETTINGS": "Advanced settings",
       "ORGANIZATIONS": "Organizations",
-      "SERVICES": "Services"
+      "SERVICES": "Services",
+      "OWNERS": "Owners"
     },
     "VISUALIZER": {
       "ATTR_DEPENDENCIES": "Modules dependencies",
@@ -820,17 +837,6 @@
       "TITLE": "Import attribute definition",
       "CREATE": "Create attribute",
       "CANCEL": "Cancel"
-    },
-    "REPORT_ISSUE": {
-      "TITLE": "Report an issue",
-      "SUBJECT": "Subject",
-      "SUBJECT_ERROR": "Subject cannot be empty.",
-      "MESSAGE": "Message",
-      "MESSAGE_PLACEHOLDER": "Please describe the issue",
-      "MESSAGE_HINT": "Please try to describe in detail the problem.",
-      "CANCEL": "Cancel",
-      "SEND": "Send",
-      "SUCCESS": "Issue report was sended and got ticket number: "
     },
     "MOVE_GROUP": {
       "TITLE": "Move group - ",
@@ -971,7 +977,8 @@
       "SUCCESS": "Selected groups were added",
       "COUNT": "Count",
       "NO_GROUPS_FOUND": "No groups found",
-      "SELECT_VO": "Select organization"
+      "SELECT_VO": "Select organization",
+      "FILTER_GROUPS": "Filter groups by id, name or description"
     },
     "REMOVE_GROUPS": {
       "TITLE": "Confirm removal",
@@ -1345,7 +1352,15 @@
       "FILTER": "Filter by ID, name or type",
       "CANCEL": "Cancel",
       "ADD": "Add",
-      "SUCCESS_ADDED": "External source successfully added: "
+      "SUCCESS_ADDED": "External sources were successfully added"
+    },
+    "REMOVE_EXT_SOURCES": {
+      "TITLE": "Remove external sources",
+      "DESCRIPTION": "Following external sources will be removed.",
+      "ASK": "Are you sure you want to proceed?",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove",
+      "SUCCESS_REMOVED": "External sources were successfully removed"
     },
     "EDIT_ATTRIBUTE_DEFINITION": {
       "COPY_FOR_IMPORT": "Copy for import",
@@ -1387,11 +1402,11 @@
       "SELECTION_ALL": "All",
       "NO_SERVICE": "No service available",
       "CHOOSE_SERVICE": "You must choose service",
-      "TYPE_EMAIL": "Please type valid email",
       "IS_SERVICES_ONLY_ON_FACILITY": "Show only services on facility",
       "TYPE": "Type",
       "HOST": "Host",
       "REQUIRED_FIELD": "Destination value can't be empty.",
+      "INVALID_DESTINATION": "The specified value for the selected destination type is invalid.",
       "USE_FACILITY_HOST": "Use names of all facility's hosts",
       "PROPAGATION": "Propagation",
       "PROPAGATION_TYPE_PARALLEL": "PARALLEL - Data for all destinations and one service are pushed in parallel.",
@@ -1425,7 +1440,8 @@
       "HINT": "Enter one host per line. You can use \"[x-y]\" in hostname to generate hosts with numbers from x to y. This replacer can be specified multiple times in one hostname to generate MxN combinations.",
       "WARNING": "Please enter at least one hostname to add it to facility.",
       "SUCCESS": "Added hosts.",
-      "EMPTY_MESSAGE": "Hostnames cannot be empty"
+      "EMPTY_MESSAGE": "Hostnames cannot be empty",
+      "INVALID_HOST": "Invalid host name: "
     },
     "REMOVE_HOST": {
       "TITLE": "Confirm removal",
@@ -1625,6 +1641,26 @@
       "DESTINATION": "Destination",
       "TIME": "Time"
     },
+    "REMOVE_SERVICE_FROM_FACILITY": {
+      "TITLE": "Remove service from facility",
+      "CHECKBOXES_DESCRIPTION": "You can also remove:",
+      "CHECKBOXES_DISABLED": "Enabled only for all resources",
+      "CHECKBOX_TASK_AND_TASK_RESULTS" : "Task and task results",
+      "CHECKBOX_TASK_RESULTS" : "Task results",
+      "CHECKBOX_DESTINATION" : "Destination",
+      "DESCRIPTION": "Following resources will be affected.",
+      "ASK": "Do you want to proceed?",
+      "SUCCESS": "Service was successfully removed",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove"
+    },
+    "DELETE_TASK": {
+      "TITLE": "This service is not assigned to any resource",
+      "DESCRIPTION": "You can delete task and task results.",
+      "SUCCESS": "Service was successfully deleted",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete"
+    },
     "EDIT_APPLICATION_FORM_ITEM_DATA": {
       "TITLE": "Edit item: ",
       "INVALID_EMAIL": "Email is invalid",
@@ -1649,20 +1685,39 @@
       "EMAIL": "Email",
       "SUCCESS": "Sponsored user created",
       "EMAIL_ERROR": "Email is not valid",
-      "LENGTH_ERROR": "Length of input has to be between 1 to 128 characters",
+      "LENGTH_ERROR": "Empty value is not allowed",
+      "BACKEND_ERROR": "Entered password doesn't meet the selected namespace's criteria",
+      "BACKEND_ERROR_LONG": "Entered password doesn't match criteria for strong password and it can't be accepted. Please, make sure that the entered password is at least 8 characters long, contains at least one of: A-z, 0-9, and special characters.",
+      "SHOW_PASSWORD": "Show password",
       "NAMESPACE_ERROR": "Selection of namespace is required",
       "FUNCTIONALITY_NOT_SUPPORTED": "This functionality is not yet supported.",
-      "LOGIN_DISABLED": "Setting login is disabled in this namespace",
+      "LOGIN_DISABLED": "Setting login is disabled for this namespace",
+      "PASSWORD_RESET_DISABLED": "Sending activation link is disabled for this namespace",
+      "PASSWORD_DISABLED": "Setting password is disabled for this namespace",
       "SUCCESSFULLY_CREATED": "Sponsored member was successfully created",
       "USER": "User",
       "WAS_CREATED": "was successfully created",
       "COPY_INFORMATION": "Please save this information. It will not be possible to access this information later.",
       "PASSWORD_RESET": "Let the created user change his password via a given email address",
-      "PASSWORD_DISABLED": "User will choose his password via an email sent to the entered e-mail address",
+      "PASSWORD_VIA_EMAIL": "User will choose his password via an email sent to the entered e-mail address",
       "EXPIRATION": "Sponsorship expiration",
       "EXPIRE_DATE": "Expire to a date",
       "EXPIRE_NEVER": "Never expire",
-      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd"
+      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd",
+      "SELECT_SPONSOR": "Choose sponsor for created user",
+      "SELECT_SELF": "Make myself sponsor",
+      "SELECT_OTHER": "Select other sponsor from this organization",
+      "SELECT_SELF_DISABLED": "You must be sponsor in this organization",
+      "SELECT_OTHER_DISABLED": "You don't have permission to select other sponsor",
+      "NEXT": "Next",
+      "BACK": "Back",
+      "SUBMIT": "Submit",
+      "USER_LABEL": "User",
+      "NAMESPACE_LABEL": "Namespace",
+      "SPONSORSHIP_LABEL": "Sponsorship",
+      "USER_TITLE": "User name",
+      "NAMESPACE_TITLE": "Namespace details",
+      "SPONSORSHIP_TITLE": "Sponsorship options"
     },
     "GENERATE_SPONSORED_MEMBERS": {
       "TITLE": "Create sponsored members in bulk",
@@ -1674,17 +1729,31 @@
       "INSERT_HERE": "Here insert correctly formatted text",
       "EXAMPLE": "John;Doe;john.doe@ics.muni.cz;Generated sponsor user\nPete;Doe;pete.doe@ics.muni.cz;Generated sponsor user",
       "ERROR_FORMAT": "This line is not filled with all mandatory attributes",
-      "ERROR_EMAIL": "One of the email you typed is not email",
+      "ERROR_EMAIL": "Email on this line is not valid",
       "CANCEL": "Cancel",
-      "GENERATE": "Create",
+      "SUBMIT": "Submit",
       "SUCCESS": "Members successfully created",
       "EMAIL": "Email",
-      "EMAIL_ERROR": "Email is not valid",
+      "PASSWORD_MANAGEMENT": "Password management",
       "PASSWORD_RESET": "Let created users change their password via given email addresses.",
+      "GENERATE_PASSWORD": "Generate random passwords",
       "EXPIRATION": "Sponsorship expiration",
-      "EXPIRE_DATE": "Expire to a date",
-      "EXPIRE_NEVER": "Never expire",
-      "EXPIRATION_ERROR": "The date has to be in format yyyy-mm-dd"
+      "GROUP_ASSIGMENT": "Group assigment",
+      "NO_ASSIGN": "Do not assign to any group",
+      "ASSIGN_TO_NEW": "Create new group to be assigned to",
+      "ASSIGN_EXISTING": "Assign to existing groups",
+      "DISABLED_ASSIGN_NEW": "You don't have permission to create groups in this organization, or manual adding of members is disabled",
+      "DISABLED_ASSIGN_EXISTING": "You don't have permission to add members to any existing group in this organization, or manual adding of members is disabled",
+      "NEXT": "Next",
+      "BACK": "Back",
+      "USERS_INFO": "Users information",
+      "USERS_LABEL": "Users",
+      "PASSWORD_LABEL": "Password",
+      "EXPIRATION_LABEL": "Sponsorship",
+      "GROUPS_LABEL": "Group",
+      "CREATE_NEW_GROUP": "Create new group",
+      "SELECT_EXISTING_GROUPS": "Select from existing groups",
+      "DONT_ASSIGN_INFO": "Created users will become members of this organization, but won't be assigned to any additional groups. You will be able to change this manually later."
     },
     "EDIT_MEMBER_SPONSORS": {
       "TITLE": "Edit sponsored member",
@@ -1733,6 +1802,28 @@
       "EXPIRATION": "Sponsorship expiration",
       "BEGIN_SEARCH": "Search for members you would like to sponsor",
       "SUCCESS": "Members successfully sponsored"
+    },
+    "ADD_OWNER": {
+      "TITLE": "Create owner",
+      "NAME": "Name",
+      "FILL_NAME": "Name cannot be empty",
+      "CONTACT": "Contact",
+      "FILL_CONTACT": "Contact cannot be empty",
+      "CONTACT_FORMAT": "Invalid format, e.g. mail@domain.com",
+      "TYPE1": "Administrative",
+      "TYPE2": "Technical",
+      "CANCEL": "Cancel",
+      "TOOLTIP": "Please, fill name and contact",
+      "CREATE": "Create",
+      "SUCCESS": "Owner successfully created"
+    },
+    "DELETE_OWNER": {
+      "TITLE": "Delete owner",
+      "DESCRIPTION": "Selected owners will be deleted.",
+      "ASK": "Are you sure, you want to continue?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Owners successfully removed"
     }
   },
   "MEMBERS_LIST": {
@@ -1789,6 +1880,12 @@
       "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
       "NO_USERS_FOUND": "No users found.",
       "EMPTY_SEARCH": "Search field cannot be empty"
+    },
+    "OWNERS": {
+      "TITLE": "Owners",
+      "ADD": "Create",
+      "DELETE": "Delete",
+      "FILTER": "Filter"
     },
     "VISUALIZER": {
       "ATTR_DEPENDENCIES": {
@@ -2026,17 +2123,6 @@
         "DESCRIPTION": "Description"
       }
     },
-    "FOOTER": {
-      "ABOUT_PERUN": "About",
-      "HELP": "Help",
-      "PERUN_WEB": "Perun website",
-      "PERUN_TEAM": "Perun team",
-      "SUPPORT": "Support",
-      "USER_DOCUMENTATION": "Documentation",
-      "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
-      "REPORT_ISSUE": "Report Issue",
-      "PRIVACY_POLICY": "Privacy Policy"
-    },
     "IDENTITY_DETAIL": {
       "TITLE": "Identity detail",
       "ADD": "Add",
@@ -2255,6 +2341,28 @@
         },
         "RECENTLY_VIEWED_ICON": {
           "RECENT": "Recently viewed"
+        },
+        "FOOTER": {
+          "ABOUT_PERUN": "About",
+          "HELP": "Help",
+          "PERUN_WEB": "Perun website",
+          "PERUN_TEAM": "Perun team",
+          "SUPPORT": "Support",
+          "USER_DOCUMENTATION": "Documentation",
+          "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
+          "REPORT_ISSUE": "Report Issue",
+          "PRIVACY_POLICY": "Privacy Policy"
+        },
+        "REPORT_ISSUE": {
+          "TITLE": "Report an issue",
+          "SUBJECT": "Subject",
+          "SUBJECT_ERROR": "Subject cannot be empty.",
+          "MESSAGE": "Message",
+          "MESSAGE_PLACEHOLDER": "Please describe the issue",
+          "MESSAGE_HINT": "Please try to describe in detail the problem.",
+          "CANCEL": "Cancel",
+          "SEND": "Send",
+          "SUCCESS": "Issue report was sended and got ticket number: "
         }
       },
       "ORGANIZATIONS": {

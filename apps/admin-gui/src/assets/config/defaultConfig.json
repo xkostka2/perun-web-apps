@@ -30,6 +30,7 @@
     "urn:perun:user:attribute-def:def:login-namespace:egi-ui",
     "urn:perun:user:attribute-def:def:login-namespace:sitola"
   ],
+  "allow_empty_sponsor_namespace": false,
   "member_profile_attributes_friendly_names": [
     "organization",
     "workplace",

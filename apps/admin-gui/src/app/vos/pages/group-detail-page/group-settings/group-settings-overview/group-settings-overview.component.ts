@@ -3,7 +3,6 @@ import { SideMenuService } from '../../../../../core/services/common/side-menu.s
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from '@perun-web-apps/perun/models';
 import {
-  Attribute,
   AttributesManagerService,
   Group,
   GroupsManagerService,
@@ -108,6 +107,15 @@ export class GroupSettingsOverviewComponent implements OnInit {
         cssIcon: 'perun-group',
         url: `/organizations/${this.vo.id}/groups/${this.group.id}/settings/relations`,
         label: 'MENU_ITEMS.GROUP.RELATIONS',
+        style: 'group-btn'
+      });
+    }
+
+    if (this.guiAuthResolver.isAuthorized('getGroupExtSources_Group_policy', [this.group])) {
+      this.items.push({
+        cssIcon: 'perun-external-sources',
+        url: `/organizations/${this.vo.id}/groups/${this.group.id}/settings/extsources`,
+        label: 'MENU_ITEMS.GROUP.EXTSOURCES',
         style: 'group-btn'
       });
     }

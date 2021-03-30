@@ -123,6 +123,14 @@ export class CustomIconService {
       url: 'assets/img/PerunWebImages/facility-dark.svg',
       name: 'perun-facility-black'
     },
+    {
+      url: 'assets/img/publications.svg',
+      name: 'perun-publications-white'
+    },
+    {
+      url: 'assets/img/PerunWebImages/owner-grey.svg',
+      name: 'perun-owner-grey'
+    },
     // TESTING PURPOSES
     {
       url: 'assets/img/settings1-blue.svg',

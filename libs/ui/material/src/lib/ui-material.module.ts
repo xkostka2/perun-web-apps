@@ -17,6 +17,16 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -39,6 +49,16 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatStepperModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSidenavModule,
+    MatListModule,
+    PerunSharedComponentsModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatSortModule,
+    MatTableExporterModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatSelectModule
   ],
   exports: [
     MatCardModule,
@@ -59,6 +79,16 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatStepperModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSidenavModule,
+    MatListModule,
+    PerunSharedComponentsModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatSortModule,
+    MatTableExporterModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatSelectModule
   ]
 })
 export class UiMaterialModule {}

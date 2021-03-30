@@ -1,7 +1,12 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import {
+  ApiRequestConfigurationService,
+  GuiAuthResolver,
+  NotificatorService,
+  StoreService
+} from '@perun-web-apps/perun/services';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -41,6 +46,8 @@ export class GroupMembersComponent implements OnInit {
     private storeService: StoreService,
     private membersManager: MembersManagerService,
     private attributesManager: AttributesManagerService,
+    private apiRequest: ApiRequestConfigurationService,
+    private notificator: NotificatorService
   ) { }
 
   group: RichGroup;
@@ -97,18 +104,7 @@ export class GroupMembersComponent implements OnInit {
     this.route.parent.params.subscribe(parentParams => {
       const groupId = parentParams['groupId'];
       const voId = parentParams['voId'];
-
-      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
-        this.blockManualMemberAdding = attrValue.value !== null;
-        if (this.blockManualMemberAdding !== true) {
-          this.attributesManager.getGroupAttributeByName(groupId, "urn:perun:group:attribute-def:def:blockManualMemberAdding").subscribe(groupAttrValue => {
-            this.blockManualMemberAdding = groupAttrValue.value !== null;
-            this.loadPage(groupId);
-          });
-        } else {
-          this.loadPage(groupId);
-        }
-      });
+      this.isManualAddingBlocked(voId, groupId).then(() => this.loadPage(groupId));
     });
   }
 
@@ -263,5 +259,33 @@ export class GroupMembersComponent implements OnInit {
       return `${this.statuses.value[0]}  ${this.statuses.value.length > 1 ? ('(+' + (this.statuses.value.length - 1) +' '+ (this.statuses.value.length === 2 ? 'other)' : 'others)')) : ''}`;
     }
     return '';
+  }
+
+  isManualAddingBlocked(voId: number, groupId: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.apiRequest.dontHandleErrorForNext();
+      this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
+        this.blockManualMemberAdding = attrValue.value !== null;
+        if (this.blockManualMemberAdding !== true) {
+          this.apiRequest.dontHandleErrorForNext();
+          this.attributesManager.getGroupAttributeByName(groupId, "urn:perun:group:attribute-def:def:blockManualMemberAdding").subscribe(groupAttrValue => {
+            this.blockManualMemberAdding = groupAttrValue.value !== null;
+            resolve();
+          }, error => {
+            if (error.error.name !== 'PrivilegeException') {
+              this.notificator.showError(error);
+            }
+            resolve();
+          });
+        } else {
+          resolve();
+        }
+      }, error => {
+        if (error.error.name !== 'PrivilegeException') {
+          this.notificator.showError(error);
+        }
+        resolve();
+      });
+    });
   }
 }

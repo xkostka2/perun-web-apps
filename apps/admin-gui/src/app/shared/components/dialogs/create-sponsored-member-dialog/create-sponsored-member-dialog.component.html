@@ -4,92 +4,234 @@
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
 
   <div mat-dialog-content class="dialog-container" *ngIf="!loading && !successfullyCreated">
+    <mat-horizontal-stepper [linear]="true">
+      <mat-step [stepControl]="userControl">
+        <ng-template matStepLabel>{{'DIALOGS.CREATE_SPONSORED_MEMBER.USER_LABEL' | translate}}</ng-template>
+        <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
+          {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
+        </app-alert>
 
-    <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
-      {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
-    </app-alert>
+        <form
+          class="dialog-container"
+          [formGroup]="userControl">
+          <h5 class="mt-2">
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.USER_TITLE' | translate}}
+          </h5>
+          <mat-form-field class="mt-4">
+            <input matInput formControlName="firstName" required
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.FIRST_NAME' | translate}}">
+            <mat-error *ngIf="userControl.hasError('required', 'firstName')">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}
+            </mat-error>
+          </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [formControl]="firstName" required
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.FIRST_NAME' | translate}}">
-      <mat-error *ngIf="firstName.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
-    </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="lastName" required
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LAST_NAME' | translate}}">
+            <mat-error
+              *ngIf="userControl.hasError('required', 'lastName')">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}
+            </mat-error>
+          </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [formControl]="lastName" required
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LAST_NAME' | translate}}">
-      <mat-error *ngIf="lastName.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
-    </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="titleBefore"
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.TITLE_BEFORE' | translate}}">
+          </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [(ngModel)]="titleBefore"
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.TITLE_BEFORE' | translate}}">
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [(ngModel)]="titleAfter"
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.TITLE_AFTER' | translate}}">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-select placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE' | translate}}"
-                  required
-                  [formControl]="namespace">
-        <mat-option (onSelectionChange)="changeNamespace(namespc)" *ngFor="let namespc of namespaceOptions" [value]="namespc">
-          {{namespc}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="namespace.invalid">
-        {{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE_ERROR' | translate}}
-      </mat-error>
-    </mat-form-field>
-
-
-    <mat-form-field
-      matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN_DISABLED' | translate}}"
-      matTooltipPosition="left"
-      [matTooltipDisabled]="!login.disabled">
-      <input matInput
-             [formControl]="login"
-             required
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN' | translate}}">
-      <mat-error *ngIf="login.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
-    </mat-form-field>
-
-
-    <mat-checkbox
-      labelPosition="before"
-      (change)="passwordResetChange()"
-      [(ngModel)]="passwordReset">{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET' | translate}}
-    </mat-checkbox>
-    <mat-form-field
-      matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_DISABLED' | translate}}"
-      matTooltipPosition="left"
-      [matTooltipDisabled]="!passwordReset">
-      <input
-        [disabled]=""
-        matInput [formControl]="password" required
-        placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
-      <mat-error *ngIf="password.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
-    </mat-form-field>
-
-    <!--        <mat-form-field class="">-->
-    <!--          <label>-->
-    <!--            <input matInput [(ngModel)]="this.sponsorId" placeholder="{{'DIALOGS.CREATE_SPONSORED_USER.SPONSOR_ID' | translate}}">-->
-    <!--          </label>-->
-    <!--        </mat-form-field>-->
-
-    <mat-form-field>
-      <input matInput required [formControl]="email"
-             placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.EMAIL' | translate}}">
-      <mat-error *ngIf="email.invalid">{{'DIALOGS.CREATE_SPONSORED_MEMBER.EMAIL_ERROR' | translate}}</mat-error>
-    </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="titleAfter"
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.TITLE_AFTER' | translate}}">
+          </mat-form-field>
+        </form>
+        <div mat-dialog-actions>
+          <button
+            mat-flat-button
+            (click)="onCancel()">
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.CANCEL' | translate}}
+          </button>
+          <button
+            [disabled]="userControl.invalid"
+            class="ml-auto"
+            mat-flat-button
+            type="button"
+            color="accent"
+            matStepperNext>
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.NEXT' | translate}}
+          </button>
+        </div>
+      </mat-step>
+      <mat-step [stepControl]="namespaceControl">
+        <ng-template matStepLabel>{{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE_LABEL' | translate}}</ng-template>
+        <h5 class="mt-2">{{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE_TITLE' | translate}}</h5>
+        <form class="dialog-container mt-4" [formGroup]="namespaceControl">
+          <mat-form-field>
+            <mat-select placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE' | translate}}"
+                        required
+                        (valueChange)="onNamespaceChanged($event)"
+                        formControlName="namespace">
+              <mat-option *ngFor="let namespc of namespaceOptions" [value]="namespc">
+                {{namespc}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="namespaceControl.hasError('required', 'namespace')">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.NAMESPACE_ERROR' | translate}}
+            </mat-error>
+          </mat-form-field>
 
 
-    <h6>{{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRATION' | translate}}</h6>
-    <perun-web-apps-expiration-select
-      (datePicker)="setExpiration($event)">
-    </perun-web-apps-expiration-select>
+          <mat-form-field
+            matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN_DISABLED' | translate}}"
+            matTooltipPosition="left"
+            [matTooltipDisabled]="namespaceControl.get('login').enabled">
+            <input matInput
+                   formControlName="login"
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN' | translate}}">
+            <mat-error *ngIf="namespaceControl.hasError('required', 'login')">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}
+            </mat-error>
+          </mat-form-field>
+
+          <span
+            matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET_DISABLED' | translate}}"
+            matTooltipPosition="left"
+            [matTooltipDisabled]="namespaceControl.get('passwordReset').enabled">
+            <mat-checkbox
+              labelPosition="before"
+              (change)="passwordResetChange()"
+              formControlName="passwordReset">{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD_RESET' | translate}}
+            </mat-checkbox>
+          </span>
+          <mat-form-field
+            [matTooltip]="getPasswordDisabledTooltip()"
+            matTooltipPosition="left"
+            [matTooltipDisabled]="namespaceControl.get('password').enabled">
+            <input
+              [type]="namespaceControl.get('showPassword').value ? 'text' : 'password'"
+              matInput
+              formControlName="password"
+              [errorStateMatcher]="passwordStateMatcher"
+              placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}">
+            <mat-spinner *ngIf="this.namespaceControl.get('password').pending" matSuffix [diameter]="18"
+                         class="input-spinner"></mat-spinner>
+            <mat-icon
+              *ngIf="this.namespaceControl.get('password').dirty && this.namespaceControl.get('password').errors !== null"
+              color="warn" matSuffix
+              [matTooltip]="'DIALOGS.CREATE_SPONSORED_MEMBER.BACKEND_ERROR_LONG' | translate">
+              error
+            </mat-icon>
+            <mat-error
+              *ngIf="namespaceControl.get('password').hasError('required')">{{'DIALOGS.CREATE_SPONSORED_MEMBER.LENGTH_ERROR' | translate}}</mat-error>
+            <mat-error
+              *ngIf="namespaceControl.get('password').hasError('backendError')">{{'DIALOGS.CREATE_SPONSORED_MEMBER.BACKEND_ERROR' | translate}}</mat-error>
+          </mat-form-field>
+          <mat-checkbox class="example-margin"
+                        formControlName="showPassword">
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.SHOW_PASSWORD' | translate}}
+          </mat-checkbox>
+
+          <mat-form-field>
+            <input matInput required formControlName="email"
+                   placeholder="{{'DIALOGS.CREATE_SPONSORED_MEMBER.EMAIL' | translate}}">
+            <mat-error *ngIf="namespaceControl.hasError('required', 'email') ||
+            namespaceControl.hasError('pattern', 'email')">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.EMAIL_ERROR' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <div mat-dialog-actions>
+            <button
+              mat-flat-button
+              (click)="onCancel()">
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.CANCEL' | translate}}
+            </button>
+            <button
+              class="ml-auto"
+              mat-flat-button
+              matStepperPrevious>
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.BACK' | translate}}
+            </button>
+            <button
+              [disabled]="namespaceControl.invalid || namespaceControl.get('password').pending"
+              class="ml-2"
+              mat-flat-button
+              type="button"
+              color="accent"
+              matStepperNext>
+              {{'DIALOGS.CREATE_SPONSORED_MEMBER.NEXT' | translate}}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>{{'DIALOGS.CREATE_SPONSORED_MEMBER.SPONSORSHIP_LABEL' | translate}}</ng-template>
+        <div class="dialog-container">
+          <h5 class="mt-2">{{'DIALOGS.CREATE_SPONSORED_MEMBER.SPONSORSHIP_TITLE' | translate}}</h5>
+          <div class="mt-4">
+            <h6>{{'DIALOGS.CREATE_SPONSORED_MEMBER.SELECT_SPONSOR' | translate}}</h6>
+            <mat-radio-group class="dialog-container" [(ngModel)]="sponsorType">
+              <span
+                matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.SELECT_SELF_DISABLED' | translate}}"
+                [matTooltipDisabled]="isSponsor"
+                matTooltipPosition="before">
+                <mat-radio-button
+                  [disabled]="!isSponsor"
+                  (click)="selectedSponsor = null"
+                  value="self">
+                  {{'DIALOGS.CREATE_SPONSORED_MEMBER.SELECT_SELF' | translate}}
+                </mat-radio-button>
+              </span>
+              <span
+                matTooltip="{{'DIALOGS.CREATE_SPONSORED_MEMBER.SELECT_OTHER_DISABLED' | translate}}"
+                [matTooltipDisabled]="isPerunAdmin"
+                matTooltipPosition="before">
+                <mat-radio-button
+                  [disabled]="!isPerunAdmin"
+                  value="other">
+                  {{'DIALOGS.CREATE_SPONSORED_MEMBER.SELECT_OTHER' | translate}}
+                </mat-radio-button>
+              </span>
+            </mat-radio-group>
+
+            <div *ngIf="sponsorType === 'other'">
+              <perun-web-apps-user-search-select
+                [users]="voSponsors"
+                [disableAutoSelect]="true"
+                (userSelected)="selectedSponsor = $event">
+              </perun-web-apps-user-search-select>
+            </div>
+          </div>
+
+          <h6 class="mt-4">{{'DIALOGS.CREATE_SPONSORED_MEMBER.EXPIRATION' | translate}}</h6>
+          <perun-web-apps-expiration-select
+            class="mt-2"
+            (datePicker)="setExpiration($event)">
+          </perun-web-apps-expiration-select>
+        </div>
+        <div mat-dialog-actions>
+          <button
+            mat-flat-button
+            (click)="onCancel()">
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.CANCEL' | translate}}
+          </button>
+          <button
+            class="ml-auto"
+            mat-flat-button
+            matStepperPrevious>
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.BACK' | translate}}
+          </button>
+          <button
+            [disabled]="sponsorType === null || (sponsorType === 'other' && selectedSponsor === null)"
+            class="ml-2"
+            mat-flat-button
+            type="button"
+            color="accent"
+            (click)="onConfirm()"
+            matStepperNext>
+            {{'DIALOGS.CREATE_SPONSORED_MEMBER.SUBMIT' | translate}}
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
 
   </div>
 
@@ -98,31 +240,14 @@
     <div class="bigger-font mb-2">
       <mat-icon class="mr-2 mb-2">done</mat-icon>
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.USER' | translate}}
-        <i>{{this.createdMember.user | userFullName}}</i>
+      <i>{{this.createdMember.user | userFullName}}</i>
       {{'DIALOGS.CREATE_SPONSORED_MEMBER.WAS_CREATED' | translate}}
     </div>
     <div>{{'DIALOGS.CREATE_SPONSORED_MEMBER.LOGIN' | translate}}: {{this.loginThatWasSet}}</div>
-    <div>{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}: {{this.password.value}} </div>
+    <div>{{'DIALOGS.CREATE_SPONSORED_MEMBER.PASSWORD' | translate}}
+      : {{this.namespaceControl.get('password').value}} </div>
     <app-alert alert_type="warn">{{'DIALOGS.CREATE_SPONSORED_MEMBER.COPY_INFORMATION' | translate}}</app-alert>
 
-  </div>
-
-  <div mat-dialog-actions *ngIf="!successfullyCreated">
-    <button
-      (click)="onCancel()"
-      class="ml-auto"
-      mat-flat-button>
-      {{'DIALOGS.CREATE_SPONSORED_MEMBER.CANCEL' | translate}}
-    </button>
-    <button
-      (click)="onConfirm()"
-      [disabled]="loading || firstName.invalid || lastName.invalid ||
-      login.invalid || password.invalid || namespace.invalid || email.invalid"
-      class="ml-2"
-      color="accent"
-      mat-flat-button>
-      {{'DIALOGS.CREATE_SPONSORED_MEMBER.CREATE' | translate}}
-    </button>
   </div>
 
   <div mat-dialog-actions *ngIf="successfullyCreated">

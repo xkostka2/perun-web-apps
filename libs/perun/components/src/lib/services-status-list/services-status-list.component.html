@@ -3,8 +3,14 @@
   <div class="card-body">
     <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"
                                   class="ml-auto"></perun-web-apps-table-options>
-    <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter" matSort matSortActive="id"
-           matSortDirection="asc" matSortDisableClear
+    <table mat-table
+           matTableExporter
+           [dataSource]="dataSource"
+           #exporter="matTableExporter"
+           matSort
+           matSortActive="service.name"
+           matSortDirection="asc"
+           matSortDisableClear
            class="w-100">
 
       <ng-container matColumnDef="select">

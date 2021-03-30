@@ -100,18 +100,15 @@ import {DisplayedRolePipe} from './pipes/displayed-role.pipe';
 import { AnimatedRouterOutletComponent } from './components/animated-router-outlet/animated-router-outlet.component';
 import { UserEmailPipe } from './pipes/user-email.pipe';
 import { ResourcesTagsListComponent } from './components/resources-tags-list/resources-tags-list.component';
-import { DebounceFilterComponent } from './components/debounce-filter/debounce-filter.component';
 // tslint:disable-next-line:max-line-length
 import { DeleteAttributeDefinitionDialogComponent } from './components/dialogs/delete-attribute-definition-dialog/delete-attribute-definition-dialog.component';
 // tslint:disable-next-line:max-line-length
 import { CreateAttributeDefinitionDialogComponent } from './components/dialogs/create-attribute-definition-dialog/create-attribute-definition-dialog.component';
-import { PerunFooterComponent } from './perun-footer/perun-footer.component';
 import {MatTableExporterModule} from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { EditAttributeDefinitionDialogComponent } from './components/dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import { EntitylessAttributeKeysListComponent } from './components/entityless-attribute-keys-list/entityless-attribute-keys-list.component';
 import { ServicesListComponent } from './components/services-list/services-list.component';
-import { ReportIssueDialogComponent } from './components/report-issue-dialog/report-issue-dialog.component';
 import { RemoveVoDialogComponent } from './components/dialogs/remove-vo-dialog/remove-vo-dialog.component';
 import { CreateVoDialogComponent } from './components/dialogs/create-vo-dialog/create-vo-dialog.component';
 import { ShowNotificationHistoryDialogComponent } from './components/dialogs/show-notification-history-dialog/show-notification-history-dialog.component';
@@ -176,6 +173,12 @@ import { AttributeFriendlyNamePipe } from './pipes/attribute-friendly-name.pipe'
 import { PasswordResetRequestDialogComponent } from './components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import { NewVersionDialogComponent } from './components/dialogs/new-version-dialog/new-version-dialog.component';
 import { SponsorExistingMemberDialogComponent } from './components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
+import { DeleteServiceFromFacilityComponent } from './components/dialogs/delete-service-from-facility/delete-service-from-facility.component';
+import { DeleteTaskDialogComponent } from './components/dialogs/delete-task-dialog/delete-task-dialog.component';
+import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-source-dialog/remove-ext-source-dialog.component';
+import { AddOwnerDialogComponent } from './components/add-owner-dialog/add-owner-dialog.component';
+import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/delete-owner-dialog.component';
+import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
 
 @NgModule({
   imports: [
@@ -230,7 +233,6 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     PerunNavComponent,
     MatAutocompleteModule,
     MatInputModule,
-    MatFormFieldModule,
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
@@ -286,8 +288,6 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     ScrollingModule,
     AnimatedRouterOutletComponent,
     ResourcesTagsListComponent,
-    DebounceFilterComponent,
-    PerunFooterComponent,
     CreateResourceDialogComponent,
     ExtSourcesListComponent,
     ExtSourceTypePipe,
@@ -309,7 +309,8 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     SponsoredMembersListComponent,
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
-    AttributeFriendlyNamePipe
+    AttributeFriendlyNamePipe,
+    StatisticsCardComponent
   ],
   declarations: [
     PerunNavComponent,
@@ -359,14 +360,11 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     AnimatedRouterOutletComponent,
     UserEmailPipe,
     ResourcesTagsListComponent,
-    DebounceFilterComponent,
     DeleteAttributeDefinitionDialogComponent,
     CreateAttributeDefinitionDialogComponent,
-    PerunFooterComponent,
     EditAttributeDefinitionDialogComponent,
     EntitylessAttributeKeysListComponent,
     ServicesListComponent,
-    ReportIssueDialogComponent,
     RemoveVoDialogComponent,
     CreateVoDialogComponent,
     ShowNotificationHistoryDialogComponent,
@@ -427,7 +425,13 @@ import { SponsorExistingMemberDialogComponent } from './components/dialogs/spons
     AttributeFriendlyNamePipe,
     PasswordResetRequestDialogComponent,
     NewVersionDialogComponent,
-    SponsorExistingMemberDialogComponent
+    SponsorExistingMemberDialogComponent,
+    DeleteServiceFromFacilityComponent,
+    RemoveExtSourceDialogComponent,
+    DeleteTaskDialogComponent,
+    AddOwnerDialogComponent,
+    DeleteOwnerDialogComponent,
+    StatisticsCardComponent
   ],
   providers: [
     AnyToStringPipe,

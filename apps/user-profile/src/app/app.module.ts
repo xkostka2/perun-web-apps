@@ -24,7 +24,6 @@ import { SettingsSambaPasswordComponent } from './pages/settings-page/settings-s
 import { SettingsMailingListsComponent } from './pages/settings-page/settings-mailing-lists/settings-mailing-lists.component';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { CustomIconService, StoreService } from '@perun-web-apps/perun/services';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -76,6 +75,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddAuthImgDialogComponent } from './components/dialogs/add-auth-img-dialog/add-auth-img-dialog.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { AddTokenInfoDialogComponent } from './components/add-token-info-dialog/add-token-info-dialog.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -119,7 +119,6 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     SettingsMailingListsComponent,
     SideMenuComponent,
     HeaderComponent,
-    FooterComponent,
     PrivacyPageComponent,
     HomePageComponent,
     AddSshDialogComponent,
@@ -137,7 +136,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     LocalizationLabelPipe,
     SettingsAuthenticationComponent,
     AddAuthImgDialogComponent,
-    AddTokenInfoDialogComponent
+    AddTokenInfoDialogComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -193,7 +193,7 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     {
       provide: Configuration,
       useFactory: apiConfigFactory,
-      deps:[StoreService]
+      deps: [StoreService]
     },
     UserFullNamePipe,
     ApiInterceptor,
@@ -201,7 +201,10 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     {
       provide: PERUN_API_SERVICE,
       useClass: ApiService
-    },
+    }
+  ],
+  exports: [
+    SideMenuComponent,
   ],
   bootstrap: [AppComponent]
 })

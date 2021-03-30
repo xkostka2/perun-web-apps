@@ -147,7 +147,8 @@ export class SideMenuComponent implements OnInit {
   }
 
   private setAdminItems(items: SideMenuItem[]) {
-    this.adminItemOpened = true;
+    // hide the main Perun admin menu when some sub menu is opened
+    this.adminItemOpened = items.length === 0;
     this.resetExceptAdmin();
     this.setNewItems(this.adminItems, items);
   }

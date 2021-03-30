@@ -186,6 +186,11 @@ export class SideMenuItemService {
           activatedRegex: '^/admin/users$'
         },
         {
+          label: 'MENU_ITEMS.ADMIN.OWNERS',
+          url: ['/admin/owners'],
+          activatedRegex: '^/admin/owners$'
+        },
+        {
           label: 'MENU_ITEMS.ADMIN.SERVICES',
           url: [`/admin/services`],
           activatedRegex: '^/admin/services$'
@@ -901,6 +906,15 @@ export class SideMenuItemService {
         label: 'MENU_ITEMS.GROUP.RELATIONS',
         url: [`/organizations/${group.voId}/groups/${group.id}/settings/relations`],
         activatedRegex: '/organizations/\\d+/groups/\\d+/settings/relations$'
+      });
+    }
+
+    //SettingsExtSources
+    if (this.authResolver.isAuthorized('getGroupExtSources_Group_policy', [group])) {
+      settingsChildrenLinks.push({
+        label: 'MENU_ITEMS.GROUP.EXTSOURCES',
+        url: [`/organizations/${group.voId}/groups/${group.id}/settings/extsources`],
+        activatedRegex: '/organizations/\\d+/groups/\\d+/settings/extsources$'
       });
     }
 

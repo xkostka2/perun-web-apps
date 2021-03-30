@@ -1,8 +1,9 @@
 <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
 <div *ngIf="!loading">
   <perun-web-apps-menu-buttons-field [items]="navItems" [size]="'small'"></perun-web-apps-menu-buttons-field>
-
-<!--  <h1 class="page-subtitle">Quick actions</h1>-->
-<!--  <app-menu-buttons-field [items]="items" [size]="'medium'">-->
-<!--  </app-menu-buttons-field>-->
+  <app-statistics-card
+    [rowNames]="rowNames"
+    [statistics]="membersCount"
+    [title]="'VO_DETAIL.OVERVIEW.MEMBERS_COUNT'">
+  </app-statistics-card>
 </div>

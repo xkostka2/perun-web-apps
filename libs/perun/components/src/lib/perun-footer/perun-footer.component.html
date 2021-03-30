@@ -1,0 +1,92 @@
+<!-- Footer -->
+<footer class="font-small" [ngStyle]="{'background': backgroundColor}">
+
+  <!-- Footer Links -->
+  <div class="container-fluid text-center text-md-left pr-xl-5 pl-xl-5">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-4 mx-auto footer-col">
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold" [ngStyle]="{'color': footerHeadersTextColor}">
+          {{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.ABOUT_PERUN' | translate}}
+        </h6>
+        <ul class="list-unstyled">
+          <li>
+            <a target="_blank" [href]="perunwebpage"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.PERUN_WEB' | translate}}</a>
+          </li>
+          <li>
+            <a target="_blank" [href]="perunTeamWebpage"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.PERUN_TEAM' | translate}}</a>
+          </li>
+          <li>
+            <a target="_blank" [href]="privacyPolicy"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.PRIVACY_POLICY' | translate}}</a>
+          </li>
+        </ul>
+
+      </div>
+
+      <!-- Grid column -->
+      <div class="col-md-4 mx-auto footer-col">
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold" [ngStyle]="{'color': footerHeadersTextColor}">
+          {{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.HELP' | translate}}
+        </h6>
+        <ul class="list-unstyled">
+          <li>
+            <a target="_blank" [href]="userDocumentationWebpage"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.USER_DOCUMENTATION' | translate}}</a>
+          </li>
+          <li>
+            <a target="_blank" [href]="administratorDocumentationWebpage"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.ADMINISTRATOR_DOCUMENTATION' | translate}}</a>
+          </li>
+          <li>
+            <span (click)="openBugReportDialog()" id="clickable"
+               [ngStyle]="{'color': linksTextColor}">{{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.REPORT_ISSUE' | translate}}</span>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+      <div class="col-md-4 mx-auto footer-col">
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold" [ngStyle]="{'color': footerHeadersTextColor}">
+          {{'SHARED_LIB.PERUN.COMPONENTS.FOOTER.SUPPORT' | translate}}
+        </h6>
+        <ul class="list-unstyled">
+          <li [ngStyle]="{'color': linksTextColor}">
+            <i class="material-icons align-bottom">
+              mail
+            </i>
+            {{supportMail}}
+          </li>
+        </ul>
+
+      </div>
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+  <hr class="my-0">
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-2" id="copyright"
+       [ngStyle]="{'color': footerCopyrightTextColor}">
+    © {{this.currentYear}} Copyright:
+    <span *ngFor="let item of this.copyright">
+      <a target="_blank" [href]="item.webpage"> {{item.name}}</a>,
+    </span>
+    Version <a target="_blank" [href]="githubRepository">{{version}}</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->

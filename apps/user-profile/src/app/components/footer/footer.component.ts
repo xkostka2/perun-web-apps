@@ -15,7 +15,7 @@ export interface FooterItem {
 }
 
 @Component({
-  selector: 'perun-web-apps-footer',
+  selector: 'perun-web-apps-footer-user-profile',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

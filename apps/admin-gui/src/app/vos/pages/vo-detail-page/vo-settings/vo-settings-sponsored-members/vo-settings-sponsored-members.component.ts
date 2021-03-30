@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthzResolverService, MembersManagerService, MemberWithSponsors, Vo } from '@perun-web-apps/perun/openapi';
+import {
+  AuthzResolverService,
+  MembersManagerService,
+  MemberWithSponsors, RichUser,
+  Vo
+} from '@perun-web-apps/perun/openapi';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TABLE_SPONSORED_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
@@ -10,6 +15,8 @@ import { GenerateSponsoredMembersDialogComponent } from '../../../../../shared/c
 import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { PageEvent } from '@angular/material/paginator';
 import { SponsorExistingMemberDialogComponent } from '../../../../../shared/components/dialogs/sponsor-existing-member-dialog/sponsor-existing-member-dialog.component';
+import { Urns } from '@perun-web-apps/perun/urns';
+import { Role } from '@perun-web-apps/perun/models';
 
 @Component({
   selector: 'app-vo-settings-sponsored-members',
@@ -35,6 +42,9 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
   generateAuth: boolean;
   setSponsorshipAuth: boolean;
   routeAuth: boolean;
+  findSponsorsAuth: boolean;
+
+  voSponsors: RichUser[] = [];
 
   //TODO uncomment when we need those parameters
   private attrNames = [
@@ -60,8 +70,26 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
         id: this.voId,
         beanName: 'Vo'
       };
-      this.setAuthRights();
-      this.refresh();
+
+      const availableRoles = ['SPONSOR'];
+      const availableRolesPrivileges = new Map<string, any>();
+
+      this.authResolver.getRolesAuthorization(availableRoles, this.vo, availableRolesPrivileges);
+      this.findSponsorsAuth = availableRolesPrivileges.get(availableRoles[0]).readAuth;
+
+      if (this.findSponsorsAuth) {
+        const attributes = [ Urns.USER_DEF_PREFERRED_MAIL ];
+
+        this.authzResolver.getAuthzRichAdmins(Role.SPONSOR, this.vo.id, 'Vo',
+          attributes,false, true).subscribe(sponsors => {
+          this.voSponsors = sponsors;
+          this.setAuthRights();
+          this.refresh();
+        });
+      } else {
+        this.setAuthRights();
+        this.refresh();
+      }
     });
   }
 
@@ -79,10 +107,11 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
 
   onCreate(): void {
     const config = getDefaultDialogConfig();
-    config.width = '570px';
+    config.width = '620px';
     config.data = {
       entityId: this.voId,
       voId: this.voId,
+      sponsors: this.voSponsors,
       theme: 'vo-theme'
     };
 
@@ -101,7 +130,7 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
 
   onGenerate() {
     const config = getDefaultDialogConfig();
-    config.width = '650px';
+    config.width = '750px';
     config.data = {
       voId: this.voId,
       theme: 'vo-theme',

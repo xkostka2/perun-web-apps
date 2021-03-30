@@ -1,0 +1,27 @@
+<mat-card class="mat-elevation-z3 align-card">
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="page-subtitle">{{title | translate}}</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table class="w-100" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let name" class="font-weight-bold" mat-cell>
+          {{name}}:
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let value" mat-cell>
+          {{statistics.get(value.toLowerCase())}}
+        </td>
+      </ng-container>
+      <tr
+        *matRowDef="let stat; columns: displayedColumns;"
+        mat-row>
+      </tr>
+    </table>
+  </mat-card-content>
+</mat-card>

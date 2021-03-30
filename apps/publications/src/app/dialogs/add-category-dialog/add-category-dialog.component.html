@@ -1,0 +1,48 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{"DIALOGS.ADD_CATEGORY.TITLE" | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <div mat-dialog-content class="dialog-container">
+      <mat-form-field>
+        <input
+          matInput
+          required
+          placeholder="{{'DIALOGS.ADD_CATEGORY.NAME' | translate}}"
+          [formControl]="nameCtrl">
+        <mat-error>
+          {{'DIALOGS.ADD_CATEGORY.FILL_NAME' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          required
+          placeholder="{{'DIALOGS.ADD_CATEGORY.RANK' | translate}}"
+          [formControl]="rankCtrl">
+        <mat-error>
+          {{'DIALOGS.ADD_CATEGORY.FILL_RANK' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <p class="mt-2">{{'DIALOGS.ADD_CATEGORY.RANK_HINT' | translate}}</p>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-flat-button
+        class="ml-auto"
+        (click)="onCancel()">
+        {{'DIALOGS.ADD_CATEGORY.CANCEL' | translate}}
+      </button>
+      <div matTooltip="{{'DIALOGS.ADD_CATEGORY.TOOLTIP' | translate}}" matTooltipPosition="above"
+           [matTooltipDisabled]="nameCtrl.valid && rankCtrl.valid">
+        <button
+          mat-flat-button
+          class="ml-2"
+          color="accent"
+          [disabled]="nameCtrl.invalid || rankCtrl.invalid"
+          (click)="onSubmit()">
+          {{'DIALOGS.ADD_CATEGORY.CREATE' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

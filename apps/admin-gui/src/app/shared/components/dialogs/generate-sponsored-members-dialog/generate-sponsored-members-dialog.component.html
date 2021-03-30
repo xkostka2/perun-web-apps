@@ -2,47 +2,209 @@
   <h1 mat-dialog-title>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.TITLE' | translate}}</h1>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <div *ngIf="!loading" mat-dialog-content class="dialog-container">
-    <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
-      {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
-    </app-alert>
-    <mat-form-field>
-      <mat-select placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMESPACE' | translate}}" required [formControl]="namespace">
-        <mat-option *ngFor="let namespc of namespaceOptions" [value]="namespc">
-          {{namespc}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="namespace.invalid">
-        {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMESPACE_ERROR' | translate}}
-      </mat-error>
-    </mat-form-field>
-    <div>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
-    <div class="font-weight-bold">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ATTRIBUTES'| translate}}</div>
-    <mat-form-field class="pt-2">
-      <mat-label>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.INSERT_HERE'| translate}}</mat-label>
-      <textarea
-        placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXAMPLE'| translate}}"
-        class="md-textarea form-control"
-        id="voGenerateSponsoredMembers"
-        name="voGenerateSponsoredMembers"
-        rows="8"
-        cols="50"
-        matInput
-        [formControl]="sponsoredMembers">
-      </textarea>
-      <mat-error *ngIf="sponsoredMembers.invalid">
-        {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMES_ERROR' | translate}}
-      </mat-error>
-    </mat-form-field>
-    <mat-checkbox [(ngModel)]="passwordReset" labelPosition="before">
-      {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_RESET' | translate}}
-    </mat-checkbox>
-    <br>
-    <div>
-      <h6>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXPIRATION' | translate}}</h6>
-      <perun-web-apps-expiration-select
-        (datePicker)="setExpiration($event)">
-      </perun-web-apps-expiration-select>
-    </div>
+    <mat-horizontal-stepper [linear]="true">
+      <mat-step [stepControl]="usersInfoFormGroup">
+        <ng-template matStepLabel>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.USERS_LABEL' | translate}}</ng-template>
+        <app-alert alert_type="error" *ngIf="this.functionalityNotSupported">
+          {{'DIALOGS.CREATE_SPONSORED_MEMBER.FUNCTIONALITY_NOT_SUPPORTED' | translate}}
+        </app-alert>
+        <h5 class="mt-2">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.USERS_INFO' | translate}}</h5>
+        <form class="flex-container mt-2" [formGroup]="usersInfoFormGroup">
+        <mat-form-field>
+          <mat-select placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMESPACE' | translate}}" required
+                      formControlName="namespace">
+            <mat-option *ngFor="let namespc of namespaceOptions" [value]="namespc">
+              {{namespc}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="usersInfoFormGroup.hasError('required', 'namespace')">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMESPACE_ERROR' | translate}}
+          </mat-error>
+        </mat-form-field>
+        <div>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
+        <div class="font-weight-bold">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ATTRIBUTES'| translate}}</div>
+        <mat-form-field class="pt-2">
+          <mat-label>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.INSERT_HERE'| translate}}</mat-label>
+          <textarea
+            placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXAMPLE'| translate}}"
+            class="md-textarea form-control"
+            id="voGenerateSponsoredMembers"
+            name="voGenerateSponsoredMembers"
+            rows="8"
+            cols="50"
+            matInput
+            formControlName="sponsoredMembers">
+          </textarea>
+          <mat-error *ngIf="usersInfoFormGroup.hasError('required', 'sponsoredMembers')">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NAMES_ERROR' | translate}}
+          </mat-error>
+          <mat-error *ngIf="usersInfoFormGroup.hasError('invalidFormat', 'sponsoredMembers')">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_FORMAT'| translate}}:
+            {{usersInfoFormGroup.get('sponsoredMembers').getError('invalidFormat').value}}
+          </mat-error>
+          <mat-error *ngIf="usersInfoFormGroup.hasError('invalidEmail', 'sponsoredMembers')">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_EMAIL'| translate}}:
+            {{usersInfoFormGroup.get('sponsoredMembers').getError('invalidEmail').value}}
+          </mat-error>
+        </mat-form-field>
+          <div mat-dialog-actions>
+            <button
+              mat-flat-button
+              (click)="onCancel()">
+              {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CANCEL' | translate}}
+            </button>
+            <button
+              [disabled]="usersInfoFormGroup.invalid"
+              class="ml-auto"
+              mat-flat-button
+              type="button"
+              color="accent"
+              matStepperNext>
+              {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NEXT' | translate}}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_LABEL' | translate}}</ng-template>
+        <div class="mt-2">
+          <h5 class="mb-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_MANAGEMENT' | translate}}</h5>
+          <mat-radio-group [(ngModel)]="passwordReset">
+            <mat-radio-button value="generate">
+              {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GENERATE_PASSWORD' | translate}}
+            </mat-radio-button>
+            <mat-radio-button value="reset">
+              {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_RESET' | translate}}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div mat-dialog-actions>
+          <button
+            mat-flat-button
+            (click)="onCancel()">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CANCEL' | translate}}
+          </button>
+          <button
+            class="ml-auto"
+            mat-flat-button
+            matStepperPrevious>
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.BACK' | translate}}
+          </button>
+          <button
+            [disabled]="passwordReset === null"
+            mat-flat-button
+            color="accent"
+            matStepperNext>
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NEXT' | translate}}
+          </button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXPIRATION_LABEL' | translate}}</ng-template>
+        <div class="mt-2">
+          <h5 class="mb-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXPIRATION' | translate}}</h5>
+          <perun-web-apps-expiration-select
+            [expiration]="expiration"
+            (datePicker)="setExpiration($event)">
+          </perun-web-apps-expiration-select>
+        </div>
+        <div mat-dialog-actions>
+          <button
+            mat-flat-button
+            (click)="onCancel()">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CANCEL' | translate}}
+          </button>
+          <button
+            class="ml-auto"
+            mat-flat-button
+            matStepperPrevious>
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.BACK' | translate}}
+          </button>
+          <button
+            [disabled]="expiration === null"
+            mat-flat-button color="accent"
+            matStepperNext>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NEXT' | translate}}
+          </button>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GROUPS_LABEL' | translate}}</ng-template>
+        <div class="mt-2">
+          <h5 class="mb-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GROUP_ASSIGMENT' | translate}}</h5>
+          <mat-radio-group (change)="groupAssigmentChanged()" [(ngModel)]="groupAssignment" class="flex-container">
+            <mat-radio-button value="none">
+              {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NO_ASSIGN' | translate}}
+            </mat-radio-button>
+            <span
+              matTooltip="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.DISABLED_ASSIGN_NEW' | translate}}"
+              [matTooltipDisabled]="!manualMemberAddingBlocked && createGroupAuth"
+              matTooltipPosition="above">
+              <mat-radio-button [disabled]="manualMemberAddingBlocked || !createGroupAuth" value="new">
+                {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ASSIGN_TO_NEW' | translate}}
+              </mat-radio-button>
+            </span>
+            <span
+              matTooltip="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.DISABLED_ASSIGN_EXISTING' | translate}}"
+              [matTooltipDisabled]="!manualMemberAddingBlocked && assignableGroups.length !== 0"
+              matTooltipPosition="above">
+              <mat-radio-button [disabled]="manualMemberAddingBlocked || assignableGroups.length === 0" value="existing">
+                {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ASSIGN_EXISTING' | translate}}
+              </mat-radio-button>
+            </span>
+          </mat-radio-group>
+        </div>
+        <div *ngIf="groupAssignment === 'none'">
+          <app-alert class="mt-4" alert_type="info">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.DONT_ASSIGN_INFO' | translate}}</app-alert>
+        </div>
+        <div *ngIf="groupAssignment === 'new'">
+          <h5 class="mt-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CREATE_NEW_GROUP' | translate}}</h5>
+          <perun-web-apps-create-group-form
+            [voGroups]="allVoGroups"
+            (nameChanged)="name = $event"
+            (descriptionChanged)="description = $event"
+            (parentGroupChanged)="parentGroup = $event"
+            (asSubgroupChanged)="asSubGroup = $event">
+          </perun-web-apps-create-group-form>
+        </div>
+        <div *ngIf="groupAssignment === 'existing'">
+          <h5 class="mt-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.SELECT_EXISTING_GROUPS' | translate}}</h5>
+          <perun-web-apps-immediate-filter
+            (filter)="applyFilter($event)"
+            [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_SEARCH'">
+          </perun-web-apps-immediate-filter>
+          <perun-web-apps-groups-list
+            [groups]="assignableGroups"
+            [selection]="selection"
+            [hideColumns]="['expiration','vo', 'recent', 'menu']"
+            [disableRouting]="true"
+            [pageSize]="pageSize"
+            (page)="groupTablePageChanged($event)"
+            [filter]="filterValue">
+          </perun-web-apps-groups-list>
+        </div>
+        <div mat-dialog-actions>
+          <button
+            mat-flat-button
+            (click)="onCancel()">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CANCEL' | translate}}
+          </button>
+          <button
+            class="ml-auto"
+            mat-flat-button
+            matStepperPrevious>
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.BACK' | translate}}
+          </button>
+          <button
+            [disabled]="groupAssignment === null ||
+            (groupAssignment === 'existing' && selection.selected.length === 0) ||
+            (groupAssignment === 'new' && (name.length === 0 || description.length === 0) || (asSubGroup === true && parentGroup === null))"
+            mat-flat-button color="accent"
+            (click)="onSubmit()">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.SUBMIT' | translate}}
+          </button>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
   </div>
 
   <table
@@ -82,20 +244,4 @@
     (page)="pageChanged($event)"
     [pageSize]="100">
   </mat-paginator>
-  <div mat-dialog-actions>
-    <button
-      mat-flat-button
-      class="ml-auto"
-      (click)="onCancel()">
-      {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.CANCEL' | translate}}
-    </button>
-    <button
-      mat-flat-button
-      class="ml-2"
-      color="accent"
-      [disabled]="sponsoredMembers.value.trim().length === 0 || namespace.invalid || loading"
-      (click)="onGenerate()">
-      {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GENERATE' | translate}}
-    </button>
-  </div>
 </div>

@@ -1,0 +1,36 @@
+#footer {
+  position: relative;
+  height: 200px;
+  bottom: 0;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    height: 450px;
+  }
+}
+
+#content-wrap {
+  @media (min-width: 600px) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  padding-bottom: 25px;
+  padding-top: 10px;
+  margin: 10px;
+}
+
+#content-inner {
+  position: relative;
+  overflow-x: hidden;
+  padding-top: 64px;
+  min-height: calc(100vh - 64px);
+}
+
+#nav-menu {
+  background: #102027;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  height: 64px;
+  max-height: 64px;
+}

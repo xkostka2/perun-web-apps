@@ -21,6 +21,11 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
+    <perun-web-apps-debounce-filter
+      *ngIf="groups !== null && groups.length > 0 && !loading"
+      placeholder="{{'DIALOGS.ADD_GROUPS.FILTER_GROUPS' | translate}}"
+      (filter)="applyFilter($event)">
+    </perun-web-apps-debounce-filter>
     <div class="overflow-hidden">
       <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
     </div>
@@ -31,6 +36,7 @@
         [disableRouting]="true"
         [hideColumns]="['menu', 'recent', 'expiration','vo']"
         [selection]="selection"
+        [filter]="filterValue"
         [groups]="groups"
         [disableMembers]="false">
       </perun-web-apps-groups-list>

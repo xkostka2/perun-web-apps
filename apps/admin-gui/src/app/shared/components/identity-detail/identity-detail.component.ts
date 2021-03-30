@@ -1,6 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Attribute,
+  AttributesManagerService,
+  UserExtSource,
+  UsersManagerService
+} from '@perun-web-apps/perun/openapi';
 import { TABLE_ATTRIBUTES_SETTINGS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,6 +26,7 @@ export class IdentityDetailComponent implements OnInit {
   constructor(private dialog: MatDialog,
               private attributesManager: AttributesManagerService,
               private tableConfigService: TableConfigService,
+              private userService: UsersManagerService,
               private route: ActivatedRoute) {
 
   }
@@ -33,19 +39,22 @@ export class IdentityDetailComponent implements OnInit {
   tableId = TABLE_ATTRIBUTES_SETTINGS;
   attributes: Attribute[] = [];
   pageSize: number;
-  userExtSource: number;
+  userExtSource: UserExtSource;
 
   ngOnInit(): void {
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.params.subscribe(params => {
-      this.userExtSource = params["identityId"];
-      this.refreshTable();
+      const identityId = params["identityId"];
+      this.userService.getUserExtSourceById(identityId).subscribe(extSource => {
+        this.userExtSource = extSource;
+        this.refreshTable();
+      });
     });
   }
 
   refreshTable() {
     this.loading = true;
-    this.attributesManager.getUserExtSourceAttributes(this.userExtSource).subscribe(attributes => {
+    this.attributesManager.getUserExtSourceAttributes(this.userExtSource.id).subscribe(attributes => {
       this.attributes = filterCoreAttributes(attributes);
       this.selection.clear();
       this.loading = false;
@@ -56,7 +65,7 @@ export class IdentityDetailComponent implements OnInit {
     const config = getDefaultDialogConfig();
     config.width = "1050px";
     config.data = {
-      entityId: this.userExtSource,
+      entityId: this.userExtSource.id,
       entity: "ues",
       notEmptyAttributes: this.attributes,
       style: 'user-theme'
@@ -77,7 +86,7 @@ export class IdentityDetailComponent implements OnInit {
     const config = getDefaultDialogConfig();
     config.width = '450px';
     config.data = {
-      entityId: this.userExtSource,
+      entityId: this.userExtSource.id,
       entity: 'ues',
       attributes: this.selection.selected
     };
@@ -95,7 +104,7 @@ export class IdentityDetailComponent implements OnInit {
     const config = getDefaultDialogConfig();
     config.width = '450px';
     config.data = {
-      entityId: this.userExtSource,
+      entityId: this.userExtSource.id,
       entity: 'ues',
       attributes: this.selection.selected
     };
