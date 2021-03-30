@@ -117,4 +117,13 @@ th, td.mat-cell {
   font-size: 32px;
 }
 
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-container > * {
+  width: 100%;
+}
+
 

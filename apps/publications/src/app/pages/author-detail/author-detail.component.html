@@ -24,7 +24,7 @@
       [selection]="selected"
       [pageSize]="pageSize"
       (page)="pageChanged($event)"
-      [routerPath]="'/authors/'+author.id"></perun-web-apps-publications-list>
+      [routerPath]="'/authors/'+author.id+'/publication'"></perun-web-apps-publications-list>
   </div>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading || initLoading"></mat-spinner>
 </div>

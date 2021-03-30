@@ -62,6 +62,33 @@
     "LOCKED": "locked",
     "UNLOCKED": "unlocked"
   },
+  "PUBLICATION_DETAIL": {
+    "TITLE": "Publication detail",
+    "LOCK_INFO": "This publication is",
+    "ACKNOWLEDGEMENT": "Acknowledgement",
+    "AUTHORS": "Authors / Reported by",
+    "LOCKED": "Locked",
+    "UNLOCKED": "Unlocked",
+    "ADD": "Add",
+    "REMOVE": "Remove",
+    "FILTER": "Filter",
+    "SAVE": "Save",
+    "LIST": {
+      "EDIT": "Edit",
+      "SAVE": "Save",
+      "YEAR": "Select year",
+      "RANK_ERROR": "Insert rank with one decimal precision",
+      "EMPTY_ERROR": "Title cannot be empty",
+      "DISABLED": "Cannot edit locked publication",
+      "EXT_ID": "Ext. Id",
+      "SYSTEM": "System"
+    }
+  },
+  "THANKS_LIST": {
+    "ID": "Owner id",
+    "NAME": "Name",
+    "NO_THANKS": "No acknowledgments were found"
+  },
   "PUBLICATION_SYSTEMS_LIST": {
     "ID": "Id",
     "FRIENDLY_NAME": "Friendly name",

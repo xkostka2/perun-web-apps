@@ -1,0 +1,125 @@
+<div class="user-theme">
+  <mat-spinner class="ml-auto mr-auto" *ngIf="initLoading"></mat-spinner>
+  <div *ngIf="!initLoading">
+    <h1 *ngIf="mode === 'authors'" class="page-subtitle d-flex">
+      <span>
+      <mat-icon class="title-icon align-icon mr-3">assignment_ind</mat-icon>
+      {{'AUTHORS_PAGE.TITLE' | translate}}
+      </span>
+    </h1>
+    <h1 *ngIf="mode === 'all'" class="page-subtitle d-flex">
+      <mat-icon class="icon-size" svgIcon="publications"></mat-icon>
+      <span class="ml-3 mt-1">{{'ALL_PUBLICATIONS.TITLE' | translate}}</span>
+    </h1>
+    <h1 *ngIf="mode === 'my'" class="page-subtitle d-flex">
+      <span>
+      <mat-icon class="title-icon align-icon mr-3">local_library</mat-icon>
+      {{'MY_PUBLICATIONS.TITLE' | translate}}
+      </span>
+    </h1>
+
+
+    <h5 *ngIf="mainAuthor !== undefined" class="mb-2">{{ mainAuthor | userFullName }}{{'AUTHOR_DETAIL.TITLE' | translate}}</h5>
+    <h5>{{'PUBLICATION_DETAIL.TITLE' | translate}}</h5>
+    <h6>
+      {{'PUBLICATION_DETAIL.LOCK_INFO' | translate}}
+      <button class="ml-2" (click)="changeLock()" mat-stroked-button>
+        <span *ngIf="publication.locked" class="font-weight-bold">
+          {{'PUBLICATION_DETAIL.LOCKED' | translate}}
+        </span>
+        <mat-icon *ngIf="publication.locked">
+          lock
+        </mat-icon>
+        <span *ngIf="!publication.locked" class="font-weight-bold">
+          {{'PUBLICATION_DETAIL.UNLOCKED' | translate}}
+        </span>
+        <mat-icon *ngIf="!publication.locked">
+          lock_open
+        </mat-icon>
+      </button>
+    </h6>
+    <mat-card>
+      <mat-card-content>
+        <mat-spinner class="ml-auto mr-auto" *ngIf="loading || pubLoading"></mat-spinner>
+        <perun-web-apps-publication-detail-list
+          *ngIf="!pubLoading && !loading"
+          [publication]="publication"
+          [categories]="categories"
+          (edited)="refreshPublication()">
+        </perun-web-apps-publication-detail-list>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="mt-4">
+      <mat-card-title>
+        {{'PUBLICATION_DETAIL.AUTHORS' | translate}}
+      </mat-card-title>
+      <mat-card-content>
+        <button
+          *ngIf="!publication.locked"
+          mat-flat-button
+          color="accent"
+          class="mr-2"
+          (click)="onAddAuthors()">
+          {{'PUBLICATION_DETAIL.ADD' | translate}}
+        </button>
+        <button
+          *ngIf="!publication.locked"
+          mat-flat-button
+          color="warn"
+          class="mr-4"
+          [disabled]="selectionAuthors.selected.length === 0 || publication.locked"
+          (click)="onRemoveAuthors()">
+          {{'PUBLICATION_DETAIL.REMOVE' | translate}}
+        </button>
+        <perun-web-apps-immediate-filter (filter)="applyFilterAuthors($event)"
+                                         [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
+        <mat-spinner class="ml-auto mr-auto" *ngIf="loading || authorsLoading"></mat-spinner>
+        <perun-web-apps-authors-list
+          *ngIf="!authorsLoading && !loading"
+          [authors]="authors"
+          [filterValue]="filterAuthors"
+          [pageSize]="pageSizeAuthors"
+          [displayedColumns]="['id', 'name', 'organization', 'email']"
+          (page)="pageChangedAuthors($event)">
+        </perun-web-apps-authors-list>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="mt-4">
+      <mat-card-title>
+        {{'PUBLICATION_DETAIL.ACKNOWLEDGEMENT' | translate}}
+      </mat-card-title>
+      <mat-card-content>
+        <button
+          *ngIf="!publication.locked"
+          mat-flat-button
+          color="accent"
+          class="mr-2"
+          (click)="onAddThanks()">
+          {{'PUBLICATION_DETAIL.ADD' | translate}}
+        </button>
+        <button
+          *ngIf="!publication.locked"
+          mat-flat-button
+          color="warn"
+          class="mr-4"
+          [disabled]="selectionThanks.selected.length === 0"
+          (click)="onRemoveThanks()">
+          {{'PUBLICATION_DETAIL.REMOVE' | translate}}
+        </button>
+        <perun-web-apps-immediate-filter (filter)="applyFilterThanks($event)"
+                                         [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
+        <mat-spinner class="ml-auto mr-auto" *ngIf="loading || thanksLoading"></mat-spinner>
+        <perun-web-apps-thanks-list
+          *ngIf="!thanksLoading && !loading"
+          [thanks]="thanks"
+          [filterValue]="filterThanks"
+          [pageSize]="pageSizeThanks"
+          [displayedColumns]="['id', 'name']"
+          (pageChanged)="pageChangedThanks($event)">
+        </perun-web-apps-thanks-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

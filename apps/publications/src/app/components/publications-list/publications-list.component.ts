@@ -15,7 +15,6 @@ import {
 import { NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { AddCategoryDialogComponent } from '../../dialogs/add-category-dialog/add-category-dialog.component';
 import { ShowCiteDialogComponent } from '../../dialogs/show-cite-dialog/show-cite-dialog.component';
 
 @Component({

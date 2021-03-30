@@ -1,0 +1,53 @@
+<div [class.hide-table]="exporting" [hidden]="thanks.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
+  <div class="card-body">
+    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <div class="overflow-auto">
+      <table
+        #exporter="matTableExporter"
+        [dataSource]="dataSource"
+        class="w-100"
+        mat-table
+        matSort
+        matSortActive="name"
+        matSortDirection="asc"
+        matSortDisableClear
+        matTableExporter>
+        <ng-container matColumnDef="id">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.ID' | translate}}</th>
+          <td *matCellDef="let thanks" class="static-column-size" mat-cell>{{thanks.ownerId}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.NAME' | translate}}</th>
+          <td *matCellDef="let thanks" mat-cell>{{thanks.ownerName}}</td>
+        </ng-container>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let thanks; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="this.thanks.length"
+      (page)="pageChanged.emit($event)"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>
+
+<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
+
+<app-alert
+  *ngIf="thanks.length !== 0 && dataSource.filteredData.length === 0"
+  [alert_type]="'warn'">
+  {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
+</app-alert>
+
+<app-alert
+  *ngIf="thanks.length === 0"
+  [alert_type]="'warn'">
+  {{'THANKS_LIST.NO_THANKS' | translate}}
+</app-alert>

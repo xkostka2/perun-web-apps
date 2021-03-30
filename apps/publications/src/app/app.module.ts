@@ -34,6 +34,9 @@ import { ShowCiteDialogComponent } from './dialogs/show-cite-dialog/show-cite-di
 import { RemovePublicationDialogComponent } from './dialogs/remove-publication-dialog/remove-publication-dialog.component';
 import { PublicationFilterComponent } from './components/publication-filter/publication-filter.component';
 import { MomentDateModule } from '@angular/material-moment-adapter';
+import { PublicationDetailComponent } from './pages/publication-detail/publication-detail.component';
+import { PublicationDetailListComponent } from './components/publication-detail-list/publication-detail-list.component';
+import { ThanksListComponent } from './components/thanks-list/thanks-list.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -79,7 +82,11 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     PublicationsListComponent,
     ShowCiteDialogComponent,
     RemovePublicationDialogComponent,
-    PublicationFilterComponent],
+    PublicationFilterComponent,
+    PublicationDetailComponent,
+    PublicationDetailListComponent,
+    ThanksListComponent
+  ],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({
