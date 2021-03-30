@@ -39,12 +39,13 @@ export class AttributeValueListComponent implements OnInit {
   readonly = false;
 
   ngOnInit() {
-    this.itemsShown = this.defaultItemsShown;
     this.removable = !isVirtualAttribute(this.attribute) && !this.readonly;
     if (this.attribute.value === undefined || this.attribute.value === null) {
       this.attribute.value = [];
     }
     this.values = Object.values(this.attribute.value);
+    this.itemsShown = this.readonly ? this.values.length : this.defaultItemsShown;
+    this.showMore = this.readonly;
     if(!this.readonly){
       this.readonly = isVirtualAttribute(this.attribute);
     }

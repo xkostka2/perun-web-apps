@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { Attribute } from '@perun-web-apps/perun/openapi';
 import { MatDialog } from '@angular/material/dialog';
 import { ShowValueDialogComponent } from '@perun-web-apps/perun/dialogs';
@@ -29,7 +29,6 @@ export class AttributeValueMapComponent implements OnInit {
   showMore = false;
 
   ngOnInit() {
-    this.itemsShown = this.defaultItemsShown;
     if (this.attribute.value !== undefined) {
       const map = this.attribute.value as Map<string, string>;
       for (const [key, value] of Object.entries(map)) {
@@ -37,6 +36,8 @@ export class AttributeValueMapComponent implements OnInit {
         this.values.push(value);
       }
     }
+    this.itemsShown = this.readonly ? this.values.length : this.defaultItemsShown;
+    this.showMore = this.readonly;
     if(!this.readonly){
       this.readonly = isVirtualAttribute(this.attribute);
     }
