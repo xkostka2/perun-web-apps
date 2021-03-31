@@ -38,6 +38,7 @@ import { ServiceRequiredAttributesComponent } from './pages/admin-page/admin-ser
 import { UserSettingsAssociatedUsersComponent } from '../users/pages/user-detail-page/user-settings/user-settings-associated-users/user-settings-associated-users.component';
 import { ServiceDestinationsComponent } from './pages/admin-page/admin-services/service-detail-page/service-destinations/service-destinations.component';
 import { AdminOwnersComponent } from './pages/admin-page/admin-owners/admin-owners.component';
+import { UserFacilitiesComponent } from '../users/pages/user-detail-page/user-facilities/user-facilities.component';
 
 const routes: Routes = [
   {
@@ -130,6 +131,11 @@ const routes: Routes = [
         path: 'identities',
         component: UserIdentitiesComponent,
         data: {animation: 'UserIdentitiesPage'}
+      },
+      {
+        path: 'facilities',
+        component: UserFacilitiesComponent,
+        data: {animation: 'UserFacilitiesPage'}
       },
       {
         path: 'resources',
