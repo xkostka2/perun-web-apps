@@ -81,7 +81,7 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
         const attributes = [ Urns.USER_DEF_PREFERRED_MAIL ];
 
         this.authzResolver.getAuthzRichAdmins(Role.SPONSOR, this.vo.id, 'Vo',
-          attributes,false, true).subscribe(sponsors => {
+          attributes,false, false).subscribe(sponsors => {
           this.voSponsors = sponsors;
           this.setAuthRights();
           this.refresh();
