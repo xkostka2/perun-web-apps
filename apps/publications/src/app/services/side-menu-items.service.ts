@@ -1,22 +1,25 @@
 import { Injectable } from '@angular/core';
+import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SideMenuItemsService {
 
-  constructor() { }
+  constructor(private authResolver: GuiAuthResolver) { }
 
   getSideMenuItems(): SideMenuItem[] {
     const items: SideMenuItem[] = [];
-    items.push({
-      label: 'MENU_ITEMS.ALL_PUBLICATIONS',
-      icon: 'perun-publications-white',
-      isSVG: true,
-      link: '/all-publications',
-      activatedRegex: '^/all-publications$',
-      tabName: 'all-publications'
-    });
+    if (this.authResolver.isCabinetAdmin()) {
+      items.push({
+        label: 'MENU_ITEMS.ALL_PUBLICATIONS',
+        icon: 'perun-publications-white',
+        isSVG: true,
+        link: '/all-publications',
+        activatedRegex: '^/all-publications$',
+        tabName: 'all-publications'
+      });
+    }
     items.push({
       label: 'MENU_ITEMS.MY_PUBLICATIONS',
       icon: 'local_library',
