@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   AuthzResolverService,
   MembersManagerService,
@@ -24,6 +24,10 @@ import { Role } from '@perun-web-apps/perun/models';
   styleUrls: ['./vo-settings-sponsored-members.component.scss']
 })
 export class VoSettingsSponsoredMembersComponent implements OnInit {
+
+  static id = 'VoSponsoredMembersComponent';
+
+  @HostBinding('class.router-component') true;
 
   constructor(private membersManager: MembersManagerService,
               private route: ActivatedRoute,

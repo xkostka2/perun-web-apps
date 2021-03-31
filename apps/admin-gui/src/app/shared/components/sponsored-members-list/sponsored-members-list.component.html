@@ -83,6 +83,7 @@
         <tr
           *matRowDef="let sponsoredMember; columns: displayedColumns;"
           [routerLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
+          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
           [class.disable-outline]="disableRouting"
           [class.cursor-pointer]="!disableRouting"
           class="dark-hover-list-item"
