@@ -267,6 +267,136 @@ export class UsersManagerService {
     }
 
     /**
+     * Changes user password in defined login-namespace based on token parameter.
+     * This method throws PasswordResetLinkExpiredException when the password reset request expired. This method throws PasswordResetLinkNotValidException when the password reset request was already used or has never existed. 
+     * @param token token for the password reset request
+     * @param password password
+     * @param lang language to get notifications in (optional)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public changeNonAuthzPasswordByToken(token: string, password: string, lang?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public changeNonAuthzPasswordByToken(token: string, password: string, lang?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public changeNonAuthzPasswordByToken(token: string, password: string, lang?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public changeNonAuthzPasswordByToken(token: string, password: string, lang?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling changeNonAuthzPasswordByToken.');
+        }
+        if (password === null || password === undefined) {
+            throw new Error('Required parameter password was null or undefined when calling changeNonAuthzPasswordByToken.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+            queryParameters = queryParameters.set('token', <any>token);
+        }
+        if (password !== undefined && password !== null) {
+            queryParameters = queryParameters.set('password', <any>password);
+        }
+        if (lang !== undefined && lang !== null) {
+            queryParameters = queryParameters.set('lang', <any>lang);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/usersManager/changeNonAuthzPassword/token`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Checks if the password reset request is valid.
+     * This method throws PasswordResetLinkExpiredException when the password reset request expired. This method throws PasswordResetLinkNotValidException when the password reset request was already used or has never existed. 
+     * @param token token for the password reset request
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public checkPasswordResetRequestByTokenIsValid(token: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public checkPasswordResetRequestByTokenIsValid(token: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public checkPasswordResetRequestByTokenIsValid(token: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public checkPasswordResetRequestByTokenIsValid(token: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling checkPasswordResetRequestByTokenIsValid.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+            queryParameters = queryParameters.set('token', <any>token);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<any>(`${this.configuration.basePath}/json/usersManager/checkPasswordResetRequestIsValid/token`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Checks if the password reset request based on encrypted input parameters is valid.
      * This method throws PasswordResetLinkExpiredException when the password reset request expired. This method throws PasswordResetLinkNotValidException when the password reset request was already used or has never existed. 
      * @param i encrypted user id
@@ -1392,6 +1522,63 @@ export class UsersManagerService {
 
 
         return this.httpClient.get<Array<RichUser>>(`${this.configuration.basePath}/json/usersManager/getRichUsersWithAttributesByIds`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns list of RichUsers which are not members of any VO with attributes.
+     * @param attrsNames list of attribute names List&lt;String&gt; or null
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getRichUsersWithoutVoWithAttributes(attrsNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<RichUser>>;
+    public getRichUsersWithoutVoWithAttributes(attrsNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RichUser>>>;
+    public getRichUsersWithoutVoWithAttributes(attrsNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RichUser>>>;
+    public getRichUsersWithoutVoWithAttributes(attrsNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (attrsNames) {
+            attrsNames.forEach((element) => {
+                queryParameters = queryParameters.append('attrsNames[]', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<RichUser>>(`${this.configuration.basePath}/json/usersManager/getRichUsersWithoutVoWithAttributes`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

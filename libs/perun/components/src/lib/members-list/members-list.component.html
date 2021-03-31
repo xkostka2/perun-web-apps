@@ -61,6 +61,12 @@
             </i>
           </td>
         </ng-container>
+        <ng-container matColumnDef="sponsored">
+          <th *matHeaderCellDef mat-header-cell class="center new-line">{{'MEMBERS_LIST.ALREADY_SPONSORED' | translate}}</th>
+          <td *matCellDef="let member" mat-cell class="center">
+            <mat-icon *ngIf="member.sponsored">check_circle_outline</mat-icon>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="organization">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
           <td *matCellDef="let member" mat-cell>{{member | memberOrganization}}</td>
