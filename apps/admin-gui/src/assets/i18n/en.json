@@ -433,6 +433,7 @@
       "SPONSORED_MEMBERS": {
         "TITLE": "Sponsored members",
         "CREATE": "Create",
+        "CREATE_ONE": "Create sponsored user",
         "GENERATE": "Create in bulk",
         "FILTER": "Filter by name or ID",
         "SPONSOR_EXISTING": "Sponsor existing member",
