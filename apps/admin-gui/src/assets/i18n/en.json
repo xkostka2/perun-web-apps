@@ -1880,7 +1880,8 @@
       "SEARCH_PLACEHOLDER": "Search by name, email or login",
       "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
       "NO_USERS_FOUND": "No users found.",
-      "EMPTY_SEARCH": "Search field cannot be empty"
+      "EMPTY_SEARCH": "Search field cannot be empty",
+      "USERS_WITHOUT_VO": "Find users without organization"
     },
     "OWNERS": {
       "TITLE": "Owners",

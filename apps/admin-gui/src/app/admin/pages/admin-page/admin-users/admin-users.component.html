@@ -18,6 +18,13 @@
           (click)="onSearchByString()">
     <mat-icon>search</mat-icon>
   </button>
+  <button
+    mat-stroked-button
+    class="mr-2"
+    [disabled]="loading"
+    (click)="findUsersWithoutVO()">
+    {{'ADMIN.USERS.USERS_WITHOUT_VO' | translate}}
+  </button>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
   </mat-spinner>
   <div *ngIf="!loading">

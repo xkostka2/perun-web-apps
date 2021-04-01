@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { RichUser, UsersManagerService } from '@perun-web-apps/perun/openapi';
+import { Attribute, RichUser, UsersManagerService } from '@perun-web-apps/perun/openapi';
 import {
   TABLE_ADMIN_USER_SELECT,
   TableConfigService
@@ -33,10 +33,15 @@ export class AdminUsersComponent implements OnInit {
   firstSearchDone = false;
   pageSize: number;
   tableId = TABLE_ADMIN_USER_SELECT;
+  attributes: string[] = [];
 
   ngOnInit() {
     this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
+    this.attributes = [
+      Urns.USER_DEF_ORGANIZATION,
+      Urns.USER_DEF_PREFERRED_MAIL];
+    this.attributes = this.attributes.concat(this.storeService.getLoginAttributeNames());
   }
 
   onSearchByString() {
@@ -46,11 +51,7 @@ export class AdminUsersComponent implements OnInit {
     }
     this.loading = true;
     this.firstSearchDone = true;
-    let attributes = [
-      Urns.USER_DEF_ORGANIZATION,
-      Urns.USER_DEF_PREFERRED_MAIL];
-    attributes = attributes.concat(this.storeService.getLoginAttributeNames());
-    this.usersService.findRichUsersWithAttributes(this.searchControl.value, attributes).subscribe(users => {
+    this.usersService.findRichUsersWithAttributes(this.searchControl.value, this.attributes).subscribe(users => {
       this.users = users;
       this.loading = false;
     }, () => {
@@ -68,4 +69,14 @@ export class AdminUsersComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.tableConfigService.setTablePageSize(this.tableId, event.pageSize);
   }
+
+  findUsersWithoutVO() {
+    this.loading = true;
+    this.firstSearchDone = true;
+    this.usersService.getRichUsersWithoutVoWithAttributes(this.attributes).subscribe(users => {
+      this.users = users;
+      this.loading = false;
+    }, () => this.loading = false);
+  }
+
 }
