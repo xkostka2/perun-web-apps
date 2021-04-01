@@ -10,6 +10,7 @@ import { PasswordResetComponent } from '@perun-web-apps/perun/components';
 import { UserSettingsAppConfigurationComponent } from './pages/user-detail-page/user-settings/user-settings-app-configuration/user-settings-app-configuration.component';
 import { UserOverviewComponent } from './pages/user-detail-page/user-overview/user-overview.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UserRolesComponent } from './pages/user-detail-page/user-settings/user-roles/user-roles.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,11 @@ const routes: Routes = [
         path: 'groups',
         component: UserGroupsComponent,
         data: { animation: 'UserGroupsPage', showPrincipal: true }
+      },
+      {
+        path: 'roles',
+        component: UserRolesComponent,
+        data: {animation: 'UserRolesPage'}
       },
       {
         path: 'settings',

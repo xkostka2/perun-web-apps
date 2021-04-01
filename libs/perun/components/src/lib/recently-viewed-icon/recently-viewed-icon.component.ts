@@ -10,7 +10,7 @@ export class RecentlyViewedIconComponent implements OnChanges {
   constructor() { }
 
   @Input()
-  recentIds: number[];
+  recentIds: number[] = [];
 
   @Input()
   id: number;

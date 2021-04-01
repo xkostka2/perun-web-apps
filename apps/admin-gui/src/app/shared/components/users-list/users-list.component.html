@@ -33,7 +33,7 @@
         </ng-container>
         <ng-container matColumnDef="user">
           <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let user">
+          <td mat-cell *matCellDef="let user" class="static-column-size">
             <mat-icon
               class="align-bottom"
               *ngIf="!user.serviceUser"

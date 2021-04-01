@@ -73,12 +73,6 @@ export class UserSettingsOverviewComponent implements OnInit {
           style: 'user-btn'
         });
       }
-      this.navItems.push({
-        cssIcon: 'perun-group',
-        url: `roles`,
-        label: 'MENU_ITEMS.USER.ROLES',
-        style: 'user-btn'
-      });
     }
   }
 }

@@ -11,7 +11,6 @@ import { Urns } from '@perun-web-apps/perun/urns';
 import { MatDialog } from '@angular/material/dialog';
 import { getDefaultDialogConfig, parseAttributeFriendlyName } from '@perun-web-apps/perun/utils';
 import { ChangeEmailDialogComponent } from '@perun-web-apps/perun/dialogs';
-import { AttributeFriendlyNamePipe } from '../../../../shared/pipes/attribute-friendly-name.pipe';
 
 @Component({
   selector: 'app-user-overview',
@@ -103,6 +102,12 @@ export class UserOverviewComponent implements OnInit {
       style: 'user-btn'
     });
     this.navItems.push(
+      {
+        cssIcon: 'perun-group',
+        url: `roles`,
+        label: 'MENU_ITEMS.USER.ROLES',
+        style: 'user-btn'
+      },
       {
         cssIcon: 'perun-settings2',
         url: `settings`,
