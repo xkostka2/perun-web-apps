@@ -51,6 +51,8 @@
             <button mat-icon-button
                     *ngIf="!publication.locked"
                     (click)="lockOrUnlockPublication(publication)"
+                    (mouseenter)="disabledRouting = true"
+                    (mouseleave)="disabledRouting = false"
                     matTooltip="{{'PUBLICATIONS_LIST.UNLOCKED' | translate}}">
               <mat-icon>lock_open</mat-icon>
             </button>

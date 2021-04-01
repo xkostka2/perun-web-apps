@@ -83,6 +83,12 @@ export class UserOverviewComponent implements OnInit {
           style: 'user-btn'
         },
         {
+          cssIcon: 'perun-facility-white',
+          url: `facilities`,
+          label: "MENU_ITEMS.USER.FACILITIES",
+          style: 'user-btn'
+        },
+        {
           cssIcon: 'perun-resource',
           url: `resources`,
           label: "MENU_ITEMS.USER.RESOURCES",

@@ -1,1 +1,29 @@
-<p>my-publications-page works!</p>
+<div class="user-theme">
+  <h1 class="page-subtitle d-flex">
+    <mat-icon class="title-icon">local_library</mat-icon>
+    <span class="ml-3 mt-1">{{'MY_PUBLICATIONS.TITLE' | translate}}</span>
+  </h1>
+  <div *ngIf="!initLoading">
+    <div class="mt-4">
+      <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+      <button
+        mat-flat-button
+        color="warn"
+        class="mr-2"
+        [disabled]="selected.selected.length === 0"
+        (click)="removePublication()">
+        {{'MY_PUBLICATIONS.REMOVE' | translate}}
+      </button>
+      <perun-web-apps-publication-filter (filteredPublication)="filterPublication($event)"></perun-web-apps-publication-filter>
+    </div>
+
+    <perun-web-apps-publications-list
+      *ngIf="!loading"
+      [publications]="publications"
+      [selection]="selected"
+      [pageSize]="pageSize"
+      (page)="pageChanged($event)">
+    </perun-web-apps-publications-list>
+  </div>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading || initLoading"></mat-spinner>
+</div>

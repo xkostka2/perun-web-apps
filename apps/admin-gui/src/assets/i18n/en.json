@@ -296,8 +296,6 @@
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
       "LIST_MEMBERS": "List all members",
-      "SEARCH_ALERT_PART_1": "In this VO are",
-      "SEARCH_ALERT_PART_2": "members and load all of them would take a long time. You can search particular member by name, login or email. Also, you can list all valid members.",
       "NO_MEMBERS_ALERT": "No members found.",
       "FILTER_STATUS": "Select Status",
       "INVITE": "Invite",
@@ -433,6 +431,7 @@
       "SPONSORED_MEMBERS": {
         "TITLE": "Sponsored members",
         "CREATE": "Create",
+        "CREATE_ONE": "Create sponsored user",
         "GENERATE": "Create in bulk",
         "FILTER": "Filter by name or ID",
         "SPONSOR_EXISTING": "Sponsor existing member",
@@ -805,6 +804,7 @@
       "SERVICE_IDENTITIES": "Service Identities",
       "IDENTITIES": "Identities",
       "PASSWORD_RESET": "Password reset",
+      "FACILITIES": "Facilities",
       "RESOURCES": "Resources",
       "ASSOCIATED_USERS": "Associated users",
       "ENTITY": "User",
@@ -1831,6 +1831,7 @@
     "NAME": "Name",
     "STATUS": "Status",
     "GROUP_STATUS": "Group status",
+    "ALREADY_SPONSORED": "Already \nsponsored",
     "EMAIL": "Email",
     "LOGINS": "Logins",
     "ORGANIZATION": "Organization",
@@ -1981,6 +1982,10 @@
       "ADD": "Add",
       "REMOVE": "Remove"
     },
+    "FACILITIES": {
+      "TITLE": "Facilities",
+      "FILTER_PLACEHOLDER": "Filter by id, name or description"
+    },
     "RESOURCES": {
       "TITLE": "Resources"
     },
@@ -2117,10 +2122,11 @@
         "PROPAGATION_TYPE": "Propagation type",
         "NO_DESTINATIONS": "No destinations found"
       },
-      "SIMPLE_FACILITY_LIST": {
+      "FACILITIES_LIST": {
         "ID": "Id",
         "NAME": "Name",
-        "DESCRIPTION": "Description"
+        "DESCRIPTION": "Description",
+        "NO_FACILITIES_WARNING": "No facilities found"
       }
     },
     "IDENTITY_DETAIL": {

@@ -1,17 +1,17 @@
-<div [class.hide-table]="exporting" [hidden]="this.members.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
-    <div class="overflow-auto">
+<div class="card mt-2" [hidden]="this.dataSource.allMemberCount === 0 && (dataSource.loading$ | async) === false">
+  <div class="card-body position-relative">
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+      <mat-spinner class="ml-auto mr-auto"></mat-spinner>
+    </div>
+    <div class="overflow-auto table-container">
       <table
-        #exporter="matTableExporter"
         [dataSource]="dataSource"
         class="w-100"
         mat-table
         matSort
         matSortActive="fullName"
         matSortDirection="asc"
-        matSortDisableClear
-        matTableExporter>
+        matSortDisableClear>
         <ng-container matColumnDef="checkbox">
           <th *matHeaderCellDef mat-header-cell>
             <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -41,10 +41,10 @@
         <ng-container matColumnDef="status">
           <div *ngIf="showGroupStatuses then thenHeader else elseHeader"></div>
           <ng-template #thenHeader>
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
+            <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
           </ng-template>
           <ng-template #elseHeader>
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
+            <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.STATUS' | translate}}</th>
           </ng-template>
           <td *matCellDef="let member" mat-cell>
             <i (click)="changeStatus($event, member)"
@@ -61,18 +61,12 @@
             </i>
           </td>
         </ng-container>
-        <ng-container matColumnDef="sponsored">
-          <th *matHeaderCellDef mat-header-cell class="center new-line">{{'MEMBERS_LIST.ALREADY_SPONSORED' | translate}}</th>
-          <td *matCellDef="let member" mat-cell class="center">
-            <mat-icon *ngIf="member.sponsored">check_circle_outline</mat-icon>
-          </td>
-        </ng-container>
         <ng-container matColumnDef="organization">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
           <td *matCellDef="let member" mat-cell>{{member | memberOrganization}}</td>
         </ng-container>
         <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.EMAIL' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.EMAIL' | translate}}</th>
           <td *matCellDef="let member" mat-cell>{{member | memberEmail}}</td>
         </ng-container>
         <ng-container matColumnDef="logins">
@@ -82,10 +76,10 @@
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let member; columns: displayedColumns;"
-          [class.disable-outline]="disableRouting"
-          [class.cursor-pointer]="!disableRouting"
-          [routerLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
+          [class.disable-outline]="!this.dataSource.routeAuth"
+          [class.cursor-pointer]="this.dataSource.routeAuth"
+          [routerLink]="!this.dataSource.routeAuth ? null : ['/organizations', member.voId, 'members', member.id]"
+          [perunWebAppsMiddleClickRouterLink]="!this.dataSource.routeAuth ? null : ['/organizations', member.voId, 'members', member.id]"
           class="dark-hover-list-item"
           mat-row>
         </tr>
@@ -93,7 +87,7 @@
     </div>
 
     <mat-paginator
-      [length]="this.members.length"
+      [length]="this.dataSource.allMemberCount"
       (page)="pageChanged($event)"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions">
@@ -101,16 +95,8 @@
   </div>
 </div>
 
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
-
 <app-alert
-  *ngIf="members.length !== 0 && dataSource.filteredData.length === 0"
-  [alert_type]="'warn'">
-  {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
-</app-alert>
-
-<app-alert
-  *ngIf="members.length === 0"
+  *ngIf="this.dataSource.allMemberCount === 0 && (dataSource.loading$ | async) === false"
   [alert_type]="'warn'">
   {{'SHARED_LIB.UI.ALERTS.NO_MEMBERS' | translate}}
 </app-alert>

@@ -1,0 +1,17 @@
+<div>
+  <h1 class="page-subtitle">{{'USER_DETAIL.FACILITIES.TITLE' | translate}}</h1>
+  <perun-web-apps-refresh-button (refresh)="refreshTable()"></perun-web-apps-refresh-button>
+  <perun-web-apps-immediate-filter
+    (filter)="applyFilter($event)"
+    [placeholder]="'USER_DETAIL.FACILITIES.FILTER_PLACEHOLDER'">
+  </perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <app-facilities-list
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)"
+    *ngIf="!loading"
+    [filterValue]="filterValue"
+    [facilities]="facilities"
+    [displayedColumns]="displayedColumns">
+  </app-facilities-list>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import {
   AuthzResolverService,
   MembersManagerService,
@@ -24,6 +24,10 @@ import { Role } from '@perun-web-apps/perun/models';
   styleUrls: ['./vo-settings-sponsored-members.component.scss']
 })
 export class VoSettingsSponsoredMembersComponent implements OnInit {
+
+  static id = 'VoSponsoredMembersComponent';
+
+  @HostBinding('class.router-component') true;
 
   constructor(private membersManager: MembersManagerService,
               private route: ActivatedRoute,
@@ -81,7 +85,7 @@ export class VoSettingsSponsoredMembersComponent implements OnInit {
         const attributes = [ Urns.USER_DEF_PREFERRED_MAIL ];
 
         this.authzResolver.getAuthzRichAdmins(Role.SPONSOR, this.vo.id, 'Vo',
-          attributes,false, true).subscribe(sponsors => {
+          attributes,false, false).subscribe(sponsors => {
           this.voSponsors = sponsors;
           this.setAuthRights();
           this.refresh();

@@ -64,12 +64,21 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
 
     const member = members.pop();
 
-    this.membersService.setSponsorshipForMember(
-      member.id,
-      this.store.getPerunPrincipal().user.id,
-      this.expiration).subscribe( () => {
+    if (member.sponsored) {
+      this.membersService.sponsorMember(
+        member.id,
+        this.store.getPerunPrincipal().user.id,
+        this.expiration).subscribe( () => {
         this.sponsor(members);
-    }, () => this.loading = false);
+      }, () => this.loading = false);
+    } else {
+      this.membersService.setSponsorshipForMember(
+        member.id,
+        this.store.getPerunPrincipal().user.id,
+        this.expiration).subscribe( () => {
+        this.sponsor(members);
+      }, () => this.loading = false);
+    }
   }
 
   onSubmit() {
@@ -101,7 +110,7 @@ export class SponsorExistingMemberDialogComponent implements OnInit {
     const attrNames  = [Urns.MEMBER_DEF_EXPIRATION, Urns.USER_DEF_PREFERRED_MAIL]
     this.membersService.findCompleteRichMembersForVo(
       this.data.voId, attrNames, this.searchCtrl.value).subscribe(members => {
-      this.members = members.filter(member => !member.sponsored);
+      this.members = members;
       this.loading = false;
     }, () => this.loading = false);
   }

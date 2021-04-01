@@ -62,7 +62,7 @@ export class VoMembersComponent implements OnInit {
 
   loading = false;
 
-  private attrNames = [
+  attrNames = [
     Urns.MEMBER_DEF_ORGANIZATION,
     Urns.MEMBER_DEF_MAIL,
     Urns.USER_DEF_ORGANIZATION,
@@ -81,7 +81,6 @@ export class VoMembersComponent implements OnInit {
   removeAuth: boolean;
   inviteAuth: boolean;
   routeAuth: boolean;
-  count: number;
   blockManualMemberAdding: boolean;
 
   ngOnInit() {
@@ -97,13 +96,7 @@ export class VoMembersComponent implements OnInit {
         this.voService.getVoById(voId).subscribe(vo => {
           this.vo = vo;
           this.setAuthRights();
-          this.membersService.getMembersCount(this.vo.id).subscribe(count => {
-            this.count = count;
-            if (count < 400) {
-              this.onListAll();
-            }
-            this.loading = false;
-          });
+          this.loading = false;
         });
       });
     });
@@ -115,7 +108,7 @@ export class VoMembersComponent implements OnInit {
 
     this.removeAuth = this.authzService.isAuthorized('deleteMembers_List<Member>_policy', [this.vo]);
 
-    this.hideColumns = this.removeAuth ? ['groupStatus'] : ['checkbox', 'groupStatus'];
+    this.hideColumns = this.removeAuth ? ['groupStatus', 'sponsored'] : ['checkbox', 'groupStatus', 'sponsored'];
 
     if(this.members !== null && this.members.length !== 0){
       this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0]]);

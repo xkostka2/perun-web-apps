@@ -39,6 +39,14 @@
     "TITLE": " publications",
     "REMOVE": "Remove"
   },
+  "ALL_PUBLICATIONS": {
+    "TITLE": "All publications",
+    "REMOVE": "Remove"
+  },
+  "MY_PUBLICATIONS": {
+    "TITLE": "My publications",
+    "REMOVE": "Remove"
+  },
   "PUBLICATIONS_LIST": {
     "TABLE_ID": "Id",
     "TABLE_LOCK": "Lock",

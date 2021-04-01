@@ -77,6 +77,7 @@ import { ReportIssueDialogComponent } from './report-issue-dialog/report-issue-d
 import { MatDialogModule } from '@angular/material/dialog';
 import { CreateGroupFormComponent } from './create-group-form/create-group-form.component';
 import { DebounceFilterComponent } from './debounce-filter/debounce-filter.component';
+import { MembersDynamicListComponent } from './members-dynamic-list/members-dynamic-list.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -184,7 +185,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     PerunFooterComponent,
     ReportIssueDialogComponent,
     CreateGroupFormComponent,
-    DebounceFilterComponent
+    DebounceFilterComponent,
+    MembersDynamicListComponent
   ],
   exports: [
     VoSelectTableComponent,
@@ -227,7 +229,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     PerunFooterComponent,
     ReportIssueDialogComponent,
     CreateGroupFormComponent,
-    DebounceFilterComponent
+    DebounceFilterComponent,
+    MembersDynamicListComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },
