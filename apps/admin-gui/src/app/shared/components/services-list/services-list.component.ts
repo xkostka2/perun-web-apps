@@ -15,7 +15,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -68,8 +68,6 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   };
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
-  exporting = false
-
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
@@ -94,6 +92,10 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

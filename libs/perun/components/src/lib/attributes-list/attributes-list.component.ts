@@ -3,7 +3,8 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges, Output,
+  OnChanges,
+  Output,
   QueryList,
   SimpleChanges,
   ViewChild,
@@ -12,12 +13,15 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {SelectionModel} from '@angular/cdk/collections';
-import {AttributeValueComponent} from './attribute-value/attribute-value.component';
-import { Attribute} from '@perun-web-apps/perun/openapi';
+import { SelectionModel } from '@angular/cdk/collections';
+import { AttributeValueComponent } from './attribute-value/attribute-value.component';
+import { Attribute } from '@perun-web-apps/perun/openapi';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  downloadData,
   filterCoreAttributes,
+  getDataForExport,
   isVirtualAttribute,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
@@ -78,7 +82,6 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
   @Input()
   hiddenColumns: string[] = [];
 
-  exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,9 +104,15 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
         return data.displayName;
       case 'description':
         return  data.description;
+      case 'value':
+        return JSON.stringify(data.value);
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

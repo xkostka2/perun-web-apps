@@ -11,11 +11,11 @@ import {
   User,
   Candidate, ApplicationMail, ApplicationFormItem, RichGroup, Author
 } from '@perun-web-apps/perun/openapi';
-import { Attribute, AttributeDefinition } from '@perun-web-apps/perun/openapi';
+import { Attribute} from '@perun-web-apps/perun/openapi';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
 import { MatSort } from '@angular/material/sort';
-
+import { saveAs } from 'file-saver';
 
 
 export const TABLE_ITEMS_COUNT_OPTIONS = [5, 10, 25, 100, 1000, 10000];
@@ -687,4 +687,32 @@ export function parseAttribute(data: Author, nameOfAttribute: string) {
     });
   }
   return attribute;
+}
+
+export function getDataForExport(data: any, columns: string[], getDataForColumn: (data: any, column: string, outerThis: any) => string, outerThis: any) {
+  const result = [];
+  const skippedColumns = ['checkbox', 'select', 'edit', 'menu', 'cite', 'extend', 'recent']
+  columns = columns.filter(c => !skippedColumns.includes(c));
+  data.forEach(row => {
+    const resultRow = {}
+    columns.forEach(col => {
+      resultRow[col] = (getDataForColumn(row, col, outerThis) ?? '').split("\"").join('\'\'').trim();
+    });
+    result.push(resultRow)
+  });
+  return result;
+}
+
+export function downloadData(data: any, format = 'csv', filename = 'export') {
+  switch (format){
+    case 'csv':
+      const replacer = (key, value) => value === null ? '' : value;
+      const header = Object.keys(data[0]);
+      const csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+      csv.unshift(header.join(',').split(' ').join('_').split("\"").join('\'\''));
+      const csvArray = csv.join('\r\n');
+
+      const blob = new Blob([csvArray], {type: 'text/csv' })
+      saveAs(blob, `${filename}.${format}`);
+  }
 }

@@ -17,7 +17,7 @@ import {TranslateService} from '@ngx-translate/core';
 import { ResourcesManagerService, ResourceTag} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 
@@ -65,7 +65,6 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
 
 
   isChanging = new SelectionModel<ResourceTag>(true, []);
-  exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,6 +88,10 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

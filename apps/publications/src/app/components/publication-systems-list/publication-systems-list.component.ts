@@ -3,7 +3,7 @@ import { MatSort } from '@angular/material/sort';
 import { PublicationSystem } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -41,8 +41,6 @@ export class PublicationSystemsListComponent implements AfterViewInit, OnChanges
 
   dataSource: MatTableDataSource<PublicationSystem>;
 
-  exporting = false;
-
   private paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
@@ -70,6 +68,10 @@ export class PublicationSystemsListComponent implements AfterViewInit, OnChanges
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

@@ -1,17 +1,15 @@
-<div [class.hide-table]="exporting" [hidden]="thanks.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
+<div [hidden]="thanks.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
   <div class="card-body">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
       <table
-        #exporter="matTableExporter"
         [dataSource]="dataSource"
         class="w-100"
         mat-table
         matSort
         matSortActive="name"
         matSortDirection="asc"
-        matSortDisableClear
-        matTableExporter>
+        matSortDisableClear>
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.ID' | translate}}</th>
           <td *matCellDef="let thanks" class="static-column-size" mat-cell>{{thanks.ownerId}}</td>
@@ -37,8 +35,6 @@
     </mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert
   *ngIf="thanks.length !== 0 && dataSource.filteredData.length === 0"

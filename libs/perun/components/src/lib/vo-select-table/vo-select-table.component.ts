@@ -15,7 +15,7 @@ import { Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
@@ -66,7 +66,6 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
   private sort: MatSort;
 
   dataSource: MatTableDataSource<Vo>;
-  exporting = false;
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.authResolver.isPerunAdmin()){
@@ -98,6 +97,10 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

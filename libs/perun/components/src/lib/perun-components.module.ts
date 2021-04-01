@@ -2,7 +2,6 @@ import { Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { MatSortModule } from '@angular/material/sort';
@@ -117,7 +116,6 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     FormsModule,
     MatChipsModule,
     DragDropModule,
-    MatTableExporterModule,
     TranslateModule,
     RouterModule,
     MatSortModule,

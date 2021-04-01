@@ -9,7 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
-  customDataSourceSort, getDefaultDialogConfig,
+  customDataSourceSort, downloadData, getDataForExport, getDefaultDialogConfig, parseFullName,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -60,8 +60,6 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<PublicationForGUI>;
 
-  exporting = false;
-
   private paginator: MatPaginator;
 
   changeLockMessage: string;
@@ -96,16 +94,24 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
       case 'title':
         return data.title;
       case 'reportedBy':
-        return data.authors.length.toString();
+        let result = '';
+        data.authors.forEach(a => result+= parseFullName(a) + ';');
+        return result.slice(0,-1);
       case 'year':
         return data.year.toString();
       case 'category':
         return data.categoryName;
       case 'thankedTo':
-        return data.thanks.length.toString();
+        let res = '';
+        data.thanks.forEach(t => res+=t.ownerName + ';');
+        return res.slice(0,-1);
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   ngAfterViewInit(): void {

@@ -12,7 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Category} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort, getDefaultDialogConfig,
+  customDataSourceSort, downloadData, getDataForExport, getDefaultDialogConfig,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatSort } from '@angular/material/sort';
@@ -60,8 +60,6 @@ export class CategoriesListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<Category>;
 
-  exporting = false;
-
   private paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
@@ -85,6 +83,10 @@ export class CategoriesListComponent implements AfterViewInit, OnChanges {
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

@@ -15,7 +15,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -53,9 +53,6 @@ export class DestinationListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<RichDestination>;
 
-  exporting = false;
-
-
   private paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
@@ -85,12 +82,16 @@ export class DestinationListComponent implements AfterViewInit, OnChanges {
       case 'type':
         return data.type;
       case 'status':
-        return data.blocked ? 'true' : 'false';
+        return data.blocked ? 'blocked' : 'allowed';
       case 'propagationType':
         return  data.propagationType;
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

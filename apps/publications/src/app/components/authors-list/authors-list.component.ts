@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewC
 import { Author } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort, parseAttribute, parseName,
+  customDataSourceSort, downloadData, getDataForExport, parseAttribute, parseFullName, parseName,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatSort } from '@angular/material/sort';
@@ -38,8 +38,6 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
   }
 
   dataSource: MatTableDataSource<Author>;
-
-  exporting = false;
 
   private paginator: MatPaginator;
 
@@ -99,6 +97,27 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
       default:
         return data[column];
     }
+  }
+
+  getExportDataForColumn(data: Author, column: string):string {
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'name':
+        return parseFullName(data);
+      case 'organization':
+        return parseAttribute(data, 'organization');
+      case 'email':
+        return parseAttribute(data, 'preferredMail');
+      case 'numberOfPublications':
+        return data.authorships.length.toString();
+      default:
+        return data[column];
+    }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
   }
 
   parseAttribute(data: Author, nameOfAttribute: string) {

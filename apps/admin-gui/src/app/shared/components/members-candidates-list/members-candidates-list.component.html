@@ -1,17 +1,15 @@
-<div [class.hide-table]="exporting" class="card mt-2">
+<div class="card mt-2">
   <div class="card-body table-theme" *ngIf="members !== null && members !== undefined">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
       <table
-        #exporter="matTableExporter"
         [dataSource]="dataSource"
         class="w-100"
         mat-table
         matSort
         matSortActive="fullName"
         matSortDirection="asc"
-        matSortDisableClear
-        matTableExporter>
+        matSortDisableClear>
         <ng-container matColumnDef="checkbox">
           <th *matHeaderCellDef mat-header-cell>
           </th>
@@ -88,5 +86,3 @@
     </mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>

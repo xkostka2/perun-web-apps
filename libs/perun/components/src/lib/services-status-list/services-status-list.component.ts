@@ -15,10 +15,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'perun-web-apps-services-status-list',
@@ -59,8 +60,6 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
 
   displayedColumns: string[] = ['select', 'task.id', 'service.name', 'status', 'blocked', 'task.startTime', 'task.endTime'];
   dataSource: MatTableDataSource<ServiceState>;
-
-  exporting = false;
 
   private paginator: MatPaginator;
 
@@ -111,12 +110,16 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
         if (data.blockedGlobally) {return 'BLOCKED GLOBALLY'}
         return 'ALLOWED';
       case 'task.startTime':
-        return data.task && data.task.startTime ? data.task.startTime : data[column];
+        return data.task && data.task.startTime ? formatDate(data.task.startTime,'d.M.y h:mm:ss a', 'en') : data[column];
       case 'task.endTime':
-        return data.task && data.task.endTime ? data.task.endTime : data[column];
+        return data.task && data.task.endTime ? formatDate(data.task.endTime,'d.M.y h:mm:ss a', 'en') : data[column];
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

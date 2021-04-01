@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 
@@ -65,7 +65,6 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
 
   displayedColumns: string[] = ['select', 'id', 'mail', 'extSourceName', 'login', 'lastAccess'];
   dataSource: MatTableDataSource<RichUserExtSource>;
-  exporting = false;
   userId: number;
 
   ngAfterViewInit() {
@@ -102,6 +101,10 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

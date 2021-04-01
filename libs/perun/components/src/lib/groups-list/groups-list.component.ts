@@ -14,7 +14,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
   getGroupExpiration,
   parseDate,
@@ -111,7 +111,6 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description', 'expiration', 'menu'];
   dataSource: MatTableDataSource<Group | RichGroup>;
 
-  exporting = false;
   disabledRouting = false;
 
   vo: Vo;
@@ -181,6 +180,10 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

@@ -33,7 +33,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -125,7 +124,6 @@ import { UserFacilitiesComponent } from './pages/user-detail-page/user-facilitie
     MatCardModule,
     MatChipsModule,
     MatMenuModule,
-    MatTableExporterModule,
     ScrollingModule,
     UiAlertsModule,
     MatBadgeModule,

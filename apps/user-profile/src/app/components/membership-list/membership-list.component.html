@@ -1,16 +1,14 @@
-<div [class.hide-table]="exporting" [hidden]="!dataSource.filteredData.length" class="card mt-2">
+<div [hidden]="!dataSource.filteredData.length" class="card mt-2">
   <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
       <table
         class="w-100"
         mat-table
-        matTableExporter
         matSort matSortActive="expirationAttribute"
         matSortDirection="desc"
         matSortDisableClear
-        [dataSource]="dataSource"
-        #exporter="matTableExporter">
+        [dataSource]="dataSource">
         <ng-container matColumnDef="checkbox">
           <th mat-header-cell *matHeaderCellDef>
           </th>
@@ -63,4 +61,3 @@
   </div>
 </div>
 <app-alert *ngIf="!dataSource.filteredData.length" alert_type="warn">{{'MEMBERSHIP_LIST.NO_MEMBERSHIPS' | customTranslate | translate}}</app-alert>
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>

@@ -17,7 +17,12 @@ import {
   getCandidateEmail,
   getExtSourceNameOrOrganizationColumn,
   parseUserEmail,
-  parseVo, TABLE_ITEMS_COUNT_OPTIONS, customDataSourceFilterPredicate, customDataSourceSort
+  parseVo,
+  TABLE_ITEMS_COUNT_OPTIONS,
+  customDataSourceFilterPredicate,
+  customDataSourceSort,
+  downloadData,
+  getDataForExport, parseFullName
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -61,7 +66,6 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
   displayedColumns: string[] = ['checkbox', 'status', 'fullName', 'voExtSource', 'email', 'logins', 'alreadyMember', 'local'];
   dataSource: MatTableDataSource<MemberCandidate>;
 
-  exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   addAuth = false;
@@ -89,6 +93,35 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
       default:
         return data[column];
     }
+  }
+
+  getExportDataForColumn(data: MemberCandidate, column: string, outerThis: MembersCandidatesListComponent): string{
+    switch (column) {
+      case 'status':
+        return data.member ? data.member.status ?? '' : '';
+      case 'fullName':
+        const user = data.richUser ? data.richUser : data.candidate
+        return parseFullName(user);
+      case 'voExtSource':
+        return data.richUser ? parseVo(data.richUser) : getExtSourceNameOrOrganizationColumn(data.candidate);
+      case 'email':
+        if (data.richUser || data.member) {
+          return parseUserEmail(data.richUser);
+        }
+        return outerThis.getEmail(data);
+      case 'logins':
+        return outerThis.getLogins(data);
+      case 'alreadyMember':
+        return outerThis.getAlreadyMember(data);
+      case 'local':
+        return data.richUser ? "Local" : "External identity"
+      default:
+        return data[column];
+    }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
   }
 
   setDataSource() {

@@ -1,18 +1,16 @@
-<div [class.hide-table]="exporting" [hidden]="dataSource.filteredData.length === 0 || resources.length === 0"
+<div [hidden]="dataSource.filteredData.length === 0 || resources.length === 0"
      class="card mt-3">
   <div class="card-body">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"
+    <perun-web-apps-table-options (exportData)="exportData($event)"
                                   class="ml-auto"></perun-web-apps-table-options>
     <div class="overflow-auto">
-      <table #exporter="matTableExporter"
-             [dataSource]="dataSource"
+      <table [dataSource]="dataSource"
              class="w-100"
              mat-table
              matSort
              matSortActive="recent"
              matSortDirection="asc"
-             matSortDisableClear
-             matTableExporter>
+             matSortDisableClear>
 
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
@@ -98,8 +96,6 @@
     </mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && resources.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}

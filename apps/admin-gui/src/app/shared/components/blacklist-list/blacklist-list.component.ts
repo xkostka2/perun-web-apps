@@ -9,15 +9,13 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { BanOnFacility, User} from '@perun-web-apps/perun/openapi';
+import { BanOnFacility, User } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
-  parseName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  customDataSourceSort, downloadData, getDataForExport, parseName, TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
@@ -55,8 +53,6 @@ export class BlacklistListComponent implements AfterViewInit, OnChanges {
   displayedColumns: string[] = ['select', 'userId', 'name', 'reason'];
   dataSource: MatTableDataSource<[BanOnFacility, User]>;
 
-  exporting = false;
-
   private paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
@@ -84,6 +80,10 @@ export class BlacklistListComponent implements AfterViewInit, OnChanges {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

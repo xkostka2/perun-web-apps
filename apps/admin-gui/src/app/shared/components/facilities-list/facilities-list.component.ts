@@ -14,7 +14,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort, TABLE_ITEMS_COUNT_OPTIONS
+  customDataSourceSort, downloadData, getDataForExport, TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -81,6 +81,11 @@ export class FacilitiesListComponent implements AfterViewInit, OnChanges {
         return '';
     }
   }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
+  }
+
 
   setDataSource() {
     if (!!this.dataSource) {

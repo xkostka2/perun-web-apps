@@ -16,9 +16,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AttributeDefinition} from '@perun-web-apps/perun/openapi';
 import { EditAttributeDefinitionDialogComponent } from '../dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
-  getDefaultDialogConfig,
-  TABLE_ITEMS_COUNT_OPTIONS
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
+  getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
@@ -50,8 +49,6 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
   refreshEvent = new EventEmitter<void>();
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
-
-  exporting = false;
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -107,6 +104,10 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

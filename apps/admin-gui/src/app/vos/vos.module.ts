@@ -68,7 +68,6 @@ import {
   GroupSettingsNotificationsComponent
 } from './pages/group-detail-page/group-settings/group-settings-notifications/group-settings-notifications.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { VoSettingsExtsourcesComponent } from './pages/vo-detail-page/vo-settings/vo-settings-extsources/vo-settings-extsources.component';
 import { GroupSettingsRelationsComponent } from './pages/group-detail-page/group-settings/group-settings-relations/group-settings-relations.component';
@@ -89,7 +88,6 @@ import { GroupStatisticsComponent } from './pages/group-detail-page/group-statis
   imports: [
     CommonModule,
     VosRoutingModule,
-    MatTableExporterModule,
     SharedModule,
     UiAlertsModule,
     PerunSharedComponentsModule,
