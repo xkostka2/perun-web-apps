@@ -62,7 +62,7 @@ export class VoMembersComponent implements OnInit {
 
   loading = false;
 
-  private attrNames = [
+  attrNames = [
     Urns.MEMBER_DEF_ORGANIZATION,
     Urns.MEMBER_DEF_MAIL,
     Urns.USER_DEF_ORGANIZATION,
@@ -81,7 +81,6 @@ export class VoMembersComponent implements OnInit {
   removeAuth: boolean;
   inviteAuth: boolean;
   routeAuth: boolean;
-  count: number;
   blockManualMemberAdding: boolean;
 
   ngOnInit() {
@@ -97,13 +96,7 @@ export class VoMembersComponent implements OnInit {
         this.voService.getVoById(voId).subscribe(vo => {
           this.vo = vo;
           this.setAuthRights();
-          this.membersService.getMembersCount(this.vo.id).subscribe(count => {
-            this.count = count;
-            if (count < 400) {
-              this.onListAll();
-            }
-            this.loading = false;
-          });
+          this.loading = false;
         });
       });
     });

@@ -66,9 +66,17 @@
   </div>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
   </mat-spinner>
-  <app-alert [alert_type]="'info'" *ngIf="!firstSearchDone && !loading">
-    {{'VO_DETAIL.MEMBERS.SEARCH_ALERT_PART_1' | translate}} {{count}} {{'VO_DETAIL.MEMBERS.SEARCH_ALERT_PART_2' | translate}}
-  </app-alert>
+  <perun-web-apps-members-dynamic-list
+    *ngIf="!firstSearchDone && !loading"
+    [voId]="vo.id"
+    [pageSize]="pageSize"
+    (page)="pageChanged($event)"
+    [selection]="selection"
+    [hideColumns]="hideColumns"
+    [attrNames]="attrNames"
+    (updateTable)="refreshTable()"
+  ></perun-web-apps-members-dynamic-list>
+
   <div class="mt-3" *ngIf="members !== null && !loading">
     <perun-web-apps-members-list
       [pageSize]="pageSize"

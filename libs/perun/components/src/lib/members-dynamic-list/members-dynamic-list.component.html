@@ -1,0 +1,102 @@
+<div class="card mt-2" [hidden]="this.dataSource.allMemberCount === 0 && (dataSource.loading$ | async) === false">
+  <div class="card-body position-relative">
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+      <mat-spinner class="ml-auto mr-auto"></mat-spinner>
+    </div>
+    <div class="overflow-auto table-container">
+      <table
+        [dataSource]="dataSource"
+        class="w-100"
+        mat-table
+        matSort
+        matSortActive="fullName"
+        matSortDirection="asc"
+        matSortDisableClear>
+        <ng-container matColumnDef="checkbox">
+          <th *matHeaderCellDef mat-header-cell>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [aria-label]="checkboxLabel()"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          color="primary">
+            </mat-checkbox>
+          </th>
+          <td *matCellDef="let member" class="static-column-size" mat-cell>
+            <mat-checkbox (change)="$event ? selection.toggle(member) : null"
+                          (click)="$event.stopPropagation()"
+                          [aria-label]="checkboxLabel(member)"
+                          [checked]="selection.isSelected(member)"
+                          color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="id">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ID' | translate}}</th>
+          <td *matCellDef="let member" class="static-column-size" mat-cell>{{member.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="fullName">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.NAME' | translate}}</th>
+          <td *matCellDef="let member" mat-cell>{{member.user | userFullName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <div *ngIf="showGroupStatuses then thenHeader else elseHeader"></div>
+          <ng-template #thenHeader>
+            <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
+          </ng-template>
+          <ng-template #elseHeader>
+            <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.STATUS' | translate}}</th>
+          </ng-template>
+          <td *matCellDef="let member" mat-cell>
+            <i (click)="changeStatus($event, member)"
+               class="material-icons {{showGroupStatuses ? (member.groupStatus | memberStatusIconColor) : (member.status | memberStatusIconColor)}}"
+               matTooltip="{{member | memberStatusTooltip: showGroupStatuses}}"
+               matTooltipClass="status-tooltip"
+               matTooltipPosition="left">
+              <span *ngIf="!showGroupStatuses">
+                {{member.status | memberStatusIcon}}
+              </span>
+              <span *ngIf="showGroupStatuses">
+                {{member.groupStatus | memberStatusIcon}}
+              </span>
+            </i>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="organization">
+          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
+          <td *matCellDef="let member" mat-cell>{{member | memberOrganization}}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.EMAIL' | translate}}</th>
+          <td *matCellDef="let member" mat-cell>{{member | memberEmail}}</td>
+        </ng-container>
+        <ng-container matColumnDef="logins">
+          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.LOGINS' | translate}}</th>
+          <td *matCellDef="let member" mat-cell>{{member | memberLogins}}</td>
+        </ng-container>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let member; columns: displayedColumns;"
+          [class.disable-outline]="!this.dataSource.routeAuth"
+          [class.cursor-pointer]="this.dataSource.routeAuth"
+          [routerLink]="!this.dataSource.routeAuth ? null : ['/organizations', member.voId, 'members', member.id]"
+          [perunWebAppsMiddleClickRouterLink]="!this.dataSource.routeAuth ? null : ['/organizations', member.voId, 'members', member.id]"
+          class="dark-hover-list-item"
+          mat-row>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [length]="this.dataSource.allMemberCount"
+      (page)="pageChanged($event)"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>
+
+<app-alert
+  *ngIf="this.dataSource.allMemberCount === 0 && (dataSource.loading$ | async) === false"
+  [alert_type]="'warn'">
+  {{'SHARED_LIB.UI.ALERTS.NO_MEMBERS' | translate}}
+</app-alert>
