@@ -522,6 +522,8 @@
       "DELETE_PERMISSION_HINT": "You don't have permission to delete some of the selected subgroups."
     },
     "SUBGROUP_INFO": "This group is a subgroup of ",
+    "STATS_BY_GROUP_STATUS": "Members by group status",
+    "STATS_BY_VO_STATUS": "Members by VO status",
     "MEMBERS": {
       "TITLE": "Members",
       "ACTIONS_DISABLED": "Actions with members are disabled, because this group is filled with members from external source.",
