@@ -47,6 +47,15 @@
     "TITLE": "My publications",
     "REMOVE": "Remove"
   },
+  "CREATE_PUBLICATION": {
+    "TITLE": "Create publication",
+    "IMPORT_TITLE": "Import publication",
+    "IMPORT_HINT":  "Are you from MU, ZCU? You can import publications you have already reported in university publication systems.",
+    "IMPORT": "Import",
+    "CREATE_TITLE": "Create publication",
+    "CREATE_HINT": "Use when you want to add custom publication or report publication created by other user.",
+    "CREATE": "Create"
+  },
   "PUBLICATIONS_LIST": {
     "TABLE_ID": "Id",
     "TABLE_LOCK": "Lock",

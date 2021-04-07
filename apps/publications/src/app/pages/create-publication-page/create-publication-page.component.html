@@ -1,1 +1,40 @@
-<p>create-publication-page works!</p>
+<div class="user-theme">
+  <h1 class="page-subtitle d-flex">
+    <span>
+    <mat-icon class="add-icon mr-1">add_box</mat-icon>
+    {{'CREATE_PUBLICATION.TITLE' | translate}}
+    </span>
+  </h1>
+  <div class="card-container">
+    <div class="align-cards">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-title>
+          {{'CREATE_PUBLICATION.IMPORT_TITLE' | translate}}
+        </mat-card-title>
+        <mat-card-content class="d-flex flex-column">
+          <div>
+          {{'CREATE_PUBLICATION.IMPORT_HINT' | translate}}
+          </div>
+          <button class="align-self-end" mat-flat-button color="accent">
+            {{'CREATE_PUBLICATION.IMPORT' | translate}}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="align-cards">
+      <mat-card class="mat-elevation-z3">
+        <mat-card-title>
+          {{'CREATE_PUBLICATION.CREATE_TITLE' | translate}}
+        </mat-card-title>
+        <mat-card-content class="d-flex flex-column">
+          <div>
+          {{'CREATE_PUBLICATION.CREATE_HINT' | translate}}
+          </div>
+          <button class="align-self-end" mat-flat-button color="accent">
+            {{'CREATE_PUBLICATION.CREATE' | translate}}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
