@@ -7,4 +7,14 @@
     </a>
   </p>
   <perun-web-apps-menu-buttons-field [items]="navItems" [size]="'small'"></perun-web-apps-menu-buttons-field>
+  <app-statistics-card
+    [rowNames]="voStatusCountsRowNames"
+    [statistics]="membersCountsByVoStatus"
+    [title]="'GROUP_DETAIL.STATS_BY_VO_STATUS'">
+  </app-statistics-card>
+  <app-statistics-card
+    [rowNames]="groupStatusCountsRowNames"
+    [statistics]="membersCountsByGroupStatus"
+    [title]="'GROUP_DETAIL.STATS_BY_GROUP_STATUS'">
+  </app-statistics-card>
 </div>

@@ -38,6 +38,12 @@ export class GroupOverviewComponent implements OnInit {
   parentGroup: Group = null;
   loading = false;
 
+  voStatusCountsRowNames: string[] = ['Members', 'Valid', 'Invalid', 'Expired', 'Disabled'];
+  membersCountsByVoStatus: Map<string, number> = new Map<string, number>();
+
+  groupStatusCountsRowNames: string[] = ['Members', 'Valid', 'Expired'];
+  membersCountsByGroupStatus: Map<string, number> = new Map<string, number>();
+
   ngOnInit() {
     this.loading = true;
     this.route.params.subscribe(params => {
@@ -52,6 +58,23 @@ export class GroupOverviewComponent implements OnInit {
           this.initNavItems();
           this.loading = false;
         }
+
+        this.groupService.getGroupMembersCount(this.groupId).subscribe(count => {
+          this.membersCountsByVoStatus.set('members', count);
+          this.membersCountsByGroupStatus.set('members', count);
+        }, () => this.loading = false);
+
+        this.groupService.getGroupMembersCountsByVoStatus(this.groupId).subscribe(stats => {
+          Object.entries(stats).forEach(([status, count]) =>
+            this.membersCountsByVoStatus.set(status.toLowerCase(), count)
+          );
+        }, () => this.loading = false);
+
+        this.groupService.getGroupMembersCountsByGroupStatus(this.groupId).subscribe(stats => {
+          Object.entries(stats).forEach(([status, count]) =>
+            this.membersCountsByGroupStatus.set(status.toLowerCase(), count)
+          );
+        }, () => this.loading = false);
       }, () => this.loading = false);
     });
   }
