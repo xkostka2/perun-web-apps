@@ -53,7 +53,7 @@ export class ApiInterceptor implements HttpInterceptor {
     // Also handle errors globally, if not disabled
     const shouldHandleError = this.apiRequestConfiguration.shouldHandleError();
 
-    const shouldReloadPrincipal = req.method === "POST";
+    const shouldReloadPrincipal = req.method === "POST" && !this.store.skipOidc();
 
     return next.handle(req).pipe(
       tap(x => {

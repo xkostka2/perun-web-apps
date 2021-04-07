@@ -8,5 +8,6 @@
     "oauth_redirect_uri": "http://gui-dev.org/api-callback",
     "oauth_scopes": "openid profile perun_api",
     "oauth_response_type": "code"
-  }
+  },
+  "skip_oidc": true
 }

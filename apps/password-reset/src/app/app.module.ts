@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PasswordResetConfigService } from './services/password-reset-config.service';
 import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { UiMaterialModule } from '@perun-web-apps/ui/material';
+import { TokenExpiredDialogComponent } from './dialogs/token-expired-dialog/token-expired-dialog.component';
 
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
@@ -42,7 +43,7 @@ const loadConfigs = (appConfig: PasswordResetConfigService) => {
 };
 
 @NgModule({
-  declarations: [AppComponent, PasswordResetDialogComponent],
+  declarations: [AppComponent, PasswordResetDialogComponent, TokenExpiredDialogComponent],
   imports: [
     BrowserModule,
     TranslateModule.forRoot({

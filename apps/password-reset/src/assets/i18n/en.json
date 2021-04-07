@@ -7,9 +7,20 @@
       "OLD_PASSWORD": "Old password",
       "NEW_PASSWORD": "New password",
       "NEW_PASSWORD_CONFIRM": "Confirm new password",
+      "SHOW_PASSWORD": "Show password",
       "ERROR_EMPTY": "This field cannot be empty",
       "ERROR_MATCH": "Passwords must match",
-      "SUBMIT": "Submit"
+      "BACKEND_ERROR": "Entered password doesn't meet the selected namespace's criteria",
+      "BACKEND_ERROR_LONG": "Entered password doesn't match criteria for strong password and it can't be accepted. Please, make sure that the entered password is at least 8 characters long, contains at least one of: A-z, 0-9, and special characters.",
+      "SUBMIT": "Submit",
+      "RESET_SUCCESS": "Your password has been successfully changed."
+    },
+    "TOKEN_EXPIRED": {
+      "TITLE": "Invalid password reset request",
+      "BODY": "Your password reset request is invalid. Possible reasons are:",
+      "EXPIRED": "request is expired",
+      "USED": "request was already used",
+      "INCORRECT": "request not existing"
     }
   }
 }
