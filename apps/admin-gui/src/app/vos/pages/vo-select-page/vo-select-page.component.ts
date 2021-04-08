@@ -13,6 +13,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CreateVoDialogComponent } from '../../../shared/components/dialogs/create-vo-dialog/create-vo-dialog.component';
 import { TABLE_VO_SELECT, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
+import {
+  DeleteEntityDialogComponent,
+  DeleteEntityType
+} from '../../../shared/components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
 
 @Component({
   selector: 'app-vo-select-page',
@@ -103,10 +107,13 @@ export class VoSelectPageComponent implements OnInit, AfterViewChecked{
 
   onRemoveVo() {
     const config = getDefaultDialogConfig();
-    config.width = '600px';
-    config.data = { theme: 'vo-theme', vos: this.selection.selected};
-
-    const dialogRef = this.dialog.open(RemoveVoDialogComponent, config);
+    config.width = '500px';
+    config.data = {
+      theme: 'vo-theme',
+      entity: this.selection.selected[0],
+      entityType: DeleteEntityType.VO
+    };
+    const dialogRef = this.dialog.open(DeleteEntityDialogComponent, config);
 
     dialogRef.afterClosed().subscribe( isVoRemoved => {
       if (isVoRemoved){

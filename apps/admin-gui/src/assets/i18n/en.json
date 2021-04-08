@@ -1848,6 +1848,24 @@
       "CANCEL": "Cancel",
       "DELETE": "Delete",
       "SUCCESS": "Owners successfully removed"
+    },
+    "DELETE_ENTITY": {
+      "BASIC": "Do you want to delete only this",
+      "OR": "or",
+      "RELATIONS": "with all relations",
+      "DELETE": "Delete",
+      "CANCEL": "Cancel",
+      "VO": "organization",
+      "GROUP": "group",
+      "FACILITY": "facility",
+      "RESOURCE": "resource",
+      "CONTROL": "Type \"DELETE\" to confirm",
+      "ASK": "Are you sure you want to permanently delete",
+      "WARN": "This action will also delete all",
+      "SUCCESS": "was successfully deleted",
+      "GROUP_RELATION": "Groups (including subgroups)",
+      "MEMBER_RELATION": "Members",
+      "RESOURCE_RELATION": "Resources"
     }
   },
   "MEMBERS_LIST": {
