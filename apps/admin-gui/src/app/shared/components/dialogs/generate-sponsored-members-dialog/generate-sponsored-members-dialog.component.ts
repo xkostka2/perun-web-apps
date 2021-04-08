@@ -3,9 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   Attribute,
   AttributesManagerService,
-  AuthzResolverService, Group, GroupsManagerService,
+  Group, GroupsManagerService,
   InputCreateSponsoredMemberFromCSV,
-  MembersManagerService, RichGroup
+  MembersManagerService, NamespaceRules, RichGroup
 } from '@perun-web-apps/perun/openapi';
 import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
@@ -45,10 +45,10 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   outputColumns = ['name', 'status', 'login', 'password'];
   functionalityNotSupported = false;
 
-  notEmptyRegex = /.*\S.*/;
   emailRegx = /^(([^<>+()\[\]\\.,;:\s@"-#$%&=]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
 
   namespaceOptions: string[] = [];
+  namespaceRules: NamespaceRules[] = [];
   usersInfoFormGroup: FormGroup;
 
   passwordReset = null;
@@ -94,14 +94,15 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     this.loading = true;
     this.theme = this.data.theme;
     this.createGroupAuth = this.guiAuthResolver.isAuthorized('createGroup_Vo_Group_policy', [{id: this.data.voId , beanName: 'Vo'}]);
-    this.parseNamespace();
-    if (this.namespaceOptions.length === 0) {
-      this.functionalityNotSupported = true;
-    }
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.usersInfoFormGroup = this.formBuilder.group({
       namespace: ['', Validators.required],
       sponsoredMembers: ['', [Validators.required, this.userInputValidator()]]
+    });
+    this.usersInfoFormGroup.controls['namespace'].valueChanges.subscribe({
+      next: (value) => {
+        this.usersInfoFormGroup.controls['sponsoredMembers'].updateValueAndValidity();
+      }
     });
 
     this.attributesService.getVoAttributes(this.data.voId).subscribe(attributes => {
@@ -110,22 +111,30 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
         this.groupsService.getAllRichGroupsWithAttributesByNames(this.data.voId, this.groupAttrNames).subscribe(grps => {
           this.allVoGroups = grps.filter(grp => grp.name !== 'members');
           this.assignableGroups = this.filterAssignableGroups(grps);
-          this.loading = false;
+          this.membersService.getAllNamespacesRules().subscribe(rules => {
+            if (this.store.get('allow_empty_sponsor_namespace')) {
+              this.namespaceRules.push({
+                namespaceName: 'No namespace',
+                csvGenHeader: 'firstname;lastname;urn:perun:user:attribute-def:def:preferredMail',
+                csvGenPlaceholder: 'John;Doe;john@mail.cz',
+                csvGenHeaderDescription: 'First name;Last name;Email'
+              });
+            }
+
+            this.namespaceRules = this.namespaceRules.concat(rules);
+            this.namespaceRules.forEach(item => this.namespaceOptions.push(item.namespaceName));
+            if (this.namespaceOptions.length === 0) {
+              this.functionalityNotSupported = true;
+            } else {
+              this.usersInfoFormGroup.setValue({namespace: this.namespaceOptions[0], sponsoredMembers: ''})
+            }
+            this.loading = false;
+          });
         }, () => this.loading = false);
       } else {
         this.loading = false;
       }
     }, () => this.loading = false);
-  }
-
-  parseNamespace(){
-    const namespaces = this.store.get('sponsor_namespace_attributes');
-    for(const namespace of namespaces){
-      const index = namespace.lastIndexOf(':');
-      if(index !== -1){
-        this.namespaceOptions.push(namespace.substring(index + 1, namespace.length));
-      }
-    }
   }
 
   private filterAssignableGroups(groups: RichGroup[]) {
@@ -191,7 +200,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   onGenerate(){
     this.loading = true;
     const listOfMembers = this.usersInfoFormGroup.get('sponsoredMembers').value.split("\n");
-    const header = 'firstname;lastname;urn:perun:user:attribute-def:def:preferredMail;urn:perun:user:attribute-def:def:note';
+    const header = this.getSelectedNamespaceRules().csvGenHeader;
     const generatedMemberNames: string[] = [];
     for (const line of listOfMembers){
       const parsedLine = this.parseMemberLine(line);
@@ -208,7 +217,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     const inputSponsoredMembersFromCSV: InputCreateSponsoredMemberFromCSV = {
       data: generatedMemberNames,
       header: header,
-      namespace: this.usersInfoFormGroup.get('namespace').value,
+      namespace: '',
       sponsor: this.store.getPerunPrincipal().userId,
       vo: this.data.voId,
       sendActivationLinks: this.passwordReset === "reset"
@@ -222,6 +231,10 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
       inputSponsoredMembersFromCSV.validityTo = formatDate(this.expiration,'yyyy-MM-dd','en-GB');
     }
 
+    if (this.usersInfoFormGroup.get('namespace').value !== 'No namespace') {
+      inputSponsoredMembersFromCSV.namespace = this.usersInfoFormGroup.get('namespace').value;
+    }
+
     this.membersService.createSponsoredMembersFromCSV(inputSponsoredMembersFromCSV).subscribe(logins => {
       this.exportData(logins);
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
@@ -233,19 +246,33 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     this.dialogRef.close(false);
   }
 
-  parseMemberLine(line: string):string {
+  parseMemberLine(line: string): string{
     const trimLine = line.trim();
     if (trimLine === '') {
       return '';
     }
     const memberAttributes = trimLine.split(';');
-    if (memberAttributes.length !== 4) {      //check if all attributes are filled
+    const arrayOfAttributes = this.getSelectedNamespaceRules().csvGenHeader.split(';');
+    if (memberAttributes.length !== arrayOfAttributes.length) {      //check if all attributes are filled
       return 'format';
     }
-    if (!memberAttributes[2].trim().match(this.emailRegx)) {      //check if the email is valid email
-      return 'email';
+    //now we expect that mail is always on the same index - third position
+    if (arrayOfAttributes[2].slice(arrayOfAttributes[2].length - 4).toLowerCase() === 'mail') { //check if the third attribute is mail
+      if (!memberAttributes[2].trim().match(this.emailRegx)) {      //check if the email is valid email
+        return 'email';
+      }
     }
-    return memberAttributes[0].trim() + ';' + memberAttributes[1].trim() + ';' + memberAttributes[2].trim() + ';' + memberAttributes[3].trim();
+    //login must be non empty and we are expecting him in forth position
+    if (arrayOfAttributes[3] === 'login') {  //check if the forth attribute is login
+      if (memberAttributes[3].trim() === '') {      //check if login is nonempty
+        return 'login';
+      }
+    }
+    let finalString = '';
+    for (const memberAttribute of memberAttributes) {
+      finalString += memberAttribute.trim() + ';';
+    }
+    return finalString.slice(0, -1);
   }
 
   userInputValidator(): ValidatorFn {
@@ -258,6 +285,9 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
         }
         if (parsedLine === 'email') {
           return {invalidEmail: {value: line}};
+        }
+        if (parsedLine === 'login') {
+          return {invalidLogin: {value: line}};
         }
       }
 
@@ -321,4 +351,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     }
   }
 
+  getSelectedNamespaceRules(): NamespaceRules {
+    return this.namespaceRules.find(item => item.namespaceName === this.usersInfoFormGroup.get('namespace').value);
+  }
 }
