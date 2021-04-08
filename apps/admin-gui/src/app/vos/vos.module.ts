@@ -82,6 +82,8 @@ import { MemberApplicationsComponent } from './pages/member-detail-page/member-a
 import { MemberResourcesComponent } from './pages/member-detail-page/member-resources/member-resources.component';
 import { VoSettingsSponsoredMembersComponent } from './pages/vo-detail-page/vo-settings/vo-settings-sponsored-members/vo-settings-sponsored-members.component';
 import { GroupSettingsExtsourcesComponent } from './pages/group-detail-page/group-settings/group-settings-extsources/group-settings-extsources.component';
+import { VoStatisticsComponent } from './pages/vo-detail-page/vo-statistics/vo-statistics.component';
+import { GroupStatisticsComponent } from './pages/group-detail-page/group-statistics/group-statistics.component';
 
 @NgModule({
   imports: [
@@ -154,7 +156,9 @@ import { GroupSettingsExtsourcesComponent } from './pages/group-detail-page/grou
     MemberResourcesComponent,
     MemberApplicationsComponent,
     VoSettingsSponsoredMembersComponent,
-    GroupSettingsExtsourcesComponent
+    GroupSettingsExtsourcesComponent,
+    VoStatisticsComponent,
+    GroupStatisticsComponent
   ],
 })
 export class VosModule {

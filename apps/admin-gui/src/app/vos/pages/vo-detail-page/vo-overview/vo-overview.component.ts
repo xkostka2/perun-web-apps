@@ -23,8 +23,7 @@ export class VoOverviewComponent implements OnInit {
     private voService: VosManagerService,
     protected route: ActivatedRoute,
     protected router: Router,
-    protected authResolver: GuiAuthResolver,
-    private memberService: MembersManagerService
+    protected authResolver: GuiAuthResolver
   ) {
   }
 
@@ -34,19 +33,6 @@ export class VoOverviewComponent implements OnInit {
 
   loading = false;
 
-  dataSource = new MatTableDataSource<string>();
-  displayedColumns = ['status', 'count'];
-
-  statuses: string[] = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
-  rowNames: string[] = ['Members', 'Valid', 'Invalid', 'Expired', 'Disabled'];
-  membersCount: Map<string, number> = new Map<string, number>([
-    ['members', 0],
-    ['valid', 0],
-    ['invalid', 0],
-    ['expired', 0],
-    ['disabled', 0]
-    ]);
-
   ngOnInit(): void {
     this.loading = true;
     this.route.parent.params.subscribe(parentParams => {
@@ -54,30 +40,10 @@ export class VoOverviewComponent implements OnInit {
 
       this.voService.getVoById(voId).subscribe(vo => {
         this.vo = vo;
-        this.dataSource = new MatTableDataSource<string>(this.rowNames);
-
-        this.memberService.getMembersCount(this.vo.id).subscribe(count => {
-          this.membersCount.set('members', count);
-          this.getCount(this.statuses);
-
-        }, () => this.loading = false);
+        this.initNavItems();
+        this.loading = false;
       }, () => this.loading = false);
     });
-  }
-
-  getCount(statuses: string[]) {
-    this.loading = true;
-    if (statuses.length === 0) {
-      this.initNavItems();
-      this.loading = false;
-      return
-    }
-
-    const status = statuses.pop();
-    this.memberService.getMembersWithStatusCount(this.vo.id, status).subscribe(count => {
-      this.membersCount.set(status.toLowerCase(), count);
-      this.getCount(statuses);
-    }, () => this.loading = false);
   }
 
   private initNavItems() {
@@ -131,6 +97,7 @@ export class VoOverviewComponent implements OnInit {
       });
     }
 
+
     // Attributes
     this.navItems.push({
       cssIcon: 'perun-attributes',
@@ -138,6 +105,17 @@ export class VoOverviewComponent implements OnInit {
       label: 'MENU_ITEMS.VO.ATTRIBUTES',
       style: 'vo-btn'
     });
+
+    // Statistics
+    if(this.authResolver.isAuthorized('getMembersCount_Vo_Status_policy', [this.vo]) &&
+       this.authResolver.isAuthorized('getMembersCount_Vo_policy', [this.vo])){
+      this.navItems.push({
+        cssIcon: 'perun-statistics',
+        url: `/organizations/${this.vo.id}/statistics`,
+        label: 'MENU_ITEMS.VO.STATISTICS',
+        style: 'vo-btn'
+      });
+    }
 
     // Settings
     if (this.authResolver.isManagerPagePrivileged(this.vo) ||

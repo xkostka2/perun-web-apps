@@ -306,8 +306,7 @@
       "CREATE_SERVICE_MEMBER": "Create service member",
       "ADD_MANAGER": "Add manager",
       "CREATE_GROUP": "Create group",
-      "ADD_MEMBER": "Add member",
-      "MEMBERS_COUNT": "Members distribution"
+      "ADD_MEMBER": "Add member"
     },
     "SETTINGS": {
       "EXPIRATION": {
@@ -514,6 +513,10 @@
         "APPROVE_MESSAGE": "Application was approved",
         "VERIFY_MESSAGE": "Application was verified"
       }
+    },
+    "STATISTICS": {
+      "TITLE": "Statistics",
+      "MEMBERS_COUNT": "Members by status"
     }
   },
   "GROUP_DETAIL": {
@@ -629,6 +632,11 @@
         "FILTER": "Filter by ID, name or type",
         "SUCCESS_REMOVED": "External source successfully removed: "
       }
+    },
+    "STATISTICS":{
+      "TITLE": "Statistics",
+      "VO_STATUS_COUNT": "Members by organization status",
+      "GROUP_STATUS_COUNT": "Members by group status"
     }
   },
   "MEMBER_DETAIL": {
@@ -734,7 +742,8 @@
       "NOTIFICATIONS": "Notifications",
       "EXTSOURCES": "External sources",
       "SPONSORS": "Sponsors",
-      "SPONSORED_MEMBERS": "Sponsored members"
+      "SPONSORED_MEMBERS": "Sponsored members",
+      "STATISTICS": "Statistics"
     },
     "FACILITY": {
       "OVERVIEW": "Overview",
@@ -775,7 +784,8 @@
       "APPLICATION_FORM": "Application form",
       "NOTIFICATIONS": "Notifications",
       "RELATIONS": "Relations",
-      "EXTSOURCES": "External sources"
+      "EXTSOURCES": "External sources",
+      "STATISTICS": "Statistics"
     },
     "MEMBER": {
       "OVERVIEW": "Overview",

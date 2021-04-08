@@ -78,6 +78,8 @@ import { ResourceAssignedServicesComponent } from '../facilities/pages/resource-
 import { ResourceAssignedMembersComponent } from '../facilities/pages/resource-detail-page/resource-assigned-members/resource-assigned-members.component';
 import { VoSettingsSponsoredMembersComponent } from './pages/vo-detail-page/vo-settings/vo-settings-sponsored-members/vo-settings-sponsored-members.component';
 import { GroupSettingsExtsourcesComponent } from './pages/group-detail-page/group-settings/group-settings-extsources/group-settings-extsources.component';
+import { VoStatisticsComponent } from './pages/vo-detail-page/vo-statistics/vo-statistics.component';
+import { GroupStatisticsComponent } from './pages/group-detail-page/group-statistics/group-statistics.component';
 
 const routes: Routes = [
   {
@@ -148,6 +150,11 @@ const routes: Routes = [
         path: 'sponsoredMembers',
         component: VoSettingsSponsoredMembersComponent,
         data: {animation: 'VoSettingsSponsoredMembersPage'}
+      },
+      {
+        path: 'statistics',
+        component: VoStatisticsComponent,
+        data: {animation: 'VoStatisticsPage'}
       },
       {
         path: 'settings',
@@ -282,6 +289,11 @@ const routes: Routes = [
         path: 'attributes',
         component: GroupAttributesComponent,
         data: {animation: 'GroupAttributesPage'}
+      },
+      {
+        path: 'statistics',
+        component: GroupStatisticsComponent,
+        data: {animation: 'GroupStatisticsPage'}
       },
       {
         path: 'settings',
