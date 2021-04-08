@@ -20,6 +20,7 @@
     *ngIf="!loading"
     [publications]="publications"
     [selection]="selected"
+    [routerPath]="'/all-publications'"
     [pageSize]="pageSize"
     (page)="pageChanged($event)">
   </perun-web-apps-publications-list>

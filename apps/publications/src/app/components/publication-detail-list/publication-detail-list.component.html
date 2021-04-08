@@ -1,0 +1,113 @@
+<div>
+  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+  <div *ngIf="!loading">
+    <div class="d-flex">
+      <h3 *ngIf="!editing" class="bigger-font w-75 mr-2">{{publication.title}}</h3>
+      <button
+        class="ml-auto"
+        (click)="editing = !editing"
+        *ngIf="!editing && !publication.locked"
+        mat-icon-button
+        matTooltipPosition="above"
+        matTooltip="{{'PUBLICATION_DETAIL.LIST.EDIT' | translate}}">
+        <mat-icon class="big-icon">edit</mat-icon>
+      </button>
+      <mat-form-field *ngIf="editing" class="w-75">
+        <textarea matInput class="bigger-font fix-height" [formControl]="titleControl"></textarea>
+        <mat-error *ngIf="titleControl.invalid">
+          {{'PUBLICATION_DETAIL.LIST.EMPTY_ERROR' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <button
+        class="ml-auto"
+        (click)="save()"
+        *ngIf="editing"
+        [disabled]="titleControl.invalid"
+        mat-icon-button
+        matTooltipPosition="above"
+        matTooltip="{{'PUBLICATION_DETAIL.LIST.SAVE' | translate}}">
+        <mat-icon class="big-icon">save</mat-icon>
+      </button>
+    </div>
+    <table class="w-100 layout" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="key">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let item" class="font-weight-bold" mat-cell>
+          {{item.key}}:
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let item" mat-cell>
+          <span *ngIf="item.key === 'Id / Origin'">
+            {{item.value}} /
+            <span class="bold">{{'PUBLICATION_DETAIL.LIST.EXT_ID' | translate}}:</span>
+            {{publication.externalId}}
+            <span class="bold">{{'PUBLICATION_DETAIL.LIST.SYSTEM' | translate}}:</span>
+            {{publication.pubSystemName}}
+          </span>
+          <span *ngIf="item.key === 'Create date'">
+            {{item.value | date:'dd/MM/yyyy'}}
+          </span>
+          <span *ngIf="item.key === 'Created by'">
+            {{item.value}}
+          </span>
+          <div *ngIf="!editing">
+            <span *ngIf="item.value !== null && item.value !== ''">
+              <span *ngIf="item.key !== 'Id / Origin' && item.key !== 'Create date' && item.key !== 'Created by'">
+                {{item.value}}
+              </span>
+            </span>
+            <span *ngIf="item.value === null || item.value === ''">
+              -
+            </span>
+          </div>
+          <div *ngIf="editing">
+            <mat-form-field *ngIf="item.key === 'Year'" class="mr-2" (click)="sdp.open()">
+              <mat-label>{{'PUBLICATION_DETAIL.LIST.YEAR' | translate}}</mat-label>
+              <input matInput [max]="maxYear" [matDatepicker]="sdp" [formControl]="yearControl" class="disable"
+                     readonly>
+              <mat-datepicker-toggle matSuffix [for]="sdp"></mat-datepicker-toggle>
+              <mat-datepicker #sdp
+                              startView="multi-year"
+                              (yearSelected)="chosenYearHandler($event, sdp)">
+              </mat-datepicker>
+            </mat-form-field>
+            <mat-form-field *ngIf="item.key === 'Category'">
+              <mat-select [formControl]="categoryControl">
+                <mat-option *ngFor="let category of categories" [value]="category.name">
+                  {{category.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="item.key === 'Rank'">
+              <input
+                [formControl]="rankControl"
+                matInput>
+              <mat-error *ngIf="rankControl.invalid">
+                {{'PUBLICATION_DETAIL.LIST.RANK_ERROR' | translate}}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="item.key === 'ISBN / ISSN'" class="w-75">
+              <input
+                [(ngModel)]="publication.isbn"
+                matInput>
+            </mat-form-field>
+            <mat-form-field *ngIf="item.key === 'DOI'" class="w-75">
+              <input
+                [(ngModel)]="publication.doi"
+                matInput>
+            </mat-form-field>
+            <mat-form-field *ngIf="item.key === 'Full cite'" class="w-75">
+              <textarea class="fix-height" matInput [(ngModel)]="publication.main"></textarea>
+            </mat-form-field>
+          </div>
+        </td>
+      </ng-container>
+      <tr
+        *matRowDef="let col; columns: displayedColumns;"
+        mat-row>
+      </tr>
+    </table>
+  </div>
+</div>

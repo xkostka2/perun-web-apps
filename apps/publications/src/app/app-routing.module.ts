@@ -7,6 +7,7 @@ import { AuthorsPageComponent } from './pages/authors-page/authors-page.componen
 import { CategoriesPageComponent } from './pages/categories-page/categories-page.component';
 import { PublicationSystemsPageComponent } from './pages/publication-systems-page/publication-systems-page.component';
 import { AuthorDetailComponent } from './pages/author-detail/author-detail.component';
+import { PublicationDetailComponent } from './pages/publication-detail/publication-detail.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,18 @@ const routes: Routes = [
   {
     path: 'authors/:authorId',
     component: AuthorDetailComponent,
+  },
+  {
+    path: 'authors/:authorId/publication/:publicationId',
+    component: PublicationDetailComponent
+  },
+  {
+    path: 'all-publications/:publicationId',
+    component: PublicationDetailComponent
+  },
+  {
+    path: 'my-publications/:publicationId',
+    component: PublicationDetailComponent
   },
   {
     path: 'categories',
