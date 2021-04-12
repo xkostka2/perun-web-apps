@@ -54,7 +54,8 @@
     "api_url": "https://id.muni.cz/mfaapi/",
     "security_image_attribute": "urn:perun:user:attribute-def:def:securityImage:mu",
     "enforce_mfa_attribute": "urn:perun:user:attribute-def:def:mfaEnforced:mu",
-    "tokens_attribute": "urn:perun:user:attribute-def:def:mfaTokens:mu"
+    "tokens_attribute": "urn:perun:user:attribute-def:def:mfaTokens:mu",
+    "register_totp_url": "https://id.muni.cz/simplesaml/module.php/muni/register-totp.php"
   },
   "display_identity_certificates": true,
   "external_services": [
