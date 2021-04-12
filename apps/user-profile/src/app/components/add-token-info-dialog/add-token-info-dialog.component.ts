@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-add-token-info-dialog',
@@ -8,7 +9,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AddTokenInfoDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<AddTokenInfoDialogComponent>) { }
+  constructor(private dialogRef: MatDialogRef<AddTokenInfoDialogComponent>,
+              private store: StoreService) { }
 
   ngOnInit(): void {
   }
@@ -18,7 +20,8 @@ export class AddTokenInfoDialogComponent implements OnInit {
   }
 
   onAdd() {
-    window.open('https://id.muni.cz/simplesaml/module.php/muni/register-totp.php', '_blank');
+    const url = this.store.get('mfa', 'register_totp_url')
+    window.open(url, '_blank');
     this.dialogRef.close()
   }
 }
