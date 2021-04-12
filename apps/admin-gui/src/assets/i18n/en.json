@@ -535,7 +535,8 @@
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
       "EMPTY_SEARCH": "Search field cannot be empty",
-      "FILTER_STATUS": "Select group status (to filter)"
+      "FILTER_STATUS": "Select VO status",
+      "FILTER_GROUP_STATUS": "Select group status"
     },
     "RESOURCES": {
       "TITLE": "Resources",
@@ -1831,7 +1832,7 @@
   "MEMBERS_LIST": {
     "ID": "Id",
     "NAME": "Name",
-    "STATUS": "Status",
+    "STATUS": "VO status",
     "GROUP_STATUS": "Group status",
     "ALREADY_SPONSORED": "Already \nsponsored",
     "EMAIL": "Email",

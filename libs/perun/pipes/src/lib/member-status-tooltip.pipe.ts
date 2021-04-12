@@ -16,10 +16,12 @@ export class MemberStatusTooltipPipe implements PipeTransform {
       groupExpiration = member.memberAttributes.find(att => att.friendlyName === 'groupMembershipExpiration');
     }
 
-    let res = `Status: ${parseMemberStatus(member.status, member.groupStatus)}
-               Vo status: ${parseMemberStatus(member.status)}, Expiration: ${memberExpiration && memberExpiration.value ? memberExpiration.value as unknown as string : 'never'}`;
-    if(showGroupStatuses){
-      res += `\n Group status: ${parseMemberStatus(member.groupStatus)}, Expiration: ${groupExpiration && groupExpiration.value ? groupExpiration.value as unknown as string : 'never'}`
+    let res = '';
+    if(showGroupStatuses) {
+      res = `\n Group status: ${parseMemberStatus(member.groupStatus)}, Expiration: ${groupExpiration && groupExpiration.value ? groupExpiration.value as unknown as string : 'never'}`
+    } else {
+      res = `Status: ${parseMemberStatus(member.status, member.groupStatus)}
+             Vo status: ${parseMemberStatus(member.status)}, Expiration: ${memberExpiration && memberExpiration.value ? memberExpiration.value as unknown as string : 'never'}`;
     }
     return res;
   }
