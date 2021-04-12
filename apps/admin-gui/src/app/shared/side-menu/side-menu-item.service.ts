@@ -486,6 +486,16 @@ export class SideMenuItemService {
       activatedRegex: '/organizations/\\d+/attributes$'
     });
 
+    // Statistics
+    if(this.guiAuthResolver.isAuthorized('getMembersCount_Vo_Status_policy', [vo]) &&
+       this.guiAuthResolver.isAuthorized('getMembersCount_Vo_policy', [vo])){
+      links.push({
+        label: 'MENU_ITEMS.VO.STATISTICS',
+        url: [`/organizations/${vo.id}/statistics`],
+        activatedRegex: '/organizations/\\d+/statistics'
+      });
+    }
+
     // Settings
     const extSourcesAuth = this.authResolver.isAuthorized('getVoExtSources_Vo_policy', [vo]);
     const managersAuth = this.authResolver.isManagerPagePrivileged(vo);
@@ -864,6 +874,18 @@ export class SideMenuItemService {
       url: [`/organizations/${group.voId}/groups/${group.id}/attributes`],
       activatedRegex: '/organizations/\\d+/groups/\\d+/attributes$'
     });
+
+    //Statistics
+    const countAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCount_Group_policy', [group]);
+    const countByVoStatusAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCountsByVoStatus_Group_policy', [group]);
+    const countByGroupStatusAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCountsByGroupStatus_Group_policy', [group]);
+    if(countAuth && countByVoStatusAuth && countByGroupStatusAuth){
+      links.push({
+        label: 'MENU_ITEMS.GROUP.STATISTICS',
+        url: [`/organizations/${group.voId}/groups/${group.id}/statistics`],
+        activatedRegex: '/organizations/\\d+/groups/\\d+/statistics'
+      });
+    }
 
     //SettingsMembership
     //not implemented in authorization....probably must be hardcoded

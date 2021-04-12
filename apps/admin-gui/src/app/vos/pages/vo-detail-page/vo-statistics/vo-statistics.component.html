@@ -1,0 +1,9 @@
+<h1 class="page-subtitle">{{'VO_DETAIL.STATISTICS.TITLE' | translate}}</h1>
+<mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+<div *ngIf="!loading">
+  <app-statistics-card
+    [rowNames]="rowNames"
+    [statistics]="membersCount"
+    [title]="'VO_DETAIL.STATISTICS.MEMBERS_COUNT'">
+  </app-statistics-card>
+</div>

@@ -38,11 +38,6 @@ export class GroupOverviewComponent implements OnInit {
   parentGroup: Group = null;
   loading = false;
 
-  voStatusCountsRowNames: string[] = ['Members', 'Valid', 'Invalid', 'Expired', 'Disabled'];
-  membersCountsByVoStatus: Map<string, number> = new Map<string, number>();
-
-  groupStatusCountsRowNames: string[] = ['Members', 'Valid', 'Expired'];
-  membersCountsByGroupStatus: Map<string, number> = new Map<string, number>();
 
   ngOnInit() {
     this.loading = true;
@@ -58,23 +53,6 @@ export class GroupOverviewComponent implements OnInit {
           this.initNavItems();
           this.loading = false;
         }
-
-        this.groupService.getGroupMembersCount(this.groupId).subscribe(count => {
-          this.membersCountsByVoStatus.set('members', count);
-          this.membersCountsByGroupStatus.set('members', count);
-        }, () => this.loading = false);
-
-        this.groupService.getGroupMembersCountsByVoStatus(this.groupId).subscribe(stats => {
-          Object.entries(stats).forEach(([status, count]) =>
-            this.membersCountsByVoStatus.set(status.toLowerCase(), count)
-          );
-        }, () => this.loading = false);
-
-        this.groupService.getGroupMembersCountsByGroupStatus(this.groupId).subscribe(stats => {
-          Object.entries(stats).forEach(([status, count]) =>
-            this.membersCountsByGroupStatus.set(status.toLowerCase(), count)
-          );
-        }, () => this.loading = false);
       }, () => this.loading = false);
     });
   }
@@ -134,6 +112,19 @@ export class GroupOverviewComponent implements OnInit {
       label: 'MENU_ITEMS.GROUP.ATTRIBUTES',
       style: 'group-btn'
     });
+
+    const countAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCount_Group_policy', [this.group]);
+    const countByVoStatusAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCountsByVoStatus_Group_policy', [this.group]);
+    const countByGroupStatusAuth = this.guiAuthResolver.isAuthorized('getGroupMembersCountsByGroupStatus_Group_policy', [this.group]);
+    if(countAuth && countByGroupStatusAuth && countByVoStatusAuth){
+      this.navItems.push({
+        cssIcon: 'perun-statistics',
+        url: `/organizations/${this.group.voId}/groups/${this.group.id}/statistics`,
+        label: 'MENU_ITEMS.GROUP.STATISTICS',
+        style: 'group-btn'
+      });
+    }
+
 
     //SettingsMembership
     //not implemented in authorization....probably must be hardcoded

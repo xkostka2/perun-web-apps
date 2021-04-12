@@ -1,0 +1,15 @@
+<h1 class="page-subtitle">{{'GROUP_DETAIL.STATISTICS.TITLE' | translate}}</h1>
+<mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+<div *ngIf="!loading">
+  <app-statistics-card
+    [rowNames]="voStatusCountsRowNames"
+    [statistics]="membersCountsByVoStatus"
+    [title]="'GROUP_DETAIL.STATISTICS.VO_STATUS_COUNT'">
+  </app-statistics-card>
+  <app-statistics-card
+    [rowNames]="groupStatusCountsRowNames"
+    [statistics]="membersCountsByGroupStatus"
+    [title]="'GROUP_DETAIL.STATISTICS.GROUP_STATUS_COUNT'">
+  </app-statistics-card>
+</div>
+
