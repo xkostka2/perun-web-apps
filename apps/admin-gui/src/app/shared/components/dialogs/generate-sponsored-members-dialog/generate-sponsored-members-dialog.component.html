@@ -22,11 +22,11 @@
           </mat-error>
         </mat-form-field>
         <div>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.HINT'| translate}}</div>
-        <div class="font-weight-bold">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ATTRIBUTES'| translate}}</div>
+        <div class="font-weight-bold">{{this.getSelectedNamespaceRules().csvGenHeaderDescription}}</div>
         <mat-form-field class="pt-2">
           <mat-label>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.INSERT_HERE'| translate}}</mat-label>
           <textarea
-            placeholder="{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.EXAMPLE'| translate}}"
+            placeholder="{{this.getSelectedNamespaceRules().csvGenPlaceholder}}"
             class="md-textarea form-control"
             id="voGenerateSponsoredMembers"
             name="voGenerateSponsoredMembers"
@@ -45,6 +45,10 @@
           <mat-error *ngIf="usersInfoFormGroup.hasError('invalidEmail', 'sponsoredMembers')">
             {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_EMAIL'| translate}}:
             {{usersInfoFormGroup.get('sponsoredMembers').getError('invalidEmail').value}}
+          </mat-error>
+          <mat-error *ngIf="usersInfoFormGroup.hasError('invalidLogin', 'sponsoredMembers')">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.ERROR_LOGIN'| translate}}:
+            {{usersInfoFormGroup.get('sponsoredMembers').getError('invalidLogin').value}}
           </mat-error>
         </mat-form-field>
           <div mat-dialog-actions>
