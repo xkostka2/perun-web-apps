@@ -192,7 +192,7 @@ export class UserRolesComponent implements OnInit {
     this.loading = true;
     this.facilities = [];
     this.facilitiesManagerService.getFacilitiesWhereUserIsAdmin(this.userId).subscribe(facilities => {
-      this.facilities = facilities.map(f => {return { facility: f } });
+      this.facilities = facilities.map(f => ({ facility: f }));
       this.loading = false;
     });
   };
@@ -225,7 +225,7 @@ export class UserRolesComponent implements OnInit {
     this.resourcesManagerService.getRichResourcesByIds(resourceIds).subscribe(resources => {
       this.resources = resources;
       this.vos = this.resources.map(res => res.vo).filter((item, i, ar) => ar.indexOf(item) === i);
-      this.facilities = this.resources.map(res => {return { facility: res.facility } }).filter((item, i, ar) => ar.indexOf(item) === i);
+      this.facilities = this.resources.map(res => ({ facility: res.facility })).filter((item, i, ar) => ar.indexOf(item) === i);
       this.loading = false;
     });
   }
@@ -262,7 +262,7 @@ export class UserRolesComponent implements OnInit {
     this.facilities = [];
     const facilityIds = this.roles.get(role).get('Facility');
     this.facilitiesManagerService.getFacilitiesByIds(facilityIds).subscribe(facilities => {
-      this.facilities = facilities.map(f => {return { facility: f } });
+      this.facilities = facilities.map(f => ({ facility: f }));
       this.loading = false;
     });
   }
