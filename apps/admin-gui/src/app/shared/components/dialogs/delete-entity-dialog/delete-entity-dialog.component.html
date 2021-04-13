@@ -1,0 +1,60 @@
+<div *ngIf="!force">
+  <h1 mat-dialog-title>{{'DIALOGS.DELETE_ENTITY.DELETE' | translate}} {{entityType}}</h1>
+  <div mat-dialog-content class="dialog-container">
+    <div class="mb-4">
+      {{'DIALOGS.DELETE_ENTITY.BASIC' | translate}}
+      {{entityType}}
+      <span class="font-weight-bold">{{'DIALOGS.DELETE_ENTITY.OR' | translate}}</span>
+      {{entityType}}
+      {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}?
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button (click)="onCancel()" mat-flat-button>
+      {{'DIALOGS.DELETE_ENTITY.CANCEL' | translate}}
+    </button>
+    <button (click)="onDelete()" class="ml-auto" mat-flat-button color="warn">
+      {{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
+    </button>
+    <button (click)="force = true" class="ml-2" mat-flat-button color="warn">
+      <mat-icon>warning</mat-icon>
+      {{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
+      {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}
+    </button>
+  </div>
+</div>
+<div *ngIf="force">
+  <h1 mat-dialog-title>{{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
+    {{entityType}}
+    {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}</h1>
+  <div mat-dialog-content class="dialog-container">
+    <div class="mb-4">
+      {{'DIALOGS.DELETE_ENTITY.WARN' | translate}}:
+      <mat-list>
+        <mat-list-item *ngFor="let relation of relations">
+          <span>
+            <mat-icon class="dot-icon">fiber_manual_record</mat-icon>
+            {{relation}}
+          </span>
+        </mat-list-item>
+      </mat-list>
+      <app-alert alert_type="warn">
+        {{'DIALOGS.DELETE_ENTITY.ASK' | translate}}: {{entityName}} ?
+      </app-alert>
+    </div>
+    <mat-form-field>
+      <input [formControl]="deleteControl" matInput placeholder="{{'DIALOGS.DELETE_ENTITY.CONTROL' | translate}}">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button (click)="onCancel()" class="ml-auto" mat-flat-button>
+      {{'DIALOGS.DELETE_ENTITY.CANCEL' | translate}}
+    </button>
+    <button (click)="onDelete()" [disabled]="deleteControl.invalid" class="ml-2" mat-flat-button color="warn">
+      <mat-icon>warning</mat-icon>
+      {{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
+      {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}
+    </button>
+  </div>
+</div>
+

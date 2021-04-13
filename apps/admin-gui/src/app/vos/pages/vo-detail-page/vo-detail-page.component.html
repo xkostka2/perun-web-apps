@@ -25,6 +25,13 @@
             (click)="editVo()">
             <mat-icon>edit</mat-icon>
           </button>
+          <button
+            *ngIf="removeAuth"
+            mat-icon-button
+            aria-label="Remove Vo"
+            (click)="removeVo()">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
         </div>
         <span class="mt-1 entity-info">
           {{'VO_DETAIL.ENTITY' | translate}},

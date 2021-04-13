@@ -11,6 +11,11 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
+import { RemoveVoDialogComponent } from '../../../shared/components/dialogs/remove-vo-dialog/remove-vo-dialog.component';
+import {
+  DeleteEntityDialogComponent,
+  DeleteEntityType
+} from '../../../shared/components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
 
 @Component({
   selector: 'app-vo-detail-page',
@@ -36,6 +41,7 @@ export class VoDetailPageComponent implements OnInit {
   vo: Vo;
   editAuth: boolean;
   loading = false;
+  removeAuth: boolean;
 
   ngOnInit() {
     this.loading = true;
@@ -45,6 +51,7 @@ export class VoDetailPageComponent implements OnInit {
       this.voService.getVoById(voId).subscribe(vo => {
         this.vo = vo;
         this.editAuth = this.authResolver.isAuthorized('updateVo_Vo_policy', [this.vo]);
+        this.removeAuth = this.authResolver.isAuthorized('deleteVo_Vo_policy', [this.vo]);
 
         const sideMenuItem = this.sideMenuItemService.parseVo(vo);
 
@@ -69,6 +76,23 @@ export class VoDetailPageComponent implements OnInit {
         this.voService.getVoById(this.vo.id).subscribe(vo => {
           this.vo = vo;
         });
+      }
+    });
+  }
+
+  removeVo() {
+    const config = getDefaultDialogConfig();
+    config.width = '500px';
+    config.data = {
+      theme: 'vo-theme',
+      entity: this.vo,
+      entityType: DeleteEntityType.VO
+    };
+    const dialogRef = this.dialog.open(DeleteEntityDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['']);
       }
     });
   }

@@ -182,6 +182,8 @@ import { StatisticsCardComponent } from './components/statistics-card/statistics
 import { FacilitiesListComponent } from './components/facilities-list/facilities-list.component';
 import { ApplicationFormItemDisabledPipe } from './pipes/application-form-item-disabled.pipe';
 import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hidden.pipe';
+import { DeleteEntityDialogComponent } from './components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   imports: [
@@ -229,7 +231,8 @@ import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hid
     PerunSharedComponentsModule,
     ConfigTableConfigModule,
     PerunPipesModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatListModule
   ],
   exports: [
     NgxMatSelectSearchModule,
@@ -439,6 +442,7 @@ import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hid
     FacilitiesListComponent,
     ApplicationFormItemDisabledPipe,
     ApplicationFormItemHiddenPipe,
+    DeleteEntityDialogComponent
   ],
   providers: [
     AnyToStringPipe,
