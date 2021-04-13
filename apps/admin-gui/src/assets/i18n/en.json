@@ -442,8 +442,8 @@
       "SPONSORED_MEMBERS": {
         "TITLE": "Sponsored members",
         "CREATE": "Create",
-        "CREATE_ONE": "Create sponsored user",
-        "GENERATE": "Create in bulk",
+        "CREATE_ONE": "Create sponsored member",
+        "GENERATE": "Generate sponsored members",
         "FILTER": "Filter by name or ID",
         "SPONSOR_EXISTING": "Sponsor existing member",
         "NO_SPONSORS": "This organization has no members with the role SPONSOR"
@@ -1754,7 +1754,7 @@
       "SPONSORSHIP_TITLE": "Sponsorship options"
     },
     "GENERATE_SPONSORED_MEMBERS": {
-      "TITLE": "Create sponsored members in bulk",
+      "TITLE": "Generate sponsored members",
       "NAMESPACE": "Namespace",
       "NAMESPACE_ERROR": "Selection of namespace is required",
       "NAMES_ERROR": "This field cannot be empty",
