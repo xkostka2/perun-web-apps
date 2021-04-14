@@ -94,12 +94,17 @@ export class GroupMembersComponent implements OnInit {
   statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
   selectedStatuses: string[] = ['VALID', 'INVALID'];
 
+  groupStatuses = new FormControl();
+  groupStatusList = ['VALID', 'EXPIRED'];
+  selectedGroupStatuses: ('VALID' | 'EXPIRED')[] = ['VALID'];
+
   ngOnInit() {
     this.loading = true;
     this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.selection = new SelectionModel<RichMember>(true, []);
     this.statuses.setValue(this.selectedStatuses);
+    this.groupStatuses.setValue(this.selectedGroupStatuses);
     this.memberAttrNames = this.memberAttrNames.concat(this.storeService.getLoginAttributeNames());
     this.route.parent.params.subscribe(parentParams => {
       const groupId = parentParams['groupId'];
@@ -221,7 +226,7 @@ export class GroupMembersComponent implements OnInit {
     this.selection.clear();
     switch (this.data) {
       case 'all': {
-        this.membersManager.getCompleteRichMembersForGroup(this.group.id, false, this.selectedStatuses, this.memberAttrNames).subscribe(
+        this.membersManager.getCompleteRichMembersForGroup(this.group.id, false, this.selectedStatuses, this.selectedGroupStatuses, this.memberAttrNames).subscribe(
           members => {
           this.members = members;
           this.setAuthRights();
@@ -232,7 +237,7 @@ export class GroupMembersComponent implements OnInit {
         break;
       }
       case 'search': {
-        this.membersManager.findCompleteRichMembersForGroup(this.group.id, this.memberAttrNames, this.searchControl.value, false, this.selectedStatuses).subscribe(
+        this.membersManager.findCompleteRichMembersForGroup(this.group.id, this.memberAttrNames, this.searchControl.value, false, this.selectedStatuses, this.selectedGroupStatuses).subscribe(
           members => {
             this.members = members;
             this.setAuthRights();
@@ -259,6 +264,14 @@ export class GroupMembersComponent implements OnInit {
       return `${this.statuses.value[0]}  ${this.statuses.value.length > 1 ? ('(+' + (this.statuses.value.length - 1) +' '+ (this.statuses.value.length === 2 ? 'other)' : 'others)')) : ''}`;
     }
     return '';
+  }
+
+  displaySelectedGroupStatuses(): string {
+    if(this.selectedGroupStatuses.length === this.groupStatusList.length){
+      return 'ALL';
+    } else {
+      return `${this.groupStatuses.value[0]}`;
+    }
   }
 
   isManualAddingBlocked(voId: number, groupId: number): Promise<void> {

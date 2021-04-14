@@ -61,6 +61,16 @@
         <mat-option class="group-theme" *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field class="mr-2 fix-select">
+      <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_GROUP_STATUS' | translate}}</mat-label>
+      <mat-select [(value)]="selectedGroupStatuses" [formControl]="groupStatuses"
+                  multiple>
+        <mat-select-trigger>
+          {{displaySelectedGroupStatuses()}}
+        </mat-select-trigger>
+        <mat-option class="group-theme" *ngFor="let status of groupStatusList" [value]="status">{{status}}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
     <mat-form-field class="mr-2 search-field no-border-mat-input">
       <label>

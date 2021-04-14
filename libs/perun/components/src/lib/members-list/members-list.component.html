@@ -39,23 +39,28 @@
           <td *matCellDef="let member" mat-cell>{{member.user | userFullName}}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <div *ngIf="showGroupStatuses then thenHeader else elseHeader"></div>
-          <ng-template #thenHeader>
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
-          </ng-template>
-          <ng-template #elseHeader>
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
-          </ng-template>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
           <td *matCellDef="let member" mat-cell>
             <i (click)="changeStatus($event, member)"
-               class="material-icons {{showGroupStatuses ? (member.groupStatus | memberStatusIconColor) : (member.status | memberStatusIconColor)}}"
-               matTooltip="{{member | memberStatusTooltip: showGroupStatuses}}"
+               class="material-icons {{(member.status | memberStatusIconColor)}}"
+               matTooltip="{{member | memberStatusTooltip: false}}"
                matTooltipClass="status-tooltip"
                matTooltipPosition="left">
-              <span *ngIf="!showGroupStatuses">
+              <span>
                 {{member.status | memberStatusIcon}}
               </span>
-              <span *ngIf="showGroupStatuses">
+            </i>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="groupStatus">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
+          <td *matCellDef="let member" mat-cell>
+            <i (click)="changeStatus($event, member)"
+               class="material-icons {{member.groupStatus | memberStatusIconColor}}"
+               matTooltip="{{member | memberStatusTooltip: true}}"
+               matTooltipClass="status-tooltip"
+               matTooltipPosition="left">
+              <span>
                 {{member.groupStatus | memberStatusIcon}}
               </span>
             </i>

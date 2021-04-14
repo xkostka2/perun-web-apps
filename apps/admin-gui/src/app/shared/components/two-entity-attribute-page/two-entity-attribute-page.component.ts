@@ -94,7 +94,7 @@ export class TwoEntityAttributePageComponent implements OnInit {
             break;
           case 'member':
             // return one attribute because if an empty list is passed, all attributes are returned
-            this.membersManager.getCompleteRichMembersForGroup(this.firstEntityId, false, this.allowedStatuses, [Urns.MEMBER_CORE_ID]).subscribe(members => {
+            this.membersManager.getCompleteRichMembersForGroup(this.firstEntityId, false, this.allowedStatuses, null, [Urns.MEMBER_CORE_ID]).subscribe(members => {
               this.entityValues = members;
               this.preselectEntity();
               this.loading = false;
