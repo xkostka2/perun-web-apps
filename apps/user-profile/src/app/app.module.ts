@@ -35,7 +35,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { PrivacyPageComponent } from './pages/privacy-page/privacy-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { AddSshDialogComponent } from './components/dialogs/add-ssh-dialog/add-ssh-dialog.component';
 import { AddUnixGroupDialogComponent } from './components/dialogs/add-unix-group-dialog/add-unix-group-dialog.component';
@@ -159,7 +158,6 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     FlexLayoutModule,
     MatToolbarModule,
     PerunSharedComponentsModule,
-    MatTableExporterModule,
     UiAlertsModule,
     MatExpansionModule,
     MatFormFieldModule,
