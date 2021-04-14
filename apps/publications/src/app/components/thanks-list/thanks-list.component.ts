@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
-import { Author, ThanksForGUI } from '@perun-web-apps/perun/openapi';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
+import { ThanksForGUI } from '@perun-web-apps/perun/openapi';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
-  parseName,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatTableDataSource } from '@angular/material/table';
@@ -41,8 +40,6 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<ThanksForGUI>;
 
-  exporting = false;
-
   private paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
@@ -63,17 +60,17 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
   private setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: ThanksForGUI, filter: string) => {
-        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getFilterDataForColumn, this)
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
       this.dataSource.sortData = (data: ThanksForGUI[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
   }
 
-  getSortDataForColumn(data: ThanksForGUI, column: string):string {
+  getDataForColumn(data: ThanksForGUI, column: string):string {
     switch (column) {
       case 'id':
         return data.ownerId.toString();
@@ -84,15 +81,7 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  getFilterDataForColumn(data: ThanksForGUI, column: string):string {
-    switch (column) {
-      case 'id':
-        return data.id.toString();
-      case 'name':
-        return data.ownerName;
-      default:
-        return data[column];
-    }
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
-
 }

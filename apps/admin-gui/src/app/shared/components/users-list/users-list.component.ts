@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import { RichUser} from '@perun-web-apps/perun/openapi';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport, parseFullName,
   parseLogins,
   parseUserEmail,
   parseVo,
@@ -59,7 +59,6 @@ export class UsersListComponent implements OnChanges {
 
   dataSource: MatTableDataSource<RichUser>;
 
-  exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   getDataForColumn(data: RichUser, column: string): string{
@@ -82,6 +81,32 @@ export class UsersListComponent implements OnChanges {
       default:
         return '';
     }
+  }
+
+  getExportDataForColumn(data: RichUser, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'user':
+        return data.serviceUser ? 'service-user' : 'user';
+      case 'name':
+        if(data){
+          return parseFullName(data)
+        }
+        return ''
+      case 'organization':
+        return parseVo(data);
+      case 'email':
+        return parseUserEmail(data);
+      case 'logins':
+        return parseLogins(data);
+      default:
+        return '';
+    }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
   }
 
   setDataSource() {

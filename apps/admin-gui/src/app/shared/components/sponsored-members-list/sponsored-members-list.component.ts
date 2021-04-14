@@ -14,7 +14,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
   parseFullName,
   TABLE_ITEMS_COUNT_OPTIONS
@@ -68,7 +68,6 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<MemberWithSponsors>;
   private sort: MatSort;
-  exporting = false;
   loading = false;
 
   routingStrategy = false;
@@ -100,6 +99,10 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

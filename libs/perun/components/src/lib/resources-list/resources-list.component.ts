@@ -15,7 +15,7 @@ import { Group, ResourceTag, RichResource } from '@perun-web-apps/perun/openapi'
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -64,8 +64,6 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   private sort: MatSort;
 
   dataSource: MatTableDataSource<RichResource>;
-
-  exporting = false;
 
   removeAuth = false;
 
@@ -119,6 +117,10 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

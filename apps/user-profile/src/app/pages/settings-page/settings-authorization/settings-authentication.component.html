@@ -17,10 +17,8 @@
 <!--  <mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>-->
   <div [class.hide-table]="exporting" class="card mt-2">
     <div class="card-body">
-      <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true"
-                                    [exporter]="exporter"></perun-web-apps-table-options>
       <div class="overflow-auto">
-        <table #exporter="matTableExporter" [dataSource]="dataSource" class="w-100" mat-table matTableExporter>
+        <table [dataSource]="dataSource" class="w-100" mat-table>
           <ng-container matColumnDef="type">
             <th *matHeaderCellDef class="pl-3"
                 mat-header-cell>{{'AUTHENTICATION.TYPE' | customTranslate | translate}}</th>

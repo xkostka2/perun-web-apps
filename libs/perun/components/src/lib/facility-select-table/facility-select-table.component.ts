@@ -13,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnrichedFacility} from '@perun-web-apps/perun/openapi';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   parseTechnicalOwnersNames,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
@@ -55,8 +55,6 @@ export class FacilitySelectTableComponent implements OnChanges {
 
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
-
-  exporting = false;
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -106,6 +104,10 @@ export class FacilitySelectTableComponent implements OnChanges {
       default:
         return data[column];
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

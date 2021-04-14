@@ -3,13 +3,9 @@
   <div class="card-body">
     <div class="overflow-auto">
       <perun-web-apps-table-options
-        (exportEnd)="exporting = false"
-        (exportStart)="exporting = true"
-        [exporter]="exporter"></perun-web-apps-table-options>
+        (exportData)="exportData($event)"></perun-web-apps-table-options>
       <table
         [dataSource]="dataSource"
-        matTableExporter
-        #exporter="matTableExporter"
         class="w-100"
         mat-table
         matSort
@@ -91,8 +87,6 @@
     </div>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && (this.services !== undefined && this.services.length !== 0)"
            alert_type="warn">

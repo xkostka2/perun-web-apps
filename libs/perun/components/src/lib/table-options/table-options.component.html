@@ -10,8 +10,6 @@
   </mat-menu>
 
   <mat-menu #exportOptions="matMenu">
-    <button mat-menu-item (click)="exporter.exportTable('xlsx', {fileName: 'export'})">Excel</button>
-    <button mat-menu-item (click)="exporter.exportTable('csv', {fileName: 'export'})">Csv</button>
-    <button mat-menu-item (click)="exporter.exportTable('json', {fileName: 'export'})">Json</button>
+    <button mat-menu-item (click)="exportData.emit('csv')">Csv</button>
   </mat-menu>
 </div>

@@ -24,7 +24,6 @@ import {
 import {
   ResourceAttributesComponent
 } from './pages/resource-detail-page/resource-attributes/resource-attributes.component';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { ResourceGroupsComponent } from './pages/resource-detail-page/resource-groups/resource-groups.component';
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
@@ -79,7 +78,6 @@ import { UsersModule } from '../users/users.module';
   imports: [
     CommonModule,
     FacilitiesRoutingModule,
-    MatTableExporterModule,
     SharedModule,
     UiAlertsModule,
     PerunSharedComponentsModule,

@@ -20,7 +20,6 @@ import {
 } from './pages/admin-page/admin-visualizer/user-destination-relationship/user-destination-graph/user-destination-graph.component';
 import { AdminUsersComponent } from './pages/admin-page/admin-users/admin-users.component';
 import { AdminUserDetailPageComponent } from './pages/admin-user-detail-page/admin-user-detail-page.component';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { AdminExtSourcesComponent } from './pages/admin-page/admin-ext-sources/admin-ext-sources.component';
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
@@ -59,7 +58,6 @@ import { AdminOwnersComponent } from './pages/admin-page/admin-owners/admin-owne
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-    MatTableExporterModule,
     UiAlertsModule,
     PerunSharedComponentsModule,
     PerunPipesModule,

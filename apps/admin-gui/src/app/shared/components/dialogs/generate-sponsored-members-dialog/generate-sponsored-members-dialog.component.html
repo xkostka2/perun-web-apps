@@ -213,10 +213,8 @@
 
   <table
     [hidden]="true"
-    #exporter="matTableExporter" [dataSource]="dataSource"
     class="w-100"
-    mat-table
-    matTableExporter>
+    mat-table>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell>name</th>
       <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.name}}</td>

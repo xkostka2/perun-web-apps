@@ -9,14 +9,14 @@ import {
 } from '@perun-web-apps/perun/openapi';
 import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableExporterDirective } from 'mat-table-exporter';
 import { formatDate } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Urns } from '@perun-web-apps/perun/urns';
 import { TABLE_VO_GROUPS, TableConfigService } from '@perun-web-apps/config/table-config';
+import { downloadData } from '@perun-web-apps/perun/utils';
 
 export interface GenerateSponsoredMembersDialogData {
   voId: number;
@@ -29,9 +29,6 @@ export interface GenerateSponsoredMembersDialogData {
   styleUrls: ['./generate-sponsored-members-dialog.component.scss']
 })
 export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('exporter', {})
-  exporter: MatTableExporterDirective;
 
   @Output()
   page = new EventEmitter<PageEvent>();
@@ -194,7 +191,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
 
   exportData(data) {
     this.dataSource.data = this.createOutputObjects(data);
-    this.exporter.exportTable('xlsx', {fileName: 'member-logins'});
+    downloadData(this.dataSource.data, 'csv', 'member-logins')
   }
 
   onGenerate(){
@@ -239,7 +236,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
       this.exportData(logins);
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
       this.dialogRef.close(true);
-    }, err => this.loading = false);
+    }, () => this.loading = false);
   }
 
   onCancel() {

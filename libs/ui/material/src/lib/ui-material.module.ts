@@ -23,7 +23,6 @@ import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSortModule } from '@angular/material/sort';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
@@ -55,7 +54,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatMenuModule,
     MatToolbarModule,
     MatSortModule,
-    MatTableExporterModule,
     MatPaginatorModule,
     MatTooltipModule,
     MatSelectModule
@@ -85,7 +83,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatMenuModule,
     MatToolbarModule,
     MatSortModule,
-    MatTableExporterModule,
     MatPaginatorModule,
     MatTooltipModule,
     MatSelectModule

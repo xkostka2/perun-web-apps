@@ -1,11 +1,10 @@
-<div [class.hide-table]="exporting" class="card mt-2"
+<div class="card mt-2"
      [hidden]="extSources.length === 0 || dataSource.filteredData.length === 0">
   <div class="card-body">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
-      <table #exporter="matTableExporter" [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id"
-             matSortDirection="asc" matSortDisableClear
-             matTableExporter>
+      <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id"
+             matSortDirection="asc" matSortDisableClear>
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
             <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -57,8 +56,6 @@
     </mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="extSources.length === 0" alert_type="warn">
   {{'SHARED.COMPONENTS.EXT_SOURCES_LIST.NO_EXT_SOURCES' | translate}}

@@ -1,27 +1,19 @@
-<div [class.hide-table]="exporting" [hidden]="dataSource.filteredData.length === 0 || categories.length === 0"
+<div [hidden]="dataSource.filteredData.length === 0 || categories.length === 0"
      class="card mt-3">
   <div class="card-body">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"
+    <perun-web-apps-table-options (exportData)="exportData($event)"
                                   class="ml-auto"></perun-web-apps-table-options>
     <div class="overflow-auto">
-      <table #exporter="matTableExporter"
-             [dataSource]="dataSource"
+      <table [dataSource]="dataSource"
              class="w-100"
              mat-table
              matSort
              matSortActive="name"
              matSortDirection="asc"
-             matSortDisableClear
-             matTableExporter>
+             matSortDisableClear>
 
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
-<!--            <mat-checkbox (change)="$event ? masterToggle() : null"-->
-<!--                          [aria-label]="checkboxLabel()"-->
-<!--                          [checked]="selection.hasValue() && isAllSelected()"-->
-<!--                          [indeterminate]="selection.hasValue() && !isAllSelected()"-->
-<!--                          color="primary">-->
-<!--            </mat-checkbox>-->
           </th>
           <td *matCellDef="let resource" class="static-column-size" mat-cell>
             <mat-checkbox (change)="$event ? itemSelectionToggle(resource) : null"
@@ -66,8 +58,6 @@
     </mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && categories.length !== 0" alert_type="warn">
   {{'CATEGORIES_PAGE.NO_FILTER_RESULTS' | translate}}

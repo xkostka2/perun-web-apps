@@ -104,7 +104,6 @@ import { ResourcesTagsListComponent } from './components/resources-tags-list/res
 import { DeleteAttributeDefinitionDialogComponent } from './components/dialogs/delete-attribute-definition-dialog/delete-attribute-definition-dialog.component';
 // tslint:disable-next-line:max-line-length
 import { CreateAttributeDefinitionDialogComponent } from './components/dialogs/create-attribute-definition-dialog/create-attribute-definition-dialog.component';
-import {MatTableExporterModule} from 'mat-table-exporter';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { EditAttributeDefinitionDialogComponent } from './components/dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import { EntitylessAttributeKeysListComponent } from './components/entityless-attribute-keys-list/entityless-attribute-keys-list.component';
@@ -224,7 +223,6 @@ import { MatListModule } from '@angular/material/list';
     MatCardModule,
     MatChipsModule,
     MatMenuModule,
-    MatTableExporterModule,
     ScrollingModule,
     UiAlertsModule,
     MatBadgeModule,

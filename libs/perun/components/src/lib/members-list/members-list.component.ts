@@ -15,7 +15,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
 import { RichMember} from '@perun-web-apps/perun/openapi';
 import {
-  customDataSourceFilterPredicate, customDataSourceSort,
+  customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
   parseEmail,
   parseFullName, parseLogins, parseOrganization,
@@ -78,8 +78,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   @Output()
   updateTable = new EventEmitter<boolean>();
 
-  exporting = false;
-
   displayedColumns: string[] = ['checkbox', 'id', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
   dataSource: MatTableDataSource<RichMember>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -120,6 +118,32 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     }
   }
 
+  getExportDataForColumn(data: RichMember, column: string, outerThis: MembersListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'fullName':
+        if(data.user){
+          return parseFullName(data.user)
+        }
+        return ''
+      case 'status':
+        return  outerThis.showGroupStatuses ? data.groupStatus : data.status;
+      case 'organization':
+        return parseOrganization(data);
+      case 'email':
+        return parseEmail(data);
+      case 'logins':
+        return parseLogins(data);
+      default:
+        return '';
+    }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
+  }
+
   setDataSource() {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
@@ -130,24 +154,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
       this.dataSource.filter = this.filter;
-
       this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (richMember, property) => {
-        switch (property) {
-          case 'fullName':
-            if (richMember.user.lastName) {
-              return richMember.user.lastName.toLocaleLowerCase();
-            } else {
-              return parseFullName(richMember.user);
-            }
-          case 'email':
-            return parseEmail(richMember);
-          case 'organization':
-            return parseOrganization(richMember);
-          default:
-            return richMember[property];
-        }
-      };
       this.dataSource.paginator = this.paginator;
     }
   }

@@ -1,9 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Application, Group, Member, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
+import { Application, Group, Member, RegistrarManagerService} from '@perun-web-apps/perun/openapi';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import {
+  downloadData, getDataForExport,
+  parseFullName,
+  TABLE_ITEMS_COUNT_OPTIONS
+} from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
@@ -61,6 +65,47 @@ export class ApplicationListDetailsComponent implements OnChanges {
     this.loading = true;
     this.table = [];
     this.getApplicationsData(0);
+  }
+
+  getExportDataForColumn(data: Application, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'voId':
+        return data.vo.id.toString();
+      case 'voName':
+        return data.vo.name;
+      case 'groupId':
+        return  data.group?.id.toString() ?? ''
+      case 'groupName':
+        return  data.group?.name ?? ''
+      case 'type':
+        return data.type;
+      case 'fedInfo':
+        return data.fedInfo;
+      case 'state':
+        return data.state;
+      case 'extSourceName':
+        return data.extSourceName;
+      case 'extSourceType':
+        return data.extSourceType;
+      case 'user':
+        return data.user ? parseFullName(data.user) : '';
+      case 'createdBy':
+        return data.createdBy;
+      case 'createdAt':
+        return data.createdAt;
+      case 'modifiedBy':
+        return data.modifiedBy;
+      case 'modifiedAt':
+        return data.modifiedAt;
+      default:
+        return data[column];
+    }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
   }
 
   getApplicationsData(index: number) {

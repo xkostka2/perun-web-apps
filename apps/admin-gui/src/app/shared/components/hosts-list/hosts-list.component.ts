@@ -15,7 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
@@ -56,10 +56,7 @@ export class HostsListComponent implements AfterViewInit, OnChanges {
 
   private sort: MatSort;
 
-
   dataSource: MatTableDataSource<Host>;
-
-  exporting = false;
 
   private paginator: MatPaginator;
 
@@ -86,6 +83,10 @@ export class HostsListComponent implements AfterViewInit, OnChanges {
       default:
         return '';
     }
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
   setDataSource() {

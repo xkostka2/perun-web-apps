@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Application, Group, Member} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
-  customDataSourceSort,
+  customDataSourceSort, downloadData, getDataForExport, parseFullName,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
@@ -61,8 +61,6 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<Application>;
 
-  exporting = false;
-
   @ViewChild('paginator', {static: false}) paginator: MatPaginator;
   private sort: MatSort;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -79,7 +77,7 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  getDataForColumn(data: Application, column: string): string{
+  getDataForColumn(data: Application, column: string, outerThis: ApplicationsListComponent): string{
     switch (column) {
       case 'id':
         return data.id.toString();
@@ -97,18 +95,50 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
       case 'group':
         return data.group ? data.group.name : '';
       case 'modifiedBy':
-        const index = data.modifiedBy.lastIndexOf('/CN=');
-        if (index !== -1) {
-          const string =  data.modifiedBy.slice(index + 4, data.modifiedBy.length).replace('/unstructuredName=', ' ').toLowerCase();
-          if (string.lastIndexOf('\\') !== -1) {
-            return data.modifiedBy.slice(data.modifiedBy.lastIndexOf('=') + 1, data.modifiedBy.length);
-          }
-          return string;
-        }
-        return data.modifiedBy.toLowerCase();
+        return outerThis.parseModifiedBy(data);
       default:
         return '';
     }
+  }
+
+  getExportDataForColumn(data: Application, column: string, outerThis: ApplicationsListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'createdAt':
+        return data.createdAt;
+      case 'type':
+        return data.type;
+      case 'state':
+        return data.state;
+      case 'user':
+        return data.user ?
+          parseFullName(data.user)
+          :
+          data.createdBy.slice(data.createdBy.lastIndexOf('=')+1, data.createdBy.length);
+      case 'group':
+        return data.group ? data.group.name : '';
+      case 'modifiedBy':
+        return outerThis.parseModifiedBy(data);
+      default:
+        return '';
+    }
+  }
+
+  parseModifiedBy(data: Application){
+    const index = data.modifiedBy.lastIndexOf('/CN=');
+    if (index !== -1) {
+      const string =  data.modifiedBy.slice(index + 4, data.modifiedBy.length).replace('/unstructuredName=', ' ').toLowerCase();
+      if (string.lastIndexOf('\\') !== -1) {
+        return data.modifiedBy.slice(data.modifiedBy.lastIndexOf('=') + 1, data.modifiedBy.length);
+      }
+      return string;
+    }
+    return data.modifiedBy.toLowerCase();
+  }
+
+  exportData(format: string){
+    downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getExportDataForColumn, this), format);
   }
 
   setDataSource() {

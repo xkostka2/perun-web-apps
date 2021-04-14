@@ -1,8 +1,8 @@
-<div class="card mt-2" [class.hide-table]="exporting" [hidden]="!values.length">
+<div class="card mt-2" [hidden]="!values.length">
   <div class="card-body">
-    <perun-web-apps-table-options (exportEnd)="exporting = false" (exportStart)="exporting = true" [exporter]="exporter"></perun-web-apps-table-options>
+    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
-      <table #exporter="matTableExporter" [dataSource]="dataSource" class="w-100" mat-table matTableExporter>
+      <table [dataSource]="dataSource" class="w-100" mat-table>
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
           </th>
@@ -32,8 +32,6 @@
     <mat-paginator [length]="this.values.length" [pageSize]="this.pageSize" [pageSizeOptions]="[5,10,25]"></mat-paginator>
   </div>
 </div>
-
-<mat-spinner *ngIf="exporting" class="ml-auto mr-auto"></mat-spinner>
 
 <app-alert *ngIf="values.length === 0" alert_type="warn">
   {{alertText}}
