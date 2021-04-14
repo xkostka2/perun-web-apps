@@ -1232,6 +1232,7 @@
       "VALIDATIONFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
       "VALIDATIONCERT_DESCRIPTION": "link for personal certificate authentication",
       "VALIDATIONNON_DESCRIPTION": "link without any authentication",
+      "REDIRECTURL_DESCRIPTION": "contains the URL parameter which was present during the application submission. If the application was initial, contains the value of the 'targetnew' URL parameter. If the application was extensional, contains the value of the 'targetexisting' parameter.",
       "APPLICATION_LINKS_DESCRIPTION": "Used to navigate users to the list of theirs applications.",
       "APPGUIURL_DESCRIPTION": "link to overview of submitted registrations for users. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
       "APPGUIURLKRB_DESCRIPTION": "link for Kerberos authentication",

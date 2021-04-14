@@ -62,6 +62,7 @@ export class TagBarComponent implements OnInit {
     tags.push(['validationLink-fed', 'VALIDATIONFED_DESCRIPTION']);
     tags.push(['validationLink-cert', 'VALIDATIONCERT_DESCRIPTION']);
     tags.push(['validationLink-non', 'VALIDATIONNON_DESCRIPTION']);
+    tags.push(['redirectUrl', 'REDIRECTURL_DESCRIPTION']);
     this.validationLinksUsersTags = tags;
   }
 
