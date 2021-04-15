@@ -56,6 +56,9 @@ export class VoSettingsApplicationFormComponent implements OnInit {
   editAuth: boolean;
   displayedColumns: String[] = [];
 
+  // This counter is used to generate ids for newly added items. This fake ids are used in backend
+  // to recognize new items in other items' dependencies
+  private idCounter = -1;
 
   ngOnInit() {
     this.loading = true;
@@ -84,7 +87,10 @@ export class VoSettingsApplicationFormComponent implements OnInit {
   add() {
     let config = getDefaultDialogConfig();
     config.width = '500px';
-    config.data = {applicationFormItems: this.applicationFormItems};
+    config.data = {
+      applicationFormItems: this.applicationFormItems,
+      fakeId: this.idCounter--,
+    };
 
     const dialog = this.dialog.open(AddApplicationFormItemDialogComponent, config);
     dialog.afterClosed().subscribe( success => {

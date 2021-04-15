@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 
 export interface AddApplicationFormItemDialogComponentData {
   applicationFormItems: ApplicationFormItem[];
+  fakeId: number;
 }
 
 @Component({
@@ -52,6 +53,7 @@ export class AddApplicationFormItemDialogComponent implements OnInit {
 
   createApplicationItem(): ApplicationFormItem {
     const newApplicationItem = createNewApplicationFormItem();
+    newApplicationItem.id = this.data.fakeId;
     newApplicationItem.shortname = this.nameCtrl.value;
     newApplicationItem.type = this.selectedWidget as Type;
     for (let i = 0; i < this.items.length; i++) {

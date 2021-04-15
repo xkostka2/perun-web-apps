@@ -185,11 +185,11 @@
         <tr
           *matRowDef="let applicationFormItem; columns: displayedColumns;"
           [cdkDragData]="applicationFormItem"
-          [class.make-green]="applicationFormItem.id == 0"
+          [class.make-green]="applicationFormItem.id <= 0"
           [class.make-red]="applicationFormItem.forDelete"
           [class.make-yellow]="itemsChanged.indexOf(applicationFormItem.id) != -1
                           && !applicationFormItem.forDelete
-                          && applicationFormItem.id != 0"
+                          && applicationFormItem.id > 0"
           cdkDrag
           mat-row>
         </tr>

@@ -2291,7 +2291,8 @@
           "SELECT_ITEM": "Select item",
           "FIND_ITEM": "Find item...",
           "NO_ITEM_FOUND": "No matching item found",
-          "NO_ITEM": "No item selected (empty value)"
+          "NO_ITEM": "No item selected (empty value)",
+          "NEW_ITEM": "-- new item --"
         },
         "USER_SEARCH_SELECT": {
           "SELECT_USER": "Select user",

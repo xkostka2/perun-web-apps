@@ -31,6 +31,9 @@ export class AppFormItemSearchSelectComponent {
     if (item === NO_FORM_ITEM) {
       return "";
     }
+    if (item.id < 0) {
+      return this.translate.instant("SHARED_LIB.PERUN.COMPONENTS.APP_FORM_ITEM_SEARCH_SELECT.NEW_ITEM")
+    }
     return "#" + item.id;
   }
   searchFunction = (item: ApplicationFormItem) => {
