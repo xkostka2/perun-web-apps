@@ -24,6 +24,8 @@
                           (click)="$event.stopPropagation()"
                           [aria-label]="checkboxLabel(member)"
                           [checked]="selection.isSelected(member)"
+                          [disabled]="member.membershipType !== 'DIRECT'"
+                          [matTooltip]="member.membershipType !== 'DIRECT' ? ('MEMBERS_LIST.CHECKBOX_TOOLTIP' | translate):''"
                           color="primary">
             </mat-checkbox>
           </td>
@@ -31,6 +33,12 @@
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ID' | translate}}</th>
           <td *matCellDef="let member" class="static-column-size" mat-cell>{{member.id}}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+          <td *matCellDef="let member" mat-cell>
+            <mat-icon *ngIf="member.membershipType !== 'DIRECT'" [matTooltip]="'MEMBERS_LIST.INDIRECT_MEMBER' | translate">transfer_within_a_station</mat-icon>
+          </td>
         </ng-container>
         <ng-container matColumnDef="fullName">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.NAME' | translate}}</th>
@@ -82,11 +90,14 @@
           <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.LOGINS' | translate}}</th>
           <td *matCellDef="let member" mat-cell>{{member | memberLogins}}</td>
         </ng-container>
+
+
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let member; columns: displayedColumns;"
           [class.disable-outline]="disableRouting"
           [class.cursor-pointer]="!disableRouting"
+          [class.italic_font]="member.membershipType !== 'DIRECT'"
           [routerLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
           [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
           class="dark-hover-list-item"

@@ -13,7 +13,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
-import { RichMember} from '@perun-web-apps/perun/openapi';
+import { RichMember } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
@@ -78,7 +78,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   @Output()
   updateTable = new EventEmitter<boolean>();
 
-  displayedColumns: string[] = ['checkbox', 'id', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
+  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
   dataSource: MatTableDataSource<RichMember>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -172,12 +172,16 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
+  canBeSelected = (member: RichMember): boolean => {
+    return member.membershipType === 'DIRECT';
+  }
+
    isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, true, this.canBeSelected);
   }
 
   checkboxLabel(row?: RichMember): string {

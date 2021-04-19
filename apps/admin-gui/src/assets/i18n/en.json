@@ -1889,7 +1889,9 @@
     "LOGINS": "Logins",
     "ORGANIZATION": "Organization",
     "NO_MEMBERS_ALERT": "No members present",
-    "NO_FILTER_RESULTS_ALERT": "There are no members matching your query"
+    "NO_FILTER_RESULTS_ALERT": "There are no members matching your query",
+    "INDIRECT_MEMBER": "Indirect member",
+    "CHECKBOX_TOOLTIP": "Indirect members cannot be removed"
   },
   "MEMBERS_CANDIDATES_LIST": {
     "STATUS": "Status",

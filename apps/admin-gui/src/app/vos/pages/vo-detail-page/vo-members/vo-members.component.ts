@@ -108,7 +108,7 @@ export class VoMembersComponent implements OnInit {
 
     this.removeAuth = this.authzService.isAuthorized('deleteMembers_List<Member>_policy', [this.vo]);
 
-    this.hideColumns = this.removeAuth ? ['groupStatus', 'sponsored'] : ['checkbox', 'groupStatus', 'sponsored'];
+    this.hideColumns = this.removeAuth ? ['groupStatus', 'sponsored', 'type'] : ['checkbox', 'groupStatus', 'sponsored', 'type'];
 
     if(this.members !== null && this.members.length !== 0){
       this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0]]);
@@ -232,7 +232,7 @@ export class VoMembersComponent implements OnInit {
   }
 
   isManualAddingBlocked(voId: number): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.apiRequest.dontHandleErrorForNext();
       this.attributesManager.getVoAttributeByName(voId, "urn:perun:vo:attribute-def:def:blockManualMemberAdding").subscribe(attrValue => {
         this.blockManualMemberAdding = attrValue.value !== null;
