@@ -68,15 +68,7 @@
     "TITLE": "Select facility",
     "FILTER_PLACEHOLDER": "Filter by name, id, description, owner, host or destination",
     "CREATE": "Create",
-    "DELETE": "Delete",
-    "TABLE": {
-      "ID": "Id",
-      "NAME": "Name",
-      "DESCRIPTION": "Description",
-      "TECHNICAL_OWNERS": "Technical owners",
-      "DESTINATIONS": "Destinations",
-      "HOSTS": "Hosts"
-    }
+    "DELETE": "Delete"
   },
   "USER_MANAGEMENT": {
     "TITLE": "Users",
@@ -2180,6 +2172,9 @@
         "ID": "Id",
         "NAME": "Name",
         "DESCRIPTION": "Description",
+        "TECHNICAL_OWNERS": "Technical owners",
+        "DESTINATIONS": "Destinations",
+        "HOSTS": "Hosts",
         "NO_FACILITIES_WARNING": "No facilities found"
       }
     },
@@ -2250,7 +2245,7 @@
           "FIND_GROUP": "Find group...",
           "NO_GROUP_FOUND": "No matching group found"
         },
-        "VO_SELECT_TABLE": {
+        "VOS_LIST": {
           "ID": "Id",
           "NAME": "Name",
           "SHORTNAME": "Short name"
@@ -2455,7 +2450,8 @@
         "NO_ORGANIZATIONS": "No organizations found",
         "NO_FILTER_RESULTS_ALERT": "No results match given search criteria.",
         "NO_MEMBERS": "No members found",
-        "NO_USERS": "No users found."
+        "NO_USERS": "No users found.",
+        "NO_FACILITIES": "No facilities found."
       }
     }
   }

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ResourceTagsToStringPipe } from './resource-tags-to-string.pipe';
 import { IsVirtualAttributePipe } from './is-virtual-attribute.pipe';
 import { UserFullNamePipe } from './user-full-name.pipe';
-import { ParseLastAccessPipe } from './parse-last-access.pipe';
 import { GetMailFromAttributesPipe } from './get-mail-from-attributes.pipe';
 import { CustomTranslatePipe } from './custom-translate.pipe';
 import { GroupSyncIconPipe } from './group-sync-icon.pipe';
@@ -27,7 +26,6 @@ import { FilterUniqueObjectsPipe } from './filter-unique-objects.pipe';
     ResourceTagsToStringPipe,
     IsVirtualAttributePipe,
     UserFullNamePipe,
-    ParseLastAccessPipe,
     GetMailFromAttributesPipe,
     CustomTranslatePipe,
     GroupSyncIconPipe,
@@ -51,7 +49,6 @@ import { FilterUniqueObjectsPipe } from './filter-unique-objects.pipe';
     ResourceTagsToStringPipe,
     IsVirtualAttributePipe,
     UserFullNamePipe,
-    ParseLastAccessPipe,
     GetMailFromAttributesPipe,
     CustomTranslatePipe,
     GroupSyncIconPipe,

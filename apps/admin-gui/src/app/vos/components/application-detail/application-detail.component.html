@@ -74,12 +74,12 @@
 
   <div class="card p-3 mt-2" *ngIf="this.application.state == 'REJECTED'">
     <mat-card-title><i class="material-icons red">clear</i> {{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.REJECTED_BY' | translate}}: {{getModifiedAtName(application.modifiedBy)}}</mat-card-title>
-    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.modifiedAt | date:'d.M.y h:mm:ss a'}}</div>
+    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.modifiedAt | date:'d.M.y H:mm:ss'}}</div>
   </div>
 
   <div class="card p-3 mt-2" *ngIf="this.application.state == 'APPROVED'">
     <mat-card-title><i class="material-icons green">done</i> {{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.APPROVED_BY' | translate}}: {{getModifiedAtName(application.modifiedBy)}}</mat-card-title>
-    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.modifiedAt | date:'d.M.y h:mm:ss a'}}</div>
+    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.modifiedAt | date:'d.M.y H:mm:ss'}}</div>
   </div>
 
   <div class="card p-4 mt-2">
@@ -87,7 +87,7 @@
 
     <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.EXT_SRC' | translate}}</span>: {{this.application.extSourceName}}</div>
     <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.LOA' | translate}}</span>: {{this.application.extSourceLoa}}</div>
-    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.createdAt | date:'d.M.y h:mm:ss a'}}</div>
+    <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.createdAt | date:'d.M.y H:mm:ss'}}</div>
 
     <table mat-table [dataSource]="dataSource" class="w-100" *ngIf="userData.length !== 0">
       <ng-container matColumnDef="label">

@@ -15,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { VoSelectTableComponent } from './vo-select-table/vo-select-table.component';
+import { VosListComponent } from './vos-list/vos-list.component';
 import { GroupsListComponent } from './groups-list/groups-list.component';
 import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
@@ -68,7 +68,7 @@ import { UserSearchSelectComponent } from './user-search-select/user-search-sele
 import { ExpirationSelectComponent } from './expiration-select/expiration-select.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { RecentlyViewedIconComponent } from './recently-viewed-icon/recently-viewed-icon.component';
-import { FacilitySelectTableComponent } from './facility-select-table/facility-select-table.component';
+import { FacilitiesListComponent } from './facilities-list/facilities-list.component';
 import { DateRangeComponent } from './date-range/date-range.component';
 import { ObjectListValuesComponent } from './object-list-values/object-list-values.component';
 import { PerunFooterComponent } from './perun-footer/perun-footer.component';
@@ -142,7 +142,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatDialogModule
   ],
   declarations: [
-    VoSelectTableComponent,
+    VosListComponent,
     GroupsListComponent,
     TableOptionsComponent,
     GroupMenuComponent,
@@ -177,7 +177,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     UserSearchSelectComponent,
     ExpirationSelectComponent,
     RecentlyViewedIconComponent,
-    FacilitySelectTableComponent,
+    FacilitiesListComponent,
     EntitySearchSelectComponent,
     DateRangeComponent,
     ObjectListValuesComponent,
@@ -189,7 +189,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     AppFormItemSearchSelectComponent,
   ],
   exports: [
-    VoSelectTableComponent,
+    VosListComponent,
     GroupsListComponent,
     TableOptionsComponent,
     GroupMenuComponent,
@@ -223,7 +223,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     UserSearchSelectComponent,
     ExpirationSelectComponent,
     RecentlyViewedIconComponent,
-    FacilitySelectTableComponent,
+    FacilitiesListComponent,
     EntitySearchSelectComponent,
     DateRangeComponent,
     PerunFooterComponent,

@@ -1,4 +1,4 @@
-<div class="card mt-3" [hidden]="!dataSource || dataSource.filteredData.length === 0">
+<div class="card mt-3" [hidden]="!dataSource || dataSource.filteredData.length === 0 || facilities.length === 0">
   <div class="card-body">
     <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
@@ -23,7 +23,7 @@
         </ng-container>
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'FACILITY_MANAGEMENT.TABLE.ID' | translate}}</th>
+              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.ID' | translate}}</th>
           <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.facility.id}}</td>
         </ng-container>
         <ng-container matColumnDef="recent">
@@ -38,19 +38,19 @@
         </ng-container>
         <ng-container matColumnDef="name">
           <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'FACILITY_MANAGEMENT.TABLE.NAME' | translate}}</th>
+              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.NAME' | translate}}</th>
           <td *matCellDef="let facility" mat-cell>{{facility.facility.name}}</td>
         </ng-container>
         <ng-container matColumnDef="description">
-          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.DESCRIPTION' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESCRIPTION' | translate}}</th>
           <td *matCellDef="let facility" mat-cell>{{facility.facility.description}}</td>
         </ng-container>
         <ng-container matColumnDef="technicalOwners">
-          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.TECHNICAL_OWNERS' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.TECHNICAL_OWNERS' | translate}}</th>
           <td *matCellDef="let facility" mat-cell>{{facility.owners | technicalOwners}}</td>
         </ng-container>
         <ng-container matColumnDef="destinations">
-          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.DESTINATIONS' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESTINATIONS' | translate}}</th>
           <td *matCellDef="let facility" mat-cell>
             <perun-web-apps-object-list-values
               (mouseenter)="disableRouting = true"
@@ -60,7 +60,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="hosts">
-          <th *matHeaderCellDef mat-header-cell>{{'FACILITY_MANAGEMENT.TABLE.HOSTS' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.HOSTS' | translate}}</th>
           <td *matCellDef="let facility" mat-cell>
             <perun-web-apps-object-list-values
               (mouseenter)="disableRouting = true"
@@ -89,6 +89,11 @@
   </div>
 </div>
 
-<app-alert *ngIf="!!dataSource && dataSource.filteredData.length === 0" alert_type="warn">
+<app-alert *ngIf="!!dataSource && dataSource.filteredData.length === 0 && facilities.length !== 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
 </app-alert>
+
+<app-alert *ngIf="facilities.length === 0" alert_type="warn">
+  {{'SHARED_LIB.UI.ALERTS.NO_FACILITIES' | translate}}
+</app-alert>
+

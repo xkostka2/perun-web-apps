@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { formatDate } from '@angular/common';
 
 export interface EditMemberSponsorsDialogComponent {
   theme: string;
@@ -93,9 +94,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
     if (date === null){
       return "Never expire";
     }
-   const [year, month, day] = date.split('-');
-
-    return `${day}-${month}-${year}`;
+    return formatDate(date, 'd.M.y', 'en');
   }
 
   changeExpiration(sponsor) {

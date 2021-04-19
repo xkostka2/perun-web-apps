@@ -1,7 +1,7 @@
 <h1 class="page-subtitle d-flex">{{'ROLES.TITLE'| translate}}</h1>
 <mat-spinner *ngIf="outerLoading" class="ml-auto mr-auto"></mat-spinner>
 <mat-accordion *ngIf="!outerLoading">
-  <mat-expansion-panel (opened)="getSelfData()">
+  <mat-expansion-panel (opened)="getSelfData()" *ngIf="isSelf">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <mat-icon mat-card-avatar svgIcon='perun-user-dark' class="mr-2"></mat-icon>
@@ -17,10 +17,10 @@
         {{'ROLES.SELF_VOS' | translate}}
       </div>
 
-      <perun-web-apps-vo-select-table
+      <perun-web-apps-vos-list
         [displayedColumns]="['id', 'name', 'shortName']"
         [vos]="vos">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
 
       <div class="mt-5" *ngIf="users.length">
         <div *ngIf="!showDescription">
@@ -92,10 +92,10 @@
         {{'ROLES.VOADMIN_VOS' | translate}}
       </div>
 
-      <perun-web-apps-vo-select-table
+      <perun-web-apps-vos-list
         [displayedColumns]="['id', 'name', 'shortName']"
         [vos]="vos">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
     </div>
   </mat-expansion-panel>
 
@@ -112,10 +112,10 @@
         {{'ROLES.VOOBSERVER_VOS' | translate}}
       </div>
 
-      <perun-web-apps-vo-select-table
+      <perun-web-apps-vos-list
         [displayedColumns]="['id', 'name', 'shortName']"
         [vos]="vos">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
     </div>
   </mat-expansion-panel>
 
@@ -133,10 +133,10 @@
           {{'ROLES.TRUSTEDFACILITYADMIN_VOS' | translate}}
         </div>
 
-        <perun-web-apps-vo-select-table
+        <perun-web-apps-vos-list
           [displayedColumns]="['id', 'name', 'shortName']"
           [vos]="vos">
-        </perun-web-apps-vo-select-table>
+        </perun-web-apps-vos-list>
       </div>
     </div>
   </mat-expansion-panel>
@@ -154,10 +154,10 @@
         {{'ROLES.TOPGROUPCREATOR_VOS' | translate}}
       </div>
 
-      <perun-web-apps-vo-select-table
+      <perun-web-apps-vos-list
         [displayedColumns]="['id', 'name', 'shortName']"
         [vos]="vos">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
     </div>
   </mat-expansion-panel>
 
@@ -237,10 +237,10 @@
         {{'ROLES.FACILITYADMIN_FACILITIES' | translate}}
       </div>
 
-      <perun-web-apps-facility-select-table
+      <perun-web-apps-facilities-list
         [displayedColumns]="['id', 'name', 'description']"
         [facilities]="facilities">
-      </perun-web-apps-facility-select-table>
+      </perun-web-apps-facilities-list>
     </div>
   </mat-expansion-panel>
 
@@ -257,10 +257,10 @@
         {{'ROLES.FACILITYOBSERVER_FACILITIES' | translate}}
       </div>
 
-      <perun-web-apps-facility-select-table
+      <perun-web-apps-facilities-list
         [displayedColumns]="['id', 'name', 'description']"
         [facilities]="facilities">
-      </perun-web-apps-facility-select-table>
+      </perun-web-apps-facilities-list>
     </div>
   </mat-expansion-panel>
 
@@ -297,10 +297,10 @@
         {{'ROLES.SPONSOR_VOS' | translate}}
       </div>
 
-      <perun-web-apps-vo-select-table
+      <perun-web-apps-vos-list
         [displayedColumns]="['id', 'name', 'shortName']"
         [vos]="vos">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
     </div>
   </mat-expansion-panel>
 

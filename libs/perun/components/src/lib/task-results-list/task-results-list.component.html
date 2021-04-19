@@ -59,7 +59,7 @@
         <ng-container matColumnDef="time">
           <th mat-header-cell *matHeaderCellDef
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.TIME' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.timestamp | date:'d.M.y h:mm:ss a'}}</td>
+          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.timestamp | date:'d.M.y H:mm:ss'}}</td>
         </ng-container>
         <ng-container matColumnDef="returnCode">
           <th mat-header-cell *matHeaderCellDef

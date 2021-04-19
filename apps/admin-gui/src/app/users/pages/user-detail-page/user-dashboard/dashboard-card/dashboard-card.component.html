@@ -10,12 +10,12 @@
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
   <div *ngIf="!loading">
     <span *ngIf="primaryObject == 'Vo'">
-      <perun-web-apps-vo-select-table [pageSizeOptions]="null"
+      <perun-web-apps-vos-list [pageSizeOptions]="null"
                                       [pageSize]="5"
                                       [displayedColumns]="['id', 'recent', 'shortName', 'name']"
                                       [recentIds]="this.recentIds"
                                       [vos]="this.objects">
-      </perun-web-apps-vo-select-table>
+      </perun-web-apps-vos-list>
     </span>
     <span *ngIf="primaryObject == 'Group'">
       <perun-web-apps-groups-list [pageSizeOptions]="null"
@@ -35,12 +35,12 @@
       </perun-web-apps-resources-list>
     </span>
     <span *ngIf="primaryObject == 'Facility'">
-      <perun-web-apps-facility-select-table [pageSizeOptions]="null"
+      <perun-web-apps-facilities-list [pageSizeOptions]="null"
                                  [pageSize]="5"
                                  [facilities]="this.objects"
                                  [recentIds]="recentIds"
                                  [displayedColumns]="['id', 'recent', 'name', 'description']">
-      </perun-web-apps-facility-select-table>
+      </perun-web-apps-facilities-list>
     </span>
   </div>
 

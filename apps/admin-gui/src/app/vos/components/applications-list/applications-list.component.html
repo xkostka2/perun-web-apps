@@ -17,7 +17,7 @@
         </ng-container>
         <ng-container matColumnDef="createdAt">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_CREATED_DATE' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>{{application.createdAt | date}}</td>
+          <td *matCellDef="let application" mat-cell>{{application.createdAt | date: 'd.M.y'}}</td>
         </ng-container>
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_TYPE' | translate}}</th>

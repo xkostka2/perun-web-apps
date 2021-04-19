@@ -1,4 +1,4 @@
-<div [hidden]="dataSource.filteredData.length === 0" class="card mt-3">
+<div [hidden]="dataSource.filteredData.length === 0 || vos.length === 0" class="card mt-3">
   <div class="card-body">
     <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
     <div class="overflow-auto">
@@ -23,7 +23,7 @@
         </ng-container>
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.ID' | translate}}</th>
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.ID' | translate}}</th>
           <td *matCellDef="let vo" class="static-column-size" mat-cell>{{vo.id}}</td>
         </ng-container>
         <ng-container matColumnDef="recent">
@@ -38,12 +38,12 @@
         </ng-container>
         <ng-container matColumnDef="shortName">
           <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.SHORTNAME' | translate}}</th>
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.SHORTNAME' | translate}}</th>
           <td *matCellDef="let vo" mat-cell>{{vo.shortName}}</td>
         </ng-container>
         <ng-container matColumnDef="name">
           <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VO_SELECT_TABLE.NAME' | translate}}</th>
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.NAME' | translate}}</th>
           <td *matCellDef="let vo" mat-cell>{{vo.name}}</td>
         </ng-container>
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
@@ -66,7 +66,11 @@
   </div>
 </div>
 
-<app-alert *ngIf="dataSource.filteredData.length === 0" alert_type="warn">
+<app-alert *ngIf="dataSource.filteredData.length === 0 && vos.length !== 0" alert_type="warn">
+  {{'SHARED_LIB.UI.ALERTS.NO_FILTER_RESULTS_ALERT' | translate}}
+</app-alert>
+
+<app-alert *ngIf="vos.length === 0" alert_type="warn">
   {{'SHARED_LIB.UI.ALERTS.NO_ORGANIZATIONS' | translate}}
 </app-alert>
 

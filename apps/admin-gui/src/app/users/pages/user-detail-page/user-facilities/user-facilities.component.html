@@ -6,12 +6,12 @@
     [placeholder]="'USER_DETAIL.FACILITIES.FILTER_PLACEHOLDER'">
   </perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <app-facilities-list
-    [pageSize]="pageSize"
+  <perun-web-apps-facilities-list
     (page)="pageChanged($event)"
     *ngIf="!loading"
     [filterValue]="filterValue"
     [facilities]="facilities"
-    [displayedColumns]="displayedColumns">
-  </app-facilities-list>
+    [displayedColumns]="displayedColumns"
+    [pageSize]="pageSize">
+  </perun-web-apps-facilities-list>
 </div>

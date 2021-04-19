@@ -25,13 +25,13 @@
     [placeholder]="'VO_MANAGEMENT.FILTER_PLACEHOLDER'">
   </perun-web-apps-immediate-filter>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-  <perun-web-apps-vo-select-table *ngIf="!loading"
-                                  (page)="pageChanged($event)"
-                                  [pageSize]="pageSize"
-                                  [displayedColumns]="displayedColumns"
-                                  [filterValue]="filterValue"
-                                  [recentIds]="recentIds"
-                                  [selection]="selection"
-                                  [vos]="vos">
-  </perun-web-apps-vo-select-table>
+  <perun-web-apps-vos-list *ngIf="!loading"
+                            (page)="pageChanged($event)"
+                            [pageSize]="pageSize"
+                            [displayedColumns]="displayedColumns"
+                            [filterValue]="filterValue"
+                            [recentIds]="recentIds"
+                            [selection]="selection"
+                            [vos]="vos">
+  </perun-web-apps-vos-list>
 </div>
