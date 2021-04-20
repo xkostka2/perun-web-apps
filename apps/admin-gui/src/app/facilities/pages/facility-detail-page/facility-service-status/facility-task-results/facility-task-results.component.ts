@@ -39,6 +39,7 @@ export class FacilityTaskResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+    this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.route.parent.params.subscribe(parentParams => {
       this.facility = {
        id: parseInt(parentParams['facilityId'], 10),

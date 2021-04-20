@@ -59,7 +59,7 @@
         <th mat-header-cell *matHeaderCellDef
             mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.STARTED' | translate}}</th>
         <td mat-cell *matCellDef="let serviceState">
-          <div *ngIf="serviceState.task && serviceState.task.startTime">{{serviceState.task.startTime | date:'d.M.y h:mm:ss a'}}</div>
+          <div *ngIf="serviceState.task && serviceState.task.startTime">{{serviceState.task.startTime | date:'d.M.y H:mm:ss'}}</div>
           <div *ngIf="!serviceState.task || !serviceState.task.startTime">
             {{'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.NOT_YET' | translate}}</div>
         </td>
@@ -68,7 +68,7 @@
         <th mat-header-cell *matHeaderCellDef
             mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.ENDED' | translate}}</th>
         <td mat-cell *matCellDef="let serviceState">
-          <div *ngIf="serviceState.task && serviceState.task.endTime">{{serviceState.task.endTime | date:'d.M.y h:mm:ss a'}}</div>
+          <div *ngIf="serviceState.task && serviceState.task.endTime">{{serviceState.task.endTime | date:'d.M.y H:mm:ss'}}</div>
           <div *ngIf="!serviceState.task || !serviceState.task.endTime">
             {{'SHARED_LIB.PERUN.COMPONENTS.SERVICES_STATUS_LIST.NOT_YET' | translate}}
           </div>

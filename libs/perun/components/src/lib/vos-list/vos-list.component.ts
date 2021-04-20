@@ -21,11 +21,11 @@ import {
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
-  selector: 'perun-web-apps-vo-select-table',
-  templateUrl: './vo-select-table.component.html',
-  styleUrls: ['./vo-select-table.component.scss']
+  selector: 'perun-web-apps-vos-list',
+  templateUrl: './vos-list.component.html',
+  styleUrls: ['./vos-list.component.scss']
 })
-export class VoSelectTableComponent implements OnChanges, AfterViewInit {
+export class VosListComponent implements OnChanges, AfterViewInit {
 
   constructor(private authResolver: GuiAuthResolver) { }
 
@@ -79,7 +79,7 @@ export class VoSelectTableComponent implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  getDataForColumn(data: Vo, column: string, otherThis: VoSelectTableComponent): string{
+  getDataForColumn(data: Vo, column: string, otherThis: VosListComponent): string{
     switch (column) {
       case 'id':
         return data.id.toString();

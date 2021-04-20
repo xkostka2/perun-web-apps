@@ -25,6 +25,7 @@ export class UserRolesComponent implements OnInit {
   roles: Map<string, Map<string, Array<number>>> = new Map<string, Map<string, Array<number>>>();
   principal: PerunPrincipal;
 
+  isSelf: boolean;
   isGroupAdmin: boolean;
   isVoAdmin: boolean;
   isResourceAdmin: boolean;
@@ -95,6 +96,9 @@ export class UserRolesComponent implements OnInit {
         innerMap.set(innerRole, roles[roleName][innerRole]);
       });
       switch (roleName) {
+        case 'SELF':
+          this.isSelf = true;
+          break;
         case 'GROUPADMIN':
           this.isGroupAdmin = true;
           break;

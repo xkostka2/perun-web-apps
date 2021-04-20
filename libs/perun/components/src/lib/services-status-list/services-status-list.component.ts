@@ -110,9 +110,30 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
         if (data.blockedGlobally) {return 'BLOCKED GLOBALLY'}
         return 'ALLOWED';
       case 'task.startTime':
-        return data.task && data.task.startTime ? formatDate(data.task.startTime,'d.M.y h:mm:ss a', 'en') : data[column];
+        return data.task && data.task.startTime ? formatDate(data.task.startTime,'d.M.y H:mm:ss', 'en') : data[column];
       case 'task.endTime':
-        return data.task && data.task.endTime ? formatDate(data.task.endTime,'d.M.y h:mm:ss a', 'en') : data[column];
+        return data.task && data.task.endTime ? formatDate(data.task.endTime,'d.M.y H:mm:ss', 'en') : data[column];
+      default:
+        return data[column];
+    }
+  }
+
+  getSortDataForColumn(data: ServiceState, column: string): string{
+    switch (column) {
+      case 'task.id':
+        return data.task ? data.task.id.toString() : data[column];
+      case 'service.name':
+        return data.service.name;
+      case 'status':
+        return data.status;
+      case 'blocked':
+        if (data.blockedOnFacility) { return 'BLOCKED' }
+        if (data.blockedGlobally) {return 'BLOCKED GLOBALLY'}
+        return 'ALLOWED';
+      case 'task.startTime':
+        return data.task && data.task.startTime ? formatDate(data.task.startTime,'yyyy.MM.dd HH:mm:ss', 'en') : data[column];
+      case 'task.endTime':
+        return data.task && data.task.endTime ? formatDate(data.task.endTime,'yyyy.MM.dd HH:mm:ss', 'en') : data[column];
       default:
         return data[column];
     }
@@ -128,7 +149,7 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
       this.dataSource.sortData = (data: ServiceState[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;

@@ -178,7 +178,6 @@ import { RemoveExtSourceDialogComponent } from './components/dialogs/remove-ext-
 import { AddOwnerDialogComponent } from './components/add-owner-dialog/add-owner-dialog.component';
 import { DeleteOwnerDialogComponent } from './components/delete-owner-dialog/delete-owner-dialog.component';
 import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
-import { FacilitiesListComponent } from './components/facilities-list/facilities-list.component';
 import { ApplicationFormItemDisabledPipe } from './pipes/application-form-item-disabled.pipe';
 import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hidden.pipe';
 import { DeleteEntityDialogComponent } from './components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
@@ -314,8 +313,7 @@ import { MatListModule } from '@angular/material/list';
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
     AttributeFriendlyNamePipe,
-    StatisticsCardComponent,
-    FacilitiesListComponent
+    StatisticsCardComponent
   ],
   declarations: [
     PerunNavComponent,
@@ -437,7 +435,6 @@ import { MatListModule } from '@angular/material/list';
     AddOwnerDialogComponent,
     DeleteOwnerDialogComponent,
     StatisticsCardComponent,
-    FacilitiesListComponent,
     ApplicationFormItemDisabledPipe,
     ApplicationFormItemHiddenPipe,
     DeleteEntityDialogComponent

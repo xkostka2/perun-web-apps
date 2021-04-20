@@ -16,10 +16,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport,
-  parseDate,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'perun-web-apps-task-results-list',
@@ -82,7 +82,32 @@ export class TaskResultsListComponent implements AfterViewInit, OnChanges {
       case 'status':
         return data.status;
       case 'time':
-        return  parseDate(data.timestamp.toString());
+        return formatDate(data.timestamp.toString(), 'd.M.y H:mm:ss', 'en');
+      case 'returnCode':
+        return data.returnCode.toString();
+      case 'standardMessage':
+        return data.standardMessage;
+      case 'errorMessage':
+        return  data.errorMessage;
+      default:
+        return '';
+    }
+  }
+
+  getSortDataForColumn(data: TaskResult, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'destination':
+        return data.destination.destination;
+      case 'type':
+        return  data.destination.type;
+      case 'service':
+        return data.service.name;
+      case 'status':
+        return data.status;
+      case 'time':
+        return formatDate(data.timestamp.toString(), 'yyyy.MM.dd HH:mm:ss', 'en');
       case 'returnCode':
         return data.returnCode.toString();
       case 'standardMessage':
@@ -107,7 +132,7 @@ export class TaskResultsListComponent implements AfterViewInit, OnChanges {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
       this.dataSource.sortData = (data: TaskResult[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
     }
   }

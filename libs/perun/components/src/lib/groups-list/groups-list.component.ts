@@ -27,6 +27,7 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -164,12 +165,35 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       case 'vo':
         return this.voNames.get(data.voId);
       case 'name':
-        return  data.name;
+        return data.name;
       case 'description':
         return  data.description;
       case 'expiration':
         const expirationStr = getGroupExpiration(data);
-        return  parseDate(expirationStr);
+        return parseDate(expirationStr);
+      case 'recent':
+        return '';
+      default:
+        return data[column];
+    }
+  }
+
+  getSortDataForColumn(data: Group | RichGroup, column: string, otherThis: GroupsListComponent): string{
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'vo':
+        return this.voNames.get(data.voId);
+      case 'name':
+        return data.name;
+      case 'description':
+        return  data.description;
+      case 'expiration':
+        const expirationStr = getGroupExpiration(data);
+        if(!expirationStr || expirationStr.toLowerCase() === 'never'){
+          return expirationStr;
+        }
+        return formatDate(expirationStr, 'yyyy.MM.dd', 'en');
       case 'recent':
         if (otherThis.recentIds) {
           if (otherThis.recentIds.indexOf(data.id) > -1) {
@@ -193,7 +217,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
       this.dataSource.sortData = (data: Group[] | RichGroup[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
       this.dataSource.filter = this.filter;

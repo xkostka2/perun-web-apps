@@ -12,14 +12,14 @@
   [placeholder]="'SHARED_LIB.PERUN.ORGANIZATIONS.FILTER'">
 </perun-web-apps-immediate-filter>
 <mat-spinner *ngIf="memberRefresh" class="mr-auto ml-auto"></mat-spinner>
-<perun-web-apps-vo-select-table
+<perun-web-apps-vos-list
   *ngIf="!memberRefresh"
   [displayedColumns]="displayedColumns"
   [pageSize]="memberPageSize"
   (page)="memberPageChanged($event)"
   [filterValue]="memberFilterValue"
   [vos]="vosWhereIsMember">
-</perun-web-apps-vo-select-table>
+</perun-web-apps-vos-list>
 
 <div class="mt-5" *ngIf="!this.isMyProfile">
   <h1 class="page-subtitle">{{'SHARED_LIB.PERUN.ORGANIZATIONS.USER_IS_ADMIN' | translate}}</h1>
@@ -29,12 +29,12 @@
     [placeholder]="'SHARED_LIB.PERUN.ORGANIZATIONS.FILTER'">
   </perun-web-apps-immediate-filter>
   <mat-spinner *ngIf="adminRefresh" class="mr-auto ml-auto"></mat-spinner>
-  <perun-web-apps-vo-select-table
+  <perun-web-apps-vos-list
     *ngIf="!adminRefresh"
     [displayedColumns]="displayedColumns"
     [pageSize]="adminPageSize"
     (page)="adminPageChanged($event)"
     [filterValue]="adminFilterValue"
     [vos]="vosWhereIsAdmin">
-  </perun-web-apps-vo-select-table>
+  </perun-web-apps-vos-list>
 </div>

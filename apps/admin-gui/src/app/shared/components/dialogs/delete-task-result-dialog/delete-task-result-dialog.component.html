@@ -17,7 +17,7 @@
       </ng-container>
       <ng-container matColumnDef="time">
         <th mat-header-cell *matHeaderCellDef>{{'DIALOGS.DELETE_TASK_RESULT.TIME' | translate}}</th>
-        <td mat-cell *matCellDef="let taskResult"> {{taskResult.timestamp | date:'d.M.y h:mm:ss a'}} </td>
+        <td mat-cell *matCellDef="let taskResult"> {{taskResult.timestamp | date: 'd.M.y H:mm:ss'}} </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns" class="font-weight-bolder"></tr>
       <tr mat-row *matRowDef="let taskResult; columns: displayedColumns;"></tr>

@@ -102,6 +102,9 @@ export class UserGroupsComponent implements OnInit {
           });
         });
       }
+      if (vos.length === 0) {
+        this.memberRefresh = false;
+      }
     });
   }
 }

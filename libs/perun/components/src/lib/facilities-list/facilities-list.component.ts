@@ -21,11 +21,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
 @Component({
-  selector: 'perun-web-apps-facility-select-table',
-  templateUrl: './facility-select-table.component.html',
-  styleUrls: ['./facility-select-table.component.scss']
+  selector: 'perun-web-apps-facilities-list',
+  templateUrl: './facilities-list.component.html',
+  styleUrls: ['./facilities-list.component.scss']
 })
-export class FacilitySelectTableComponent implements OnChanges {
+export class FacilitiesListComponent implements OnChanges {
 
   constructor(
     private authResolver: GuiAuthResolver,
@@ -80,7 +80,7 @@ export class FacilitySelectTableComponent implements OnChanges {
     this.setDataSource();
   }
 
-  getDataForColumn(data: EnrichedFacility, column: string, otherThis: FacilitySelectTableComponent): string{
+  getDataForColumn(data: EnrichedFacility, column: string, otherThis: FacilitiesListComponent): string{
     switch (column) {
       case 'id':
         return data.facility.id.toString();
