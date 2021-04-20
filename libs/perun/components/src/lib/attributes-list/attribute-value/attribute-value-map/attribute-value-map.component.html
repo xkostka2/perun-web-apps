@@ -4,7 +4,7 @@
       <div class="w-100">
         <div class="mr-5">
           <div *ngFor="let value of values.slice(0, itemsShown); let i = index; trackBy: customTrackBy" class="d-flex mb-1">
-            <mat-form-field appearance="{{readonly ? 'none' : 'standard'}}" class="w-100 ml-3 mr-2">
+            <mat-form-field appearance="{{readonly ? 'none' : 'standard'}}" class="w-100 mr-2 input-margin">
               <label for="{{attribute.id}}-key-{{i}}"></label>
               <input
                 matInput
@@ -18,7 +18,7 @@
                 [readonly]="readonly"
                 name="key-{{i}}">
             </mat-form-field>
-            <mat-form-field appearance="{{readonly ? 'none' : 'standard'}}" class="w-100 mr-2 ml-2">
+            <mat-form-field appearance="{{readonly ? 'none' : 'standard'}}" class="w-100 mr-2 input-margin">
               <label for="{{attribute.id}}-value-{{i}}"></label>
               <input
                 (click)="readonly && attribute.displayName !== undefined && showValue(value,attribute.displayName)"
@@ -35,7 +35,7 @@
               *ngIf="!readonly"
               mat-icon-button
               color="warn"
-              class="mt-auto mb-auto"
+              class="btn-margin"
               (click)="removeValue(i)">
               <mat-icon>
                 indeterminate_check_box
