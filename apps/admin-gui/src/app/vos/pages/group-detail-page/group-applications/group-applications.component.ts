@@ -1,13 +1,20 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Application, Group, GroupsManagerService, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  Application, AppState,
+  AppType,
+  Group,
+  GroupsManagerService,
+  RegistrarManagerService, User,
+  Vo
+} from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import {
   TABLE_GROUP_APPLICATIONS_DETAILED,
   TABLE_GROUP_APPLICATIONS_NORMAL,
   TableConfigService
 } from '@perun-web-apps/config/table-config';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 import { FormControl } from '@angular/forms';
 import { formatDate } from '@angular/common';
 
@@ -27,7 +34,8 @@ export class GroupApplicationsComponent implements OnInit {
               private registrarManager: RegistrarManagerService,
               private tableConfigService: TableConfigService,
               protected route: ActivatedRoute,
-              private guiAuthResolver: GuiAuthResolver) { }
+              private guiAuthResolver: GuiAuthResolver,
+              private store: StoreService) { }
 
   state = 'pending';
   loading = false;

@@ -145,7 +145,11 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
   settings() {
     const config = getDefaultDialogConfig();
     config.width = '400px';
-    config.data = { applicationForm: this.applicationForm, theme: 'group-theme' };
+    config.data = {
+      entity: "group",
+      applicationForm: this.applicationForm,
+      theme: 'group-theme'
+    };
 
     const dialog = this.dialog.open(UpdateApplicationFormDialogComponent, config);
     dialog.afterClosed().subscribe(newForm => {

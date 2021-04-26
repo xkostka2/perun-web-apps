@@ -10,7 +10,7 @@ import {
   Application,
   ApplicationFormItem,
   ApplicationFormItemData,
-  RegistrarManagerService
+  RegistrarManagerService, UsersManagerService
 } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { EditApplicationFormItemDataDialogComponent } from '../../../shared/components/dialogs/edit-application-form-item-data-dialog/edit-application-form-item-data-dialog.component';
@@ -32,11 +32,13 @@ export class ApplicationDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private notificator: NotificatorService,
     private router: Router,
-    private authResolver: GuiAuthResolver) {
+    private authResolver: GuiAuthResolver,
+    private usersService: UsersManagerService) {
   }
 
   application: Application;
   userData: ApplicationFormItemData[] = [];
+  userMail: string;
   displayedColumns: string[] = ['label', 'value'];
   dataSource: MatTableDataSource<ApplicationFormItemData>;
   loading = true;
@@ -62,12 +64,21 @@ export class ApplicationDetailComponent implements OnInit {
       const applicationId = parentParams['applicationId'];
       this.registrarManager.getApplicationById(applicationId).subscribe(application => {
         this.application = application;
-        this.registrarManager.getApplicationDataById(this.application.id).subscribe(value => {
-          this.userData = value;
-          this.dataSource = new MatTableDataSource<ApplicationFormItemData>(this.userData);
-          this.setAuthRights();
-          this.loading = false;
-        });
+        if (this.application.type === 'EMBEDDED' && this.application.user){
+          this.usersService.getRichUserWithAttributes(this.application.user.id).subscribe(user => {
+            const preferredMail = user.userAttributes.find(att => att.friendlyName === 'preferredMail');
+            this.userMail = preferredMail?.value?.toString();
+            this.setAuthRights();
+            this.loading = false;
+          });
+        } else {
+          this.registrarManager.getApplicationDataById(this.application.id).subscribe(value => {
+            this.userData = value;
+            this.dataSource = new MatTableDataSource<ApplicationFormItemData>(this.userData);
+            this.setAuthRights();
+            this.loading = false;
+          });
+        }
       });
     });
   }

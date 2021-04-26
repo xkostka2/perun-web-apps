@@ -30,6 +30,16 @@
       </mat-select>
     </mat-form-field>
 
+    <div *ngIf="entity === 'group'">
+      {{'DIALOGS.UPDATE_APPLICATION_FORM.EMBEDDED' | translate}}:
+    <mat-form-field class="w-100">
+      <mat-select [(value)]="embeddedState" disableOptionCentering>
+        <mat-option value=auto>{{'DIALOGS.UPDATE_APPLICATION_FORM.AUTOMATIC' | translate}}</mat-option>
+        <mat-option value=manual>{{'DIALOGS.UPDATE_APPLICATION_FORM.MANUAL' | translate}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+
   </div>
   <div mat-dialog-actions>
     <button
