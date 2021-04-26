@@ -48,9 +48,9 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
   namespaceRules: NamespaceRules[] = [];
   usersInfoFormGroup: FormGroup;
 
-  passwordReset = null;
+  passwordReset = 'generate';
   groupAssignment = null;
-  expiration = null;
+  expiration = 'never';
 
   createGroupAuth: boolean;
   assignableGroups: Group[] = [];
