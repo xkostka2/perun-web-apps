@@ -16,7 +16,6 @@ import {
   FormControl,
   FormGroupDirective,
   NgForm,
-  ValidationErrors,
   ValidatorFn,
   Validators,
   AbstractControl,
@@ -93,7 +92,7 @@ export class CreateSponsoredMemberDialogComponent implements OnInit {
   voSponsors: RichUser[] = [];
 
   selectedSponsor: User = null;
-  sponsorType: string = null;
+  sponsorType = 'self';
   isSponsor = false;
   isPerunAdmin = false;
 

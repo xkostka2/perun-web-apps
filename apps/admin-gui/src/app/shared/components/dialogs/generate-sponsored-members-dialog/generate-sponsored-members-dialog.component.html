@@ -73,7 +73,12 @@
         <ng-template matStepLabel>{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_LABEL' | translate}}</ng-template>
         <div class="mt-2">
           <h5 class="mb-4">{{'DIALOGS.GENERATE_SPONSORED_MEMBERS.PASSWORD_MANAGEMENT' | translate}}</h5>
-          <mat-radio-group [(ngModel)]="passwordReset">
+          <app-alert alert_type="info" *ngIf="getSelectedNamespaceRules().namespaceName === 'No namespace'">
+            {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.NO_NAMESPACE_PASSWORD_INFO' | translate}}
+          </app-alert>
+          <mat-radio-group
+            *ngIf="getSelectedNamespaceRules().namespaceName !== 'No namespace'"
+            [(ngModel)]="passwordReset">
             <mat-radio-button value="generate">
               {{'DIALOGS.GENERATE_SPONSORED_MEMBERS.GENERATE_PASSWORD' | translate}}
             </mat-radio-button>

@@ -1780,7 +1780,8 @@
       "GROUPS_LABEL": "Group",
       "CREATE_NEW_GROUP": "Create new group",
       "SELECT_EXISTING_GROUPS": "Select from existing groups",
-      "DONT_ASSIGN_INFO": "Created users will become members of this organization, but won't be assigned to any additional groups. You will be able to change this manually later."
+      "DONT_ASSIGN_INFO": "Created users will become members of this organization, but won't be assigned to any additional groups. You will be able to change this manually later.",
+      "NO_NAMESPACE_PASSWORD_INFO": "Generated members will not have password."
     },
     "EDIT_MEMBER_SPONSORS": {
       "TITLE": "Edit sponsored member",
