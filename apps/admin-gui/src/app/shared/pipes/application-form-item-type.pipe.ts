@@ -108,6 +108,12 @@ export class ApplicationFormItemTypePipe implements PipeTransform {
         });
         break;
       }
+      case 'EMBEDDED_GROUP_APPLICATION': {
+        this.translateService.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.TYPES.EMBEDDED_GROUP_APPLICATION').subscribe(text => {
+          this.returnData = text;
+        });
+        break;
+      }
       default: {
         return value;
       }

@@ -335,4 +335,8 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     to.disabledDependencyItemId = from.disabledDependencyItemId;
     to.hiddenDependencyItemId = from.hiddenDependencyItemId;
   }
+
+  isApplicationFormItemOfType(types: string[]):boolean {
+    return types.indexOf(this.applicationFormItem.type) > -1;
+  }
 }

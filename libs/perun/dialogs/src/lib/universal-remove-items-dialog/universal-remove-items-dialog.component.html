@@ -1,0 +1,40 @@
+<div class="{{theme}}">
+  <h1 mat-dialog-title>{{this.data.title | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" mat-dialog-content>
+    <p>
+      {{this.data.description | translate}}
+    </p>
+
+    <div class="font-weight-bold">
+      {{'SHARED_LIB.PERUN.COMPONENTS.UNIVERSAL_REMOVE_ITEMS_DIALOG.ASK' | translate}}
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="w-100">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let item"> {{item}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="font-weight-bolder"></tr>
+      <tr mat-row *matRowDef="let item; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="onCancel()">
+      {{'SHARED_LIB.PERUN.COMPONENTS.UNIVERSAL_REMOVE_ITEMS_DIALOG.CANCEL_BUTTON' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="warn"
+      [disabled]="loading"
+      (click)="onSubmit()">
+      {{'SHARED_LIB.PERUN.COMPONENTS.UNIVERSAL_REMOVE_ITEMS_DIALOG.SUBMIT_BUTTON' | translate}}
+    </button>
+  </div>
+</div>

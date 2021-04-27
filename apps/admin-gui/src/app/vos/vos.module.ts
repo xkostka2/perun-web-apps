@@ -83,6 +83,7 @@ import { VoSettingsSponsoredMembersComponent } from './pages/vo-detail-page/vo-s
 import { GroupSettingsExtsourcesComponent } from './pages/group-detail-page/group-settings/group-settings-extsources/group-settings-extsources.component';
 import { VoStatisticsComponent } from './pages/vo-detail-page/vo-statistics/vo-statistics.component';
 import { GroupStatisticsComponent } from './pages/group-detail-page/group-statistics/group-statistics.component';
+import { ApplicationFormManageGroupsComponent } from './components/application-form-manage-groups/application-form-manage-groups.component';
 
 @NgModule({
   imports: [
@@ -156,7 +157,8 @@ import { GroupStatisticsComponent } from './pages/group-detail-page/group-statis
     VoSettingsSponsoredMembersComponent,
     GroupSettingsExtsourcesComponent,
     VoStatisticsComponent,
-    GroupStatisticsComponent
+    GroupStatisticsComponent,
+    ApplicationFormManageGroupsComponent
   ],
 })
 export class VosModule {

@@ -10,3 +10,4 @@ export * from './lib/edit-attribute-dialog/edit-attribute-dialog.component';
 export * from './lib/attribute-value-list-edit-dialog/attribute-value-list-edit-dialog.component';
 export * from './lib/attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';
 export * from './lib/change-email-dialog/change-email-dialog.component';
+export * from './lib/universal-remove-items-dialog/universal-remove-items-dialog.component'

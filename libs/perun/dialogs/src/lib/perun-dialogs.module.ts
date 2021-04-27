@@ -26,6 +26,7 @@ import { PerunPipesModule } from '@perun-web-apps/perun/pipes';
 import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { AttributeValueListDeleteDialogComponent} from './attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';
 import { ChangeEmailDialogComponent } from './change-email-dialog/change-email-dialog.component';
+import { UniversalRemoveItemsDialogComponent } from './universal-remove-items-dialog/universal-remove-items-dialog.component';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { ChangeEmailDialogComponent } from './change-email-dialog/change-email-d
     EditAttributeDialogComponent,
     AttributeValueListEditDialogComponent,
     AttributeValueListDeleteDialogComponent,
-    ChangeEmailDialogComponent
+    ChangeEmailDialogComponent,
+    UniversalRemoveItemsDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,
@@ -71,7 +73,8 @@ import { ChangeEmailDialogComponent } from './change-email-dialog/change-email-d
     EditAttributeDialogComponent,
     AttributeValueListEditDialogComponent,
     AttributeValueListDeleteDialogComponent,
-    ChangeEmailDialogComponent
+    ChangeEmailDialogComponent,
+    UniversalRemoveItemsDialogComponent
   ]
 })
 export class PerunDialogsModule {

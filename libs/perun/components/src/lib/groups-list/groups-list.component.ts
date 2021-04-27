@@ -309,6 +309,9 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     } else if (this.authType === 'member-groups') {
       return this.selection.selected.reduce((acc, grp) => acc &&
         this.authResolver.isAuthorized('removeMember_Member_List<Group>_policy', [grp]), true);
+    } else if (this.authType === 'application-form-manage-groups') {
+      return this.selection.selected.reduce((acc, grp) => acc &&
+        this.authResolver.isAuthorized('deleteGroupsFromAutoRegistration_List<Group>_policy', [this.vo, grp]), true);
     }
   }
 

@@ -182,6 +182,8 @@ import { ApplicationFormItemDisabledPipe } from './pipes/application-form-item-d
 import { ApplicationFormItemHiddenPipe } from './pipes/application-form-item-hidden.pipe';
 import { DeleteEntityDialogComponent } from './components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
 import { MatListModule } from '@angular/material/list';
+import { EditApplicationFormItemLineComponent } from './components/dialogs/edit-application-form-item-dialog/edit-application-form-item-line/edit-application-form-item-line.component';
+import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-to-registration/add-group-to-registration.component';
 
 @NgModule({
   imports: [
@@ -437,7 +439,9 @@ import { MatListModule } from '@angular/material/list';
     StatisticsCardComponent,
     ApplicationFormItemDisabledPipe,
     ApplicationFormItemHiddenPipe,
-    DeleteEntityDialogComponent
+    DeleteEntityDialogComponent,
+    EditApplicationFormItemLineComponent,
+    AddGroupToRegistrationComponent
   ],
   providers: [
     AnyToStringPipe,

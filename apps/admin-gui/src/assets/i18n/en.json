@@ -317,6 +317,7 @@
         "TYPE": "Type",
         "PREVIEW": "Preview",
         "EDIT": "Edit",
+        "MANAGE_GROUPS": "Manage groups",
         "DELETE": "Delete",
         "MODULE_NAME": "Module name",
         "APPLICATION_TYPE": "Approval style",
@@ -349,7 +350,8 @@
           "CHECKBOX": "Checkbox (multiple selection)",
           "RADIO": "Radio (single selection)",
           "TIMEZONE": "Selection of timezone",
-          "AUTO_SUBMIT_BUTTON": "Submit button with auto-submit"
+          "AUTO_SUBMIT_BUTTON": "Submit button with auto-submit",
+          "EMBEDDED_GROUP_APPLICATION": "Groups for embedded applications"
         },
         "HIDDEN": {
           "ALWAYS": "Always",
@@ -379,7 +381,8 @@
           "CHECKBOX": "List of defined custom options with checkboxes. Selected values are gathered as comma separated string.",
           "RADIO": "List of defined custom options with radio buttons. Single selection model. Value is stored as string.",
           "TIMEZONE": "Selection box with pre-defined values of UTC timezones.",
-          "AUTO_SUBMIT_BUTTON": "Button used to auto-submit the form with custom label. All other form items are checked on valid input before submission. If validation fail (at least once) user must submit form manually. If it's OK, then form is automatically submitted."
+          "AUTO_SUBMIT_BUTTON": "Button used to auto-submit the form with custom label. All other form items are checked on valid input before submission. If validation fail (at least once) user must submit form manually. If it's OK, then form is automatically submitted.",
+          "EMBEDDED_GROUP_APPLICATION": "Checkbox of real organization groups which the user can check and thus submit an application to these groups"
         },
         "PREVIEW_PAGE": {
           "TITLE": "Application form preview",
@@ -387,6 +390,16 @@
           "SWITCH_CZECH": "Switch to Czech",
           "SWITCH_EXTENSION": "Switch to Extension",
           "SWITCH_INITIAL": "Switch to Initial"
+        },
+        "MANAGE_GROUPS_PAGE": {
+          "TITLE": "Manage groups for registration",
+          "ADD": "Add",
+          "REMOVE": "Remove",
+          "HELP": "On this page, you can set up a set of groups that will be displayed to users on an application to the organization. The user can select any set of these groups and for these selected groups, there will be applications submitted automatically.",
+          "FILTER": "Filter",
+          "REMOVE_GROUP_DIALOG_TITLE": "Confirm removing groups",
+          "REMOVE_GROUP_DIALOG_DESCRIPTION": "Following groups will be removed from the group list that is offered to users for registration.",
+          "REMOVE_PERMISSION_HINT": "You don't have permission to remove some of the selected groups."
         }
       },
       "ATTRIBUTES": {
@@ -652,7 +665,8 @@
     "GROUPS": {
       "TITLE": "Member groups",
       "ADD": "Add",
-      "REMOVE": "Remove"
+      "REMOVE": "Remove",
+      "REMOVE_PERMISSION_HINT": "You don't have permission to remove some of the selected groups."
     },
     "APPLICATIONS": {
       "TITLE": "Application",
@@ -1451,6 +1465,12 @@
       "ADD": "Add",
       "ADD_PERMISSION_TOOLTIP": "You don't have permission to assign some of the selected resources.",
       "SUCCESS": "Resources successfully added"
+    },
+    "ADD_GROUP_TO_REGISTRATION": {
+      "TITLE": "Assing group to registration",
+      "FILTER_DESCRIPTION": "Filter",
+      "CANCEL_BUTTON": "Cancel",
+      "ADD_BUTTON": "Assign groups"
     },
     "ADD_USER_EXT_SOURCE": {
       "TITLE": "Add user ext source",
@@ -2430,6 +2450,11 @@
           "CANCEL": "Cancel",
           "SEND": "Send",
           "SUCCESS": "Issue report was sended and got ticket number: "
+        },
+        "UNIVERSAL_REMOVE_ITEMS_DIALOG": {
+          "ASK": "Do you want to proceed?",
+          "CANCEL_BUTTON": "Cancel",
+          "SUBMIT_BUTTON": "Submit"
         }
       },
       "ORGANIZATIONS": {

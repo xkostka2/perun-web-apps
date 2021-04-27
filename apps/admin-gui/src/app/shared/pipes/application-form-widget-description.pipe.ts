@@ -108,6 +108,12 @@ export class ApplicationFormWidgetDescriptionPipe implements PipeTransform {
         });
         break;
       }
+      case 'EMBEDDED_GROUP_APPLICATION': {
+        this.translateService.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.WIDGET_DESCRIPTION.EMBEDDED_GROUP_APPLICATION').subscribe(text => {
+          this.returnData = text;
+        });
+        break;
+      }
       default: {
         return value;
       }

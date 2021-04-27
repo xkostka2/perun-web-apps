@@ -8,15 +8,20 @@
   class="mr-2">
   {{'MEMBER_DETAIL.GROUPS.ADD' | translate}}
 </button>
-<button
-  *ngIf="!loading && removeAuth"
-  mat-flat-button
-  color="warn"
-  (click)="removeGroup()"
-  [disabled]="selection.selected.length === 0 || (list !== undefined && !list.removeAuth)"
-  class="mr-2">
-  {{'MEMBER_DETAIL.GROUPS.REMOVE' | translate}}
-</button>
+<span
+  *ngIf="!loading"
+  [matTooltipDisabled]="list === undefined || (list !== undefined && list.removeAuth)"
+  matTooltip="{{'MEMBER_DETAIL.GROUPS.REMOVE_PERMISSION_HINT' | translate}}">
+  <button
+    *ngIf="!loading"
+    mat-flat-button
+    color="warn"
+    (click)="removeGroup()"
+    [disabled]="selection.selected.length === 0 || (list !== undefined && !list.removeAuth)"
+    class="mr-2">
+    {{'MEMBER_DETAIL.GROUPS.REMOVE' | translate}}
+  </button>
+</span>
 <perun-web-apps-immediate-filter
   (filter)="applyFilter($event)"
   *ngIf="!loading"
@@ -28,7 +33,7 @@
   [pageSize]="pageSize"
   (page)="pageChanged($event)"
   [groups]="groups"
-  [hideColumns]="removeAuth ? [ 'vo','menu', 'recent'] : ['select', 'vo', 'menu', 'recent']"
+  [hideColumns]="['vo','menu', 'recent']"
   [selection]="selection"
   [filter]="filterValue"
   [memberId]="memberId"

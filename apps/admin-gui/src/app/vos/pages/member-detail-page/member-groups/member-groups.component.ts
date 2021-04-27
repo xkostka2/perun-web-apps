@@ -92,8 +92,6 @@ export class MemberGroupsComponent implements OnInit {
     this.addAuth = this.allGroups.reduce((acc, grp) =>
       acc || this.authResolver.isAuthorized('addMember_Group_Member_policy', [grp]), false);
 
-    this.removeAuth = this.authResolver.isAuthorized('removeMember_Group_Member_policy', [vo]);
-
     if(this.groups.length !== 0){
       this.routeAuth = this.authResolver.isAuthorized('getGroupById_int_policy', [vo, this.groups[0]]);
     }
