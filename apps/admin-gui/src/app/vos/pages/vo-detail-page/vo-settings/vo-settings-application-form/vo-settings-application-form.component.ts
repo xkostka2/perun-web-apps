@@ -131,7 +131,11 @@ export class VoSettingsApplicationFormComponent implements OnInit {
   settings() {
     const config = getDefaultDialogConfig();
     config.width = '400px';
-    config.data = {applicationForm: this.applicationForm, theme: 'vo-theme'};
+    config.data = {
+      entity: "vo",
+      applicationForm: this.applicationForm,
+      theme: 'vo-theme'
+    };
 
     const dialog = this.dialog.open(UpdateApplicationFormDialogComponent, config);
     dialog.afterClosed().subscribe( newForm => {

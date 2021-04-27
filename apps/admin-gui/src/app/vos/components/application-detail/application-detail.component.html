@@ -64,12 +64,18 @@
   </div>
   <div>
     <span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.TYPE' | translate}}</span>:
-    <span *ngIf="application.type == 'INITIAL'; else extension">
-      <mat-icon class="align-text-bottom" >arrow_right_alt</mat-icon>Initial
+    <span *ngIf="application.type == 'INITIAL'">
+      <mat-icon class="align-text-top" >arrow_right_alt</mat-icon>
+      Initial
     </span>
-    <ng-template #extension>
-      <mat-icon class="align-text-bottom">cached</mat-icon>Extension
-    </ng-template>
+    <span *ngIf="application.type == 'EXTENSION'">
+      <mat-icon class="align-text-top" >restore</mat-icon>
+      Extension
+    </span>
+    <span *ngIf="application.type == 'EMBEDDED'">
+      <mat-icon class="align-text-top" >cached</mat-icon>
+      Embedded
+    </span>
   </div>
 
   <div class="card p-3 mt-2" *ngIf="this.application.state == 'REJECTED'">
@@ -85,6 +91,7 @@
   <div class="card p-4 mt-2">
     <mat-card-title><i class="material-icons">redo</i> {{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.SUBMITTED_BY' | translate}}: {{application.user === null ? submittedBy() : application.user | userFullName}}</mat-card-title>
 
+    <div *ngIf="userMail"><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.MAIL' | translate}}</span>: {{this.userMail}}</div>
     <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.EXT_SRC' | translate}}</span>: {{this.application.extSourceName}}</div>
     <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.LOA' | translate}}</span>: {{this.application.extSourceLoa}}</div>
     <div><span class="font-weight-bold">{{'VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DATE' | translate}}</span>: {{this.application.createdAt | date:'d.M.y H:mm:ss'}}</div>
