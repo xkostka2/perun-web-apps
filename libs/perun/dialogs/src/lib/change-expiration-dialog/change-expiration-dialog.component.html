@@ -6,9 +6,9 @@
       <p><strong>{{'DIALOGS.CHANGE_EXPIRATION.CURRENT_EXPIRATION'|translate}}</strong> {{currentExpiration | parseDate}}</p>
       <p><strong>{{'DIALOGS.CHANGE_EXPIRATION.NEW_EXPIRATION'|translate}}</strong> {{newExpiration ? (newExpiration | parseDate) : 'never'}}</p>
 
-      <mat-radio-group [(ngModel)]="newExpiration">
+      <mat-radio-group [(ngModel)]="newExpiration" class="d-flex flex-column">
         <mat-radio-button value="{{expirationControl.value}}">
-          <mat-form-field appearance="fill" color="primary" class="cursor-pointer" (click)="picker.open()">
+          <mat-form-field color="primary" class="cursor-pointer" (click)="picker.open()">
             <mat-label>{{'DIALOGS.CHANGE_EXPIRATION.DATE_LABEL'|translate}}</mat-label>
             <input (dateChange)="setExpiration()" [min]="minDate" [formControl]="expirationControl" [matDatepicker]="picker" class="disable" readonly matInput>
             <mat-datepicker-toggle [for]="picker" [disabled]="false" matSuffix></mat-datepicker-toggle>
