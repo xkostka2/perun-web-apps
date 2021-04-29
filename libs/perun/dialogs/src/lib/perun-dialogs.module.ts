@@ -27,6 +27,9 @@ import { UiAlertsModule } from '@perun-web-apps/ui/alerts';
 import { AttributeValueListDeleteDialogComponent} from './attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';
 import { ChangeEmailDialogComponent } from './change-email-dialog/change-email-dialog.component';
 import { UniversalRemoveItemsDialogComponent } from './universal-remove-items-dialog/universal-remove-items-dialog.component';
+import { MemberTreeViewDialogComponent } from './member-tree-view-dialog/member-tree-view-dialog.component';
+import { RouterModule } from '@angular/router';
+import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
   imports: [
@@ -45,7 +48,9 @@ import { UniversalRemoveItemsDialogComponent } from './universal-remove-items-di
     ClipboardModule,
     MatIconModule,
     PerunPipesModule,
-    UiAlertsModule
+    UiAlertsModule,
+    RouterModule,
+    MatTreeModule
   ],
   declarations: [
     BugReportDialogComponent,
@@ -60,7 +65,8 @@ import { UniversalRemoveItemsDialogComponent } from './universal-remove-items-di
     AttributeValueListEditDialogComponent,
     AttributeValueListDeleteDialogComponent,
     ChangeEmailDialogComponent,
-    UniversalRemoveItemsDialogComponent
+    UniversalRemoveItemsDialogComponent,
+    MemberTreeViewDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,

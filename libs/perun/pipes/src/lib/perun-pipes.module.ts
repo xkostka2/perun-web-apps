@@ -20,6 +20,7 @@ import { MemberOrganizationPipe } from './member-organization.pipe';
 import { ParseDatePipe } from './parse-date.pipe';
 import { TechnicalOwnersPipe } from './technical-owners.pipe';
 import { FilterUniqueObjectsPipe } from './filter-unique-objects.pipe';
+import { ParseGroupNamePipe } from './parse-group-name.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { FilterUniqueObjectsPipe } from './filter-unique-objects.pipe';
     GroupExpirationPipe,
     ParseDatePipe,
     TechnicalOwnersPipe,
-    FilterUniqueObjectsPipe
+    FilterUniqueObjectsPipe,
+    ParseGroupNamePipe
   ],
   exports: [
     ResourceTagsToStringPipe,
@@ -66,7 +68,8 @@ import { FilterUniqueObjectsPipe } from './filter-unique-objects.pipe';
     MemberOrganizationPipe,
     ParseDatePipe,
     TechnicalOwnersPipe,
-    FilterUniqueObjectsPipe
+    FilterUniqueObjectsPipe,
+    ParseGroupNamePipe
   ],
   imports: [CommonModule],
 })

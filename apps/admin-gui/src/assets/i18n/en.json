@@ -2455,6 +2455,10 @@
           "ASK": "Do you want to proceed?",
           "CANCEL_BUTTON": "Cancel",
           "SUBMIT_BUTTON": "Submit"
+        },
+        "MEMBER_TREEVIEW_DIALOG": {
+          "TITLE": "Member tree view",
+          "CLOSE": "Close"
         }
       },
       "ORGANIZATIONS": {

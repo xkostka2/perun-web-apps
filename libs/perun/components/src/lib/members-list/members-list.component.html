@@ -37,7 +37,11 @@
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
           <td *matCellDef="let member" mat-cell>
-            <mat-icon *ngIf="member.membershipType !== 'DIRECT'" [matTooltip]="'MEMBERS_LIST.INDIRECT_MEMBER' | translate">transfer_within_a_station</mat-icon>
+            <mat-icon *ngIf="member.membershipType !== 'DIRECT'"
+                      [matTooltip]="'MEMBERS_LIST.INDIRECT_MEMBER' | translate"
+                      (click)="viewMemberGroupTree(member)"
+                      (mouseenter)="disableRouting = true"
+                      (mouseleave)="disableRouting = disabledRouting">transfer_within_a_station</mat-icon>
           </td>
         </ng-container>
         <ng-container matColumnDef="fullName">
@@ -96,7 +100,7 @@
         <tr
           *matRowDef="let member; columns: displayedColumns;"
           [class.disable-outline]="disableRouting"
-          [class.cursor-pointer]="!disableRouting"
+          [class.cursor-pointer]="!disabledRouting"
           [class.italic_font]="member.membershipType !== 'DIRECT'"
           [routerLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
           [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"

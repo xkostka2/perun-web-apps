@@ -1,0 +1,65 @@
+<div class="group-theme">
+  <h1 mat-dialog-title>{{'SHARED_LIB.PERUN.COMPONENTS.MEMBER_TREEVIEW_DIALOG.TITLE' | translate}}</h1>
+  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+  <div *ngIf="!loading" mat-dialog-content class="mr-0">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+        <li class="mat-tree-node">
+          <button mat-flat-button
+                  class="ml-3"
+                  [class.act-disabled]="!node.direct"
+                  (click)="navigate(node.id)">
+            <mat-icon *ngIf="node.direct">home</mat-icon>
+            {{node.name | parseGroupName}}
+          </button>
+
+          <mat-icon *ngIf="node.includes.length">
+            chevron_right
+          </mat-icon>
+          <button mat-icon-button (click)="navigate(node.id, true)" *ngIf="node.includes.length">
+            <mat-icon>transfer_within_a_station</mat-icon>
+            {{node.includes}}
+          </button>
+
+        </li>
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <li>
+          <div class="mat-tree-node">
+            <button mat-icon-button matTreeNodeToggle
+                    [attr.aria-label]="'Toggle ' + node.name">
+              <mat-icon>
+                {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+              </mat-icon>
+            </button>
+            <button mat-flat-button [class.act-disabled]="!node.direct"
+                    (click)="navigate(node.id)"><mat-icon *ngIf="node.direct">home</mat-icon>{{node.name | parseGroupName}}</button>
+
+            <mat-icon *ngIf="node.includes.length">
+              chevron_right
+            </mat-icon>
+            <button mat-icon-button (click)="navigate(node.id, true)" *ngIf="node.includes.length">
+              <mat-icon>transfer_within_a_station</mat-icon>
+              {{node.includes}}
+            </button>
+          </div>
+          <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+            <ng-container matTreeNodeOutlet></ng-container>
+          </ul>
+        </li>
+      </mat-nested-tree-node>
+    </mat-tree>
+
+  </div>
+  <div mat-dialog-actions>
+    <div class="ml-auto">
+      <button
+        (click)="onCancel()"
+        mat-flat-button>
+        {{'SHARED_LIB.PERUN.COMPONENTS.MEMBER_TREEVIEW_DIALOG.CLOSE' | translate}}
+      </button>
+    </div>
+  </div>
+</div>
