@@ -610,7 +610,8 @@
         "CREATE_APPLICATION_FORM": "Create empty form",
         "CLEAR": "Clear form",
         "CLEAR_TOOLTIP": "Removes all form items",
-        "CHANGE_SETTINGS_SUCCESS": "Application from settings successfully changed."
+        "CHANGE_SETTINGS_SUCCESS": "Application form settings successfully changed.",
+        "ALLOW_EMBEDDED": "Allowed for embedded applications"
       },
       "NOTIFICATIONS": {
         "TITLE": "Email notifications",

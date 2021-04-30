@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
@@ -18,12 +18,14 @@ import {
 import {
   ApplicationForm,
   ApplicationFormItem,
+  AttributesManagerService,
   Group,
   GroupsManagerService,
   RegistrarManagerService
 } from '@perun-web-apps/perun/openapi';
 import { ApiRequestConfigurationService } from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-group-settings-application-form',
@@ -45,8 +47,12 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
     private apiRequest: ApiRequestConfigurationService,
     private router: Router,
     private guiAuthResolver: GuiAuthResolver,
-    private groupsManager: GroupsManagerService) {
+    private groupsManager: GroupsManagerService,
+    private attributesManager: AttributesManagerService) {
   }
+
+  @ViewChild('autoRegToggle')
+  autoRegToggle: MatSlideToggle;
 
   loading = false;
   applicationForm: ApplicationForm;
@@ -58,6 +64,9 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
   group: Group;
   editAuth = false;
   createEmptyForm = false;
+  voHasEmbeddedGroupApplication = false;
+  autoRegistrationEnabled: boolean;
+  changeAutoRegistration: boolean;
 
   // This counter is used to generate ids for newly added items. This fake ids are used in backend
   // to recognize new items in other items' dependencies
@@ -76,8 +85,12 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
           this.applicationForm = form;
           this.registrarManager.getFormItemsForGroup(this.groupId).subscribe(formItems => {
             this.applicationFormItems = formItems;
-            this.setAuth();
-            this.loading = false;
+            this.attributesManager.getGroupAttributeByName(this.groupId, "urn:perun:group:attribute-def:virt:autoRegistrationEnabled").subscribe(attr => {
+              this.voHasEmbeddedGroupApplication = attr.value !== null;
+              this.autoRegistrationEnabled = !!attr.value;
+              this.setAuth();
+              this.loading = false;
+            });
           }, () => this.loading = false);
         }, error => {
           if (error.error.name === 'FormNotExistsException') {
@@ -95,6 +108,7 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
   setAuth() {
     this.editAuth = this.guiAuthResolver.isAuthorized('group-updateFormItems_ApplicationForm_List<ApplicationFormItem>_policy', [this.group]);
     this.createEmptyForm = this.guiAuthResolver.isAuthorized('createApplicationFormInGroup_Group_policy', [this.group]);
+    this.changeAutoRegistration = this.guiAuthResolver.isAuthorized('addGroupsToAutoRegistration_List<Group>_policy', [this.group]);
   }
 
   add() {
@@ -212,5 +226,28 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
   clear() {
     this.applicationFormItems = [];
     this.itemsChanged = true;
+  }
+
+  updateAutoRegistration() {
+    this.autoRegToggle.setDisabledState(true);
+    if (this.autoRegistrationEnabled) {
+      this.groupsManager.deleteGroupsFromAutoRegistration([this.group.id]).subscribe(() => {
+        this.autoRegistrationEnabled = !this.autoRegistrationEnabled;
+        this.translate.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.CHANGE_SETTINGS_SUCCESS')
+          .subscribe(successMessage => {
+            this.notificator.showSuccess(successMessage);
+          });
+        this.autoRegToggle.setDisabledState(false)
+      }, () => this.autoRegToggle.setDisabledState(false));
+    } else {
+      this.groupsManager.addGroupsToAutoRegistration([this.group.id]).subscribe(() => {
+        this.autoRegistrationEnabled = !this.autoRegistrationEnabled;
+        this.translate.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.CHANGE_SETTINGS_SUCCESS')
+          .subscribe(successMessage => {
+            this.notificator.showSuccess(successMessage);
+          });
+        this.autoRegToggle.setDisabledState(false)
+      }, () => this.autoRegToggle.setDisabledState(false));
+    }
   }
 }

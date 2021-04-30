@@ -20,9 +20,18 @@
         {{applicationForm.automaticApprovalExtension ?
         ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}},
 
-        <mat-icon class="align-text-top" matTooltip="Embedded">cached</mat-icon>
+        <mat-icon class="align-text-top" matTooltip="Embedded">nat</mat-icon>
         {{applicationForm.automaticApprovalEmbedded ?
         ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}}
+      </div>
+      <div *ngIf="voHasEmbeddedGroupApplication">
+        <mat-slide-toggle (change)="updateAutoRegistration()"
+                          [disabled]="!changeAutoRegistration"
+                          [ngModel]="autoRegistrationEnabled"
+                          color="primary"
+                          #autoRegToggle>
+          {{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.ALLOW_EMBEDDED' | translate}}
+        </mat-slide-toggle>
       </div>
     </div>
     <div class="w-25">

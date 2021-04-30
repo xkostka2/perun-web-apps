@@ -73,7 +73,7 @@
       Extension
     </span>
     <span *ngIf="application.type == 'EMBEDDED'">
-      <mat-icon class="align-text-top" >cached</mat-icon>
+      <mat-icon class="align-text-top" >nat</mat-icon>
       Embedded
     </span>
   </div>
@@ -106,7 +106,8 @@
         <td class="word-break-all" mat-cell *matCellDef="let userData"> {{userData.value}}
           <button
             *ngIf="!userData.formItem.type.startsWith('FROM_FEDERATION') &&
-            (application.state === 'NEW' || application.state === 'VERIFIED')"
+            (application.state === 'NEW' || application.state === 'VERIFIED') &&
+            userData.formItem.type !== 'EMBEDDED_GROUP_APPLICATION'"
             mat-icon-button
             aria-label="Edit Application data"
             (click)="editApplicationData(userData)">
