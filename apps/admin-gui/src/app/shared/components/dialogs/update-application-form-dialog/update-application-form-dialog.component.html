@@ -30,7 +30,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div *ngIf="entity === 'group'">
+    <div *ngIf="entity === 'group' && autoRegistrationEnabled">
       {{'DIALOGS.UPDATE_APPLICATION_FORM.EMBEDDED' | translate}}:
     <mat-form-field class="w-100">
       <mat-select [(value)]="embeddedState" disableOptionCentering>
