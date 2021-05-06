@@ -68,7 +68,7 @@ export class AuthService {
     });
   }
 
-  authenticate(): Promise<boolean> {
+  verifyAuth(): Promise<boolean> {
     const currentPathname = location.pathname;
     const queryParams = location.search.substr(1);
 
@@ -139,7 +139,7 @@ export class AuthService {
    * @return true if path is valid, false otherwise
    */
   private isPotentiallyValidPath(path: string): boolean {
-    const validPaths = ['/home', '/organizations', '/facilities', '/myProfile', '/admin'];
+    const validPaths = ['/home', '/organizations', '/facilities', '/myProfile', '/admin', '/login'];
     if (path === '/'){
       return true;
     }
@@ -175,9 +175,8 @@ export class AuthService {
 
           sessionStorage.setItem('auth:redirect', path);
           sessionStorage.setItem('auth:queryParams', queryParams);
-          console.log("STARTED AUTH");
-          return this.startAuthentication()
-            .then(() => false);
+
+          return false;
         }
         return true;
       });
@@ -200,7 +199,7 @@ export class AuthService {
     if (mfaRoute){
       return this.router.navigate([mfaRoute], {replaceUrl: true})
     }
-    const redirectUrl = sessionStorage.getItem('auth:redirect');
+    let redirectUrl = sessionStorage.getItem('auth:redirect');
     const storageParams = sessionStorage.getItem('auth:queryParams');
     let params: string[] = [];
     if (!!storageParams) {
@@ -212,6 +211,9 @@ export class AuthService {
       queryParams[elements[0]] = elements[1];
     })
     if (!!redirectUrl) {
+      if (redirectUrl === '/login') {
+        redirectUrl = '/';
+      }
       sessionStorage.removeItem('auth:redirect');
       sessionStorage.removeItem('auth:queryParams');
 

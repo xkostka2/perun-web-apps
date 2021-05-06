@@ -2,39 +2,46 @@
   <mat-icon>alert</mat-icon>
   {{ warningMessage }}
 </div>
-<app-perun-nav-menu
-  id="nav-menu"
-  [ngStyle]="{'top': getNavMenuTop(), 'background': navBackgroundColor}"
-  class="mat-elevation-z3"
-  [sideNav]="sidenav"
-  [principal]="principal">
-</app-perun-nav-menu>
 <app-notificator></app-notificator>
-<mat-sidenav-container
-  id="content"
-  [ngStyle]="{'margin-top': getSideNavMarginTop(),'min-height': getSideNavMinHeight()}"
->
-  <mat-sidenav #sidenav
-               [ngStyle]="{'border-color': sideBarBorderColor}"
-               [mode]="sidebarMode"
-               [opened]="!isMobile()"
-               [fixedInViewport]="true"
-               [fixedTopGap]="getTopGap()">
-    <perfect-scrollbar [ngStyle]="{'background': sideMenubackgroundColor}" [scrollIndicators]="true">
-      <app-side-menu [sideNav]="sidenav"></app-side-menu>
-    </perfect-scrollbar>
-  </mat-sidenav>
+<ng-template [ngIf]="!isLoginScreenShow">
+  <app-perun-nav-menu
+    id="nav-menu"
+    [ngStyle]="{'top': getNavMenuTop(), 'background': navBackgroundColor}"
+    class="mat-elevation-z3"
+    [sideNav]="sidenav"
+    [principal]="principal">
+  </app-perun-nav-menu>
+  <mat-sidenav-container
+    id="content"
+    [ngStyle]="{'margin-top': getSideNavMarginTop(),'min-height': getSideNavMinHeight()}"
+  >
+    <mat-sidenav #sidenav
+                 [ngStyle]="{'border-color': sideBarBorderColor}"
+                 [mode]="sidebarMode"
+                 [opened]="!isMobile()"
+                 [fixedInViewport]="true"
+                 [fixedTopGap]="getTopGap()">
+      <perfect-scrollbar [ngStyle]="{'background': sideMenubackgroundColor}" [scrollIndicators]="true">
+        <app-side-menu [sideNav]="sidenav"></app-side-menu>
+      </perfect-scrollbar>
+    </mat-sidenav>
 
-  <mat-sidenav-content id="content-inner"
-    [ngStyle]="{
-       'min-height' : getContentInnerMinHeight(),
-       'background-color': contentBackgroundColor
-    }">
-    <div id="content-wrap">
-      <router-outlet></router-outlet>
-    </div>
-    <div id="footer">
-      <perun-web-apps-footer></perun-web-apps-footer>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <mat-sidenav-content id="content-inner"
+      [ngStyle]="{
+         'min-height' : getContentInnerMinHeight(),
+         'background-color': contentBackgroundColor
+      }">
+      <div id="content-wrap">
+        <router-outlet></router-outlet>
+      </div>
+      <div id="footer">
+        <perun-web-apps-footer></perun-web-apps-footer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-template>
+
+<ng-template [ngIf]="isLoginScreenShow">
+  <perun-web-apps-login-screen-base>
+  </perun-web-apps-login-screen-base>
+</ng-template>

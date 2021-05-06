@@ -5,7 +5,7 @@
   "isDevel": false,
   "display_warning": false,
   "warning_message": "BETA version of new Perun GUI. It doesn’t contain all functionality. Please report any issues to support mail below.",
-
+  "auto_auth_redirect": true,
   "oidc_client" : {
     "oauth_authority": "https://login.cesnet.cz/oidc/",
     "oauth_callback": "http://gui-dev.org/api-callback",

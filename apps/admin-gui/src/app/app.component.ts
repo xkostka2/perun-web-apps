@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CacheHelperService } from './core/services/common/cache-helper.service';
-import { StoreService } from '@perun-web-apps/perun/services';
+import { InitAuthService, StoreService } from '@perun-web-apps/perun/services';
 import { PerunPrincipal } from '@perun-web-apps/perun/openapi';
 import { interval } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -22,8 +22,9 @@ export class AppComponent implements OnInit {
     private cache: CacheHelperService,
     private store: StoreService,
     private http: HttpClient,
-    private dialog:MatDialog,
-    private router: Router
+    private dialog: MatDialog,
+    private router: Router,
+    private initAuth: InitAuthService
   ) {
 
     this.cache.init();
@@ -34,6 +35,8 @@ export class AppComponent implements OnInit {
 
   sidebarMode: 'over' | 'push' | 'side' = 'side';
   lastScreenWidth: number;
+
+  isLoginScreenShow: boolean;
 
   principal: PerunPrincipal;
   navBackgroundColor = this.store.get('theme', 'nav_bg_color');
@@ -58,6 +61,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoginScreenShow = this.initAuth.isLoginScreenShown();
+
     if (sessionStorage.getItem("initPage") === null) {
       sessionStorage.setItem("initPage", location.pathname);
       sessionStorage.setItem("onInitPage", 'true');

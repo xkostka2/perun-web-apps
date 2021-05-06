@@ -29,6 +29,7 @@ import {
   PerfectScrollbarModule
 } from 'ngx-perfect-scrollbar';
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
+import { PerunLoginModule } from '@perun-web-apps/perun/login';
 
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
@@ -57,7 +58,7 @@ export function apiConfigFactory(store: StoreService): Configuration {
 
 const loadConfigs = (appConfig: AdminGuiConfigService) => {
   return () => {
-    return appConfig.loadConfigs();
+    return appConfig.initialize();
   };
 };
 
@@ -88,7 +89,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     ApiModule,
     PerfectScrollbarModule,
-    PerunSharedComponentsModule
+    PerunSharedComponentsModule,
+    PerunLoginModule
   ],
   providers: [
     AdminGuiConfigService,

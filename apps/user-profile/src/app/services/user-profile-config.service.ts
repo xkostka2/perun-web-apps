@@ -3,6 +3,7 @@ import { InitAuthService, StoreService } from '@perun-web-apps/perun/services';
 import { AppConfigService, ColorConfig, EntityColorConfig } from '@perun-web-apps/config';
 import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -44,12 +45,12 @@ export class UserProfileConfigService {
     }
   ];
 
-  loadConfigs(): Promise<void> {
+  initialize(): Promise<void> {
     return this.appConfigService.loadAppDefaultConfig()
       .then(() => this.appConfigService.loadAppInstanceConfig())
       .then(() => this.setApiUrl())
       .then(() => this.appConfigService.initializeColors(this.entityColorConfigs, this.colorConfigs))
-      .then(() => this.initAuthService.authenticateUser())
+      .then(() => this.initAuthService.verifyAuth())
       .catch(err => {
         // if there is an error, it means user probably navigated to /api-callback without logging in
         console.error(err);
@@ -61,8 +62,9 @@ export class UserProfileConfigService {
         // if the authentication is successful, continue
         if (isAuthenticated) {
           return this.initAuthService.loadPrincipal();
+        } else {
+          return this.initAuthService.handleAuthStart();
         }
-        // if it was not, do nothing because it will do a redirect to oidc server
       });
   }
 

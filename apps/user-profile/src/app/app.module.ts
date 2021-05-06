@@ -95,7 +95,7 @@ export function apiConfigFactory(store: StoreService): Configuration {
 
 const loadConfigs = (appConfig: UserProfileConfigService) => {
   return () => {
-    return appConfig.loadConfigs();
+    return appConfig.initialize();
   };
 };
 

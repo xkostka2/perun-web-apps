@@ -1209,7 +1209,10 @@
               "apps/publications/src/favicon.ico",
               "apps/publications/src/assets"
             ],
-            "styles": ["apps/publications/src/styles.scss", "node_modules/bootstrap/dist/css/bootstrap.css"],
+            "styles": [
+              "apps/publications/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css"
+            ],
             "scripts": ["./node_modules/tinycolor2/dist/tinycolor-min.js"]
           },
           "configurations": {
@@ -1304,6 +1307,36 @@
             "tsConfig": ["apps/publications-e2e/tsconfig.e2e.json"],
             "exclude": ["**/node_modules/**", "!apps/publications-e2e/**/*"]
           }
+        }
+      }
+    },
+    "perun-login": {
+      "projectType": "library",
+      "root": "libs/perun/login",
+      "sourceRoot": "libs/perun/login/src",
+      "prefix": "perun-web-apps",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/perun/login/tsconfig.lib.json",
+              "libs/perun/login/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/perun/login/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/perun/login/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         }
       }
     }

@@ -2248,6 +2248,10 @@
   },
   "SHARED_LIB": {
     "PERUN": {
+      "LOGIN": {
+        "SIGN_IN": "Sign in",
+        "TEXT": "You must sign in to continue."
+      },
       "COMPONENTS": {
         "GROUPS_LIST": {
           "TABLE_GROUP_ID": "Id",
