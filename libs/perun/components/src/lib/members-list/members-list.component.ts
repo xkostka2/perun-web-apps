@@ -224,8 +224,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
 
   viewMemberGroupTree(member: RichMember) {
     const config = getDefaultDialogConfig();
-    config.width = '500px';
-    config.maxHeight = '500px';
+    config.width = '800px';
     config.data = {member: member, groupId: this.groupId};
 
     this.dialog.open(MemberTreeViewDialogComponent, config);

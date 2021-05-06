@@ -12,3 +12,13 @@
 .act-disabled {
   pointer-events: none;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.filter-field {
+  max-width:350px !important;
+  width:100% !important;
+  min-width:initial !important;
+}

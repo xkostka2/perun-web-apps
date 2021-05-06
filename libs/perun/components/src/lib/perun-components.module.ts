@@ -186,7 +186,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     CreateGroupFormComponent,
     DebounceFilterComponent,
     MembersDynamicListComponent,
-    AppFormItemSearchSelectComponent,
+    AppFormItemSearchSelectComponent
   ],
   exports: [
     VosListComponent,
