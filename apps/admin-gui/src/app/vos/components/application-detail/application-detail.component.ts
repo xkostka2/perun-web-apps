@@ -133,6 +133,7 @@ export class ApplicationDetailComponent implements OnInit {
   }
 
   deleteApplication() {
+    this.loading = true;
     this.registrarManager.deleteApplication(this.application.id).subscribe(() => {
       this.translate.get('VO_DETAIL.APPLICATION.APPLICATION_DETAIL.DELETE_MESSAGE').subscribe(successMessage => {
         this.notificator.showSuccess(successMessage);
@@ -153,21 +154,21 @@ export class ApplicationDetailComponent implements OnInit {
       this.registrarManager.getApplicationById(this.application.id).subscribe(reloaded => {
         this.application = reloaded;
         this.loading = false;
-      });
+      }, () => this.loading = false);
     });
   }
 
   approveApplication() {
+    this.loading = true;
     this.registrarManager.approveApplication(this.application.id).subscribe( () => {
       this.translate.get('VO_DETAIL.APPLICATION.APPLICATION_DETAIL.APPROVE_MESSAGE').subscribe(successMessage => {
         this.notificator.showSuccess(successMessage);
       });
-      this.loading = true;
       this.registrarManager.getApplicationById(this.application.id).subscribe(reloaded => {
         this.application = reloaded;
         this.loading = false;
-      });
-    });
+      }, () => this.loading = false);
+    }, () => this.loading = false);
   }
 
   verifyApplication() {
