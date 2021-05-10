@@ -162,7 +162,8 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
     config.data = {
       entity: "group",
       applicationForm: this.applicationForm,
-      theme: 'group-theme'
+      theme: 'group-theme',
+      autoRegistrationEnabled: this.autoRegistrationEnabled
     };
 
     const dialog = this.dialog.open(UpdateApplicationFormDialogComponent, config);

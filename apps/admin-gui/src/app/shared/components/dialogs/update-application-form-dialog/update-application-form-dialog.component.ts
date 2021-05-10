@@ -6,6 +6,7 @@ export interface UpdateApplicationFormDialogData {
   entity: string;
   applicationForm: ApplicationForm;
   theme: string;
+  autoRegistrationEnabled: boolean;
 }
 
 @Component({
@@ -27,6 +28,7 @@ export class UpdateApplicationFormDialogComponent implements OnInit {
   embeddedState: string;
   loading = false;
   theme: string;
+  autoRegistrationEnabled: boolean;
 
   ngOnInit() {
     this.theme = this.data.theme;
@@ -36,6 +38,7 @@ export class UpdateApplicationFormDialogComponent implements OnInit {
     this.extensionState = this.applicationForm.automaticApprovalExtension ? 'auto' : 'manual';
     this.embeddedState = this.applicationForm.automaticApprovalEmbedded ? 'auto' : 'manual';
     this.entity = this.data.entity;
+    this.autoRegistrationEnabled = this.data.autoRegistrationEnabled;
   }
 
   onCancel() {

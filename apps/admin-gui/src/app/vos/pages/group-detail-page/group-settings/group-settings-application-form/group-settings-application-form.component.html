@@ -5,24 +5,27 @@
 </mat-spinner>
 <div *ngIf="!loading && !noApplicationForm">
   <div class="d-flex w-50">
-    <div class="w-75">
+    <div [ngClass]="autoRegistrationEnabled ? 'w-75' : 'w-50'">
       <div class="font-weight-bold">{{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MODULE_NAME' | translate}}:
         {{applicationForm.moduleClassName}}
       </div>
       <div>
         <span class="font-weight-bold">{{'GROUP_DETAIL.SETTINGS.APPLICATION_FORM.APPLICATION_TYPE' | translate}}</span>:
 
-        <mat-icon class="align-text-top" matTooltip="Initial">arrow_right_alt</mat-icon>
+        <mat-icon class="align-text-bottom" matTooltip="Initial">arrow_right_alt</mat-icon>
         {{applicationForm.automaticApproval ?
         ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}},
 
-        <mat-icon class="align-text-top" matTooltip="Extension">restore</mat-icon>
+        <mat-icon class="align-text-bottom" matTooltip="Extension">restore</mat-icon>
         {{applicationForm.automaticApprovalExtension ?
-        ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}},
-
-        <mat-icon class="align-text-top" matTooltip="Embedded">nat</mat-icon>
-        {{applicationForm.automaticApprovalEmbedded ?
         ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}}
+
+        <span *ngIf='autoRegistrationEnabled'>
+          ,
+          <mat-icon class="align-text-bottom" matTooltip="Embedded">nat</mat-icon>
+          {{applicationForm.automaticApprovalEmbedded ?
+          ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.AUTOMATIC'| translate) : ('GROUP_DETAIL.SETTINGS.APPLICATION_FORM.MANUAL'| translate)}}
+        </span>
       </div>
       <div *ngIf="voHasEmbeddedGroupApplication">
         <mat-slide-toggle (change)="updateAutoRegistration()"
