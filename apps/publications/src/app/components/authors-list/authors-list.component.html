@@ -10,6 +10,17 @@
         matSortActive="name"
         matSortDirection="asc"
         matSortDisableClear>
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let author" class="static-column-size" mat-cell>
+            <mat-checkbox (change)="$event ? selection.toggle(author) : null"
+                          (click)="$event.stopPropagation()"
+                          [aria-label]="checkboxLabel(author)"
+                          [checked]="selection.isSelected(author)"
+                          color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.ID' | translate}}</th>
           <td *matCellDef="let author" class="static-column-size" mat-cell>{{author.id}}</td>
@@ -30,11 +41,35 @@
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.NUMBER_OF_PUBLICATIONS' | translate}}</th>
           <td *matCellDef="let author" mat-cell>{{author.authorships.length.toString()}}</td>
         </ng-container>
+        <ng-container matColumnDef="add">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let author" class="static-column-size" mat-cell>
+            <button
+              (click)="onAddClick(author)"
+              class="ml-2"
+              color="accent"
+              mat-flat-button>
+              {{'AUTHORS_LIST.ADD' | translate}}
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="remove">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let author" class="static-column-size" mat-cell>
+            <button
+              (click)="onRemoveClick(author)"
+              class="ml-2"
+              color="warn"
+              mat-flat-button>
+              {{'AUTHORS_LIST.REMOVE' | translate}}
+            </button>
+          </td>
+        </ng-container>
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let author; columns: displayedColumns;"
-          [routerLink]="['/authors', author.id]"
-          [perunWebAppsMiddleClickRouterLink]="['/authors', author.id]"
+          [routerLink]="disableRouting ? null : ['/authors', author.id]"
+          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/authors', author.id]"
           class="dark-hover-list-item"
           mat-row>
         </tr>

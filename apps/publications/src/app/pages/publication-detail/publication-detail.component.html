@@ -78,9 +78,10 @@
         <perun-web-apps-authors-list
           *ngIf="!authorsLoading && !loading"
           [authors]="authors"
+          [selection]="selectionAuthors"
           [filterValue]="filterAuthors"
           [pageSize]="pageSizeAuthors"
-          [displayedColumns]="['id', 'name', 'organization', 'email']"
+          [displayedColumns]="publication.locked ? ['id', 'name', 'organization', 'email'] : ['select', 'id', 'name', 'organization', 'email']"
           (page)="pageChangedAuthors($event)">
         </perun-web-apps-authors-list>
       </mat-card-content>

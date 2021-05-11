@@ -18,6 +18,9 @@ import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { AddThanksDialogComponent } from '../../dialogs/add-thanks-dialog/add-thanks-dialog.component';
 import { UniversalRemoveItemsDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { AddAuthorsDialogComponent } from '../../dialogs/add-authors-dialog/add-authors-dialog.component';
+import { NotificatorService } from '@perun-web-apps/perun/services';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'perun-web-apps-publication-detail',
@@ -31,8 +34,11 @@ export class PublicationDetailComponent implements OnInit {
               private cabinetService: CabinetManagerService,
               private tableConfigService: TableConfigService,
               private matIconRegistry: MatIconRegistry,
+              private domSanitizer: DomSanitizer,
               private dialog: MatDialog,
-              private domSanitizer: DomSanitizer) {
+              private notificator: NotificatorService,
+              private translate: TranslateService,
+              ) {
     this.matIconRegistry.addSvgIcon(
     "publications",
     this.domSanitizer.bypassSecurityTrustResourceUrl("../../assets/img/publications-dark.svg"));
@@ -53,6 +59,7 @@ export class PublicationDetailComponent implements OnInit {
   mainAuthor: Author;
 
   authors: Author[] = [];
+  disabledColumns: string[];
   pageSizeAuthors: number;
   tableIdAuthors = TABLE_PUBLICATION_AUTHORS;
   filterAuthors = '';
@@ -97,13 +104,18 @@ export class PublicationDetailComponent implements OnInit {
       this.cabinetService.getCategories().subscribe(categories => {
         this.categories = categories;
 
-        this.cabinetService.findAuthorsByPublicationId(this.publicationId).subscribe(authors => {
-          this.authors = authors;
-          this.mainAuthor = authors.find(author => author.id === this.mainAuthorId);
-          this.initLoading = false;
-          this.loading = false;
-        });
+        this.loadAuthors();
       });
+    });
+  }
+
+  loadAuthors() {
+    this.cabinetService.findAuthorsByPublicationId(this.publicationId).subscribe(authors => {
+      this.authors = authors;
+      this.mainAuthor = authors.find(author => author.id === this.mainAuthorId);
+      this.initLoading = false;
+      this.loading = false;
+      this.authorsLoading = false;
     });
   }
 
@@ -117,11 +129,55 @@ export class PublicationDetailComponent implements OnInit {
 
 
   onAddAuthors() {
-    // TODO
+    const config = getDefaultDialogConfig();
+    config.width = '800px';
+    config.data = {
+      publicationId: this.publicationId,
+      alreadyAddedAuthors: this.authors
+    };
+
+    const dialogRef = this.dialog.open(AddAuthorsDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(authorshipCreated => {
+      if (authorshipCreated) {
+        this.selectionAuthors.clear();
+        this.authorsLoading = true;
+        this.loadAuthors();
+      }
+    });
   }
 
   onRemoveAuthors() {
-    // TODO
+    const config = getDefaultDialogConfig();
+    config.width = '800px';
+    config.data = {
+      items: this.selectionAuthors.selected.map(author => `${author.titleBefore ? author.titleBefore: ""} ${author.firstName ? author.firstName : ""}  ${author.lastName ? author.lastName : ""} ${author.titleAfter ? author.titleAfter : ""}`),
+      title: 'DIALOGS.REMOVE_AUTHORS.TITLE',
+      description: 'DIALOGS.REMOVE_AUTHORS.DESCRIPTION',
+      theme: 'user-theme'
+    };
+
+    const dialogRef = this.dialog.open(UniversalRemoveItemsDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(authorshipRemoved => {
+      if (authorshipRemoved) {
+        this.removeAuthors(this.selectionAuthors.selected);
+      }
+    });
+  }
+
+  removeAuthors(authorsToRemove: Author[]) {
+    this.authorsLoading = true;
+    if(authorsToRemove.length) {
+      const author = authorsToRemove.pop();
+      this.cabinetService.deleteAuthorship(this.publicationId, author.id).subscribe(() => {
+        this.removeAuthors(authorsToRemove);
+      }, ()=> this.authorsLoading = false);
+    } else {
+      this.notificator.showSuccess(this.translate.instant('DIALOGS.REMOVE_AUTHORS.SUCCESS_MESSAGE'));
+      this.selectionAuthors.clear();
+      this.loadAuthors();
+    }
   }
 
   onAddThanks() {
