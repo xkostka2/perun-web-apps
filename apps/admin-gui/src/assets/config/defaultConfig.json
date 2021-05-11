@@ -15,7 +15,11 @@
     "oauth_silent_redirect_uri": "http://gui-dev.org/silent-refresh.html",
     "oauth_load_user_info": false,
     "oauth_scopes": "openid profile perun_api perun_admin",
-    "oauth_response_type": "id_token token"
+    "oauth_response_type": "id_token token",
+    "filters": {
+      "muni": "urn:cesnet:proxyidp:idpentityid:https://idp2.ics.muni.cz/idp/shibboleth",
+      "soc_idp": "urn:cesnet:proxyidp:filter:eyJ2ZXIiOiIyIiwiYWxsb3dGZWVkcyI6eyJTb2NpYWxJZFBzIjp7fX19"
+    }
   },
   "login_namespace_attributes": [
     "urn:perun:user:attribute-def:def:login-namespace:einfra",
