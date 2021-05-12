@@ -137,7 +137,6 @@ import { SecurityTeamsListComponent } from './components/security-teams-list/sec
 import { AddUserExtSourceDialogComponent } from './components/dialogs/add-user-ext-source-dialog/add-user-ext-source-dialog.component';
 import { AddHostDialogComponent } from './components/dialogs/add-host-dialog/add-host-dialog.component';
 import { RemoveHostDialogComponent } from './components/dialogs/remove-host-dialog/remove-host-dialog.component';
-import { OwnersListComponent } from './components/owners-list/owners-list.component';
 import { AddFacilityOwnerDialogComponent } from './components/dialogs/add-facility-owner-dialog/add-facility-owner-dialog.component';
 import { RemoveFacilityOwnerDialogComponent } from './components/dialogs/remove-facility-owner-dialog/remove-facility-owner-dialog.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
@@ -303,7 +302,6 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     HostsListComponent,
     BlacklistListComponent,
     SecurityTeamsListComponent,
-    OwnersListComponent,
     ServicesListComponent,
     AttrDefListComponent,
     TransformMemberStatusPipe,
@@ -395,7 +393,6 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     AddUserExtSourceDialogComponent,
     AddHostDialogComponent,
     RemoveHostDialogComponent,
-    OwnersListComponent,
     AddFacilityOwnerDialogComponent,
     RemoveFacilityOwnerDialogComponent,
     NotFoundPageComponent,

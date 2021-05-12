@@ -7,13 +7,13 @@
                                      class="font-size-1rem"></perun-web-apps-immediate-filter>
 
     <div mat-dialog-content>
-      <app-owners-list
+      <perun-web-apps-owners-list
         [filterValue]="filterValue"
         (page)="pageChanged($event)"
         [pageSize]="pageSize"
         [owners]="owners"
         [selection]="selection">
-      </app-owners-list>
+      </perun-web-apps-owners-list>
     </div>
 
 

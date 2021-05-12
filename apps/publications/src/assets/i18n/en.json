@@ -91,11 +91,14 @@
       "DISABLED": "Cannot edit locked publication",
       "EXT_ID": "Ext. Id",
       "SYSTEM": "System"
-    }
+    },
+    "REMOVE_THANKS_DIALOG_TITLE": "Delete acknowledgements",
+    "REMOVE_THANKS_DIALOG_DESCRIPTION": "Following acknowledgements will be removed from publication."
   },
   "THANKS_LIST": {
     "ID": "Owner id",
     "NAME": "Name",
+    "CREATED_BY": "Created by",
     "NO_THANKS": "No acknowledgments were found"
   },
   "PUBLICATION_SYSTEMS_LIST": {
@@ -162,6 +165,12 @@
       "CANCEL": "Cancel",
       "REMOVE": "Remove",
       "WARNING": "Following publications will be removed."
+    },
+    "ADD_THANKS": {
+      "TITLE": "Add acknowledgement",
+      "CANCEL": "Cancel",
+      "ADD": "Add",
+      "FILTER": "Filter"
     }
   },
   "SHARED_LIB": {
@@ -362,6 +371,19 @@
           "CANCEL": "Cancel",
           "SEND": "Send",
           "SUCCESS": "Issue report was sended and got ticket number: "
+        },
+        "OWNERS_LIST": {
+          "ID": "Id",
+          "NAME": "Name",
+          "CONTACT": "Contact",
+          "TYPE": "Type",
+          "NO_OWNERS": "No owners found.",
+          "NO_FILTER_OWNERS": "No owners match the given filter"
+        },
+        "UNIVERSAL_REMOVE_ITEMS_DIALOG": {
+          "ASK": "Do you want to proceed?",
+          "CANCEL_BUTTON": "Cancel",
+          "SUBMIT_BUTTON": "Submit"
         }
       },
       "ORGANIZATIONS": {

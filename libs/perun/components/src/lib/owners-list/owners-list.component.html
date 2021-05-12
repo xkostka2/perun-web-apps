@@ -29,21 +29,21 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED.COMPONENTS.OWNERS_LIST.ID' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.ID' | translate}}</th>
           <td *matCellDef="let user" class="static-column-size" mat-cell>
             {{user.id}}
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED.COMPONENTS.OWNERS_LIST.NAME' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.NAME' | translate}}</th>
           <td *matCellDef="let owner" mat-cell>{{owner.name}}</td>
         </ng-container>
         <ng-container matColumnDef="contact">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED.COMPONENTS.OWNERS_LIST.CONTACT' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.CONTACT' | translate}}</th>
           <td *matCellDef="let owner" mat-cell>{{owner.contact}}</td>
         </ng-container>
         <ng-container matColumnDef="type">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED.COMPONENTS.OWNERS_LIST.TYPE' | translate}}</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.TYPE' | translate}}</th>
           <td *matCellDef="let owner" mat-cell>{{owner.type}}</td>
         </ng-container>
 
@@ -65,5 +65,5 @@
   </div>
 </div>
 
-<app-alert *ngIf="!owners.length" alert_type="warn">{{'FACILITY_DETAIL.SETTINGS.OWNERS.NO_OWNERS' | translate}}</app-alert>
-<app-alert *ngIf="!dataSource.filteredData.length && owners.length" alert_type="warn">{{'SHARED.COMPONENTS.OWNERS_LIST.NO_OWNERS' | translate}}</app-alert>
+<app-alert *ngIf="!owners.length" alert_type="warn">{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.NO_OWNERS' | translate}}</app-alert>
+<app-alert *ngIf="!dataSource.filteredData.length && owners.length" alert_type="warn">{{'SHARED_LIB.PERUN.COMPONENTS.OWNERS_LIST.NO_FILTER_OWNERS' | translate}}</app-alert>
