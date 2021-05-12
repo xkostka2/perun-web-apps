@@ -9,18 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Attribute } from './attribute';
+import { NewApps } from './newApps';
 
 
-/**
- * input to setMemberWithUserAttributes
- */
-export interface InputSetMemberWithUserAttributes { 
-    /**
-     * member id
-     */
-    member: number;
-    attributes: Array<Attribute>;
-    workWithUserAttributes: boolean;
+export interface Brand { 
+    name?: string;
+    oldGuiDomain?: string;
+    newApps?: NewApps;
 }
 

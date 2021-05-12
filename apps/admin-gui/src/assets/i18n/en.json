@@ -287,11 +287,8 @@
       "ADD_MEMBER_DISABLED": "You cannot add members manually into this Vo.",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
-      "LIST_MEMBERS": "List all members",
-      "NO_MEMBERS_ALERT": "No members found.",
       "FILTER_STATUS": "Select Status",
-      "INVITE": "Invite",
-      "EMPTY_SEARCH": "Search field cannot be empty"
+      "INVITE": "Invite"
     },
     "OVERVIEW": {
       "INVITE_MEMBER": "Invite member",
