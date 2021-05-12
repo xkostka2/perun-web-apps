@@ -94,8 +94,8 @@ export class AppConfigService {
       this.http.get('/assets/config/instanceConfig.json', { headers: this.getNoCacheHeaders() })
         .subscribe(config => {
           this.storeService.setInstanceConfig(config);
-          const branding = document.location.hostname + '_branding';
-          if (this.storeService.get(branding) !== undefined) {
+          const branding = document.location.hostname;
+          if (this.storeService.get('brandings', branding) !== undefined) {
             this.storeService.setBanding(branding);
           }
           resolve();

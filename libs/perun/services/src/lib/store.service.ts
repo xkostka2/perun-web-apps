@@ -67,7 +67,7 @@ export class StoreService {
     let currentValue: string;
 
     if (this.branding !== '') {
-      const brandingConfig = this.instanceConfig[this.branding];
+      const brandingConfig = this.instanceConfig['brandings'][this.branding];
       for (let i = 0; i < keys.length; ++i) {
         if (i === 0) {
           currentValue = brandingConfig[keys[i]];
