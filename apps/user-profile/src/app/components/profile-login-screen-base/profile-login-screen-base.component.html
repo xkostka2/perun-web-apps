@@ -1,0 +1,8 @@
+<div class="app-min-width">
+  <perun-web-apps-header [hideToggle]="true" [disableLogo]="true"></perun-web-apps-header>
+  <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
+    <router-outlet></router-outlet>
+  </div>
+
+  <perun-web-apps-footer-user-profile></perun-web-apps-footer-user-profile>
+</div>

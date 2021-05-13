@@ -75,6 +75,8 @@ import { AddAuthImgDialogComponent } from './components/dialogs/add-auth-img-dia
 import { MatRadioModule } from '@angular/material/radio';
 import { AddTokenInfoDialogComponent } from './components/add-token-info-dialog/add-token-info-dialog.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { PerunLoginModule } from '@perun-web-apps/perun/login';
+import { ProfileLoginScreenBaseComponent } from './components/profile-login-screen-base/profile-login-screen-base.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -136,7 +138,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     SettingsAuthenticationComponent,
     AddAuthImgDialogComponent,
     AddTokenInfoDialogComponent,
-    FooterComponent
+    FooterComponent,
+    ProfileLoginScreenBaseComponent
   ],
   imports: [
     BrowserModule,
@@ -178,7 +181,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     MatTooltipModule,
     MatSlideToggleModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    PerunLoginModule
   ],
   providers: [
     CustomIconService,

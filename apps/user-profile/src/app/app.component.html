@@ -1,18 +1,21 @@
-<div class="app-min-width">
-  <perun-web-apps-header (sidenavToggle)="sidenav.toggle()"></perun-web-apps-header>
+<ng-template [ngIf]="!isLoginScreenShown">
   <perun-web-apps-notificator></perun-web-apps-notificator>
-  <mat-sidenav-container>
-    <mat-sidenav #sidenav [mode]="sidebarMode" [ngStyle]="{'background': sideMenuBgColor}"
-                 [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
-      <perun-web-apps-side-menu [sideNav]="sidenav" class="overflow-hidden"></perun-web-apps-side-menu>
-    </mat-sidenav>
-    <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
-      <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
-        <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>
-        <router-outlet></router-outlet>
-      </div>
+  <div class="app-min-width">
+    <perun-web-apps-header (sidenavToggle)="sidenav.toggle()"></perun-web-apps-header>
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav [mode]="sidebarMode" [ngStyle]="{'background': sideMenuBgColor}"
+                   [opened]="!isMobile()" class="side-menu-size" fixedInViewport fixedTopGap="64">
+        <perun-web-apps-side-menu [sideNav]="sidenav" class="overflow-hidden"></perun-web-apps-side-menu>
+      </mat-sidenav>
+      <mat-sidenav-content [ngStyle]="{'background': contentBackgroundColor}" id="content-inner">
+        <div [ngStyle]="{'min-height': getContentHeight()}" id="content-wrap">
+          <perun-web-apps-breadcrumbs></perun-web-apps-breadcrumbs>
+          <router-outlet></router-outlet>
+        </div>
 
-      <perun-web-apps-footer-user-profile></perun-web-apps-footer-user-profile>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+        <perun-web-apps-footer-user-profile></perun-web-apps-footer-user-profile>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</ng-template>
+<perun-web-apps-profile-login-screen-base *ngIf="isLoginScreenShown"></perun-web-apps-profile-login-screen-base>
