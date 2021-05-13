@@ -1,9 +1,10 @@
 <div class="card mt-2" [hidden]="this.dataSource.allMemberCount === 0 && (dataSource.loading$ | async) === false">
-  <div class="card-body position-relative">
+  <div class="card-body">
+    <perun-web-apps-table-options (exportData)="exportData($event)" ></perun-web-apps-table-options>
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
       <mat-spinner class="ml-auto mr-auto"></mat-spinner>
     </div>
-    <div class="overflow-auto table-container">
+    <div class="overflow-auto">
       <table
         [dataSource]="dataSource"
         class="w-100"

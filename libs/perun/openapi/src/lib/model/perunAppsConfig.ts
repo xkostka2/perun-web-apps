@@ -9,18 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Attribute } from './attribute';
+import { Brand } from './brand';
 
 
-/**
- * input to setMemberWithUserAttributes
- */
-export interface InputSetMemberWithUserAttributes { 
-    /**
-     * member id
-     */
-    member: number;
-    attributes: Array<Attribute>;
-    workWithUserAttributes: boolean;
+export interface PerunAppsConfig { 
+    brands?: Array<Brand>;
 }
 

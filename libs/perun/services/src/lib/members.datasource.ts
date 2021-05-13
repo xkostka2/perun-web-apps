@@ -1,7 +1,13 @@
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {Observable, BehaviorSubject, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
-import { MembersOrderColumn, PaginatedRichMembers, RichMember, SortingOrder } from '@perun-web-apps/perun/openapi';
+import {
+  MembersOrderColumn,
+  PaginatedRichMembers,
+  RichMember,
+  SortingOrder,
+  VoMemberStatuses
+} from '@perun-web-apps/perun/openapi';
 import { DynamicPaginatingService } from './dynamic-paginating.service';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -19,6 +25,8 @@ export class MembersDataSource implements DataSource<RichMember> {
 
   public routeAuth = true;
 
+  private latestQueryTime: number;
+
   constructor(private dynamicPaginatingService: DynamicPaginatingService,
               private authzService: GuiAuthResolver) {}
 
@@ -27,20 +35,26 @@ export class MembersDataSource implements DataSource<RichMember> {
               sortOrder: SortingOrder,
               pageIndex: number,
               pageSize: number,
-              sortColumn: MembersOrderColumn) {
+              sortColumn: MembersOrderColumn,
+              statuses: VoMemberStatuses[],
+              searchString?: string) {
 
     this.loadingSubject.next(true);
+    this.latestQueryTime = Date.now();
+    const thisQueryTime = this.latestQueryTime;
 
-    this.dynamicPaginatingService.getMembers(voId, attrNames, sortOrder, pageIndex, pageSize, sortColumn).pipe(
+    this.dynamicPaginatingService.getMembers(voId, attrNames, sortOrder, pageIndex, pageSize, sortColumn, statuses, searchString).pipe(
       catchError(() => of([])),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(paginatedRichMembers => {
-      const data: RichMember[] = (<PaginatedRichMembers>paginatedRichMembers).data;
-      if(data !== null && data.length !== 0){
-        this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [{beanName: 'Vo', id: voId}, data[0]]);
+      if (this.latestQueryTime <= thisQueryTime) {
+        const data: RichMember[] = (<PaginatedRichMembers>paginatedRichMembers).data;
+        if(data !== null && data.length !== 0){
+          this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [{beanName: 'Vo', id: voId}, data[0]]);
+        }
+        this.allMemberCount = (<PaginatedRichMembers>paginatedRichMembers).totalCount;
+        this.membersSubject.next((<PaginatedRichMembers>paginatedRichMembers).data);
       }
-      this.allMemberCount = (<PaginatedRichMembers>paginatedRichMembers).totalCount;
-      this.membersSubject.next((<PaginatedRichMembers>paginatedRichMembers).data);
     });
 
   }

@@ -38,12 +38,9 @@ export class VoMembersComponent implements OnInit {
   @HostBinding('class.router-component') true;
 
   constructor(
-    private membersService: MembersManagerService,
-    private sideMenuService: SideMenuService,
     private voService: VosManagerService,
     private route: ActivatedRoute,
     private notificator: NotificatorService,
-    private translate: TranslateService,
     private tableConfigService: TableConfigService,
     private dialog: MatDialog,
     private authzService: GuiAuthResolver,
@@ -58,8 +55,6 @@ export class VoMembersComponent implements OnInit {
 
   selection = new SelectionModel<RichMember>(true, []);
   searchControl: FormControl;
-  firstSearchDone = false;
-
   loading = false;
 
   attrNames = [
@@ -76,6 +71,8 @@ export class VoMembersComponent implements OnInit {
   pageSize: number;
   tableId = TABLE_VO_MEMBERS;
   hideColumns = [];
+  searchString: string;
+  updateTable = false;
 
   addAuth: boolean;
   removeAuth: boolean;
@@ -85,7 +82,7 @@ export class VoMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
+    this.searchControl = new FormControl('');
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.statuses.setValue(this.statusList);
     this.attrNames = this.attrNames.concat(this.storeService.getLoginAttributeNames());
@@ -118,38 +115,7 @@ export class VoMembersComponent implements OnInit {
   }
 
   onSearchByString() {
-    if (this.searchControl.invalid) {
-      this.searchControl.markAllAsTouched();
-      return;
-    }
-    this.loading = true;
-    this.firstSearchDone = true;
-
-    this.selection.clear();
-
-    this.membersService.findCompleteRichMembersForVo(this.vo.id, this.attrNames, this.searchControl.value, this.selectedStatuses).subscribe(
-      members => {
-        this.members = members;
-        this.setAuthRights();
-        this.loading = false;
-      },
-      () => this.loading = false
-    );
-  }
-
-  onListAll() {
-    this.loading = true;
-    this.firstSearchDone = true;
-
-    this.selection.clear();
-    this.membersService.getCompleteRichMembersForVo(this.vo.id, this.selectedStatuses, this.attrNames).subscribe(
-      members => {
-        this.members = members;
-        this.setAuthRights();
-        this.loading = false;
-      },
-      () => this.loading = false
-    );
+    this.searchString = this.searchControl.value;
   }
 
   onAddMember() {
@@ -165,16 +131,11 @@ export class VoMembersComponent implements OnInit {
     const dialogRef = this.dialog.open(AddMemberDialogComponent, config);
 
     dialogRef.afterClosed().subscribe((success) => {
-      if (this.firstSearchDone || success) {
-        this.refreshTable();
+      if (success) {
+        this.updateTable = !this.updateTable;
+        this.selection.clear();
       }
     });
-  }
-
-  onKeyInput(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.onSearchByString();
-    }
   }
 
   onRemoveMembers() {
@@ -189,7 +150,8 @@ export class VoMembersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(wereMembersDeleted => {
       if (wereMembersDeleted) {
-        this.refreshTable();
+        this.updateTable = !this.updateTable;
+        this.selection.clear();
       }
     });
   }
@@ -199,21 +161,7 @@ export class VoMembersComponent implements OnInit {
     config.width = '650px';
     config.data = { voId: this.vo.id, theme: 'vo-theme' };
 
-    const dialogRef = this.dialog.open(InviteMemberDialogComponent, config);
-
-    dialogRef.afterClosed().subscribe(inviteSent => {
-      if (inviteSent) {
-        this.refreshTable();
-      }
-    });
-  }
-
-  refreshTable() {
-    if (this.searchControl.value.trim().length > 0) {
-      this.onSearchByString();
-    } else {
-      this.onListAll();
-    }
+    this.dialog.open(InviteMemberDialogComponent, config);
   }
 
   displaySelectedStatuses(): string {

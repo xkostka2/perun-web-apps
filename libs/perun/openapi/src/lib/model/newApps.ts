@@ -9,18 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Attribute } from './attribute';
 
 
-/**
- * input to setMemberWithUserAttributes
- */
-export interface InputSetMemberWithUserAttributes { 
-    /**
-     * member id
-     */
-    member: number;
-    attributes: Array<Attribute>;
-    workWithUserAttributes: boolean;
+export interface NewApps { 
+    admin?: string;
+    profile?: string;
+    pwdReset?: string;
+    publications?: string;
 }
 

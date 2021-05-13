@@ -10,7 +10,3 @@
   align-items: center;
   justify-content: center;
 }
-.table-container {
-  position: relative;
-  overflow: auto;
-}

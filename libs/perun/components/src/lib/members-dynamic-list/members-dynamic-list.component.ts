@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output,
   ViewChild
@@ -11,9 +11,10 @@ import {MatSort} from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
-import { RichMember} from '@perun-web-apps/perun/openapi';
+import { RichMember, VoMemberStatuses } from '@perun-web-apps/perun/openapi';
 import {
-  getDefaultDialogConfig,
+  downloadData, getDataForExport,
+  getDefaultDialogConfig, parseEmail, parseFullName, parseLogins, parseOrganization,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
@@ -31,7 +32,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: './members-dynamic-list.component.html',
   styleUrls: ['./members-dynamic-list.component.css']
 })
-export class MembersDynamicListComponent implements AfterViewInit, OnInit {
+export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnChanges {
 
   constructor(private dialog: MatDialog,
               private authResolver: GuiAuthResolver,
@@ -59,11 +60,17 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit {
   @Input()
   attrNames: string[];
 
-  @Output()
-  page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  @Input()
+  searchString: string;
+
+  @Input()
+  selectedStatuses: VoMemberStatuses[];
+
+  @Input()
+  updateTable: boolean;
 
   @Output()
-  updateTable = new EventEmitter<boolean>();
+  page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
 
   exporting = false;
 
@@ -88,7 +95,15 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
 
     this.dataSource = new MembersDataSource(this.dynamicPaginatingService, this.authResolver);
-    this.dataSource.loadMembers(this.voId, this.attrNames,'ASCENDING', 0, this.pageSize, 'NAME');
+    this.dataSource.loadMembers(this.voId, this.attrNames,'ASCENDING', 0, this.pageSize,
+      'NAME', this.selectedStatuses, this.searchString);
+  }
+
+  ngOnChanges() {
+    if (!!this.dataSource) {
+      this.paginator.pageIndex = 0;
+      this.loadMembersPage();
+    }
   }
 
   isAllSelected() {
@@ -120,7 +135,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit {
       const dialogRef = this.dialog.open(ChangeMemberStatusDialogComponent, config);
       dialogRef.afterClosed().subscribe( success => {
         if (success) {
-          this.updateTable.emit(true);
+          this.loadMembersPage();
         }
       });
     }
@@ -133,6 +148,33 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit {
   loadMembersPage() {
     const sortDirection = this.sort.direction === 'asc' ? 'ASCENDING' : 'DESCENDING';
     const sortColumn = this.sort.active === 'fullName' ? 'NAME' : 'ID';
-    this.dataSource.loadMembers(this.voId, this.attrNames, sortDirection, this.paginator.pageIndex, this.paginator.pageSize, sortColumn);
+    this.dataSource.loadMembers(this.voId, this.attrNames, sortDirection, this.paginator.pageIndex,
+      this.paginator.pageSize, sortColumn,  this.selectedStatuses, this.searchString);
+  }
+
+  exportData(format: string) {
+    downloadData(getDataForExport(this.dataSource.getData(), this.displayedColumns, this.getExportDataForColumn, this), format);
+  }
+
+  getExportDataForColumn(data: RichMember, column: string, outerThis: MembersDynamicListComponent): string {
+    switch (column) {
+      case 'id':
+        return data.id.toString();
+      case 'fullName':
+        if (data.user) {
+          return parseFullName(data.user)
+        }
+        return ''
+      case 'status':
+        return outerThis.showGroupStatuses ? data.groupStatus : data.status;
+      case 'organization':
+        return parseOrganization(data);
+      case 'email':
+        return parseEmail(data);
+      case 'logins':
+        return parseLogins(data);
+      default:
+        return '';
+    }
   }
 }

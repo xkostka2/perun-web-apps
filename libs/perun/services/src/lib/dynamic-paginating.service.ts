@@ -3,7 +3,7 @@ import {
   MembersManagerService,
   MembersOrderColumn,
   PaginatedRichMembers,
-  SortingOrder
+  SortingOrder, VoMemberStatuses
 } from '@perun-web-apps/perun/openapi';
 import { Observable } from 'rxjs';
 
@@ -19,11 +19,18 @@ export class DynamicPaginatingService {
              sortOrder: SortingOrder,
              pageNumber: number,
              pageSize : number,
-             sortColumn: MembersOrderColumn): Observable<PaginatedRichMembers> {
+             sortColumn: MembersOrderColumn,
+             statuses: VoMemberStatuses[],
+             searchString?: string): Observable<PaginatedRichMembers> {
     return this.membersService.getMembersPage({
       vo: voId,
       attrNames: attrNames,
-      query: {pageSize: pageSize, offset: pageNumber*pageSize, order: sortOrder, sortColumn: sortColumn}})
+      query: {pageSize: pageSize,
+        offset: pageNumber*pageSize,
+        order: sortOrder,
+        sortColumn: sortColumn,
+        statuses: statuses,
+        searchString: searchString}})
 
   }
 }
