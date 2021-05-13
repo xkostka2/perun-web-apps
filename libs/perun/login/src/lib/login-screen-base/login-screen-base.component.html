@@ -1,0 +1,25 @@
+<div id="login-nav"
+     [ngStyle]="{'background': navBackgroundColor}">
+  <div
+     [ngStyle]="{'padding': logoPadding}">
+    <div [innerHTML]="logo"
+         class="logo-container"
+         [ngStyle]="{'height': '56px'}">
+    </div>
+  </div>
+</div>
+<div id="content">
+  <div id="content-inner"
+    [ngStyle]="{
+           'min-height' : getContentInnerMinHeight(),
+           'background-color': contentBackgroundColor
+        }"
+    >
+    <div id="content-wrap">
+      <router-outlet></router-outlet>
+    </div>
+    <div id="footer">
+      <perun-web-apps-footer></perun-web-apps-footer>
+    </div>
+  </div>
+</div>

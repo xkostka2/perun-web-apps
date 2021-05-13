@@ -26,5 +26,6 @@ module.exports = {
     '<rootDir>/libs/perun/session-expiration',
     '<rootDir>/apps/publications',
     '<rootDir>/apps/password-reset',
+    '<rootDir>/libs/perun/login',
   ],
 };

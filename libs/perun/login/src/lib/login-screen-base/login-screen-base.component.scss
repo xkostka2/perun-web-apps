@@ -1,0 +1,39 @@
+#login-nav {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  height: 64px;
+  max-height: 64px;
+  top: 0;
+}
+
+#footer {
+  position: absolute;
+  height: 200px;
+  bottom: 0;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    height: 450px;
+  }
+}
+
+#content {
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  margin-top: 64px;
+}
+
+#content-inner {
+  position: relative;
+}
+
+#content-wrap {
+  padding-bottom: 250px;
+  padding-top: 10px;
+  @media (max-width: 768px) {
+    padding-bottom: 500px;
+  }
+}

@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { PreventProxyOverloadDialogComponent, ServerDownDialogComponent } from '@perun-web-apps/general';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -27,7 +28,8 @@ export class AdminGuiConfigService {
     private location: Location,
     private translate: TranslateService,
     private guiAuthResolver: GuiAuthResolver,
-    private titleService: Title
+    private titleService: Title,
+    private router: Router
   ) {}
 
   entityColorConfigs: EntityColorConfig[] = [
@@ -92,12 +94,12 @@ export class AdminGuiConfigService {
     }
   ];
 
-  loadConfigs(): Promise<void> {
+  initialize(): Promise<void> {
     return this.appConfigService.loadAppDefaultConfig()
       .then(() => this.appConfigService.loadAppInstanceConfig())
       .then(() => this.setApiUrl())
       .then(() => this.appConfigService.initializeColors(this.entityColorConfigs, this.colorConfigs))
-      .then(() => this.initAuthService.authenticateUser())
+      .then(() => this.initAuthService.verifyAuth())
       .catch(err => {
         if (err === 'Invalid path') {
           this.handleErr(err);
@@ -116,8 +118,9 @@ export class AdminGuiConfigService {
             .catch(err => this.handleErr(err))
             .then(() => this.loadPolicies())
             .then(() => this.guiAuthResolver.loadRolesManagementRules());
+        } else {
+          return this.initAuthService.handleAuthStart();
         }
-        // if it was not, do nothing because it will do a redirect to oidc server
       });
   }
 

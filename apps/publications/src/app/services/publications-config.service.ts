@@ -50,7 +50,7 @@ export class PublicationsConfigService {
       .then(() => this.appConfigService.loadAppInstanceConfig())
       .then(() => this.setApiUrl())
       .then(() => this.appConfigService.initializeColors(this.entityColorConfigs, this.colorConfigs))
-      .then(() => this.initAuthService.authenticateUser())
+      .then(() => this.initAuthService.verifyAuth())
       .catch(err => {
         console.error(err);
         this.location.go("/");
