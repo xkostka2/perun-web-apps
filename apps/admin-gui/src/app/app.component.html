@@ -42,6 +42,7 @@
 </ng-template>
 
 <ng-template [ngIf]="isLoginScreenShow">
-  <perun-web-apps-login-screen-base>
+  <perun-web-apps-login-screen-base [headerColorConfigLabel]="'nav_bg_color'"
+                                    [application]="'admin-gui'">
   </perun-web-apps-login-screen-base>
 </ng-template>

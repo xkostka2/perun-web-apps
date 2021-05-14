@@ -3,7 +3,6 @@
   width: 100%;
   z-index: 999;
   display: flex;
-  justify-content: space-between;
   height: 64px;
   max-height: 64px;
   top: 0;
@@ -36,4 +35,21 @@
   @media (max-width: 768px) {
     padding-bottom: 500px;
   }
+}
+
+.router-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  cursor: pointer;
+  outline: 0;
+}
+
+.router-icon-scale{
+  transform: scale(0.75);
+  margin-top: 0.3rem;
+}
+
+.page-subtitle {
+  margin-bottom: 1.0rem;
+  font-size: 1.5rem;
 }

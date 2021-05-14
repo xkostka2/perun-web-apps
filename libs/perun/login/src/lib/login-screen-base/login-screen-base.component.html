@@ -1,13 +1,19 @@
-<div id="login-nav"
-     [ngStyle]="{'background': navBackgroundColor}">
-  <div
-     [ngStyle]="{'padding': logoPadding}">
-    <div [innerHTML]="logo"
-         class="logo-container"
-         [ngStyle]="{'height': '56px'}">
-    </div>
+<div id="login-nav" [ngStyle]="{'background': headerBackgroundColor}">
+  <div *ngIf="application === 'admin-gui'" [ngStyle]="{'padding': logoPadding}">
+    <div [innerHTML]="logo" class="logo-container" [ngStyle]="{'height': '56px'}"></div>
   </div>
+  <div *ngIf="application === 'publications'" style=" display: flex; flex-direction: row;">
+    <div [innerHTML]="logo" class="router-icon-scale"></div>
+    <mat-icon svgIcon="perun-publications-white" class="mt-auto mb-auto router-icon ml-2 mr-2"></mat-icon>
+  </div>
+  <div *ngIf="application === 'user-profile'">
+    <a class="ml-3" [innerHTML]="logo"></a>
+  </div>
+  <p *ngIf="!!headerTitle" [ngStyle]="{'color': textColor}" class="ml-3 mt-auto mb-auto page-subtitle">
+    {{headerTitle}}
+  </p>
 </div>
+
 <div id="content">
   <div id="content-inner"
     [ngStyle]="{

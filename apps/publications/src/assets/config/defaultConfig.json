@@ -11,6 +11,7 @@
     "oauth_scopes": "openid profile perun_api perun_admin",
     "oauth_response_type": "id_token token"
   },
+  "auto_auth_redirect": true,
   "footer_perun_web_web": "https://perun-aai.org/",
   "footer_perun_team_web": "https://perun-aai.org/team",
   "footer_privacy_policy_web": "https://perun-aai.org/",

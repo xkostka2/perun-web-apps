@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -10,17 +10,31 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class LoginScreenBaseComponent implements OnInit {
 
   constructor(
-    private store: StoreService,
+    private storeService: StoreService,
     private sanitizer: DomSanitizer,
   ) { }
 
-  navBackgroundColor = this.store.get('theme', 'nav_bg_color');
-  logoPadding = this.store.get('logo_padding');
-  contentBackgroundColor = this.store.get('theme', 'content_bg_color');
+  @Input()
+  application: string;
+
+  @Input()
+  headerColorConfigLabel: string;
+
+  @Input()
+  headerTitle: string;
+
+  textColor: string;
+
+  headerBackgroundColor: string;
+  logoPadding: string;
+  contentBackgroundColor = this.storeService.get('theme', 'content_bg_color');
   logo: any;
 
   ngOnInit(): void {
-    this.logo = this.sanitizer.bypassSecurityTrustHtml(this.store.get('logo'));
+    this.headerBackgroundColor = this.storeService.get('theme', this.headerColorConfigLabel);
+    this.logo = this.sanitizer.bypassSecurityTrustHtml(this.storeService.get('logo'));
+    !!this.headerTitle ? this.textColor = this.storeService.get('theme', 'header_text_color') : this.textColor = '';
+    this.application === 'admin-gui' ? this.logoPadding = this.storeService.get('logo_padding'): this.logoPadding = '';
   }
 
   getContentInnerMinHeight() {

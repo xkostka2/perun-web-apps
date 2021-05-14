@@ -62,8 +62,9 @@ export class PublicationsConfigService {
         if (isAuthenticated) {
           return this.initAuthService.loadPrincipal()
             .then(() => this.loadPolicies());
+        } else {
+          return this.initAuthService.handleAuthStart();
         }
-        // if it was not, do nothing because it will do a redirect to oidc server
       });
   }
 
