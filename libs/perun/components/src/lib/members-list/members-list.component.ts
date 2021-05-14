@@ -23,6 +23,8 @@ import {
 } from '@perun-web-apps/perun/utils';
 import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { MemberTreeViewDialogComponent } from '../../../../dialogs/src/lib/member-tree-view-dialog/member-tree-view-dialog.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'perun-web-apps-members-list',
@@ -33,7 +35,8 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
 
   constructor(private dialog: MatDialog,
               private authResolver: GuiAuthResolver,
-              private tableCheckbox: TableCheckbox) { }
+              private tableCheckbox: TableCheckbox,
+              private route: ActivatedRoute) { }
 
   private sort: MatSort;
 
@@ -81,6 +84,8 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
   dataSource: MatTableDataSource<RichMember>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  disabledRouting: boolean;
+  groupId: number;
 
   getSortDataForColumn(data: RichMember, column: string, outerThis: MembersListComponent): string{
     switch (column) {
@@ -170,6 +175,12 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<RichMember>(this.members);
     this.setDataSource();
+    this.disabledRouting = this.disableRouting;
+    this.route.parent.params.subscribe(params => {
+      if (params['groupId']){
+        this.groupId = params['groupId'];
+      }
+    })
   }
 
   canBeSelected = (member: RichMember): boolean => {
@@ -209,5 +220,13 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
 
   pageChanged(event: PageEvent) {
     this.page.emit(event);
+  }
+
+  viewMemberGroupTree(member: RichMember) {
+    const config = getDefaultDialogConfig();
+    config.width = '800px';
+    config.data = {member: member, groupId: this.groupId};
+
+    this.dialog.open(MemberTreeViewDialogComponent, config);
   }
 }
