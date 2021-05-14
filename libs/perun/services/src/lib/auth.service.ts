@@ -2,7 +2,7 @@ import { EventEmitter, Injectable, Injector } from '@angular/core';
 import {User, UserManager, UserManagerSettings} from 'oidc-client';
 import {from, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import { Params, Router } from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import { StoreService } from './store.service';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,10 +18,18 @@ export class AuthService {
   constructor(
     private injector: Injector,
     private store: StoreService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
+
   ) {
     setTimeout(() => {
       this.router = this.injector.get(Router);
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (!!params["idpFilter"]) {
+        this.filterShortname = params["idpFilter"];
+      }
     });
   }
   manager: UserManager;
@@ -30,6 +38,7 @@ export class AuthService {
 
   user: User = null;
   loggedIn = false;
+  filterShortname = '';
 
   redirectUrl: string;
 
@@ -41,13 +50,15 @@ export class AuthService {
   getClientSettings(): UserManagerSettings {
     const queryParams = location.search.substr(1).split('&');
     const filters = this.store.get('oidc_client', 'filters');
-    let filter = '';
+    this.filterShortname = '';
+    let filterValue = '';
     queryParams.forEach(param => {
       const parsedParam = param.split('=')
       if(parsedParam[0]==='idpFilter'){
         const f = filters[parsedParam[1]];
         if(f){
-          filter = f;
+          filterValue = f;
+          this.filterShortname = parsedParam[1];
         }
       }
     })
@@ -62,7 +73,7 @@ export class AuthService {
       loadUserInfo: this.store.get('oidc_client', 'oauth_load_user_info'),
       automaticSilentRenew: true,
       silent_redirect_uri: this.store.get('oidc_client', 'oauth_silent_redirect_uri'),
-      extraQueryParams: { 'acr_values': filter}
+      extraQueryParams: { 'acr_values': filterValue}
     };
   }
 
@@ -223,18 +234,15 @@ export class AuthService {
       const elements = param.split('=');
       queryParams[elements[0]] = elements[1];
     })
-    if (!!redirectUrl) {
-      if (redirectUrl === '/login') {
-        redirectUrl = '/';
-      }
-      sessionStorage.removeItem('auth:redirect');
-      sessionStorage.removeItem('auth:queryParams');
-
-      return this.router.navigate([redirectUrl], {queryParams: queryParams, replaceUrl: true});
-    } else {
-      sessionStorage.removeItem('auth:redirect');
-      sessionStorage.removeItem('auth:queryParams');
-      return this.router.navigate(['/'], {replaceUrl: true});
+    if (!!redirectUrl || redirectUrl === '/login') {
+      redirectUrl = '/';
     }
+    sessionStorage.removeItem('auth:redirect');
+    sessionStorage.removeItem('auth:queryParams');
+    return this.router.navigate([redirectUrl], {queryParams: queryParams, replaceUrl: true});
+  }
+
+  public getIdpFilter(): string {
+    return this.filterShortname;
   }
 }

@@ -9,7 +9,11 @@
     "oauth_post_logout_redirect_uri": "",
     "oauth_redirect_uri": "http://gui-dev.org/api-callback",
     "oauth_scopes": "openid profile perun_api",
-    "oauth_response_type": "code"
+    "oauth_response_type": "code",
+    "filters": {
+      "muni": "urn:cesnet:proxyidp:idpentityid:https://idp2.ics.muni.cz/idp/shibboleth",
+      "soc_idp": "urn:cesnet:proxyidp:filter:eyJ2ZXIiOiIyIiwiYWxsb3dGZWVkcyI6eyJTb2NpYWxJZFBzIjp7fX19"
+    }
   },
   "password_namespace_attributes": [
     "urn:perun:user:attribute-def:def:login-namespace:einfra",

@@ -3,7 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UsersManagerService } from '@perun-web-apps/perun/openapi';
 import { TranslateService } from '@ngx-translate/core';
-import { NotificatorService } from '@perun-web-apps/perun/services';
+import {AuthService, NotificatorService} from '@perun-web-apps/perun/services';
 
 export interface ChangeEmailDialogData {
   userId: number;
@@ -27,7 +27,8 @@ export class ChangeEmailDialogComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) private data: ChangeEmailDialogData,
               private translate: TranslateService,
               private notificator: NotificatorService,
-              private usersManagerService: UsersManagerService
+              private usersManagerService: UsersManagerService,
+              private authService: AuthService
   ) {
     translate.get('DIALOGS.CHANGE_EMAIL.SUCCESS').subscribe(res => this.successMessage = res);
     translate.get('DIALOGS.CHANGE_EMAIL.PENDING_MAILS_BEGIN').subscribe(res => this.pendingEmailsMessageStart = res);
@@ -51,7 +52,12 @@ export class ChangeEmailDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    this.usersManagerService.requestPreferredEmailChange(this.data.userId, this.emailControl.value, this.translate.currentLang, '').subscribe(() => {
+    let currentUrl = window.location.href;
+    let splittedUrl = currentUrl.split("/");
+    let domain = splittedUrl[0] + "//" + splittedUrl[2]; // protocol with domain
+
+    this.usersManagerService.requestPreferredEmailChange(this.data.userId, this.emailControl.value,
+      this.translate.currentLang, '', domain, this.authService.getIdpFilter()).subscribe(() => {
       this.notificator.showSuccess(this.successMessage);
       this.dialogRef.close();
     });

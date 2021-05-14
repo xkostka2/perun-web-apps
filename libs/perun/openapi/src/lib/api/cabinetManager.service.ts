@@ -441,28 +441,28 @@ export class CabinetManagerService {
 
     /**
      * Delete Authorship by its userId and publicationId.
-     * @param publication id of publication
-     * @param user id of User
+     * @param publicationId id of publication
+     * @param userId id of user
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteAuthorship(publication: number, user: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteAuthorship(publication: number, user: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteAuthorship(publication: number, user: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteAuthorship(publication: number, user: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (publication === null || publication === undefined) {
-            throw new Error('Required parameter publication was null or undefined when calling deleteAuthorship.');
+    public deleteAuthorship(publicationId: number, userId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteAuthorship(publicationId: number, userId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteAuthorship(publicationId: number, userId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteAuthorship(publicationId: number, userId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (publicationId === null || publicationId === undefined) {
+            throw new Error('Required parameter publicationId was null or undefined when calling deleteAuthorship.');
         }
-        if (user === null || user === undefined) {
-            throw new Error('Required parameter user was null or undefined when calling deleteAuthorship.');
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling deleteAuthorship.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
-        if (publication !== undefined && publication !== null) {
-            queryParameters = queryParameters.set('publication', <any>publication);
+        if (publicationId !== undefined && publicationId !== null) {
+            queryParameters = queryParameters.set('publicationId', <any>publicationId);
         }
-        if (user !== undefined && user !== null) {
-            queryParameters = queryParameters.set('user', <any>user);
+        if (userId !== undefined && userId !== null) {
+            queryParameters = queryParameters.set('userId', <any>userId);
         }
 
         let headers = this.defaultHeaders;
