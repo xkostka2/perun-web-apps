@@ -114,3 +114,17 @@ button:focus {
 th, td {
   padding: 0.25rem !important;
 }
+
+#content-wrap {
+  @media (min-width: 600px) {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  padding-bottom: 25px;
+  padding-top: 10px;
+  margin: 10px;
+}
+
+.app-min-width {
+  min-width: 400px;
+}

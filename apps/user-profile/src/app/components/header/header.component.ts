@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -14,6 +14,12 @@ export class HeaderComponent implements OnInit {
 
   @Output()
   sidenavToggle = new EventEmitter();
+
+  @Input()
+  hideToggle = false;
+
+  @Input()
+  disableLogo = false;
 
   bgColor = this.storeService.get('theme', 'header_bg_color');
   textColor = this.storeService.get('theme', 'header_text_color');
