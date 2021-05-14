@@ -10,6 +10,24 @@
         matSortActive="name"
         matSortDirection="asc"
         matSortDisableClear>
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [aria-label]="checkboxLabel()"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          color="primary">
+            </mat-checkbox>
+          </th>
+          <td *matCellDef="let row" class="static-column-size" mat-cell>
+            <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                          (click)="$event.stopPropagation()"
+                          [aria-label]="checkboxLabel(row)"
+                          [checked]="selection.isSelected(row)"
+                          color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="id">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.ID' | translate}}</th>
           <td *matCellDef="let thanks" class="static-column-size" mat-cell>{{thanks.ownerId}}</td>
@@ -17,6 +35,10 @@
         <ng-container matColumnDef="name">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.NAME' | translate}}</th>
           <td *matCellDef="let thanks" mat-cell>{{thanks.ownerName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="createdBy">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'THANKS_LIST.CREATED_BY' | translate}}</th>
+          <td *matCellDef="let thanks" mat-cell>{{thanks.createdBy}}</td>
         </ng-container>
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr

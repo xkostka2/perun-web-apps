@@ -115,7 +115,8 @@
           [thanks]="thanks"
           [filterValue]="filterThanks"
           [pageSize]="pageSizeThanks"
-          [displayedColumns]="['id', 'name']"
+          [displayedColumns]="publication.locked ? ['id', 'name', 'createdBy'] : ['select', 'id', 'name', 'createdBy']"
+          [selection]="selectionThanks"
           (pageChanged)="pageChangedThanks($event)">
         </perun-web-apps-thanks-list>
       </mat-card-content>

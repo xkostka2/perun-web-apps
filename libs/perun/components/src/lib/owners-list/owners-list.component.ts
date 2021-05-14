@@ -21,7 +21,7 @@ import {
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
-  selector: 'app-owners-list',
+  selector: 'perun-web-apps-owners-list',
   templateUrl: './owners-list.component.html',
   styleUrls: ['./owners-list.component.scss']
 })

@@ -19,7 +19,7 @@
 </button>
 <perun-web-apps-immediate-filter (filter)="applyFilter($event)" *ngIf="!loading" [placeholder]="'VO_MANAGEMENT.FILTER_PLACEHOLDER'"></perun-web-apps-immediate-filter>
 <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-<app-owners-list
+  <perun-web-apps-owners-list
   (page)="pageChanged($event)"
   [pageSize]="pageSize"
   *ngIf="!loading"
@@ -27,6 +27,6 @@
   [owners]="owners"
   [displayedColumns]="displayedColumns"
   [selection]="selection">
-</app-owners-list>
+</perun-web-apps-owners-list>
 
 

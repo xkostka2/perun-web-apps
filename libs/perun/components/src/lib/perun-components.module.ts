@@ -78,6 +78,7 @@ import { CreateGroupFormComponent } from './create-group-form/create-group-form.
 import { DebounceFilterComponent } from './debounce-filter/debounce-filter.component';
 import { MembersDynamicListComponent } from './members-dynamic-list/members-dynamic-list.component';
 import { AppFormItemSearchSelectComponent } from './app-form-item-search-select/app-form-item-search-select.component';
+import { OwnersListComponent } from './owners-list/owners-list.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -186,7 +187,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     CreateGroupFormComponent,
     DebounceFilterComponent,
     MembersDynamicListComponent,
-    AppFormItemSearchSelectComponent
+    AppFormItemSearchSelectComponent,
+    OwnersListComponent
   ],
   exports: [
     VosListComponent,
@@ -232,6 +234,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     DebounceFilterComponent,
     MembersDynamicListComponent,
     AppFormItemSearchSelectComponent,
+    OwnersListComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },

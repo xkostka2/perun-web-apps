@@ -1,0 +1,34 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{"DIALOGS.ADD_THANKS.TITLE" | translate}}</h1>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <div mat-dialog-content class="dialog-container">
+      <perun-web-apps-immediate-filter (filter)="filterValue = $event"
+                                        [placeholder]="'DIALOGS.ADD_THANKS.FILTER'">
+      </perun-web-apps-immediate-filter>
+      <perun-web-apps-owners-list [owners]="owners"
+                                  [filterValue]="filterValue"
+                                  (page)="pageChanged($event)"
+                                  [pageSize]="pageSize"
+                                  [displayedColumns]="['select', 'id', 'name', 'contact']"
+                                  [selection]="selected">
+      </perun-web-apps-owners-list>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-flat-button
+        class="ml-auto"
+        (click)="onCancel()">
+        {{'DIALOGS.ADD_THANKS.CANCEL' | translate}}
+      </button>
+      <button
+        mat-flat-button
+        class="ml-2"
+        color="accent"
+        [disabled]="selected.selected.length === 0 || loading"
+        (click)="onSubmit()">
+        {{'DIALOGS.ADD_THANKS.ADD' | translate}}
+      </button>
+    </div>
+  </div>
+</div>

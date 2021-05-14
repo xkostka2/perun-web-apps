@@ -2160,13 +2160,6 @@
         "REASON": "Reason",
         "NO_BANS_WARNING": "No bans found"
       },
-      "OWNERS_LIST": {
-        "ID": "Id",
-        "NAME": "Name",
-        "CONTACT": "Contact",
-        "TYPE": "Type",
-        "NO_OWNERS": "No owners match the given filter"
-      },
       "SECURITY_TEAMS_LIST": {
         "ID": "id",
         "NAME": "name",
@@ -2466,6 +2459,14 @@
           "FILTER": "Search by group name",
           "CLOSE": "Close",
           "NO_PATHS": "No paths include the entered group name."
+        },
+        "OWNERS_LIST": {
+          "ID": "Id",
+          "NAME": "Name",
+          "CONTACT": "Contact",
+          "TYPE": "Type",
+          "NO_OWNERS": "No owners found.",
+          "NO_FILTER_OWNERS": "No owners match the given filter"
         }
       },
       "ORGANIZATIONS": {

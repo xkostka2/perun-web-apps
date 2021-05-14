@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
-import { ThanksForGUI } from '@perun-web-apps/perun/openapi';
+import { Owner, ThanksForGUI } from '@perun-web-apps/perun/openapi';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -8,6 +8,8 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { TableCheckbox } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'perun-web-apps-thanks-list',
@@ -16,7 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class ThanksListComponent implements AfterViewInit, OnChanges {
 
-  constructor() { }
+  constructor(private tableCheckbox: TableCheckbox) { }
 
   @Input()
   thanks: ThanksForGUI[] = [];
@@ -25,9 +27,11 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
   @Input()
   pageSize = 10;
   @Input()
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['select', 'id', 'name', 'createdBy'];
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
+  @Input()
+  selection = new SelectionModel<Owner>(true, []);
 
   @Output()
   pageChanged: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
@@ -83,5 +87,20 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
 
   exportData(format: string){
     downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
+  }
+
+  isAllSelected() {
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+  }
+
+  masterToggle() {
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+  }
+
+  checkboxLabel(row?: Owner): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 }

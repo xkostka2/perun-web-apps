@@ -14,6 +14,10 @@ import {
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { AddThanksDialogComponent } from '../../dialogs/add-thanks-dialog/add-thanks-dialog.component';
+import { UniversalRemoveItemsDialogComponent } from '@perun-web-apps/perun/dialogs';
 
 @Component({
   selector: 'perun-web-apps-publication-detail',
@@ -27,6 +31,7 @@ export class PublicationDetailComponent implements OnInit {
               private cabinetService: CabinetManagerService,
               private tableConfigService: TableConfigService,
               private matIconRegistry: MatIconRegistry,
+              private dialog: MatDialog,
               private domSanitizer: DomSanitizer) {
     this.matIconRegistry.addSvgIcon(
     "publications",
@@ -120,11 +125,45 @@ export class PublicationDetailComponent implements OnInit {
   }
 
   onAddThanks() {
-    // TODO
+    const config = getDefaultDialogConfig();
+    config.width = '800px';
+    config.data = this.publication;
+
+    const dialogRef = this.dialog.open(AddThanksDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.refreshThanks();
+      }
+    });
   }
 
   onRemoveThanks() {
-    // TODO
+    const config = getDefaultDialogConfig();
+    config.width = '450px';
+    config.data = {items: this.selectionThanks.selected.map(thanks => thanks.ownerName),
+      title: 'PUBLICATION_DETAIL.REMOVE_THANKS_DIALOG_TITLE',
+      description: 'PUBLICATION_DETAIL.REMOVE_THANKS_DIALOG_DESCRIPTION',
+      theme: 'user-theme'};
+
+    const dialogRef = this.dialog.open(UniversalRemoveItemsDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.thanksLoading = true;
+        this.removeThank();
+      }
+    });
+  }
+
+  removeThank() {
+    if (this.selectionThanks.selected.length === 0) {
+      this.refreshThanks();
+    } else {
+      this.cabinetService.deleteThanks(this.selectionThanks.selected.pop().id).subscribe(() => {
+        this.removeThank();
+      })
+    }
   }
 
   applyFilterAuthors(filterValue: string) {
@@ -166,6 +205,16 @@ export class PublicationDetailComponent implements OnInit {
     this.cabinetService.lockPublications(
       {publications: [updatedPublication], lock: !this.publication.locked}).subscribe(() => {
         this.refreshPublication();
+    });
+  }
+
+  refreshThanks() {
+    this.thanksLoading = true;
+    this.cabinetService.findPublicationById(this.publicationId).subscribe(publication => {
+      this.publication = publication;
+      this.thanks = this.publication.thanks;
+      this.selectionThanks.clear();
+      this.thanksLoading = false;
     });
   }
 }

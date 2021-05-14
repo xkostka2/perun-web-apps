@@ -22,11 +22,11 @@
   <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
                                    [placeholder]="'ADMIN.OWNERS.FILTER'"></perun-web-apps-immediate-filter>
   <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-  <app-owners-list
+  <perun-web-apps-owners-list
     (page)="pageChanged($event)"
     [pageSize]="pageSize"
     *ngIf="!loading"
     [filterValue]="filterValue"
     [owners]="owners"
-    [selection]="selected"></app-owners-list>
+    [selection]="selected"></perun-web-apps-owners-list>
 </div>
