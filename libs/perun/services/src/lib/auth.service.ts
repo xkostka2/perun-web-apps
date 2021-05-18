@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable, Injector } from '@angular/core';
 import {User, UserManager, UserManagerSettings} from 'oidc-client';
 import {from, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import { filter, map } from 'rxjs/operators';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { StoreService } from './store.service';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,6 +24,8 @@ export class AuthService {
   ) {
     setTimeout(() => {
       this.router = this.injector.get(Router);
+
+      this.startIdpFilterKeeper();
     });
 
     this.route.queryParams.subscribe(params => {
@@ -38,10 +40,30 @@ export class AuthService {
 
   user: User = null;
   loggedIn = false;
-  filterShortname = '';
+  filterShortname: string;
 
   redirectUrl: string;
 
+  /**
+   * Subscribes to route events and keeps the idpFilter query parameter.
+   *
+   * @private
+   */
+  private startIdpFilterKeeper(): void {
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        const idpFilterParams: Params = { idpFilter: this.getIdpFilter() };
+        this.router.navigate(
+          [],
+          {
+            relativeTo: this.route,
+            queryParams: idpFilterParams,
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+          });
+      });
+  }
 
   getUserManager(): UserManager {
     return this.manager;
@@ -50,7 +72,6 @@ export class AuthService {
   getClientSettings(): UserManagerSettings {
     const queryParams = location.search.substr(1).split('&');
     const filters = this.store.get('oidc_client', 'filters');
-    this.filterShortname = '';
     let filterValue = '';
     queryParams.forEach(param => {
       const parsedParam = param.split('=')
@@ -239,6 +260,10 @@ export class AuthService {
     }
     sessionStorage.removeItem('auth:redirect');
     sessionStorage.removeItem('auth:queryParams');
+
+    if (!!queryParams['idpFilter']) {
+      this.filterShortname = queryParams['idpFilter'];
+    }
     return this.router.navigate([redirectUrl], {queryParams: queryParams, replaceUrl: true});
   }
 

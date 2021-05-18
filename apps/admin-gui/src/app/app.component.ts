@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CacheHelperService } from './core/services/common/cache-helper.service';
-import { InitAuthService, StoreService } from '@perun-web-apps/perun/services';
+import { AuthService, InitAuthService, StoreService } from '@perun-web-apps/perun/services';
 import { PerunPrincipal } from '@perun-web-apps/perun/openapi';
 import { interval } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,7 +8,7 @@ import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { NewVersionDialogComponent } from './shared/components/dialogs/new-version-dialog/new-version-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { version } from '../../../../package.json';
-import { NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -24,9 +24,10 @@ export class AppComponent implements OnInit {
     private http: HttpClient,
     private dialog: MatDialog,
     private router: Router,
-    private initAuth: InitAuthService
+    private initAuth: InitAuthService,
+    private auth: AuthService,
+    private route: ActivatedRoute
   ) {
-
     this.cache.init();
     this.getScreenSize(null);
   }
