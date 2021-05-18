@@ -12,7 +12,7 @@
       </mat-icon>
       <div class="page-title-block">
         <div class="page-title-headline d-flex align-items-center">
-          <a class="member-link" [routerLink]="['/organizations', vo.id, 'members', member.id]">
+          <a class="member-link" [routerLink]="['/organizations', vo.id, 'members', member.id]" queryParamsHandling="merge">
             {{fullName}}
           </a>
           <span class="text-muted">
@@ -22,7 +22,7 @@
         <span class="mt-1 entity-info">
           {{'MEMBER_DETAIL.ENTITY' | translate}},
           {{'MEMBER_DETAIL.USER_ID' | translate}}:
-          <a class="member-link" *ngIf="isAuthorized" [routerLink]="['/admin', 'users', member.userId]">
+          <a class="member-link" *ngIf="isAuthorized" [routerLink]="['/admin', 'users', member.userId]" queryParamsHandling="merge">
             {{member.userId}}
           </a>
           <span *ngIf="!isAuthorized">{{member.userId}}</span>

@@ -18,10 +18,10 @@
                       [indeterminate]="descendantsPartiallySelected(group)"
                       (change)="itemSelectionToggle(group)"
                       ></mat-checkbox>
-        <div
-          class="group-item-content"
+        <a
+          class="group-item-content text-format"
           [routerLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null :['/organizations', group.voId, 'groups', group.id]">
+          queryParamsHandling="merge">
           <button mat-icon-button
                   (mouseenter)="disableRouting = true"
                   (mouseleave)="disableRouting = false"
@@ -47,7 +47,7 @@
               {{group.description}}
             </span>
           </div>
-        </div>
+        </a>
         <div class="group-buttons">
           <perun-web-apps-group-menu
             [disabled]="group.fullName === 'members'"

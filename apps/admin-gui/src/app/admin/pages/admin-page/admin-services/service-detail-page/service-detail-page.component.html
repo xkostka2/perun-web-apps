@@ -11,7 +11,7 @@
     </mat-icon>
     <div class="page-title-block">
       <div class="page-title-headline d-flex align-items-center">
-        <a [routerLink]="['/admin/services', service.id]" class="service-link">
+        <a [routerLink]="['/admin/services', service.id]" class="service-link" queryParamsHandling="merge">
           {{service.name}}
         </a>
         <span class="text-muted">

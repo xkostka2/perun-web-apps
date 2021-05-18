@@ -11,7 +11,7 @@
     </mat-icon>
     <div class="page-title-block">
       <div class="page-title-headline d-flex align-items-center">
-        <a [routerLink]="['/admin/users', user.id]" class="user-link">
+        <a [routerLink]="['/admin/users', user.id]" class="user-link" queryParamsHandling="merge">
           {{user | userFullName}}
         </a>
         <span class="text-muted">

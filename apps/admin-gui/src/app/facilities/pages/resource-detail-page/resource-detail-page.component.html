@@ -12,7 +12,7 @@
       </mat-icon>
       <div class="page-title-block">
         <div class="page-title-headline d-flex align-items-center">
-          <a class="resource-link" [routerLink]="[baseUrl]">
+          <a class="resource-link" [routerLink]="[baseUrl]" queryParamsHandling="merge">
             {{resource.name}}
           </a>
           <span class="text-muted">
@@ -26,13 +26,13 @@
           {{'RESOURCE_DETAIL.ENTITY' | translate}},
           {{'RESOURCE_DETAIL.VO' | translate}}:
           <a *ngIf="voLinkAuth"
-             [routerLink]="['/organizations', resource.vo.id]" class="resource-link">{{resource.vo.name}}</a>
+             [routerLink]="['/organizations', resource.vo.id]" queryParamsHandling="merge" class="resource-link">{{resource.vo.name}}</a>
           <span *ngIf="!voLinkAuth">
             {{resource.vo.name}}
           </span>
           #{{resource.voId}},
           {{'RESOURCE_DETAIL.FACILITY' | translate}}:
-          <a class="resource-link" *ngIf="facilityLinkAuth"
+          <a class="resource-link" *ngIf="facilityLinkAuth" queryParamsHandling="merge"
              [routerLink]="['/facilities', resource.facilityId]">{{resource.facility.name}}</a>
           <span *ngIf="!facilityLinkAuth">
             {{resource.facility.name}}

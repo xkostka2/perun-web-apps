@@ -1,7 +1,7 @@
 <app-alert *ngIf="items.length === 0" alert_type="info">{{'USER_DETAIL.DASHBOARD.NO_RECENTLY_VIEWED' | translate}}</app-alert>
 <div *ngIf="items.length > 0" class="items-container">
   <div *ngFor="let item of items" class="item-itself-container" mat-ripple>
-    <a class="{{item.style}} item-itself" [routerLink]="item.url">
+    <a class="{{item.style}} item-itself" [routerLink]="item.url" queryParamsHandling="merge">
       <span class="item-type">{{item.type}}</span>
       <mat-icon [svgIcon]="item.cssIcon" class="item-pic perun-icon"></mat-icon>
       {{item.label}}

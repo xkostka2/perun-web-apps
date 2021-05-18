@@ -12,7 +12,7 @@
       </mat-icon>
       <div class="page-title-block">
         <div class="page-title-headline d-flex align-items-center">
-          <a class="vo-link" [routerLink]="['/organizations/', vo.id]">
+          <a class="vo-link" [routerLink]="['/organizations/', vo.id]" queryParamsHandling="merge">
             {{vo.name}}
           </a>
           <span class="text-muted">
