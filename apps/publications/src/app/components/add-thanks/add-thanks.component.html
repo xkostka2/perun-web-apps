@@ -1,0 +1,31 @@
+<div class="'user-theme'">
+  <button
+    *ngIf="!publication.locked"
+    mat-flat-button
+    color="accent"
+    class="mr-2"
+    (click)="onAddThanks()">
+    {{'PUBLICATION_DETAIL.ADD' | translate}}
+  </button>
+  <button
+    *ngIf="!publication.locked"
+    mat-flat-button
+    color="warn"
+    class="mr-4"
+    [disabled]="selection.selected.length === 0"
+    (click)="onRemoveThanks()">
+    {{'PUBLICATION_DETAIL.REMOVE' | translate}}
+  </button>
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <perun-web-apps-thanks-list
+    *ngIf="!loading"
+    [thanks]="publication.thanks"
+    [filterValue]="filterValue"
+    [pageSize]="pageSize"
+    [displayedColumns]="publication.locked ? ['id', 'name', 'createdBy'] : ['select', 'id', 'name', 'createdBy']"
+    [selection]="selection"
+    (pageChanged)="pageChanged($event)">
+  </perun-web-apps-thanks-list>
+</div>

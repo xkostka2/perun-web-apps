@@ -40,6 +40,10 @@ import { ThanksListComponent } from './components/thanks-list/thanks-list.compon
 import { PerunLoginModule } from '@perun-web-apps/perun/login';
 import { AddThanksDialogComponent } from './dialogs/add-thanks-dialog/add-thanks-dialog.component';
 import { AddAuthorsDialogComponent } from './dialogs/add-authors-dialog/add-authors-dialog.component';
+import { CreateSinglePublicationPageComponent } from './pages/create-publication-page/create-single-publication-page/create-single-publication-page.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AddAuthorsComponent } from './components/add-authors/add-authors.component';
+import { AddThanksComponent } from './components/add-thanks/add-thanks.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -91,6 +95,9 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     ThanksListComponent,
     AddThanksDialogComponent,
     AddAuthorsDialogComponent,
+    CreateSinglePublicationPageComponent,
+    AddAuthorsComponent,
+    AddThanksComponent
   ],
   imports: [
     BrowserModule,
@@ -109,7 +116,8 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     AppRoutingModule,
     UiAlertsModule,
     PerunPipesModule,
-    PerunLoginModule
+    PerunLoginModule,
+    MatTabsModule
   ],
   providers: [
     CustomIconService,

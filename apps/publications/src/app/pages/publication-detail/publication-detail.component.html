@@ -55,35 +55,10 @@
         {{'PUBLICATION_DETAIL.AUTHORS' | translate}}
       </mat-card-title>
       <mat-card-content>
-        <button
-          *ngIf="!publication.locked"
-          mat-flat-button
-          color="accent"
-          class="mr-2"
-          (click)="onAddAuthors()">
-          {{'PUBLICATION_DETAIL.ADD' | translate}}
-        </button>
-        <button
-          *ngIf="!publication.locked"
-          mat-flat-button
-          color="warn"
-          class="mr-4"
-          [disabled]="selectionAuthors.selected.length === 0 || publication.locked"
-          (click)="onRemoveAuthors()">
-          {{'PUBLICATION_DETAIL.REMOVE' | translate}}
-        </button>
-        <perun-web-apps-immediate-filter (filter)="applyFilterAuthors($event)"
-                                         [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
-        <mat-spinner class="ml-auto mr-auto" *ngIf="loading || authorsLoading"></mat-spinner>
-        <perun-web-apps-authors-list
-          *ngIf="!authorsLoading && !loading"
-          [authors]="authors"
-          [selection]="selectionAuthors"
-          [filterValue]="filterAuthors"
-          [pageSize]="pageSizeAuthors"
-          [displayedColumns]="publication.locked ? ['id', 'name', 'organization', 'email'] : ['select', 'id', 'name', 'organization', 'email']"
-          (page)="pageChangedAuthors($event)">
-        </perun-web-apps-authors-list>
+        <perun-web-apps-add-authors
+          [publication]="publication"
+          [selection]="selectionAuthors">
+        </perun-web-apps-add-authors>
       </mat-card-content>
     </mat-card>
     <mat-card class="mt-4">
@@ -91,35 +66,10 @@
         {{'PUBLICATION_DETAIL.ACKNOWLEDGEMENT' | translate}}
       </mat-card-title>
       <mat-card-content>
-        <button
-          *ngIf="!publication.locked"
-          mat-flat-button
-          color="accent"
-          class="mr-2"
-          (click)="onAddThanks()">
-          {{'PUBLICATION_DETAIL.ADD' | translate}}
-        </button>
-        <button
-          *ngIf="!publication.locked"
-          mat-flat-button
-          color="warn"
-          class="mr-4"
-          [disabled]="selectionThanks.selected.length === 0"
-          (click)="onRemoveThanks()">
-          {{'PUBLICATION_DETAIL.REMOVE' | translate}}
-        </button>
-        <perun-web-apps-immediate-filter (filter)="applyFilterThanks($event)"
-                                         [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
-        <mat-spinner class="ml-auto mr-auto" *ngIf="loading || thanksLoading"></mat-spinner>
-        <perun-web-apps-thanks-list
-          *ngIf="!thanksLoading && !loading"
-          [thanks]="thanks"
-          [filterValue]="filterThanks"
-          [pageSize]="pageSizeThanks"
-          [displayedColumns]="publication.locked ? ['id', 'name', 'createdBy'] : ['select', 'id', 'name', 'createdBy']"
-          [selection]="selectionThanks"
-          (pageChanged)="pageChangedThanks($event)">
-        </perun-web-apps-thanks-list>
+        <perun-web-apps-add-thanks
+          [publication]="publication"
+          [selection]="selectionThanks">
+        </perun-web-apps-add-thanks>
       </mat-card-content>
     </mat-card>
   </div>

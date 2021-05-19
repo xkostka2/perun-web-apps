@@ -53,14 +53,21 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
   @Input()
   routerPath: string;
-
+  @Input()
   disabledRouting = false;
+  @Input()
+  openInTab = false;
+
+  @Output()
+  publicationSelector: EventEmitter<PublicationForGUI> = new EventEmitter<PublicationForGUI>();
 
   private sort: MatSort;
 
   dataSource: MatTableDataSource<PublicationForGUI>;
 
   private paginator: MatPaginator;
+
+  buttonPressed = false;
 
   changeLockMessage: string;
   locked: string;
@@ -175,5 +182,9 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
       title: publication.title,
       year: publication.year
     }
+  }
+
+  emitPublication(publication: PublicationForGUI) {
+    return this.publicationSelector.emit(publication)
   }
 }
