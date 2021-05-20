@@ -12,10 +12,6 @@ import {
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
 import { RemoveVoDialogComponent } from '../../../shared/components/dialogs/remove-vo-dialog/remove-vo-dialog.component';
-import {
-  DeleteEntityDialogComponent,
-  DeleteEntityType
-} from '../../../shared/components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
 
 @Component({
   selector: 'app-vo-detail-page',
@@ -85,10 +81,9 @@ export class VoDetailPageComponent implements OnInit {
     config.width = '500px';
     config.data = {
       theme: 'vo-theme',
-      entity: this.vo,
-      entityType: DeleteEntityType.VO
+      vos: [this.vo]
     };
-    const dialogRef = this.dialog.open(DeleteEntityDialogComponent, config);
+    const dialogRef = this.dialog.open(RemoveVoDialogComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

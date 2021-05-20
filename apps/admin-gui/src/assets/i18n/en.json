@@ -908,14 +908,10 @@
       "FILL_SHORT_NAME": "Length of short name has to be between 1 to 32 characters, allowed characters are a-z, A-Z, 0-9, ., _, -"
     },
     "REMOVE_VO": {
-      "TITLE": "Remove organization",
-      "CANCEL": "Cancel",
-      "REMOVE": "Remove",
-      "FORCE": "Force",
-      "FORCE_WARNING": "Using force also deletes all groups, members and resources of selected organizations.",
-      "DESCRIPTION": "Following organizations will be removed",
-      "ASK": "Do you want to proceed?",
-      "SUCCESS": "Organization was successfully removed"
+      "SUCCESS": "Organization was successfully removed",
+      "GROUP_RELATION": "Groups (including subgroups)",
+      "MEMBER_RELATION": "Members",
+      "RESOURCE_RELATION": "Resources"
     },
     "INVITE_MEMBER": {
       "TITLE": "Invite member",
@@ -941,11 +937,8 @@
       "SUCCESS": "Selected attributes were removed"
     },
     "DELETE_GROUP": {
-      "TITLE": "Confirm delete action",
-      "DESCRIPTION": "Following groups (including all sub-groups) will be deleted.",
-      "ASK": "Do you want to proceed?",
-      "CANCEL": "Cancel",
-      "DELETE": "Delete",
+      "SUBGROUP_RELATION": "Subgroups",
+      "MEMBER_RELATION": "Group members",
       "SUCCESS": "Selected groups were deleted"
     },
     "REMOVE_MEMBERS": {
@@ -1570,12 +1563,8 @@
       "NO_COPY": "--- No copy ---"
     },
     "DELETE_FACILITY": {
-      "TITLE": "Delete facility",
-      "DESCRIPTION": "Following facility will be removed.",
-      "ASK": "Are you sure you want to proceed?",
-      "CANCEL": "Cancel",
-      "CONFIRM": "Delete",
-      "SUCCESS": "Facility deleted."
+      "SUCCESS": "Facility deleted.",
+      "RESOURCE_RELATION": "resources"
     },
     "ADD_MEMBER_GROUP": {
       "TITLE": "Add groups",
@@ -1874,22 +1863,15 @@
       "SUCCESS": "Owners successfully removed"
     },
     "DELETE_ENTITY": {
-      "BASIC": "Do you want to delete only this",
+      "BASIC": "Do you want to delete",
+      "ONLY": "only this",
       "OR": "or",
       "RELATIONS": "with all relations",
       "DELETE": "Delete",
       "CANCEL": "Cancel",
-      "VO": "organization",
-      "GROUP": "group",
-      "FACILITY": "facility",
-      "RESOURCE": "resource",
       "CONTROL": "Type \"DELETE\" to confirm",
-      "ASK": "Are you sure you want to permanently delete",
-      "WARN": "This action will also delete all",
-      "SUCCESS": "was successfully deleted",
-      "GROUP_RELATION": "Groups (including subgroups)",
-      "MEMBER_RELATION": "Members",
-      "RESOURCE_RELATION": "Resources"
+      "ASK": "Are you sure you want to permanently delete following",
+      "WARN": "This action will also delete all"
     }
   },
   "MEMBERS_LIST": {

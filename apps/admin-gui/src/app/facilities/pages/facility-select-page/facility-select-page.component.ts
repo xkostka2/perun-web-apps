@@ -10,6 +10,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateFacilityDialogComponent } from '../../../shared/components/dialogs/create-facility-dialog/create-facility-dialog.component';
+import {
+  DeleteEntityDialogComponent,
+} from '../../../shared/components/dialogs/delete-entity-dialog/delete-entity-dialog.component';
 import { DeleteFacilityDialogComponent } from '../../../shared/components/dialogs/delete-facility-dialog/delete-facility-dialog.component';
 
 @Component({
@@ -78,12 +81,11 @@ export class FacilitySelectPageComponent implements OnInit, AfterViewChecked {
 
   onDelete() {
     const config = getDefaultDialogConfig();
-    config.width = "650px";
+    config.width = '500px';
     config.data = {
-      facility: this.selection.selected[0],
-      theme: "facility-theme"
+      theme: 'facility-theme',
+      facility: this.selection.selected[0].facility,
     };
-
     const dialogRef = this.dialog.open(DeleteFacilityDialogComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {

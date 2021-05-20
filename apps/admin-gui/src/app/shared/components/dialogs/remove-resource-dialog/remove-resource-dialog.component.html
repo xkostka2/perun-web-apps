@@ -1,41 +1,8 @@
-<h1 mat-dialog-title>{{'DIALOGS.REMOVE_RESOURCES.TITLE' | translate}}</h1>
-<div class="{{data.theme}}">
-  <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
-  </mat-spinner>
-  <div mat-dialog-content *ngIf="!loading">
-    <p>
-      {{'DIALOGS.REMOVE_RESOURCES.DESCRIPTION' | translate}}
-    </p>
-
-    <div class="font-weight-bold">
-      {{'DIALOGS.REMOVE_RESOURCES.ASK' | translate}}
-    </div>
-
-    <table mat-table [dataSource]="dataSource" class="w-100">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let resource"> {{resource.name}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="font-weight-bolder"></tr>
-      <tr mat-row *matRowDef="let resource; columns: displayedColumns;"></tr>
-    </table>
-
-  </div>
-  <div mat-dialog-actions>
-    <button
-      mat-flat-button
-      class="ml-auto"
-      (click)="onCancel()">
-      {{'DIALOGS.REMOVE_RESOURCES.CANCEL' | translate}}
-    </button>
-    <button
-      mat-flat-button
-      class="ml-2"
-      color="warn"
-      [disabled]="loading"
-      (click)="onSubmit()">
-      {{'DIALOGS.REMOVE_RESOURCES.DELETE' | translate}}
-    </button>
-  </div>
+<div class="{{theme}}">
+  <app-delete-entity-dialog
+    [entityNames]="dataSource"
+    [entityType]="'resources'"
+    [disableForce]="true"
+    (deleted)="onSubmit($event)">
+  </app-delete-entity-dialog>
 </div>

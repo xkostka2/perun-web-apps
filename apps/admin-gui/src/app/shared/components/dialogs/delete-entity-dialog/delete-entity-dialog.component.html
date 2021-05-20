@@ -1,22 +1,37 @@
 <div *ngIf="!force">
   <h1 mat-dialog-title>{{'DIALOGS.DELETE_ENTITY.DELETE' | translate}} {{entityType}}</h1>
   <div mat-dialog-content class="dialog-container">
-    <div class="mb-4">
+    <div *ngIf="!disableForce" class="mb-4">
       {{'DIALOGS.DELETE_ENTITY.BASIC' | translate}}
+      {{'DIALOGS.DELETE_ENTITY.ONLY' | translate}}
       {{entityType}}
       <span class="font-weight-bold">{{'DIALOGS.DELETE_ENTITY.OR' | translate}}</span>
       {{entityType}}
       {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}?
     </div>
+    <div *ngIf="disableForce" class="mb-4">
+      {{'DIALOGS.DELETE_ENTITY.BASIC' | translate}}
+      {{entityType}}
+      ?
+    </div>
+    <table mat-table [dataSource]="entityNames" class="w-100 table-margin">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let entity"> {{entity.name}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['name']" class="font-weight-bolder"></tr>
+      <tr mat-row *matRowDef="let entity; columns: ['name'];"></tr>
+    </table>
   </div>
   <div mat-dialog-actions>
-    <button (click)="onCancel()" mat-flat-button>
+    <button (click)="onCancel()" class="ml-auto" mat-flat-button>
       {{'DIALOGS.DELETE_ENTITY.CANCEL' | translate}}
     </button>
-    <button (click)="onDelete()" class="ml-auto" mat-flat-button color="warn">
+    <button (click)="onDelete()" class="ml-2" mat-flat-button color="warn">
       {{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
     </button>
-    <button (click)="force = true" class="ml-2" mat-flat-button color="warn">
+    <button *ngIf="!disableForce" (click)="force = true" class="ml-2" mat-flat-button color="warn">
       <mat-icon>warning</mat-icon>
       {{'DIALOGS.DELETE_ENTITY.DELETE' | translate}}
       {{'DIALOGS.DELETE_ENTITY.RELATIONS' | translate}}
@@ -39,8 +54,17 @@
         </mat-list-item>
       </mat-list>
       <app-alert alert_type="warn">
-        {{'DIALOGS.DELETE_ENTITY.ASK' | translate}}: {{entityName}} ?
+        {{'DIALOGS.DELETE_ENTITY.ASK' | translate}} {{entityType}} ?
       </app-alert>
+      <table mat-table [dataSource]="entityNames" class="w-100 table-margin">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let entity"> {{entity.name}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['name']" class="font-weight-bolder"></tr>
+        <tr mat-row *matRowDef="let entity; columns: ['name'];"></tr>
+      </table>
     </div>
     <mat-form-field>
       <input [formControl]="deleteControl" matInput placeholder="{{'DIALOGS.DELETE_ENTITY.CONTROL' | translate}}">

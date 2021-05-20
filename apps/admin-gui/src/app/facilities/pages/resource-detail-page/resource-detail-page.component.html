@@ -21,6 +21,12 @@
           <button mat-icon-button aria-label="Edit resource" *ngIf="editResourceAuth" (click)="editResource()">
             <mat-icon>edit</mat-icon>
           </button>
+          <button
+            *ngIf="deleteAuth"
+            mat-icon-button
+            (click)="deleteResource()">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
         </div>
         <span class="mt-1 entity-info">
           {{'RESOURCE_DETAIL.ENTITY' | translate}},

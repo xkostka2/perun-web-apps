@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SideMenuService } from '../../../core/services/common/side-menu.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
 import { fadeIn } from '@perun-web-apps/perun/animations';
 import { GroupsManagerService, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
@@ -13,6 +13,7 @@ import {
   EditFacilityResourceGroupVoDialogOptions,
   GroupSyncDetailDialogComponent
 } from '@perun-web-apps/perun/dialogs';
+import { DeleteGroupDialogComponent } from '../../../shared/components/dialogs/delete-group-dialog/delete-group-dialog.component';
 
 @Component({
   selector: 'app-group-detail-page',
@@ -31,13 +32,15 @@ export class GroupDetailPageComponent implements OnInit {
     private sideMenuItemService: SideMenuItemService,
     private groupService: GroupsManagerService,
     private dialog: MatDialog,
-    private guiAuthResolver: GuiAuthResolver
+    private guiAuthResolver: GuiAuthResolver,
+    private router: Router
   ) {
   }
 
   vo: Vo;
   group: RichGroup;
   editAuth = false;
+  deleteAuth = false;
   loading = false;
   syncAuth = false;
   syncEnabled = false;
@@ -74,6 +77,7 @@ export class GroupDetailPageComponent implements OnInit {
           }
 
           this.editAuth = this.guiAuthResolver.isAuthorized('updateGroup_Group_policy', [this.group]);
+          this.deleteAuth = this.guiAuthResolver.isAuthorized('deleteGroup_Group_boolean_policy', [this.group])
 
           const voSideMenuItem = this.sideMenuItemService.parseVo(vo);
           const groupSideMenuItem = this.sideMenuItemService.parseGroup(group);
@@ -114,6 +118,22 @@ export class GroupDetailPageComponent implements OnInit {
         this.groupService.getGroupById(this.group.id).subscribe(group => {
           this.group = group;
         });
+      }
+    });
+  }
+
+  deleteGroup() {
+    const config = getDefaultDialogConfig();
+    config.width = '500px';
+    config.data = {
+      theme: 'group-theme',
+      groups: [this.group]
+    };
+    const dialogRef = this.dialog.open(DeleteGroupDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['../'], { relativeTo: this.route });
       }
     });
   }
