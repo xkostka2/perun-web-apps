@@ -233,6 +233,9 @@ export class CacheRouteReuseStrategy implements RouteReuseStrategy {
    */
   store(route: ActivatedRouteSnapshot, detachedTree: DetachedRouteHandle): void {
     if (route.component) {
+      while(document.getElementsByTagName('mat-tooltip-component').length > 0) {
+        document.getElementsByTagName('mat-tooltip-component')[0].remove();
+      }
       const type = this.getComponentType(route);
       this.typeToComponentToHandlers
         .get(type)
