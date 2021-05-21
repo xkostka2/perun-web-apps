@@ -193,4 +193,8 @@ export class VoMembersComponent implements OnInit {
       });
     });
   }
+
+  changeStatuses() {
+    this.selectedStatuses = this.statuses.value;
+  }
 }
