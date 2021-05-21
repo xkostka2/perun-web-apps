@@ -102,6 +102,7 @@ export class StoreService {
           currentValue = this.defaultConfig[keys[i]];
         } else {
           if (currentValue === undefined) {
+            console.error('Missing value in default config: ' + keys);
             break;
           }
           currentValue = currentValue[keys[i]];

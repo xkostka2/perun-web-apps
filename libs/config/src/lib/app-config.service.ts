@@ -95,7 +95,7 @@ export class AppConfigService {
         .subscribe(config => {
           this.storeService.setInstanceConfig(config);
           const branding = document.location.hostname;
-          if (this.storeService.get('brandings', branding) !== undefined) {
+          if (config['brandings'] !== undefined && config['brandings'][branding] !== undefined) {
             this.storeService.setBanding(branding);
           }
           resolve();
