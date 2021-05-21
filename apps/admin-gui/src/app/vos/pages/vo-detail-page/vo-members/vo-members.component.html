@@ -32,7 +32,7 @@
 
     <mat-form-field class="mr-2 fix-select">
       <mat-label>{{'VO_DETAIL.MEMBERS.FILTER_STATUS' | translate}}</mat-label>
-      <mat-select [(value)]="selectedStatuses" [formControl]="statuses"
+      <mat-select [formControl]="statuses" (closed)="changeStatuses()"
                   multiple>
         <mat-select-trigger>
           {{displaySelectedStatuses()}}
