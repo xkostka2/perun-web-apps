@@ -31,7 +31,7 @@
     "help": "nx help",
     "start-dev-admin-gui": "ng serve admin-gui --public-host=http://localhost:4200 --disable-host-check",
     "preversion": "npm run lint",
-    "version": "npm run build -- --prod && npm run build -- user-profile --prod && bash create-version-file.sh && git add -A -f dist",
+    "version": "npm run build -- --prod && npm run build -- user-profile --prod && npm run build -- publications --prod && bash create-version-file.sh && git add -A -f dist",
     "start-user-profile": "ng serve user-profile --public-host=http://localhost:4200 --disable-host-check",
     "start-publications": "ng serve publications --public-host=http://localhost:4200 --disable-host-check",
     "start-password-reset": "ng serve password-reset --public-host=http://localhost:4200 --disable-host-check",
