@@ -232,7 +232,7 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
   updateAutoRegistration() {
     this.autoRegToggle.setDisabledState(true);
     if (this.autoRegistrationEnabled) {
-      this.groupsManager.deleteGroupsFromAutoRegistration([this.group.id]).subscribe(() => {
+      this.registrarManager.deleteGroupsFromAutoRegistration([this.group.id]).subscribe(() => {
         this.autoRegistrationEnabled = !this.autoRegistrationEnabled;
         this.translate.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.CHANGE_SETTINGS_SUCCESS')
           .subscribe(successMessage => {
@@ -241,7 +241,7 @@ export class GroupSettingsApplicationFormComponent implements OnInit {
         this.autoRegToggle.setDisabledState(false)
       }, () => this.autoRegToggle.setDisabledState(false));
     } else {
-      this.groupsManager.addGroupsToAutoRegistration([this.group.id]).subscribe(() => {
+      this.registrarManager.addGroupsToAutoRegistration([this.group.id]).subscribe(() => {
         this.autoRegistrationEnabled = !this.autoRegistrationEnabled;
         this.translate.get('VO_DETAIL.SETTINGS.APPLICATION_FORM.CHANGE_SETTINGS_SUCCESS')
           .subscribe(successMessage => {

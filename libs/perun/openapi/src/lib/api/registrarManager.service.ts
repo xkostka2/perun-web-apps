@@ -22,6 +22,7 @@ import { ApplicationForm } from '../model/applicationForm';
 import { ApplicationFormItem } from '../model/applicationFormItem';
 import { ApplicationFormItemData } from '../model/applicationFormItemData';
 import { ApplicationMail } from '../model/applicationMail';
+import { Group } from '../model/group';
 import { InputAddApplicationMailForGroup } from '../model/inputAddApplicationMailForGroup';
 import { InputAddApplicationMailForVo } from '../model/inputAddApplicationMailForVo';
 import { InputFormItemData } from '../model/inputFormItemData';
@@ -182,6 +183,67 @@ export class RegistrarManagerService {
         return this.httpClient.post<number>(`${this.configuration.basePath}/json/registrarManager/addApplicationMail/v`,
             inputAddApplicationMailForVo,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Adds groups to a list of groups which can be registered into during vo registration.
+     * @param groups list of Group ids List&lt;Integer&gt;
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addGroupsToAutoRegistration(groups: Array<number>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public addGroupsToAutoRegistration(groups: Array<number>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public addGroupsToAutoRegistration(groups: Array<number>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public addGroupsToAutoRegistration(groups: Array<number>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (groups === null || groups === undefined) {
+            throw new Error('Required parameter groups was null or undefined when calling addGroupsToAutoRegistration.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (groups) {
+            groups.forEach((element) => {
+                queryParameters = queryParameters.append('groups[]', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/registrarManager/addGroupsToAutoRegistration`,
+            null,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1098,6 +1160,67 @@ export class RegistrarManagerService {
     }
 
     /**
+     * Deletes groups from a list of groups which can be registered into during vo registration.
+     * @param groups list of Group ids List&lt;Integer&gt;
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteGroupsFromAutoRegistration(groups: Array<number>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteGroupsFromAutoRegistration(groups: Array<number>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteGroupsFromAutoRegistration(groups: Array<number>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteGroupsFromAutoRegistration(groups: Array<number>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (groups === null || groups === undefined) {
+            throw new Error('Required parameter groups was null or undefined when calling deleteGroupsFromAutoRegistration.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (groups) {
+            groups.forEach((element) => {
+                queryParameters = queryParameters.append('groups[]', <any>element);
+            })
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/registrarManager/deleteGroupsFromAutoRegistration`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Returns application object by its id.
      * @param id numeric id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1873,6 +1996,64 @@ export class RegistrarManagerService {
 
 
         return this.httpClient.get<ApplicationForm>(`${this.configuration.basePath}/json/registrarManager/getApplicationForm/group`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns all groups which can be registered into during vo registration.
+     * @param vo id of Vo
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGroupsToAutoRegistration(vo: number, observe?: 'body', reportProgress?: boolean): Observable<Array<Group>>;
+    public getGroupsToAutoRegistration(vo: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Group>>>;
+    public getGroupsToAutoRegistration(vo: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Group>>>;
+    public getGroupsToAutoRegistration(vo: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (vo === null || vo === undefined) {
+            throw new Error('Required parameter vo was null or undefined when calling getGroupsToAutoRegistration.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (vo !== undefined && vo !== null) {
+            queryParameters = queryParameters.set('vo', <any>vo);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<Array<Group>>(`${this.configuration.basePath}/json/registrarManager/getGroupsToAutoRegistration`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

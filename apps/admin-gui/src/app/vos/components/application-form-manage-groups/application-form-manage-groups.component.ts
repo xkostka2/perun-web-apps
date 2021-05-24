@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Group, GroupsManagerService } from '@perun-web-apps/perun/openapi';
+import { Group, GroupsManagerService, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PageEvent } from '@angular/material/paginator';
@@ -19,7 +19,7 @@ import { GroupsListComponent } from '@perun-web-apps/perun/components';
 export class ApplicationFormManageGroupsComponent implements OnInit {
 
   constructor(private tableConfigService: TableConfigService,
-              public groupsService: GroupsManagerService,
+              private registrarService: RegistrarManagerService,
               public authResolver: GuiAuthResolver,
               private dialog: MatDialog,
               protected route: ActivatedRoute) { }
@@ -47,7 +47,7 @@ export class ApplicationFormManageGroupsComponent implements OnInit {
 
   loadGroups() {
     this.loading = true;
-    this.groupsService.getGroupsToAutoRegistration(this.voId).subscribe(groups => {
+    this.registrarService.getGroupsToAutoRegistration(this.voId).subscribe(groups => {
       this.groups = groups;
       this.selected.clear();
       this.setAuthRights();
@@ -83,7 +83,7 @@ export class ApplicationFormManageGroupsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.groupsService.deleteGroupsFromAutoRegistration(this.selected.selected.map(group => group.id)).subscribe(() => {
+        this.registrarService.deleteGroupsFromAutoRegistration(this.selected.selected.map(group => group.id)).subscribe(() => {
           this.loadGroups();
         });
       }

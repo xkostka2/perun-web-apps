@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Group, GroupsManagerService } from '@perun-web-apps/perun/openapi';
+import { Group, GroupsManagerService, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   TABLE_ADD_GROUP_TO_REGISTRATION, TableConfigService
@@ -24,6 +24,7 @@ export class AddGroupToRegistrationComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<AddGroupToRegistrationComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddGroupToRegistrationDialogData,
               private groupService: GroupsManagerService,
+              private registrarService: RegistrarManagerService,
               private tableConfigService: TableConfigService) { }
 
   loading = false;
@@ -60,7 +61,7 @@ export class AddGroupToRegistrationComponent implements OnInit {
 
   onAdd() {
     this.loading = true;
-    this.groupService.addGroupsToAutoRegistration(this.selection.selected.map(group => group.id)).subscribe(() => {
+    this.registrarService.addGroupsToAutoRegistration(this.selection.selected.map(group => group.id)).subscribe(() => {
       this.dialogRef.close(true);
     }, () => this.loading = false);
   }
