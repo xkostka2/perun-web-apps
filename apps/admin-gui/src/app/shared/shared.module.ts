@@ -40,7 +40,6 @@ import {InviteMemberDialogComponent} from './components/dialogs/invite-member-di
 import {DeleteGroupDialogComponent} from './components/dialogs/delete-group-dialog/delete-group-dialog.component';
 import {SettingsToggleItemComponent} from './components/settings-toggle-item/settings-toggle-item.component';
 import { ApplicationStatePipe } from './pipes/application-state.pipe';
-import { NotificatorComponent } from './components/notificator/notificator.component';
 import { AttributeTypeCleanPipe } from './pipes/attribute-type-clean.pipe';
 import { NameSpaceToDefPipe } from './pipes/name-space-to-def.pipe';
 import { ApplicationReSendNotificationDialogComponent
@@ -267,7 +266,6 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     MatRippleModule,
     ApplicationStatePipe,
     MatPaginatorModule,
-    NotificatorComponent,
     AttributeTypeCleanPipe,
     NameSpaceToDefPipe,
     ApplicationFormItemTypePipe,
@@ -324,7 +322,6 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     DeleteGroupDialogComponent,
     SettingsToggleItemComponent,
     ApplicationStatePipe,
-    NotificatorComponent,
     AttributeTypeCleanPipe,
     NameSpaceToDefPipe,
     ApplicationReSendNotificationDialogComponent,

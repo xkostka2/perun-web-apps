@@ -39,7 +39,7 @@ export class RemoveCategoryDialogComponent implements OnInit {
         this.onSubmit();
       }, ()=> this.loading = false);
     }else {
-      this.translate.get('SUCCESS').subscribe(successMessage => {
+      this.translate.get('DIALOGS.REMOVE_CATEGORY.SUCCESS').subscribe(successMessage => {
         this.loading = false;
         this.notificator.showSuccess(successMessage);
         this.dialogRef.close(true);

@@ -63,7 +63,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRippleModule } from '@angular/material/core';
 import { ShowSshDialogComponent } from './components/dialogs/show-ssh-dialog/show-ssh-dialog.component';
 import { ApiInterceptor } from '@perun-web-apps/perun/services';
-import { NotificatorComponent } from './components/notificator/notificator.component';
 import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { ApiService } from '@perun-web-apps/perun/services';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -132,7 +131,6 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     MembershipListComponent,
     ValidateExpirationPipe,
     ShowSshDialogComponent,
-    NotificatorComponent,
     BreadcrumbsComponent,
     LocalizationLabelPipe,
     SettingsAuthenticationComponent,

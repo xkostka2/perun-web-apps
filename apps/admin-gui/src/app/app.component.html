@@ -2,7 +2,7 @@
   <mat-icon>alert</mat-icon>
   {{ warningMessage }}
 </div>
-<app-notificator></app-notificator>
+<perun-web-apps-notificator [displayWarning]="displayWarning"></perun-web-apps-notificator>
 <ng-template [ngIf]="!isLoginScreenShow">
   <app-perun-nav-menu
     id="nav-menu"

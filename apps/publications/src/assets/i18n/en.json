@@ -166,7 +166,8 @@
       "TITLE": "Confirm removal",
       "CANCEL": "Cancel",
       "REMOVE": "Remove",
-      "WARNING": "Following publications will be removed."
+      "WARNING": "Following publications will be removed.",
+      "REMOVE_SUCCESS": "Publication(s) was removed"
     },
     "ADD_THANKS": {
       "TITLE": "Add acknowledgement",
