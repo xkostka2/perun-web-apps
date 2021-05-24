@@ -11,6 +11,7 @@
   <perun-web-apps-authors-list
     *ngIf="!loading"
     [authors]="authors"
+    [displayedColumns]="['id', 'name', 'organization', 'email', 'numberOfPublications']"
     [filterValue]="filterValue"
     [pageSize]="pageSize"
     (page)="pageChanged($event)">

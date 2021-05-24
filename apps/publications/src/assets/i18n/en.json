@@ -33,7 +33,9 @@
     "ORGANIZATION": "Organization",
     "EMAIL": "Email",
     "NUMBER_OF_PUBLICATIONS": "Publications count",
-    "NO_AUTHORS": "No author were found."
+    "NO_AUTHORS": "No authors were found.",
+    "ADD": "Add",
+    "REMOVE": "Remove"
   },
   "AUTHOR_DETAIL": {
     "TITLE": " publications",
@@ -171,6 +173,22 @@
       "CANCEL": "Cancel",
       "ADD": "Add",
       "FILTER": "Filter"
+    },
+    "ADD_AUTHORS": {
+      "TITLE": "Add authors",
+      "SEARCH_PLACEHOLDER": "Search by name",
+      "EMPTY_SEARCH_MESSAGE": "Search field cannot be empty",
+      "SEARCH_INFO": "You can search authors by name",
+      "AUTHORS_TO_ADD": "Authors to add",
+      "NO_AUTHORS_TO_ADD": "No authors to add",
+      "SUCCESS_MESSAGE": "Authors successfully added",
+      "CANCEL": "Cancel",
+      "ADD": "Add"
+    },
+    "REMOVE_AUTHORS": {
+      "TITLE": "Remove authors",
+      "DESCRIPTION": "This action will remove these authors from publication.",
+      "SUCCESS_MESSAGE": "Authors successfully removed"
     }
   },
   "SHARED_LIB": {

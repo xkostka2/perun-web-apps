@@ -1,0 +1,76 @@
+<div class="user-theme">
+  <h1 mat-dialog-title>{{'DIALOGS.ADD_AUTHORS.TITLE' | translate}}</h1>
+  <div mat-dialog-content>
+    <mat-form-field class="mr-2 adjust-width">
+      <label>
+        <input matInput
+               autocomplete="false"
+               placeholder="{{'DIALOGS.ADD_AUTHORS.SEARCH_PLACEHOLDER' | translate}}"
+               (keyup.enter)="onSearchByString()"
+               [formControl]="searchControl">
+      </label>
+      <mat-error>
+        {{'DIALOGS.ADD_AUTHORS.EMPTY_SEARCH_MESSAGE' | translate }}
+      </mat-error>
+    </mat-form-field>
+    <button mat-flat-button
+            color="accent"
+            class="mr-2"
+            [disabled]="searchLoading || searchControl.value.trim() === ''"
+            (click)="onSearchByString()">
+      <mat-icon>search</mat-icon>
+    </button>
+    <div *ngIf="!loading">
+      <div *ngIf="!searchLoading">
+        <perun-web-apps-authors-list
+          *ngIf="firstSearchDone"
+          [authors]="authors"
+          (addAuthor)="addAuthor($event)"
+          [disableRouting]="true"
+          [pageSize]="pageSizeAuthors"
+          [displayedColumns]="['id', 'name', 'organization', 'email', 'add']"
+          (page)="pageChangedAuthors($event)">
+        </perun-web-apps-authors-list>
+        <app-alert *ngIf="!firstSearchDone" [alert_type]="'info'">
+          {{'DIALOGS.ADD_AUTHORS.SEARCH_INFO' | translate}}
+        </app-alert>
+      </div>
+      <mat-spinner *ngIf="searchLoading" class="ml-auto mr-auto"></mat-spinner>
+      <h2 mat-dialog-title class="top-margin">{{'DIALOGS.ADD_AUTHORS.AUTHORS_TO_ADD' | translate}}</h2>
+      <div *ngIf="firstSearchDone && authorsToAdd.length !== 0">
+        <perun-web-apps-authors-list
+          *ngIf="firstSearchDone"
+          [reloadTable]="reloadTable"
+          [authors]="authorsToAdd"
+          (removeAuthor)="removeAuthor($event)"
+          [disableRouting]="true"
+          [pageSize]="pageSizeAddAuthors"
+          [displayedColumns]="['id', 'name', 'organization', 'email', 'remove']"
+          (page)="pageChangedAuthorsToAdd($event)">
+        </perun-web-apps-authors-list>
+      </div>
+      <app-alert *ngIf="authorsToAdd.length === 0" [alert_type]="'warn'">
+        {{'DIALOGS.ADD_AUTHORS.NO_AUTHORS_TO_ADD' | translate}}
+      </app-alert>
+    </div>
+  </div>
+  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+
+  <div mat-dialog-actions>
+    <button
+      (click)="onCancel()"
+      class="ml-auto"
+      mat-flat-button>
+      {{'DIALOGS.ADD_AUTHORS.CANCEL' | translate}}
+    </button>
+    <button
+      (click)="onAdd()"
+      [disabled]="authorsToAdd.length === 0 || loading"
+      class="ml-2"
+      color="accent"
+      mat-flat-button>
+      {{'DIALOGS.ADD_AUTHORS.ADD' | translate}}
+    </button>
+  </div>
+
+</div>

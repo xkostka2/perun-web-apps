@@ -8,6 +8,7 @@ import {
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'perun-web-apps-authors-list',
@@ -25,11 +26,21 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
   @Input()
   pageSize = 10;
   @Input()
-  displayedColumns: string[] = ['id', 'name', 'organization', 'email', 'numberOfPublications'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'organization', 'email', 'numberOfPublications', 'add', 'remove'];
+  @Input()
+  disableRouting = false;
+  @Input()
+  reloadTable: boolean;
+  @Input()
+  selection: SelectionModel<Author>;
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
   @Output()
   page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  @Output()
+  addAuthor = new EventEmitter();
+  @Output()
+  removeAuthor = new EventEmitter();
 
   private sort: MatSort;
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
@@ -130,6 +141,19 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
       });
     }
     return attribute;
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: Author): string {
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  onAddClick(author: Author) {
+    this.addAuthor.emit(author);
+  }
+
+  onRemoveClick(author: Author) {
+    this.removeAuthor.emit(author);
   }
 
   ngAfterViewInit(): void {

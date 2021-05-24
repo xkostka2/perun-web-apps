@@ -39,6 +39,7 @@ import { PublicationDetailListComponent } from './components/publication-detail-
 import { ThanksListComponent } from './components/thanks-list/thanks-list.component';
 import { PerunLoginModule } from '@perun-web-apps/perun/login';
 import { AddThanksDialogComponent } from './dialogs/add-thanks-dialog/add-thanks-dialog.component';
+import { AddAuthorsDialogComponent } from './dialogs/add-authors-dialog/add-authors-dialog.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -88,7 +89,8 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     PublicationDetailComponent,
     PublicationDetailListComponent,
     ThanksListComponent,
-    AddThanksDialogComponent
+    AddThanksDialogComponent,
+    AddAuthorsDialogComponent,
   ],
   imports: [
     BrowserModule,
