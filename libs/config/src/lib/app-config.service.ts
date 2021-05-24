@@ -49,7 +49,6 @@ export class AppConfigService {
         // update theme for given entity
         this.setEntityTheme(ecc.entity, color);
       });
-
       resolve();
     }));
   }
@@ -95,6 +94,10 @@ export class AppConfigService {
       this.http.get('/assets/config/instanceConfig.json', { headers: this.getNoCacheHeaders() })
         .subscribe(config => {
           this.storeService.setInstanceConfig(config);
+          const branding = document.location.hostname;
+          if (config['brandings'] !== undefined && config['brandings'][branding] !== undefined) {
+            this.storeService.setBanding(branding);
+          }
           resolve();
         }, () => {
           console.log('instance config not detected');

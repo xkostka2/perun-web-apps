@@ -14,6 +14,7 @@ export class StoreService {
   private defaultConfig;
   private principal: PerunPrincipal;
   private initialPageId: number;
+  private branding = '';
 
   constructor() { }
 
@@ -49,6 +50,10 @@ export class StoreService {
     return this.get("member_profile_attributes_friendly_names");
   }
 
+  setBanding(branding: string) {
+    this.branding = branding;
+  }
+
   skipOidc(): boolean {
     return this.get('skip_oidc');
   }
@@ -61,7 +66,21 @@ export class StoreService {
   get(...keys: string[]) : any {
     let currentValue: string;
 
-    if (this.instanceConfig !== undefined) {
+    if (this.branding !== '') {
+      const brandingConfig = this.instanceConfig['brandings'][this.branding];
+      for (let i = 0; i < keys.length; ++i) {
+        if (i === 0) {
+          currentValue = brandingConfig[keys[i]];
+        } else {
+          if (currentValue === undefined) {
+            break;
+          }
+          currentValue = currentValue[keys[i]];
+        }
+      }
+    }
+
+    if (this.instanceConfig !== undefined && currentValue === undefined) {
       for (let i = 0; i < keys.length; ++i) {
         if (i === 0) {
           currentValue = this.instanceConfig[keys[i]];
