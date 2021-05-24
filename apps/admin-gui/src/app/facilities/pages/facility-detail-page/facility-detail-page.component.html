@@ -12,7 +12,7 @@
       </mat-icon>
       <div class="page-title-block">
         <div class="page-title-headline d-flex align-items-center">
-          <a class="facility-link" [routerLink]="['/facilities', facility.id]">{{facility.name}}</a>
+          <a class="facility-link" [routerLink]="['/facilities', facility.id]" queryParamsHandling="merge">{{facility.name}}</a>
           <span class="text-muted">
             &nbsp;#{{facility.id}}
           </span>

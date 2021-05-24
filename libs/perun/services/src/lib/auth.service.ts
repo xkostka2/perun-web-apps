@@ -255,7 +255,7 @@ export class AuthService {
       const elements = param.split('=');
       queryParams[elements[0]] = elements[1];
     })
-    if (!!redirectUrl || redirectUrl === '/login') {
+    if (!redirectUrl || redirectUrl === '/login') {
       redirectUrl = '/';
     }
     sessionStorage.removeItem('auth:redirect');

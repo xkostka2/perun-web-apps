@@ -2,7 +2,7 @@
 <div *ngIf="!loading">
   <p *ngIf="parentGroup !== null">
     {{'GROUP_DETAIL.SUBGROUP_INFO' | translate}}
-    <a class="group-link" [routerLink]="['/organizations', parentGroup.voId, 'groups', parentGroup.id]">
+    <a class="group-link" [routerLink]="['/organizations', parentGroup.voId, 'groups', parentGroup.id]" queryParamsHandling="merge">
       {{parentGroup.name}}
     </a>
   </p>

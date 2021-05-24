@@ -12,7 +12,7 @@
       </mat-icon>
       <div class="page-title-block">
         <div class="page-title-headline d-flex align-items-center">
-          <a class="group-link" [routerLink]="['/organizations', vo.id, 'groups', group.id]">
+          <a class="group-link" [routerLink]="['/organizations', vo.id, 'groups', group.id]" queryParamsHandling="merge">
             {{group.shortName}}
           </a>
           <span class="text-muted">
@@ -25,7 +25,7 @@
         <span class="mt-1 entity-info">
           {{'GROUP_DETAIL.ENTITY' | translate}},
           {{'GROUP_DETAIL.VO_NAME' | translate}}:
-          <a class="group-link" [routerLink]="['/organizations', vo.id]">{{vo.name}}</a>,
+          <a class="group-link" [routerLink]="['/organizations', vo.id]" queryParamsHandling="merge">{{vo.name}}</a>,
           {{'GROUP_DETAIL.DESCRIPTION' | translate}}: {{group.description}}
           <span *ngIf="syncEnabled">
             , {{'GROUP_DETAIL.SYNCHRONIZATION' | translate}}:

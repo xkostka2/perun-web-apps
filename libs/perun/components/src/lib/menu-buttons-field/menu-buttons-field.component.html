@@ -1,6 +1,6 @@
 <div *ngIf="size === 'small'" class="items-container">
   <div *ngFor="let item of items" class="item-itself-container" mat-ripple>
-    <a class="{{item.style}} item-itself" [routerLink]="item.url">
+    <a class="{{item.style}} item-itself" [routerLink]="item.url" queryParamsHandling="merge">
       <mat-icon [svgIcon]="item.cssIcon" class="item-pic perun-icon"></mat-icon>
   <!--    <img src="assets/img/PerunWebImages/{{item.icon}}" alt="{{item.label}}">-->
       {{item.label | translate}}

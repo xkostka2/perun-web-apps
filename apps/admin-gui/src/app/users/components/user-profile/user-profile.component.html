@@ -10,7 +10,7 @@
     </mat-icon>
     <div class="page-title-block">
       <div class="page-title-headline d-flex align-items-center">
-        <a [routerLink]="['/myProfile']" class="user-link">
+        <a [routerLink]="['/myProfile']" class="user-link" queryParamsHandling="merge">
           {{user | userFullName}}
         </a>
         <span class="text-muted">
