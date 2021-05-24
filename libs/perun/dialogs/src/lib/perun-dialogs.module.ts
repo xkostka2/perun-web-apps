@@ -80,7 +80,8 @@ import { MatTreeModule } from '@angular/material/tree';
     AttributeValueListEditDialogComponent,
     AttributeValueListDeleteDialogComponent,
     ChangeEmailDialogComponent,
-    UniversalRemoveItemsDialogComponent
+    UniversalRemoveItemsDialogComponent,
+    MemberTreeViewDialogComponent
   ]
 })
 export class PerunDialogsModule {

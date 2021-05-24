@@ -52,9 +52,9 @@ export class ChangeEmailDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    let currentUrl = window.location.href;
-    let splittedUrl = currentUrl.split("/");
-    let domain = splittedUrl[0] + "//" + splittedUrl[2]; // protocol with domain
+    const currentUrl = window.location.href;
+    const splittedUrl = currentUrl.split("/");
+    const domain = splittedUrl[0] + "//" + splittedUrl[2]; // protocol with domain
 
     this.usersManagerService.requestPreferredEmailChange(this.data.userId, this.emailControl.value,
       this.translate.currentLang, '', domain, this.authService.getIdpFilter()).subscribe(() => {

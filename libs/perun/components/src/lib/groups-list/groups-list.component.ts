@@ -183,7 +183,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       case 'id':
         return data.id.toString();
       case 'vo':
-        return this.voNames.get(data.voId);
+        return otherThis.voNames.get(data.voId);
       case 'name':
         return data.name;
       case 'description':
