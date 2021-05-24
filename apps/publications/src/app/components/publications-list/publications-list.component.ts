@@ -150,12 +150,11 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
 
   lockOrUnlockPublication(publication: PublicationForGUI) {
     this.cabinetService.lockPublications({publications: [this.createPublication(publication)], lock: !publication.locked}).subscribe(() => {
-      //bacha notifikace nefaka, chceme notifikace?
-      // if (publication.locked) {
-      //   this.notificator.showSuccess(this.changeLockMessage + this.unlocked);
-      // } else {
-      //   this.notificator.showSuccess(this.changeLockMessage + this.locked);
-      // }
+      if (publication.locked) {
+        this.notificator.showSuccess(this.changeLockMessage + this.unlocked);
+      } else {
+        this.notificator.showSuccess(this.changeLockMessage + this.locked);
+      }
       publication.locked = !publication.locked;
     });
   }

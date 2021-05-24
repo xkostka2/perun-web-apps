@@ -95,7 +95,9 @@
       "SYSTEM": "System"
     },
     "REMOVE_THANKS_DIALOG_TITLE": "Delete acknowledgements",
-    "REMOVE_THANKS_DIALOG_DESCRIPTION": "Following acknowledgements will be removed from publication."
+    "REMOVE_THANKS_DIALOG_DESCRIPTION": "Following acknowledgements will be removed from publication.",
+    "CHANGE_PUBLICATION_SUCCESS": "Publication was successfully changed",
+    "REMOVE_THANKS_SUCCESS": "Acknowledgements successfully removed"
   },
   "THANKS_LIST": {
     "ID": "Owner id",
@@ -166,13 +168,15 @@
       "TITLE": "Confirm removal",
       "CANCEL": "Cancel",
       "REMOVE": "Remove",
-      "WARNING": "Following publications will be removed."
+      "WARNING": "Following publications will be removed.",
+      "REMOVE_SUCCESS": "Publication(s) was removed"
     },
     "ADD_THANKS": {
       "TITLE": "Add acknowledgement",
       "CANCEL": "Cancel",
       "ADD": "Add",
-      "FILTER": "Filter"
+      "FILTER": "Filter",
+      "SUCCESS": "Acknowledgements successfully added"
     },
     "ADD_AUTHORS": {
       "TITLE": "Add authors",

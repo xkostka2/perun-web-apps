@@ -79,6 +79,7 @@ import { DebounceFilterComponent } from './debounce-filter/debounce-filter.compo
 import { MembersDynamicListComponent } from './members-dynamic-list/members-dynamic-list.component';
 import { AppFormItemSearchSelectComponent } from './app-form-item-search-select/app-form-item-search-select.component';
 import { OwnersListComponent } from './owners-list/owners-list.component';
+import { NotificatorComponent } from './notificator/notificator.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -188,7 +189,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     DebounceFilterComponent,
     MembersDynamicListComponent,
     AppFormItemSearchSelectComponent,
-    OwnersListComponent
+    OwnersListComponent,
+    NotificatorComponent
   ],
   exports: [
     VosListComponent,
@@ -234,7 +236,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     DebounceFilterComponent,
     MembersDynamicListComponent,
     AppFormItemSearchSelectComponent,
-    OwnersListComponent
+    OwnersListComponent,
+    NotificatorComponent
   ],
   providers: [
     { provide: DateAdapter, useClass: AppDateAdapter },
