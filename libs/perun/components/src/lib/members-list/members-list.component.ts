@@ -21,9 +21,8 @@ import {
   parseFullName, parseLogins, parseOrganization,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
-import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { ChangeMemberStatusDialogComponent, MemberTreeViewDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
-import { MemberTreeViewDialogComponent } from '../../../../dialogs/src/lib/member-tree-view-dialog/member-tree-view-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

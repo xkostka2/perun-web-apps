@@ -50,7 +50,7 @@ export class MemberTreeViewDialogComponent implements OnInit {
         }
         index++;
         if (!path[index].name.includes(path[index - 1].name)) {
-          const newNode: GroupNode = {
+          const childrenNode: GroupNode = {
             name: path[index].name,
             id: path[index - 1].id,
             description: path[index].description,
@@ -59,7 +59,7 @@ export class MemberTreeViewDialogComponent implements OnInit {
             level: index,
             children: []
           };
-          currentTree[i].children = [newNode].concat(currentTree[i].children);
+          currentTree[i].children = [childrenNode].concat(currentTree[i].children);
         } else {
           currentTree[i].children = this.recursiveSearch(currentTree[i].children, path, index);
         }

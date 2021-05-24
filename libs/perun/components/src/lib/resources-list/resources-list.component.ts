@@ -162,10 +162,11 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   setAuth() {
+    const objects = !!this.groupToResource ? [this.groupToResource] : [];
     this.removeAuth = this.selection.selected.reduce((acc, res) => acc &&
-      this.guiAuthResolver.isAuthorized('removeGroupFromResources_Group_List<Resource>_policy', [res, this.groupToResource]), true);
+      this.guiAuthResolver.isAuthorized('removeGroupFromResources_Group_List<Resource>_policy', objects.concat([res])), true);
     this.addAuth = this.selection.selected.reduce((acc, res) => acc &&
-      this.guiAuthResolver.isAuthorized('assignGroupToResources_Group_List<Resource>_policy', [res, this.groupToResource]), true);
+      this.guiAuthResolver.isAuthorized('assignGroupToResources_Group_List<Resource>_policy', objects.concat([res])), true);
   }
 
   itemSelectionToggle(item: RichResource) {
