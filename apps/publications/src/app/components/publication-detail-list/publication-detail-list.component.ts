@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Author, CabinetManagerService, Category, PublicationForGUI } from '@perun-web-apps/perun/openapi';
+import { CabinetManagerService, Category, PublicationForGUI } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Moment } from 'moment';
 import { FormControl, Validators } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import * as _moment from 'moment';
-import { parseFullName } from '@perun-web-apps/perun/utils';
+import { NotificatorService } from '@perun-web-apps/perun/services';
+import { TranslateService } from '@ngx-translate/core';
 
 const moment =  _moment;
 
@@ -38,7 +39,9 @@ export const YEAR_MODE_FORMATS = {
 })
 export class PublicationDetailListComponent implements OnInit {
 
-  constructor(private cabinetService: CabinetManagerService) { }
+  constructor(private cabinetService: CabinetManagerService,
+              private notificator: NotificatorService,
+              private translate: TranslateService) { }
 
   @Input()
   publication: PublicationForGUI
@@ -117,8 +120,11 @@ export class PublicationDetailListComponent implements OnInit {
     };
 
     this.cabinetService.updatePublication({publication: updatedPublication}).subscribe(() => {
-      this.edited.emit(true);
-      this.loading = false;
+      this.translate.get('PUBLICATION_DETAIL.CHANGE_PUBLICATION_SUCCESS').subscribe(success => {
+        this.notificator.showSuccess(success);
+        this.edited.emit(true);
+        this.loading = false;
+      });
     }, () => this.loading = false);
   }
 

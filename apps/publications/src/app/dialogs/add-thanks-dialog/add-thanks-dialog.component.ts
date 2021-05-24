@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { StoreService } from '@perun-web-apps/perun/services';
+import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import {
   CabinetManagerService,
   Owner,
@@ -10,6 +10,7 @@ import {
 import { SelectionModel } from '@angular/cdk/collections';
 import { PageEvent } from '@angular/material/paginator';
 import { TABLE_ADD_THANKS_DIALOG, TableConfigService } from '@perun-web-apps/config/table-config';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'perun-web-apps-add-thanks-dialog',
@@ -23,6 +24,8 @@ export class AddThanksDialogComponent implements OnInit {
               private ownersManagerService: OwnersManagerService,
               private storeService: StoreService,
               private tableConfigService: TableConfigService,
+              private notificator: NotificatorService,
+              private translate: TranslateService,
               private cabinetManagerService: CabinetManagerService) { }
 
   loading: boolean;
@@ -55,7 +58,10 @@ export class AddThanksDialogComponent implements OnInit {
   onSubmit() {
     this.loading = true;
     if (this.selected.selected.length === 0) {
-      this.dialogRef.close(true);
+      this.translate.get('DIALOGS.ADD_THANKS.SUCCESS').subscribe(success => {
+        this.notificator.showSuccess(success);
+        this.dialogRef.close(true);
+      });
     } else {
       this.cabinetManagerService.createThanks({thanks: {publicationId: this.data.id, ownerId: this.selected.selected.pop().id,
           createdBy: this.storeService.getPerunPrincipal().actor, createdByUid: this.storeService.getPerunPrincipal().userId,

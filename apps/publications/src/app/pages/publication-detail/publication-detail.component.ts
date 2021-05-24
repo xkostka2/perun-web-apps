@@ -214,7 +214,10 @@ export class PublicationDetailComponent implements OnInit {
 
   removeThank() {
     if (this.selectionThanks.selected.length === 0) {
-      this.refreshThanks();
+      this.translate.get('PUBLICATION_DETAIL.REMOVE_THANKS_SUCCESS').subscribe(success => {
+        this.notificator.showSuccess(success);
+        this.refreshThanks();
+      });
     } else {
       this.cabinetService.deleteThanks(this.selectionThanks.selected.pop().id).subscribe(() => {
         this.removeThank();
@@ -260,7 +263,10 @@ export class PublicationDetailComponent implements OnInit {
 
     this.cabinetService.lockPublications(
       {publications: [updatedPublication], lock: !this.publication.locked}).subscribe(() => {
-        this.refreshPublication();
+        this.translate.get('PUBLICATION_DETAIL.CHANGE_PUBLICATION_SUCCESS').subscribe(success => {
+          this.notificator.showSuccess(success);
+          this.refreshPublication();
+        });
     });
   }
 
