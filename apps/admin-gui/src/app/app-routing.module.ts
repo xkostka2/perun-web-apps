@@ -8,7 +8,7 @@ import { LoginScreenComponent } from '@perun-web-apps/perun/login';
 
 const routes: Routes = [
   {
-    path: '', redirectTo: '/home', pathMatch: 'full'
+    path: '', redirectTo: 'home', pathMatch: 'full'
   },
   {
     path: 'redirect',

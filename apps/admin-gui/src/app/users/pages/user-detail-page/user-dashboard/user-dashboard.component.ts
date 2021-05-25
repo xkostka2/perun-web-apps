@@ -5,8 +5,10 @@ import {
   User,
   UsersManagerService
 } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { SideMenuService } from '../../../../core/services/common/side-menu.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-perun-web-apps-user-dashboard',
@@ -22,7 +24,14 @@ export class UserDashboardComponent implements OnInit {
               private guiAuthResolver: GuiAuthResolver,
               private facilitiesService: FacilitiesManagerService,
               private resourcesService: ResourcesManagerService,
-              private sideMenuService: SideMenuService) { }
+              private sideMenuService: SideMenuService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private notificator: NotificatorService,
+              public translateService: TranslateService
+  ) {
+    translateService.get('USER_DETAIL.DASHBOARD.MAIL_CHANGE_SUCCESS').subscribe(res => this.mailSuccessMessage = res);
+  }
 
 
   user: User;
@@ -35,8 +44,11 @@ export class UserDashboardComponent implements OnInit {
   rolesToHide: string[] = [];
   allowedRoles = ['VOADMIN', 'GROUPADMIN', 'FACILITYADMIN', 'SPONSOR', 'RESOURCEADMIN', 'TOPGROUPCREATOR',
     'VOOBSERVER', 'GROUPOBSERVER', 'FACILITYOBSERVER', 'RESOURCEOBSERVER'];
+  mailSuccessMessage: string;
 
   ngOnInit() {
+    this.validatePreferredMailChange();
+
     this.user = this.storeService.getPerunPrincipal().user;
     this.roles = this.storeService.getPerunPrincipal().roles;
     this.userProfileUrl = this.storeService.get('user_profile_url');
@@ -47,6 +59,18 @@ export class UserDashboardComponent implements OnInit {
     });
     this.getDashboardSettings();
     this.sideMenuService.setHomeItems([]);
+  }
+
+  private validatePreferredMailChange() {
+    const params = this.route.snapshot.queryParamMap;
+    const token = params.get('token');
+    const u = params.get('u');
+    if (token && u) {
+      this.userManager.validatePreferredEmailChangeWithToken(token, Number.parseInt(u, 10)).subscribe(() => {
+        this.notificator.showSuccess(this.mailSuccessMessage);
+        this.router.navigate([], { replaceUrl: true });
+      });
+    }
   }
 
   goToUserProfile() {
