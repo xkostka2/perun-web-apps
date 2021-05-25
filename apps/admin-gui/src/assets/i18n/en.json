@@ -2041,7 +2041,8 @@
       "ROLE_INFO_RESOURCEOBSERVER": "You can observe resources that are listed below",
       "DASHBOARD_SETTINGS": "Dashboard Settings",
       "SHOW_RECENTLY_VIEWED": "Show Recently viewed",
-      "SHOW_ROLES": "Show roles"
+      "SHOW_ROLES": "Show roles",
+      "MAIL_CHANGE_SUCCESS": "Preferred mail has been changed"
     },
     "OVERVIEW": {
       "GENERAL_SETTINGS": "General settings"
