@@ -26,8 +26,10 @@ export class RemoveResourceDialogComponent implements OnInit {
   displayedColumns: string[] = ['name'];
   dataSource: MatTableDataSource<RichResource>;
   loading = false;
+  theme: string;
 
   ngOnInit() {
+    this.theme = this.data.theme;
     this.dataSource = new MatTableDataSource<RichResource>(this.data.resources);
   }
 
@@ -35,7 +37,7 @@ export class RemoveResourceDialogComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  onSubmit() {
+  onDelete() {
     this.loading = true;
     if (this.data.resources.length === 0) {
       this.translate.get('DIALOGS.REMOVE_RESOURCES.SUCCESS').subscribe(successMessage => {
@@ -46,10 +48,18 @@ export class RemoveResourceDialogComponent implements OnInit {
     } else {
       this.resourcesManager.deleteResource(this.data.resources[0].id).subscribe( () => {
         this.data.resources.shift();
-        this.onSubmit();
+        this.onDelete();
       }, () => {
         this.dialogRef.close(true);
       });
+    }
+  }
+
+  onSubmit(result: {deleted: boolean, force: boolean}) {
+    if(result.deleted){
+      this.onDelete();
+    } else{
+      this.onCancel();
     }
   }
 

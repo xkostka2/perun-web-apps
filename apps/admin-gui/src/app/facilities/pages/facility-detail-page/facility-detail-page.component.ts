@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeIn } from '@perun-web-apps/perun/animations';
 import { SideMenuService } from '../../../core/services/common/side-menu.service';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
@@ -11,6 +11,7 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
+import { DeleteFacilityDialogComponent } from '../../../shared/components/dialogs/delete-facility-dialog/delete-facility-dialog.component';
 
 @Component({
   selector: 'app-facility-detail-page',
@@ -28,12 +29,14 @@ export class FacilityDetailPageComponent implements OnInit {
     private route: ActivatedRoute,
     private sideMenuService: SideMenuService,
     private sideMenuItemService: SideMenuItemService,
-    public guiAuthResolver:GuiAuthResolver
+    public guiAuthResolver:GuiAuthResolver,
+    private router: Router
   ) {
   }
 
   facility: Facility;
   editFacilityAuth = false;
+  deleteAuth = false;
   loading = false;
 
   ngOnInit() {
@@ -48,6 +51,7 @@ export class FacilityDetailPageComponent implements OnInit {
         this.sideMenuService.setFacilityMenuItems([facilityItem]);
 
         this.editFacilityAuth = this.guiAuthResolver.isAuthorized('updateFacility_Facility_policy',[this.facility]);
+        this.deleteAuth = this.guiAuthResolver.isAuthorized('deleteFacility_Facility_Boolean_policy',[this.facility]);
 
         addRecentlyVisited('facilities', this.facility);
         addRecentlyVisitedObject(this.facility);
@@ -71,6 +75,22 @@ export class FacilityDetailPageComponent implements OnInit {
         this.facilityManager.getFacilityById(this.facility.id).subscribe(facility => {
           this.facility = facility;
         });
+      }
+    });
+  }
+
+  deleteFacility() {
+    const config = getDefaultDialogConfig();
+    config.width = '500px';
+    config.data = {
+      theme: 'facility-theme',
+      facility: this.facility,
+    };
+    const dialogRef = this.dialog.open(DeleteFacilityDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['']);
       }
     });
   }

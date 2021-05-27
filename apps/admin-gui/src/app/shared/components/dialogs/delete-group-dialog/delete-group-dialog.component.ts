@@ -28,23 +28,36 @@ export class DeleteGroupDialogComponent implements OnInit {
   dataSource: MatTableDataSource<Group>;
   theme: string;
   loading = false;
+  relations: string[] = [];
+  force = false;
 
   ngOnInit() {
     this.theme = this.data.theme;
     this.dataSource = new MatTableDataSource<Group>(this.data.groups);
+    this.relations.push(this.translate.instant('DIALOGS.DELETE_GROUP.SUBGROUP_RELATION'));
+    this.relations.push(this.translate.instant('DIALOGS.DELETE_GROUP.MEMBER_RELATION'));
   }
 
   onCancel() {
     this.dialogRef.close(false);
   }
 
-  onSubmit() {
+  onDelete() {
     this.loading = true;
-    this.groupService.deleteGroups(this.data.groups.map(elem => elem.id), true).subscribe( () => {
+    this.groupService.deleteGroups(this.data.groups.map(elem => elem.id), this.force).subscribe( () => {
       this.translate.get('DIALOGS.DELETE_GROUP.SUCCESS').subscribe(successMessage => {
         this.notificator.showSuccess(successMessage);
         this.dialogRef.close(true);
       }, () => this.loading = false);
     }, () => this.loading = false);
+  }
+
+  onSubmit(result: {deleted: boolean, force: boolean}) {
+    this.force = result.force;
+    if(result.deleted){
+      this.onDelete();
+    } else{
+      this.onCancel();
+    }
   }
 }

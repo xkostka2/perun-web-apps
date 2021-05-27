@@ -30,16 +30,19 @@ export class DeleteFacilityDialogComponent implements OnInit {
   displayedColumns: string[] = ['name'];
   dataSource: MatTableDataSource<Facility>;
   loading = false;
+  force = false;
+  relations: string[] = [];
 
   ngOnInit(): void {
     this.theme = this.data.theme;
     this.facility = this.data.facility;
     this.dataSource = new MatTableDataSource<Facility>([this.facility]);
+    this.relations.push(this.translate.instant('DIALOGS.DELETE_FACILITY.RESOURCE_RELATION'));
   }
 
   onConfirm() {
     this.loading = true;
-    this.facilitiesManager.deleteFacility(this.facility.id).subscribe(() => {
+    this.facilitiesManager.deleteFacility(this.facility.id, this.force).subscribe(() => {
       this.notificator.showSuccess(this.translate.instant('DIALOGS.DELETE_FACILITY.SUCCESS'));
       this.dialogRef.close(true);
     }, () => this.loading = false);
@@ -47,5 +50,14 @@ export class DeleteFacilityDialogComponent implements OnInit {
 
   onCancel() {
     this.dialogRef.close(false);
+  }
+
+  onSubmit(result: {deleted: boolean, force: boolean}) {
+    this.force = result.force;
+    if(result.deleted){
+      this.onConfirm();
+    } else{
+      this.onCancel();
+    }
   }
 }

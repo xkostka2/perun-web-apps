@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { fadeIn } from '@perun-web-apps/perun/animations';
 import { SideMenuService } from '../../../core/services/common/side-menu.service';
 import { SideMenuItemService } from '../../../shared/side-menu/side-menu-item.service';
@@ -18,6 +18,7 @@ import {
   EditFacilityResourceGroupVoDialogComponent,
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
+import { RemoveResourceDialogComponent } from '../../../shared/components/dialogs/remove-resource-dialog/remove-resource-dialog.component';
 
 @Component({
   selector: 'app-resource-detail-page',
@@ -37,7 +38,8 @@ export class ResourceDetailPageComponent implements OnInit {
     private sideMenuService: SideMenuService,
     private sideMenuItemService: SideMenuItemService,
     private dialog: MatDialog,
-    public guiAuthResolver:GuiAuthResolver
+    public guiAuthResolver:GuiAuthResolver,
+    private router: Router
   ) {
   }
 
@@ -45,6 +47,7 @@ export class ResourceDetailPageComponent implements OnInit {
   facilityLinkAuth: boolean;
   editResourceAuth: boolean;
   voLinkAuth: boolean;
+  deleteAuth = false;
   baseUrl = '';
   loading = false;
 
@@ -83,6 +86,7 @@ export class ResourceDetailPageComponent implements OnInit {
     this.facilityLinkAuth = this.guiAuthResolver.isAuthorized('getFacilityById_int_policy',[this.resource]);
     this.editResourceAuth = this.guiAuthResolver.isAuthorized('updateResource_Resource_policy',[this.resource]);
     this.voLinkAuth = this.guiAuthResolver.isAuthorized('getVoById_int_policy',[this.resource]);
+    this.deleteAuth = this.guiAuthResolver.isAuthorized('deleteResource_Resource_policy',[this.resource]);
   }
 
   editResource() {
@@ -105,6 +109,22 @@ export class ResourceDetailPageComponent implements OnInit {
           });
         }
       });
+    });
+  }
+
+  deleteResource() {
+    const config = getDefaultDialogConfig();
+    config.width = '500px';
+    config.data = {
+      theme: 'resource-theme',
+      resources: [this.resource],
+    };
+    const dialogRef = this.dialog.open(RemoveResourceDialogComponent, config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.router.navigate(['../'], { relativeTo: this.route });
+      }
     });
   }
 }

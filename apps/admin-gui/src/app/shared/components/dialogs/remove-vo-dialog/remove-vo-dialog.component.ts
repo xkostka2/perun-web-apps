@@ -35,16 +35,21 @@ export class RemoveVoDialogComponent implements OnInit {
   displayedColumns: string[] = ['name'];
   dataSource: MatTableDataSource<Vo>;
 
+  relations: string[] = []
+
   ngOnInit() {
     this.theme = this.data.theme;
     this.dataSource = new MatTableDataSource<Vo>(this.data.vos);
+    this.relations.push(this.translate.instant('DIALOGS.REMOVE_VO.GROUP_RELATION'));
+    this.relations.push(this.translate.instant('DIALOGS.REMOVE_VO.MEMBER_RELATION'));
+    this.relations.push(this.translate.instant('DIALOGS.REMOVE_VO.RESOURCE_RELATION'));
   }
 
   onCancel() {
     this.dialogRef.close(false);
   }
 
-  onSubmit() {
+  onDelete() {
     this.loading = true;
     //TODO Works for one Vo at the time, in future there may be need to remove  more Vos at once
     this.voService.deleteVo(this.data.vos[0].id, this.force).subscribe(() => {
@@ -52,7 +57,15 @@ export class RemoveVoDialogComponent implements OnInit {
       this.loading = false;
       this.dialogRef.close(true);
     }, () => this.loading = false);
+  }
 
+  onSubmit(result: {deleted: boolean, force: boolean}) {
+    this.force = result.force;
+    if(result.deleted){
+      this.onDelete();
+    } else{
+      this.onCancel();
+    }
   }
 
 }

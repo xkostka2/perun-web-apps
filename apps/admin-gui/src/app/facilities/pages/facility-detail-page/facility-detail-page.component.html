@@ -19,6 +19,12 @@
           <button mat-icon-button *ngIf="editFacilityAuth" (click)="editFacility()">
             <mat-icon>edit</mat-icon>
           </button>
+          <button
+            *ngIf="deleteAuth"
+            mat-icon-button
+            (click)="deleteFacility()">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
         </div>
         <span class="mt-1 entity-info">
           {{'FACILITY_DETAIL.ENTITY' | translate}},
