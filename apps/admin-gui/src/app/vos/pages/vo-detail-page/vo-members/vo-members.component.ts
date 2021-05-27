@@ -1,5 +1,4 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { SideMenuService } from '../../../../core/services/common/side-menu.service';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -8,19 +7,17 @@ import {
   NotificatorService,
   StoreService
 } from '@perun-web-apps/perun/services';
-import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RemoveMembersDialogComponent } from '../../../../shared/components/dialogs/remove-members-dialog/remove-members-dialog.component';
 import { AddMemberDialogComponent } from '../../../../shared/components/dialogs/add-member-dialog/add-member-dialog.component';
 import {
   AttributesManagerService,
-  MembersManagerService,
   RichMember,
   Vo,
   VosManagerService
 } from '@perun-web-apps/perun/openapi';
 import { Urns } from '@perun-web-apps/perun/urns';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { TABLE_VO_MEMBERS, TableConfigService } from '@perun-web-apps/config/table-config';
 import { PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
@@ -105,7 +102,7 @@ export class VoMembersComponent implements OnInit {
 
     this.removeAuth = this.authzService.isAuthorized('deleteMembers_List<Member>_policy', [this.vo]);
 
-    this.hideColumns = this.removeAuth ? ['groupStatus', 'sponsored', 'type'] : ['checkbox', 'groupStatus', 'sponsored', 'type'];
+    this.hideColumns = this.removeAuth ? ['groupStatus'] : ['checkbox', 'groupStatus'];
 
     if(this.members !== null && this.members.length !== 0){
       this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0]]);

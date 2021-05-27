@@ -11,7 +11,7 @@ import {MatSort} from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
-import { RichMember, VoMemberStatuses } from '@perun-web-apps/perun/openapi';
+import { MemberGroupStatus, RichMember, VoMemberStatuses } from '@perun-web-apps/perun/openapi';
 import {
   downloadData, getDataForExport,
   getDefaultDialogConfig, parseEmail, parseFullName, parseLogins, parseOrganization,
@@ -43,9 +43,6 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
   @ViewChild(MatSort) sort: MatSort;
 
   @Input()
-  showGroupStatuses: boolean;
-
-  @Input()
   selection: SelectionModel<RichMember>;
 
   @Input()
@@ -56,6 +53,12 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
   @Input()
   voId: number;
+
+  @Input()
+  groupId: number;
+
+  @Input()
+  selectedGroupStatuses: MemberGroupStatus[] = [];
 
   @Input()
   attrNames: string[];
@@ -74,7 +77,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
   exporting = false;
 
-  displayedColumns: string[] = ['checkbox', 'id', 'fullName', 'status', 'organization', 'email', 'logins'];
+  displayedColumns: string[] = ['checkbox', 'id', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
   dataSource: MembersDataSource;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -96,7 +99,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
     this.dataSource = new MembersDataSource(this.dynamicPaginatingService, this.authResolver);
     this.dataSource.loadMembers(this.voId, this.attrNames,'ASCENDING', 0, this.pageSize,
-      'NAME', this.selectedStatuses, this.searchString);
+      'NAME', this.selectedStatuses, this.searchString, this.groupId, this.selectedGroupStatuses);
   }
 
   ngOnChanges() {
@@ -149,7 +152,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
     const sortDirection = this.sort.direction === 'asc' ? 'ASCENDING' : 'DESCENDING';
     const sortColumn = this.sort.active === 'fullName' ? 'NAME' : 'ID';
     this.dataSource.loadMembers(this.voId, this.attrNames, sortDirection, this.paginator.pageIndex,
-      this.paginator.pageSize, sortColumn,  this.selectedStatuses, this.searchString);
+      this.paginator.pageSize, sortColumn,  this.selectedStatuses, this.searchString, this.groupId, this.selectedGroupStatuses);
   }
 
   exportData(format: string) {
@@ -166,7 +169,9 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
         }
         return ''
       case 'status':
-        return outerThis.showGroupStatuses ? data.groupStatus : data.status;
+        return data.status;
+      case 'groupStatus':
+        return data.groupStatus;
       case 'organization':
         return parseOrganization(data);
       case 'email':

@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   ApiRequestConfigurationService,
@@ -14,7 +14,6 @@ import { RemoveMembersDialogComponent } from '../../../../shared/components/dial
 import {
   AttributesManagerService,
   GroupsManagerService,
-  MembersManagerService,
   RichGroup,
   RichMember
 } from '@perun-web-apps/perun/openapi';
@@ -39,32 +38,26 @@ export class GroupMembersComponent implements OnInit {
   constructor(
     private groupService: GroupsManagerService,
     protected route: ActivatedRoute,
-    protected router: Router,
     private tableConfigService: TableConfigService,
     private dialog: MatDialog,
     private guiAuthResolver: GuiAuthResolver,
     private storeService: StoreService,
-    private membersManager: MembersManagerService,
     private attributesManager: AttributesManagerService,
     private apiRequest: ApiRequestConfigurationService,
     private notificator: NotificatorService
   ) { }
 
   group: RichGroup;
-
-  members: RichMember[] = null;
   selection: SelectionModel<RichMember>;
   synchEnabled = false;
-
-  searchControl: FormControl;
-  firstSearchDone = false;
-
+  searchString: string;
+  updateTable = false;
   loading = false;
-  data: 'search' | 'all';
+  searchControl: FormControl;
 
   tableId = TABLE_GROUP_MEMBERS;
 
-  private memberAttrNames = [
+  memberAttrNames = [
     Urns.MEMBER_DEF_ORGANIZATION,
     Urns.MEMBER_DEF_MAIL,
     Urns.USER_DEF_ORGANIZATION,
@@ -85,10 +78,9 @@ export class GroupMembersComponent implements OnInit {
 
   addAuth: boolean;
   removeAuth: boolean;
-  routeAuth: boolean;
   inviteAuth: boolean;
-  hideColumns: String[] = [];
   blockManualMemberAdding: boolean;
+  hideColumns = [];
 
   statuses = new FormControl();
   statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
@@ -100,7 +92,7 @@ export class GroupMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.searchControl = new FormControl('', [Validators.required, Validators.pattern('.*[\\S]+.*')]);
+    this.searchControl = new FormControl('', [Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.selection = new SelectionModel<RichMember>(true, []);
     this.statuses.setValue(this.selectedStatuses);
@@ -118,12 +110,7 @@ export class GroupMembersComponent implements OnInit {
       this.group = group;
       this.synchEnabled = this.isSynchronized();
       this.setAuthRights();
-      this.groupService.getGroupMembersCount(this.group.id).subscribe( count => {
-        if(count < 400) {
-          this.onListAll();
-        }
-        this.loading = false;
-      });
+      this.loading = false;
     });
   }
 
@@ -135,28 +122,13 @@ export class GroupMembersComponent implements OnInit {
   setAuthRights() {
     this.addAuth = this.guiAuthResolver.isAuthorized('addMembers_Group_List<Member>_policy', [this.group]);
     this.removeAuth = this.guiAuthResolver.isAuthorized('removeMembers_Group_List<Member>_policy', [this.group]);
-    this.routeAuth = this.guiAuthResolver.isAuthorized('getMemberById_int_policy', [this.group]);
+    this.hideColumns = this.removeAuth ? [] : ['checkbox'];
     this.inviteAuth = this.guiAuthResolver.isAuthorized('group-sendInvitation_Vo_Group_String_String_String_policy', [this.group]);
-    this.hideColumns = this.removeAuth ? ['sponsored'] : ['checkbox', 'sponsored'];
   }
 
 
   onSearchByString() {
-    if (this.searchControl.invalid) {
-      this.searchControl.markAllAsTouched();
-      return;
-    }
-    this.data = 'search';
-    this.firstSearchDone = true;
-
-    this.refreshTable();
-  }
-
-  onListAll() {
-    this.data = 'all';
-    this.firstSearchDone = true;
-
-    this.refreshTable();
+    this.searchString = this.searchControl.value;
   }
 
   onAddMember() {
@@ -172,9 +144,10 @@ export class GroupMembersComponent implements OnInit {
 
     const dialogRef = this.dialog.open(AddMemberDialogComponent, config);
 
-    dialogRef.afterClosed().subscribe(() => {
-      if (this.firstSearchDone) {
-        this.refreshTable();
+    dialogRef.afterClosed().subscribe((success) => {
+      if(success) {
+        this.selection.clear();
+        this.updateTable = !this.updateTable;
       }
     });
   }
@@ -198,7 +171,8 @@ export class GroupMembersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(wereMembersDeleted => {
       if (wereMembersDeleted) {
-        this.refreshTable();
+        this.selection.clear();
+        this.updateTable = !this.updateTable;
       }
     });
   }
@@ -212,43 +186,8 @@ export class GroupMembersComponent implements OnInit {
       theme: 'group-theme'
     };
 
-    const dialogRef = this.dialog.open(InviteMemberDialogComponent, config);
+    this.dialog.open(InviteMemberDialogComponent, config);
 
-    dialogRef.afterClosed().subscribe(inviteSent => {
-      if (inviteSent) {
-        this.refreshTable();
-      }
-    });
-  }
-
-  refreshTable() {
-    this.loading = true;
-    this.selection.clear();
-    switch (this.data) {
-      case 'all': {
-        this.membersManager.getCompleteRichMembersForGroup(this.group.id, false, this.selectedStatuses, this.selectedGroupStatuses, this.memberAttrNames).subscribe(
-          members => {
-          this.members = members;
-          this.setAuthRights();
-          this.loading = false;
-        },
-          () => this.loading = false
-        );
-        break;
-      }
-      case 'search': {
-        this.membersManager.findCompleteRichMembersForGroup(this.group.id, this.memberAttrNames, this.searchControl.value, false, this.selectedStatuses, this.selectedGroupStatuses).subscribe(
-          members => {
-            this.members = members;
-            this.setAuthRights();
-            this.loading = false;
-          },
-          () => this.loading = false
-        );
-        break;
-      }
-      default: this.loading = false;
-    }
   }
 
   pageChanged(event: PageEvent) {
@@ -300,5 +239,13 @@ export class GroupMembersComponent implements OnInit {
         resolve();
       });
     });
+  }
+
+  changeVoStatuses() {
+    this.selectedStatuses = this.statuses.value;
+  }
+
+  changeGroupStatuses() {
+    this.selectedGroupStatuses = this.groupStatuses.value;
   }
 }

@@ -12,6 +12,7 @@
 import { MembersOrderColumn } from './membersOrderColumn';
 import { VoMemberStatuses } from './voMemberStatuses';
 import { SortingOrder } from './sortingOrder';
+import { MemberGroupStatus } from './memberGroupStatus';
 
 
 export interface MembersPageQuery { 
@@ -21,5 +22,7 @@ export interface MembersPageQuery {
     sortColumn: MembersOrderColumn;
     searchString?: string;
     statuses?: Array<VoMemberStatuses>;
+    groupId?: number;
+    groupStatuses?: Array<MemberGroupStatus>;
 }
 

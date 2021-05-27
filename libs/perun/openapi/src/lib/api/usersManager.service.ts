@@ -2380,12 +2380,12 @@ export class UsersManagerService {
     }
 
     /**
-     * Request to change preferred email address of user. Validation mail is sent on new address. Change is not saved until user validate new email address by calling validatePreferredEmailChange() method with proper set of parameters (sent in validation mail).
+     * Request to change preferred email address of user. Validation mail is sent on new address. Change is not saved until user validate new email address by calling validatePreferredEmailChange() method with proper set of parameters (sent in validation mail). Provide eiher linkPath (appended to referer) or whole custom url. Combination of linkPath and customUrl is not supported.
      * @param user id of User
      * @param email new email address to set
      * @param lang language to get confirmation mail in (optional)
-     * @param linkPath path that is appended to the url of the verification link (optional)
-     * @param customUrl url to verification link (optional)
+     * @param linkPath path that is appended to the referer and creates the verification link (optional)
+     * @param customUrl url to verification link containing path (optional)
      * @param idpFilter authentication method appended to query parameters of verification link (optional)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
