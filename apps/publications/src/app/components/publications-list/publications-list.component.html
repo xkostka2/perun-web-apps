@@ -41,16 +41,16 @@
             <button mat-icon-button
                     *ngIf="publication.locked"
                     (click)="lockOrUnlockPublication(publication)"
-                    (mouseenter)="disabledRouting = true"
-                    (mouseleave)="disabledRouting = false"
+                    (mouseenter)="buttonPressed = true"
+                    (mouseleave)="buttonPressed = false"
                     matTooltip="{{'PUBLICATIONS_LIST.LOCKED' | translate}}">
               <mat-icon>lock</mat-icon>
             </button>
             <button mat-icon-button
                     *ngIf="!publication.locked"
                     (click)="lockOrUnlockPublication(publication)"
-                    (mouseenter)="disabledRouting = true"
-                    (mouseleave)="disabledRouting = false"
+                    (mouseenter)="buttonPressed = true"
+                    (mouseleave)="buttonPressed = false"
                     matTooltip="{{'PUBLICATIONS_LIST.UNLOCKED' | translate}}">
               <mat-icon>lock_open</mat-icon>
             </button>
@@ -95,8 +95,8 @@
             <button
               mat-stroked-button
               (click)="showCite(publication)"
-              (mouseenter)="disabledRouting = true"
-              (mouseleave)="disabledRouting = false">
+              (mouseenter)="buttonPressed = true"
+              (mouseleave)="buttonPressed = false">
               {{'PUBLICATIONS_LIST.SHOW_CITE' | translate}}
             </button>
           </td>
@@ -105,8 +105,9 @@
         <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
         <tr
           *matRowDef="let publication; columns: displayedColumns;"
-          [routerLink]="disabledRouting ? null : [routerPath, publication.id]"
-          [perunWebAppsMiddleClickRouterLink]="disabledRouting ? null : [routerPath, publication.id]"
+          [routerLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
+          [perunWebAppsMiddleClickRouterLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
+          (click)="disabledRouting && openInTab && !buttonPressed ? emitPublication(publication) : null"
           class="dark-hover-list-item"
           mat-row>
         </tr>

@@ -1,0 +1,31 @@
+<div class="'user-theme'">
+  <button
+    *ngIf="!publication.locked"
+    mat-flat-button
+    color="accent"
+    class="mr-2"
+    (click)="onAddAuthors()">
+    {{'PUBLICATION_DETAIL.ADD' | translate}}
+  </button>
+  <button
+    *ngIf="!publication.locked"
+    mat-flat-button
+    color="warn"
+    class="mr-4"
+    [disabled]="selection.selected.length === 0 || publication.locked"
+    (click)="onRemoveAuthors()">
+    {{'PUBLICATION_DETAIL.REMOVE' | translate}}
+  </button>
+  <perun-web-apps-immediate-filter (filter)="applyFilter($event)"
+                                   [placeholder]="'PUBLICATION_DETAIL.FILTER'"></perun-web-apps-immediate-filter>
+  <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
+  <perun-web-apps-authors-list
+    *ngIf="!loading"
+    [authors]="publication.authors"
+    [selection]="selection"
+    [filterValue]="filterValue"
+    [pageSize]="pageSize"
+    [displayedColumns]="publication.locked ? ['id', 'name', 'organization', 'email'] : ['select', 'id', 'name', 'organization', 'email']"
+    (page)="pageChanged($event)">
+  </perun-web-apps-authors-list>
+</div>

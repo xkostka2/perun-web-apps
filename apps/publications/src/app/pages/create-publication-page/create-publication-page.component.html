@@ -30,7 +30,7 @@
           <div>
           {{'CREATE_PUBLICATION.CREATE_HINT' | translate}}
           </div>
-          <button class="align-self-end" mat-flat-button color="accent">
+          <button (click)="createPublication()" class="align-self-end" mat-flat-button color="accent">
             {{'CREATE_PUBLICATION.CREATE' | translate}}
           </button>
         </mat-card-content>
