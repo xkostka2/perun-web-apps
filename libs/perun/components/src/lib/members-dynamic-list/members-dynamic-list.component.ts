@@ -17,7 +17,7 @@ import {
   getDefaultDialogConfig, parseEmail, parseFullName, parseLogins, parseOrganization,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
-import { ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { ChangeMemberStatusDialogComponent, MemberTreeViewDialogComponent } from '@perun-web-apps/perun/dialogs';
 import {
   DynamicPaginatingService,
   GuiAuthResolver,
@@ -77,7 +77,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
   exporting = false;
 
-  displayedColumns: string[] = ['checkbox', 'id', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
+  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
   dataSource: MembersDataSource;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -181,5 +181,14 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
       default:
         return '';
     }
+  }
+
+  viewMemberGroupTree(event: any, member: RichMember) {
+    event.stopPropagation();
+    const config = getDefaultDialogConfig();
+    config.width = '800px';
+    config.data = {member: member, groupId: this.groupId};
+
+    this.dialog.open(MemberTreeViewDialogComponent, config);
   }
 }

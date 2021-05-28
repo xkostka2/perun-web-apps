@@ -102,7 +102,7 @@ export class VoMembersComponent implements OnInit {
 
     this.removeAuth = this.authzService.isAuthorized('deleteMembers_List<Member>_policy', [this.vo]);
 
-    this.hideColumns = this.removeAuth ? ['groupStatus'] : ['checkbox', 'groupStatus'];
+    this.hideColumns = this.removeAuth ? ['type', 'groupStatus'] : ['checkbox', 'type', 'groupStatus'];
 
     if(this.members !== null && this.members.length !== 0){
       this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0]]);

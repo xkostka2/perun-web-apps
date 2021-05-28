@@ -946,8 +946,7 @@
       "SUCCESS": "Selected members were deleted",
       "SUCCESS_GROUP": "Selected members were removed",
       "REMOVE": "Delete",
-      "REMOVE_GROUP": "Remove",
-      "CANCEL": "Cancel"
+      "REMOVE_GROUP": "Remove"
     },
     "REMOVE_RESOURCES": {
       "TITLE": "Confirm removal",
