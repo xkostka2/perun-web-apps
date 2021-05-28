@@ -568,11 +568,8 @@
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
       "LIST_ALL": "List all members",
-      "SEARCH_ALERT": "In this group are too many members and load all of them would take a long time. You can search particular member by name, login or email or list all members and wait for a while.",
-      "NO_MEMBERS_ALERT": "No members found.",
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
-      "EMPTY_SEARCH": "Search field cannot be empty",
       "FILTER_STATUS": "Select VO status",
       "FILTER_GROUP_STATUS": "Select group status"
     },

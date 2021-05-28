@@ -1,115 +1,102 @@
-<div (keyup)="onKeyInput($event)">
-  <h1 class="page-subtitle">{{'GROUP_DETAIL.MEMBERS.TITLE' | translate}}</h1>
-  <app-alert *ngIf="synchEnabled" alert_type="warn">
-    {{'GROUP_DETAIL.MEMBERS.ACTIONS_DISABLED' | translate}}
-  </app-alert>
-  <div class="align-elements">
-    <span
-      [matTooltipDisabled]="!synchEnabled"
-      [matTooltipPosition]="'above'"
-      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-      <div matTooltip="{{'GROUP_DETAIL.MEMBERS.ADD_MEMBER_DISABLED' | translate}}" [matTooltipDisabled]="!blockManualMemberAdding">
-        <button
-          (click)="onAddMember()"
-          *ngIf="addAuth"
-          [disabled]="synchEnabled || blockManualMemberAdding"
-          class="mr-2"
-          color="accent"
-          mat-flat-button>
-          {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
-        </button>
-      </div>
-    </span>
-    <span
-      [matTooltipDisabled]="!synchEnabled"
-      [matTooltipPosition]="'above'"
-      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+<h1 class="page-subtitle">{{'GROUP_DETAIL.MEMBERS.TITLE' | translate}}</h1>
+<app-alert *ngIf="synchEnabled" alert_type="warn">
+  {{'GROUP_DETAIL.MEMBERS.ACTIONS_DISABLED' | translate}}
+</app-alert>
+<div class="align-elements">
+  <span
+    [matTooltipDisabled]="!synchEnabled"
+    [matTooltipPosition]="'above'"
+    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+    <div matTooltip="{{'GROUP_DETAIL.MEMBERS.ADD_MEMBER_DISABLED' | translate}}" [matTooltipDisabled]="!blockManualMemberAdding">
       <button
-        (click)="onInviteMember()"
-        *ngIf="inviteAuth"
-        [disabled]="synchEnabled"
+        (click)="onAddMember()"
+        *ngIf="addAuth"
+        [disabled]="synchEnabled || blockManualMemberAdding"
         class="mr-2"
         color="accent"
         mat-flat-button>
-      {{'GROUP_DETAIL.MEMBERS.INVITE_MEMBER' | translate}}
+        {{'GROUP_DETAIL.MEMBERS.ADD_MEMBER' | translate}}
       </button>
-    </span>
-    <span
-      [matTooltipDisabled]="!synchEnabled"
-      [matTooltipPosition]="'above'"
-      matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
-       <button
-         (click)="onRemoveMembers()"
-         *ngIf="removeAuth"
-         [disabled]="selection.isEmpty() || synchEnabled"
-         class="mr-2"
-         color="warn"
-         mat-flat-button>
-         {{'GROUP_DETAIL.MEMBERS.REMOVE_MEMBERS' | translate}}
-       </button>
-    </span>
-    <button (click)="onListAll()" class="mr-2" mat-stroked-button>
-      {{'GROUP_DETAIL.MEMBERS.LIST_ALL' | translate}}
+    </div>
+  </span>
+  <span
+    [matTooltipDisabled]="!synchEnabled"
+    [matTooltipPosition]="'above'"
+    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+    <button
+      (click)="onInviteMember()"
+      *ngIf="inviteAuth"
+      [disabled]="synchEnabled"
+      class="mr-2"
+      color="accent"
+      mat-flat-button>
+    {{'GROUP_DETAIL.MEMBERS.INVITE_MEMBER' | translate}}
     </button>
-    <mat-form-field class="mr-2 fix-select">
-      <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_STATUS' | translate}}</mat-label>
-      <mat-select [(value)]="selectedStatuses" [formControl]="statuses"
-                  multiple>
-        <mat-select-trigger>
-          {{displaySelectedStatuses()}}
-        </mat-select-trigger>
-        <mat-option class="group-theme" *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="mr-2 fix-select">
-      <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_GROUP_STATUS' | translate}}</mat-label>
-      <mat-select [(value)]="selectedGroupStatuses" [formControl]="groupStatuses"
-                  multiple>
-        <mat-select-trigger>
-          {{displaySelectedGroupStatuses()}}
-        </mat-select-trigger>
-        <mat-option class="group-theme" *ngFor="let status of groupStatusList" [value]="status">{{status}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  </span>
+  <span
+    [matTooltipDisabled]="!synchEnabled"
+    [matTooltipPosition]="'above'"
+    matTooltip="{{'GROUP_DETAIL.MEMBERS.SYNCHRONIZED' | translate}}">
+     <button
+       (click)="onRemoveMembers()"
+       *ngIf="removeAuth"
+       [disabled]="selection.isEmpty() || synchEnabled"
+       class="mr-2"
+       color="warn"
+       mat-flat-button>
+       {{'GROUP_DETAIL.MEMBERS.REMOVE_MEMBERS' | translate}}
+     </button>
+  </span>
+  <mat-form-field class="mr-2 fix-select">
+    <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_STATUS' | translate}}</mat-label>
+    <mat-select [formControl]="statuses" (closed)="changeVoStatuses()" multiple>
+      <mat-select-trigger>
+        {{displaySelectedStatuses()}}
+      </mat-select-trigger>
+      <mat-option class="group-theme" *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="mr-2 fix-select">
+    <mat-label>{{'GROUP_DETAIL.MEMBERS.FILTER_GROUP_STATUS' | translate}}</mat-label>
+    <mat-select [formControl]="groupStatuses" (closed)="changeGroupStatuses()" multiple>
+      <mat-select-trigger>
+        {{displaySelectedGroupStatuses()}}
+      </mat-select-trigger>
+      <mat-option class="group-theme" *ngFor="let status of groupStatusList" [value]="status">{{status}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field class="mr-2 search-field no-border-mat-input">
-      <label>
-        <input
-          matInput
-          autocomplete="false"
-          placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
-          [formControl]="searchControl">
-      </label>
-      <mat-error>
-        {{'GROUP_DETAIL.MEMBERS.EMPTY_SEARCH' | translate}}
-      </mat-error>
-    </mat-form-field>
-    <button mat-flat-button color="primary"
-            class="mr-2" [disabled]="loading"
-            (click)="onSearchByString()">
-      <mat-icon>search</mat-icon>
-    </button>
-  </div>
-  <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
-  </mat-spinner>
-  <app-alert alert_type="info" *ngIf="!firstSearchDone && !loading">
-    {{'GROUP_DETAIL.MEMBERS.SEARCH_ALERT' | translate}}
-  </app-alert>
-  <div class="mt-3" *ngIf="members !== null && !loading">
-    <perun-web-apps-members-list
-      [disableRouting]="!routeAuth"
-      [hideColumns]="hideColumns"
-      [pageSize]="pageSize"
-      (page)="pageChanged($event)"
-      [selection]="selection"
-      [members]="members"
-      (updateTable)="refreshTable()"
-      *ngIf="members.length !== 0"
-      [showGroupStatuses]="true">
-    </perun-web-apps-members-list>
-
-    <app-alert *ngIf="members.length === 0" alert_type="warn">
-      {{'GROUP_DETAIL.MEMBERS.NO_MEMBERS_ALERT' | translate}}
-    </app-alert>
-  </div>
+  <mat-form-field class="mr-2 search-field no-border-mat-input">
+    <label>
+      <input
+        matInput
+        autocomplete="false"
+        (keyup.enter)="onSearchByString()"
+        placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
+        [formControl]="searchControl">
+    </label>
+  </mat-form-field>
+  <button mat-flat-button
+          color="primary"
+          class="mr-2"
+          [disabled]="loading"
+          (click)="onSearchByString()">
+    <mat-icon>search</mat-icon>
+  </button>
 </div>
+<mat-spinner *ngIf="loading" class="ml-auto mr-auto">
+</mat-spinner>
+<perun-web-apps-members-dynamic-list
+  *ngIf="!loading"
+  [voId]="group.voId"
+  [groupId]="group.id"
+  [pageSize]="pageSize"
+  [selection]="selection"
+  [hideColumns]="hideColumns"
+  [updateTable]="updateTable"
+  [searchString]="searchString"
+  [selectedStatuses]="selectedStatuses"
+  [selectedGroupStatuses]="selectedGroupStatuses"
+  [attrNames]="memberAttrNames"
+  (page)="pageChanged($event)">
+</perun-web-apps-members-dynamic-list>

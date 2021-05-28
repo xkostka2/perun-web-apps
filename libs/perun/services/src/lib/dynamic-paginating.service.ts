@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  MemberGroupStatus,
   MembersManagerService,
   MembersOrderColumn,
   PaginatedRichMembers,
@@ -21,7 +22,9 @@ export class DynamicPaginatingService {
              pageSize : number,
              sortColumn: MembersOrderColumn,
              statuses: VoMemberStatuses[],
-             searchString?: string): Observable<PaginatedRichMembers> {
+             searchString?: string,
+             groupId?: number,
+             groupStatuses?: MemberGroupStatus[]): Observable<PaginatedRichMembers> {
     return this.membersService.getMembersPage({
       vo: voId,
       attrNames: attrNames,
@@ -30,7 +33,9 @@ export class DynamicPaginatingService {
         order: sortOrder,
         sortColumn: sortColumn,
         statuses: statuses,
-        searchString: searchString}})
+        searchString: searchString,
+        groupId: groupId,
+        groupStatuses: groupStatuses}})
 
   }
 }

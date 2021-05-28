@@ -2,6 +2,7 @@ import {CollectionViewer, DataSource} from "@angular/cdk/collections";
 import {Observable, BehaviorSubject, of} from "rxjs";
 import {catchError, finalize} from "rxjs/operators";
 import {
+  MemberGroupStatus,
   MembersOrderColumn,
   PaginatedRichMembers,
   RichMember,
@@ -37,13 +38,15 @@ export class MembersDataSource implements DataSource<RichMember> {
               pageSize: number,
               sortColumn: MembersOrderColumn,
               statuses: VoMemberStatuses[],
-              searchString?: string) {
+              searchString?: string,
+              groupId?: number,
+              groupStatuses?: MemberGroupStatus[]) {
 
     this.loadingSubject.next(true);
     this.latestQueryTime = Date.now();
     const thisQueryTime = this.latestQueryTime;
 
-    this.dynamicPaginatingService.getMembers(voId, attrNames, sortOrder, pageIndex, pageSize, sortColumn, statuses, searchString).pipe(
+    this.dynamicPaginatingService.getMembers(voId, attrNames, sortOrder, pageIndex, pageSize, sortColumn, statuses, searchString, groupId, groupStatuses).pipe(
       catchError(() => of([])),
       finalize(() => this.loadingSubject.next(false))
     ).subscribe(paginatedRichMembers => {

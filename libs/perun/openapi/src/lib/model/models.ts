@@ -141,6 +141,7 @@ export * from './mailText';
 export * from './mailType';
 export * from './member';
 export * from './memberCandidate';
+export * from './memberGroupStatus';
 export * from './memberWithSponsors';
 export * from './membersOrderColumn';
 export * from './membersPageQuery';
