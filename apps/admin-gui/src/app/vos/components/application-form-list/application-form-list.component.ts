@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
   templateUrl: './application-form-list.component.html',
   styleUrls: ['./application-form-list.component.scss']
 })
-export class ApplicationFormListComponent implements OnChanges {
+export class ApplicationFormListComponent implements OnInit, OnChanges {
 
   constructor(private dialog: MatDialog,
               private notificator: NotificatorService,
@@ -39,7 +39,7 @@ export class ApplicationFormListComponent implements OnChanges {
   theme: string;
 
   @Input()
-  displayedColumns: string[] = ['drag', 'shortname', 'type', 'preview', 'managegroups', 'edit', 'delete'];
+  displayedColumns: string[] = ['drag', 'shortname', 'type', 'disabled', 'hidden', 'preview', 'managegroups', 'edit', 'delete'];
 
   @Output()
   applicationFormItemsChange = new EventEmitter<ApplicationFormItem[]>();
@@ -52,9 +52,70 @@ export class ApplicationFormListComponent implements OnChanges {
   mapForCombobox: Map<number, string> = new Map();
   dragDisabled = true;
 
+  // labels and tooltips
+  ifEmpty: string;
+  ifPrefilled: string;
+  alwaysDisabled: string;
+  alwaysHidden: string;
+  isDisabledIf: string;
+  isHiddenIf: string;
+  isEmpty: string;
+  isPrefilled: string;
+
+  ngOnInit() {
+    // labels for hidden and disabled icons
+    this.ifEmpty = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.IF_EMPTY');
+    this.ifPrefilled = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.IF_PREFILLED');
+
+    // tooltips for hidden and disabled icons
+    this.alwaysDisabled = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.ALWAYS_DISABLED_HINT');
+    this.alwaysHidden = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.ALWAYS_HIDDEN_HINT')
+    this.isDisabledIf = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.DISABLED_IF_HINT');
+    this.isHiddenIf = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.HIDDEN_IF_HINT');
+    this.isEmpty = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.IS_EMPTY_HINT');
+    this.isPrefilled = this.translate.instant('VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HIDDEN_ICON.IS_PREFILLED_HINT');
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource = this.applicationFormItems;
 
+  }
+
+  disabledHiddenDependency(item: ApplicationFormItem, dependency: string, dependencyItemId: number): string {
+    let message = "";
+    if (dependency === "IF_EMPTY" || dependency === "IF_PREFILLED") {
+      const dep = dependencyItemId === null ? "" : this.applicationFormItems.find(i => i.id === dependencyItemId).shortname;
+      message = dependency === "IF_EMPTY" ? `(${this.ifEmpty} ${dep})` : `(${this.ifPrefilled} ${dep})`;
+    }
+    return message;
+  }
+
+  disabledTooltip(item: ApplicationFormItem): string {
+    let dep: string;
+    switch (item.disabled) {
+      case 'ALWAYS':
+        return this.alwaysDisabled;
+      case 'IF_EMPTY':
+        dep = item.disabledDependencyItemId === null ? "" : this.applicationFormItems.find(i => i.id === item.disabledDependencyItemId).shortname;
+        return `${this.isDisabledIf} ${dep} ${this.isEmpty}`;
+      case 'IF_PREFILLED':
+        dep = item.disabledDependencyItemId === null ? "" : this.applicationFormItems.find(i => i.id === item.disabledDependencyItemId).shortname;
+        return `${this.isDisabledIf} ${dep} ${this.isPrefilled}`;
+    }
+  }
+
+  hiddenTooltip(item: ApplicationFormItem): string {
+    let dep: string;
+    switch (item.hidden) {
+      case 'ALWAYS':
+        return this.alwaysHidden;
+      case 'IF_EMPTY':
+        dep = item.hiddenDependencyItemId === null ? "" : this.applicationFormItems.find(i => i.id === item.hiddenDependencyItemId).shortname;
+        return `${this.isHiddenIf} ${dep} ${this.isEmpty}`;
+      case 'IF_PREFILLED':
+        dep = item.hiddenDependencyItemId === null ? "" : this.applicationFormItems.find(i => i.id === item.hiddenDependencyItemId).shortname;
+        return `${this.isHiddenIf} ${dep} ${this.isPrefilled}`;
+    }
   }
 
   edit(applicationFormItem: ApplicationFormItem) {

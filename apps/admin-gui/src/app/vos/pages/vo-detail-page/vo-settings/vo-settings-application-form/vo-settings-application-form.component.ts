@@ -81,8 +81,8 @@ export class VoSettingsApplicationFormComponent implements OnInit {
 
   setAuthRights(){
     this.editAuth = this.authResolver.isAuthorized('vo-updateFormItems_ApplicationForm_List<ApplicationFormItem>_policy', [this.vo]);
-    this.displayedColumns = this.editAuth ? ['drag', 'shortname', 'type', 'preview', 'managegroups', 'edit', 'delete']
-                                          : ['shortname', 'type', 'preview', 'managegroups'];
+    this.displayedColumns = this.editAuth ? ['drag', 'shortname', 'type', 'disabled', 'hidden', 'preview', 'managegroups', 'edit', 'delete']
+                                          : ['shortname', 'type', 'disabled', 'hidden', 'preview', 'managegroups'];
   }
 
   add() {

@@ -28,6 +28,26 @@
           <th *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.SETTINGS.APPLICATION_FORM.TYPE' | translate}}</th>
           <td *matCellDef="let applicationFormItem" mat-cell>{{applicationFormItem.type | applicationFormItemType}}</td>
         </ng-container>
+        <ng-container matColumnDef="disabled">
+          <th class="center" *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.SETTINGS.APPLICATION_FORM.DISABLED_HEADER' | translate}}</th>
+          <td class="center" *matCellDef="let applicationFormItem" mat-cell>
+            <div *ngIf="applicationFormItem.disabled !== 'NEVER'">
+              <mat-icon class="pointer" [matTooltip]="disabledTooltip(applicationFormItem)">lock</mat-icon>
+              <br>
+              {{disabledHiddenDependency(applicationFormItem, applicationFormItem.disabled, applicationFormItem.disabledDependencyItemId)}}
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="hidden">
+          <th class="center" *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.SETTINGS.APPLICATION_FORM.HIDDEN_HEADER' | translate}}</th>
+          <td class="center" *matCellDef="let applicationFormItem" mat-cell>
+            <div *ngIf="applicationFormItem.hidden !== 'NEVER'">
+              <mat-icon class="pointer" [matTooltip]="hiddenTooltip(applicationFormItem)">visibility_off</mat-icon>
+              <br>
+              {{disabledHiddenDependency(applicationFormItem, applicationFormItem.hidden, applicationFormItem.hiddenDependencyItemId)}}
+            </div>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="preview">
           <th *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.SETTINGS.APPLICATION_FORM.PREVIEW' | translate}}</th>
           <td *matCellDef="let applicationFormItem" mat-cell>

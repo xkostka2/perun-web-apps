@@ -312,6 +312,8 @@
         "NO_APPLICATION_FORM": "Application form have no items.",
         "SHORTNAME": "Short name",
         "TYPE": "Type",
+        "DISABLED_HEADER": "Disabled",
+        "HIDDEN_HEADER": "Hidden",
         "PREVIEW": "Preview",
         "EDIT": "Edit",
         "MANAGE_GROUPS": "Manage groups",
@@ -381,12 +383,30 @@
           "AUTO_SUBMIT_BUTTON": "Button used to auto-submit the form with custom label. All other form items are checked on valid input before submission. If validation fail (at least once) user must submit form manually. If it's OK, then form is automatically submitted.",
           "EMBEDDED_GROUP_APPLICATION": "Checkbox of real organization groups which the user can check and thus submit an application to these groups"
         },
+        "DISABLED_HIDDEN_ICON": {
+          "IF_EMPTY": "If empty",
+          "IF_PREFILLED": "If prefilled",
+          "ALWAYS_DISABLED_HINT": "This item is always disabled",
+          "ALWAYS_HIDDEN_HINT": "This item is always hidden",
+          "DISABLED_IF_HINT": "This item is disabled if",
+          "HIDDEN_IF_HINT": "This item is hidden if",
+          "IS_EMPTY_HINT": "is empty",
+          "IS_PREFILLED_HINT": "is prefilled"
+        },
         "PREVIEW_PAGE": {
           "TITLE": "Application form preview",
           "SWITCH_ENGLISH": "Switch to English",
           "SWITCH_CZECH": "Switch to Czech",
           "SWITCH_EXTENSION": "Switch to Extension",
-          "SWITCH_INITIAL": "Switch to Initial"
+          "SWITCH_INITIAL": "Switch to Initial",
+          "DISABLED_HIDDEN_ICON": {
+            "ALWAYS_DISABLED": "Always disabled",
+            "ALWAYS_HIDDEN": "Always hidden",
+            "DISABLED_WHEN": "Disabled when",
+            "HIDDEN_WHEN": "Hidden when",
+            "IS_EMPTY": "is empty",
+            "IS_PREFILLED": "is prefilled"
+          }
         },
         "MANAGE_GROUPS_PAGE": {
           "TITLE": "Manage groups for registration",
