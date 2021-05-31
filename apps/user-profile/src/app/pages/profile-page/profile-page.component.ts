@@ -12,7 +12,8 @@ import {
 import { UserFullNamePipe } from '@perun-web-apps/perun/pipes';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
+import { ApiRequestConfigurationService, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
+import { MailChangeFailedDialogComponent } from '@perun-web-apps/perun/dialogs';
 
 interface AdditionalAttribute {
   attribute: Attribute;
@@ -56,7 +57,8 @@ export class ProfilePageComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private notificator: NotificatorService,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private apiRequestConfiguration: ApiRequestConfigurationService
   ) {
     translateService.get('PROFILE_PAGE.MAIL_CHANGE_SUCCESS').subscribe(res => this.successMessage = res);
   }
@@ -69,16 +71,25 @@ export class ProfilePageComponent implements OnInit {
     const u = params.get('u');
     this.loading = true;
     if (i && m && u) {
-      this.usersManagerService.validatePreferredEmailChange(i, m, Number.parseInt(u, 10)).subscribe(() => {
-        this.notificator.showSuccess(this.successMessage);
-        this.router.navigate([], { replaceUrl: true });
-        this.getData();
-      });
+        this.usersManagerService.validatePreferredEmailChange(i, m, Number.parseInt(u, 10)).subscribe(() => {
+          this.notificator.showSuccess(this.successMessage);
+          this.router.navigate([], { replaceUrl: true });
+          this.getData();
+        });
     } else if (token && u) {
+      this.apiRequestConfiguration.dontHandleErrorForNext();
       this.usersManagerService.validatePreferredEmailChangeWithToken(token, Number.parseInt(u, 10)).subscribe(() => {
         this.notificator.showSuccess(this.successMessage);
         this.router.navigate([], { replaceUrl: true });
         this.getData();
+      }, () => {
+        const config = getDefaultDialogConfig();
+        config.width = '600px';
+
+        const dialogRef = this.dialog.open(MailChangeFailedDialogComponent, config);
+        dialogRef.afterClosed().subscribe(() => {
+          this.getData();
+        });
       });
     } else {
       this.getData();
@@ -108,7 +119,7 @@ export class ProfilePageComponent implements OnInit {
         let count = 0;
         additionalAttributesSpecs.forEach(spec => {
           const attribute = richUser.userAttributes.find(att => att.friendlyName === spec.friendly_name);
-          if(!attribute){
+          if (!attribute) {
             this.attributesManagerService.getAttributeDefinitionByName(`urn:perun:user:attribute-def:${spec.is_virtual ? 'virt' : 'def'}:${spec.friendly_name}`).subscribe(att => {
               this.additionalAttributes.push(<AdditionalAttribute>{
                 attribute: att,
@@ -118,8 +129,8 @@ export class ProfilePageComponent implements OnInit {
                 tooltip_cz: spec.tooltip_cz ?? ''
               });
               count++;
-              this.loading = count !==additionalAttributesSpecs.length
-            })
+              this.loading = count !== additionalAttributesSpecs.length;
+            });
           } else {
             count++;
             this.additionalAttributes.push(<AdditionalAttribute>{
@@ -130,7 +141,7 @@ export class ProfilePageComponent implements OnInit {
               tooltip_cz: spec.tooltip_cz ?? ''
             });
           }
-          this.loading = count !==additionalAttributesSpecs.length
+          this.loading = count !== additionalAttributesSpecs.length;
         });
       });
     });

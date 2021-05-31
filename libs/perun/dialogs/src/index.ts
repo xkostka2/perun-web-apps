@@ -12,3 +12,4 @@ export * from './lib/attribute-value-list-delete-dialog/attribute-value-list-del
 export * from './lib/change-email-dialog/change-email-dialog.component';
 export * from './lib/universal-remove-items-dialog/universal-remove-items-dialog.component'
 export * from './lib/member-tree-view-dialog/member-tree-view-dialog.component'
+export * from './lib/mail-change-failed-dialog/mail-change-failed-dialog.component'

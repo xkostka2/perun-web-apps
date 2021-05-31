@@ -330,6 +330,11 @@
         "SHOW_VALUE": {
           "CLOSE": "Zrušit",
           "COPY": "Zkopírovat hodnotu"
+        },
+        "MAIL_CHANGE_FAILED_DIALOG": {
+          "TITLE": "Zmněna preferovaného emailu se nezdařila",
+          "INFO": "Žádost o změnu preferovaného emailu neexistuje nebo již není platná",
+          "CLOSE": "Zavřít"
         }
       },
       "ORGANIZATIONS": {

@@ -30,6 +30,7 @@ import { UniversalRemoveItemsDialogComponent } from './universal-remove-items-di
 import { MemberTreeViewDialogComponent } from './member-tree-view-dialog/member-tree-view-dialog.component';
 import { RouterModule } from '@angular/router';
 import { MatTreeModule } from '@angular/material/tree';
+import { MailChangeFailedDialogComponent } from './mail-change-failed-dialog/mail-change-failed-dialog.component';
 
 @NgModule({
   imports: [
@@ -66,7 +67,8 @@ import { MatTreeModule } from '@angular/material/tree';
     AttributeValueListDeleteDialogComponent,
     ChangeEmailDialogComponent,
     UniversalRemoveItemsDialogComponent,
-    MemberTreeViewDialogComponent
+    MemberTreeViewDialogComponent,
+    MailChangeFailedDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,
@@ -81,7 +83,8 @@ import { MatTreeModule } from '@angular/material/tree';
     AttributeValueListDeleteDialogComponent,
     ChangeEmailDialogComponent,
     UniversalRemoveItemsDialogComponent,
-    MemberTreeViewDialogComponent
+    MemberTreeViewDialogComponent,
+    MailChangeFailedDialogComponent
   ]
 })
 export class PerunDialogsModule {

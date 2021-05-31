@@ -401,6 +401,11 @@
           "TITLE": "Session expiration",
           "DESCRIPTION": "Your session has expired. Please sign in to continue.",
           "SIGN_IN": "Sign in"
+        },
+        "MAIL_CHANGE_FAILED_DIALOG": {
+          "TITLE": "Preferred mail change failed",
+          "INFO": "Preferred email change request does not exist or is not valid anymore",
+          "CLOSE": "Close"
         }
       },
       "ORGANIZATIONS": {
