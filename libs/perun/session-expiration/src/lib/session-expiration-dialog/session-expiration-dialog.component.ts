@@ -13,9 +13,8 @@ export class SessionExpirationDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  refreshPage() {
-    window.location.reload();
-    this.dialogRef.close();
+  close() {
+    this.dialogRef.close(true);
   }
 
 }
