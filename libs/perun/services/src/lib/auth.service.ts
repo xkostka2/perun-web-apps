@@ -104,12 +104,15 @@ export class AuthService {
     this.manager.events.addUserLoaded(user => {
       this.user = user;
     });
-
     this.manager.events.addAccessTokenExpired(() => {
       const config = getDefaultDialogConfig();
       config.width = '450px';
 
-      this.dialog.open(SessionExpirationDialogComponent, config);
+      const dialogRef = this.dialog.open(SessionExpirationDialogComponent, config);
+
+      dialogRef.afterClosed().subscribe(() => {
+        this.startAuthentication().then(() => {});
+      });
     });
   }
 
