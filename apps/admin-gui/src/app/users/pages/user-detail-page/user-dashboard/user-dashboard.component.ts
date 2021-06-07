@@ -5,10 +5,18 @@ import {
   User,
   UsersManagerService
 } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
+import {
+  ApiRequestConfigurationService,
+  GuiAuthResolver,
+  NotificatorService,
+  StoreService
+} from '@perun-web-apps/perun/services';
 import { SideMenuService } from '../../../../core/services/common/side-menu.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { MailChangeFailedDialogComponent } from '@perun-web-apps/perun/dialogs';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-perun-web-apps-user-dashboard',
@@ -28,7 +36,9 @@ export class UserDashboardComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private notificator: NotificatorService,
-              public translateService: TranslateService
+              public translateService: TranslateService,
+              private dialog: MatDialog,
+              private apiRequestConfiguration: ApiRequestConfigurationService
   ) {
     translateService.get('USER_DETAIL.DASHBOARD.MAIL_CHANGE_SUCCESS').subscribe(res => this.mailSuccessMessage = res);
   }
@@ -66,9 +76,18 @@ export class UserDashboardComponent implements OnInit {
     const token = params.get('token');
     const u = params.get('u');
     if (token && u) {
+      this.apiRequestConfiguration.dontHandleErrorForNext();
       this.userManager.validatePreferredEmailChangeWithToken(token, Number.parseInt(u, 10)).subscribe(() => {
         this.notificator.showSuccess(this.mailSuccessMessage);
         this.router.navigate([], { replaceUrl: true });
+      }, () => {
+        const config = getDefaultDialogConfig();
+        config.width = '600px';
+
+        const dialogRef = this.dialog.open(MailChangeFailedDialogComponent, config);
+        dialogRef.afterClosed().subscribe(() => {
+          this.getDashboardSettings();
+        });
       });
     }
   }
