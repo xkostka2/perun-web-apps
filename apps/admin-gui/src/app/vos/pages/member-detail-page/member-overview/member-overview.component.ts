@@ -240,11 +240,13 @@ export class MemberOverviewComponent implements OnInit {
       theme: "member-theme"
     };
     const dialogRef = this.dialog.open(EditMemberSponsorsDialogComponent, config);
-    dialogRef.afterClosed().subscribe(() => {
-      this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
-        this.sponsors = sponsors;
-        this.sponsorsDataSource = new MatTableDataSource<Sponsor>(this.sponsors);
-      });
+    dialogRef.afterClosed().subscribe((edited) => {
+      if(edited) {
+        this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
+          this.sponsors = sponsors;
+          this.sponsorsDataSource.data = this.sponsors;
+        });
+      }
     });
   }
 }

@@ -1819,7 +1819,7 @@
       "TABLE_ID": "id",
       "TABLE_NAME": "name",
       "TABLE_EXPIRATION": "expiration",
-      "CANCEL": "Cancel",
+      "CANCEL": "Close",
       "SUBMIT": "Submit",
       "REMOVE_SPONSOR_DISABLED": "You are not authorized to remove sponsor",
       "SUCCESS": "Sponsors successfully edited"
