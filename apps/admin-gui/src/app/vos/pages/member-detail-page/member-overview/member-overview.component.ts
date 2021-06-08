@@ -242,9 +242,16 @@ export class MemberOverviewComponent implements OnInit {
     const dialogRef = this.dialog.open(EditMemberSponsorsDialogComponent, config);
     dialogRef.afterClosed().subscribe((edited) => {
       if(edited) {
-        this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
-          this.sponsors = sponsors;
-          this.sponsorsDataSource.data = this.sponsors;
+        this.loading = true;
+        this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
+          this.member = member;
+          if(this.member.sponsored) {
+            this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
+              this.sponsors = sponsors;
+              this.sponsorsDataSource.data = this.sponsors;
+            });
+          }
+          this.loading = false;
         });
       }
     });
