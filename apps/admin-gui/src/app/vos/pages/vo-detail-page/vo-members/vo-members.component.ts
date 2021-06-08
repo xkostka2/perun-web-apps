@@ -64,7 +64,7 @@ export class VoMembersComponent implements OnInit {
 
   statuses = new FormControl();
   statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
-  selectedStatuses: string[] = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
+  selectedStatuses: string[] = [];
   pageSize: number;
   tableId = TABLE_VO_MEMBERS;
   hideColumns = [];
@@ -81,7 +81,7 @@ export class VoMembersComponent implements OnInit {
     this.loading = true;
     this.searchControl = new FormControl('');
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
-    this.statuses.setValue(this.statusList);
+    this.statuses.setValue(this.selectedStatuses);
     this.attrNames = this.attrNames.concat(this.storeService.getLoginAttributeNames());
     this.route.parent.params.subscribe(parentParams => {
       const voId = parentParams['voId'];
