@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Group, Resource, ResourcesManagerService, VosManagerService } from '@perun-web-apps/perun/openapi';
+import {
+  AssignedGroup,
+  Group,
+  Resource,
+  ResourcesManagerService,
+  VosManagerService
+} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +19,7 @@ import {
 import { PageEvent } from '@angular/material/paginator';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GroupWithStatus } from '@perun-web-apps/perun/components';
 
 @Component({
   selector: 'app-perun-web-apps-resource-groups',
@@ -25,8 +32,8 @@ export class ResourceGroupsComponent implements OnInit {
   checkbox: MatCheckbox;
 
   resourceId: number;
-  assignedGroups: Group[] = [];
-  selected = new SelectionModel<Group>(true, []);
+  assignedGroups: GroupWithStatus[] = [];
+  selected = new SelectionModel<GroupWithStatus>(true, []);
   loading: boolean;
   filteredValue = '';
 
@@ -55,8 +62,12 @@ export class ResourceGroupsComponent implements OnInit {
 
   loadAllGroups() {
     this.loading = true;
-    this.resourcesManager.getAssignedGroups(this.resourceId).subscribe(assignedGroups => {
-      this.assignedGroups = assignedGroups;
+    this.resourcesManager.getGroupAssignments(this.resourceId).subscribe(assignedGroups => {
+      this.assignedGroups = <GroupWithStatus[]>assignedGroups.map(g => {
+        const gws: GroupWithStatus = g.enrichedGroup.group;
+        gws.status = g.status;
+        return gws;
+      });
       this.selected.clear();
       this.loading = false;
     });

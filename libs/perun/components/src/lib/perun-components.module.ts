@@ -80,6 +80,7 @@ import { MembersDynamicListComponent } from './members-dynamic-list/members-dyna
 import { AppFormItemSearchSelectComponent } from './app-form-item-search-select/app-form-item-search-select.component';
 import { OwnersListComponent } from './owners-list/owners-list.component';
 import { NotificatorComponent } from './notificator/notificator.component';
+import { GroupResourceStatusComponent } from './group-resource-status/group-resource-status.component';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -190,7 +191,8 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MembersDynamicListComponent,
     AppFormItemSearchSelectComponent,
     OwnersListComponent,
-    NotificatorComponent
+    NotificatorComponent,
+    GroupResourceStatusComponent
   ],
   exports: [
     VosListComponent,

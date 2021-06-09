@@ -40,7 +40,6 @@ export class CreateRelationDialogComponent implements OnInit {
   selection = new SelectionModel<Group>(false, []);
   groups: Group[];
   theme: string;
-  hideColumns = ['recent', 'vo', 'expiration','menu'];
   filterValue = '';
   loading:boolean;
 

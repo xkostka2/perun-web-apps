@@ -54,7 +54,7 @@
 
       <perun-web-apps-groups-list
         [groups]="groups"
-        [hideColumns]="['select', 'menu', 'expiration', 'recent']"
+        [displayedColumns]="['id', 'vo', 'name', 'description']"
       ></perun-web-apps-groups-list>
     </div>
   </mat-expansion-panel>
@@ -74,7 +74,7 @@
 
       <perun-web-apps-groups-list
         [groups]="groups"
-        [hideColumns]="['select', 'menu', 'expiration']"
+        [displayedColumns]="['id', 'recent', 'vo', 'name', 'description']"
       ></perun-web-apps-groups-list>
     </div>
   </mat-expansion-panel>

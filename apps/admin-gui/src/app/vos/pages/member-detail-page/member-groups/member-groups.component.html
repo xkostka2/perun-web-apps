@@ -33,7 +33,7 @@
   [pageSize]="pageSize"
   (page)="pageChanged($event)"
   [groups]="groups"
-  [hideColumns]="['vo','menu', 'recent']"
+  [displayedColumns]="['select', 'id', 'vo', 'name', 'description', 'expiration']"
   [selection]="selection"
   [filter]="filterValue"
   [memberId]="memberId"

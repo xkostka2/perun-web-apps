@@ -22,7 +22,7 @@
                                   [pageSize]="5"
                                   [groups]="this.objects"
                                   [recentIds]="recentIds"
-                                  [hideColumns]="['select', 'expiration', 'menu']">
+                                  [displayedColumns]="['id', 'recent', 'vo', 'name', 'description']">
       </perun-web-apps-groups-list>
     </span>
     <span *ngIf="primaryObject == 'Resource'">

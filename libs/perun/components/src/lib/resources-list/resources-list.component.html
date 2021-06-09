@@ -63,6 +63,16 @@
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_FACILITY_NAME' | translate}}</th>
           <td mat-cell *matCellDef="let resource">{{resource.facility.name}}</td>
         </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.RESOURCES_LIST.TABLE_GROUP_RESOURCE_STATUS' | translate}}</th>
+          <td mat-cell *matCellDef="let resource">
+            <perun-web-apps-group-resource-status
+              [status]="resource.status">
+            </perun-web-apps-group-resource-status>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="tags">
           <th mat-header-cell
               *matHeaderCellDef

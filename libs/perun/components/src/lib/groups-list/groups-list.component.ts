@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { Group, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
+import { Group, GroupResourceStatus, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
@@ -29,6 +29,10 @@ import {
 } from '@perun-web-apps/perun/dialogs';
 import { formatDate } from '@angular/common';
 
+
+export interface GroupWithStatus extends RichGroup {
+  status?: GroupResourceStatus;
+}
 
 @Component({
   selector: 'perun-web-apps-groups-list',
@@ -53,19 +57,19 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
               private tableCheckbox: TableCheckbox) { }
 
   @Output()
-  moveGroup = new EventEmitter<Group>();
+  moveGroup = new EventEmitter<GroupWithStatus>();
 
   @Input()
-  groups: Group[] | RichGroup[] = [];
+  groups: GroupWithStatus[] = [];
 
   @Input()
-  selection = new SelectionModel<Group>(true, []);
+  selection = new SelectionModel<GroupWithStatus>(true, []);
 
   private sort: MatSort;
   private hasMembersGroup = false;
 
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description', 'status', 'expiration', 'menu'];
 
   @Input()
   disableMembers: boolean;
@@ -109,8 +113,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   @Output()
   refreshTable = new EventEmitter<void>();
 
-  displayedColumns: string[] = ['select', 'id', 'recent', 'vo', 'name', 'description', 'expiration', 'menu'];
-  dataSource: MatTableDataSource<Group | RichGroup>;
+  dataSource: MatTableDataSource<GroupWithStatus>;
 
   disabledRouting = false;
 
@@ -142,7 +145,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     this.disabledRouting = this.disableRouting;
     this.hasMembersGroup = this.checkIfHasMembersGroup();
     this.updateVoNames();
-    this.dataSource = new MatTableDataSource<Group>(this.groups);
+    this.dataSource = new MatTableDataSource<GroupWithStatus>(this.groups);
     this.setDataSource();
     if (this.authType) {
       this.removeAuth = this.setAuth();
@@ -158,7 +161,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
 
-  getDataForColumn(data: Group | RichGroup, column: string, otherThis: GroupsListComponent): string{
+  getDataForColumn(data: GroupWithStatus, column: string, otherThis: GroupsListComponent): string{
     switch (column) {
       case 'id':
         return data.id.toString();
@@ -173,12 +176,14 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
         return parseDate(expirationStr);
       case 'recent':
         return '';
+      case 'status':
+        return data.status;
       default:
         return data[column];
     }
   }
 
-  getSortDataForColumn(data: Group | RichGroup, column: string, otherThis: GroupsListComponent): string{
+  getSortDataForColumn(data: GroupWithStatus, column: string, otherThis: GroupsListComponent): string{
     switch (column) {
       case 'id':
         return data.id.toString();
@@ -201,6 +206,8 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
           }
         }
         return data['name'];
+      case 'status':
+        return data.status;
       default:
         return data[column];
     }
@@ -211,7 +218,6 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setDataSource() {
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: Group|RichGroup, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
@@ -225,7 +231,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  canBeSelected = (group: Group): boolean => {
+  canBeSelected = (group: GroupWithStatus): boolean => {
      return (group.name !== 'members' || !this.disableMembers) && !this.disableSelect(group);
   }
 
@@ -241,14 +247,14 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  checkboxLabel(row?: Group): string {
+  checkboxLabel(row?: GroupWithStatus): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
-  disableSelect(grp: Group): boolean {
+  disableSelect(grp: GroupWithStatus): boolean {
     return this.disableGroups && (this.groupsToDisable.has(grp.id) || this.isSynchronized(grp));
   }
 
@@ -263,7 +269,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     this.dataSource.paginator = this.paginator;
   }
 
-  onMoveGroup(group: Group) {
+  onMoveGroup(group: GroupWithStatus) {
     this.moveGroup.emit(group);
   }
 
@@ -315,12 +321,12 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
 
-  itemSelectionToggle(item: Group) {
+  itemSelectionToggle(item: GroupWithStatus) {
     this.selection.toggle(item);
     this.removeAuth = this.setAuth();
   }
 
-  isSynchronized(grp: RichGroup) {
+  isSynchronized(grp: GroupWithStatus) {
     if (grp.attributes){
       return grp.attributes.some(att =>
         att.friendlyName === "synchronizationEnabled" && att.value !== null && att.value.toString() === "true");
@@ -328,7 +334,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     return false;
   }
 
-  getCheckboxTooltipMessage(row: Group | RichGroup) {
+  getCheckboxTooltipMessage(row: GroupWithStatus) {
     if (this.authType === 'create-relation-dialog'){
       return 'SHARED_LIB.PERUN.COMPONENTS.GROUPS_LIST.CREATE_RELATION_AUTH_TOOLTIP';
     } else if (this.isSynchronized(row)){
@@ -339,7 +345,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   updateVoNames() {
-    if (!this.hideColumns.includes('vo')){
+    if (this.displayedColumns.includes('vo')){
         this.groups.forEach(grp => {
           if(!this.voIds.has(grp.voId)){
             this.voIds.add(grp.voId);
@@ -351,7 +357,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       }
   }
 
-  changeExpiration(group: RichGroup) {
+  changeExpiration(group: GroupWithStatus) {
     const expirationAtt = group.attributes.find(att => att.baseFriendlyName === 'groupMembershipExpiration');
     const config = getDefaultDialogConfig();
     config.width = '400px';
@@ -370,7 +376,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
     });
   }
 
-  canManageGroup(group: Group): boolean {
+  canManageGroup(group: GroupWithStatus): boolean {
     return this.authResolver.isThisGroupAdmin(group.id) || this.authResolver.isThisVoAdmin(group.voId);
   }
 }

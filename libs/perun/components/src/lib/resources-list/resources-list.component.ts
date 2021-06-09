@@ -11,7 +11,7 @@ import {
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Group, ResourceTag, RichResource } from '@perun-web-apps/perun/openapi';
+import { Group, GroupResourceStatus, ResourceTag, RichResource } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
   customDataSourceFilterPredicate,
@@ -19,6 +19,11 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+
+
+export interface ResourceWithStatus extends RichResource {
+  status?: GroupResourceStatus;
+}
 
 @Component({
   selector: 'perun-web-apps-resources-list',
@@ -36,9 +41,9 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   @Input()
-  resources: RichResource[] = [];
+  resources: ResourceWithStatus[] = [];
   @Input()
-  selection = new SelectionModel<RichResource>(true, []);
+  selection = new SelectionModel<ResourceWithStatus>(true, []);
   @Input()
   filterValue: string;
   @Input()
@@ -48,7 +53,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   @Input()
   routingVo = false;
   @Input()
-  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'vo', 'facility', 'tags', 'description'];
+  displayedColumns: string[] = ['select', 'id', 'recent', 'name', 'vo', 'facility', 'status', 'tags', 'description'];
   @Input()
   groupToResource: Group;
   @Input()
@@ -79,13 +84,13 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
     if (!this.guiAuthResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.dataSource = new MatTableDataSource<RichResource>(this.resources);
+    this.dataSource = new MatTableDataSource<ResourceWithStatus>(this.resources);
     this.setDataSource();
     this.dataSource.filter = this.filterValue;
     this.setAuth();
   }
 
-  getDataForColumn(data: RichResource, column: string, otherThis: ResourcesListComponent): string{
+  getDataForColumn(data: ResourceWithStatus, column: string, otherThis: ResourcesListComponent): string{
     switch (column) {
       case 'id':
         return data.id.toString();
@@ -114,6 +119,8 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
           result = result.concat(tag.tagName);
         });
         return result;
+      case 'status':
+        return data.status;
       default:
         return data[column];
     }
@@ -150,7 +157,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: RichResource): string {
+  checkboxLabel(row?: ResourceWithStatus): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
@@ -169,7 +176,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
       this.guiAuthResolver.isAuthorized('assignGroupToResources_Group_List<Resource>_policy', objects.concat([res])), true);
   }
 
-  itemSelectionToggle(item: RichResource) {
+  itemSelectionToggle(item: ResourceWithStatus) {
     this.selection.toggle(item);
     this.setAuth();
   }
