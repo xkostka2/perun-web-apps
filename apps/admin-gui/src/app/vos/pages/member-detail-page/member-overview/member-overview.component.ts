@@ -20,6 +20,7 @@ import {
 } from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
 import { Urns } from '@perun-web-apps/perun/urns';
+import { EditMemberSponsorsDialogComponent } from '../../../../shared/components/dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
 
 @Component({
   selector: 'app-member-overview',
@@ -228,5 +229,31 @@ export class MemberOverviewComponent implements OnInit {
     };
 
     this.dialog.open(PasswordResetRequestDialogComponent, config);
+  }
+
+  changeSponsors() {
+    const config = getDefaultDialogConfig();
+    config.width = "650px";
+    config.data = {
+      sponsors: this.sponsors,
+      member: this.member,
+      theme: "member-theme"
+    };
+    const dialogRef = this.dialog.open(EditMemberSponsorsDialogComponent, config);
+    dialogRef.afterClosed().subscribe((edited) => {
+      if(edited) {
+        this.loading = true;
+        this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
+          this.member = member;
+          if(this.member.sponsored) {
+            this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
+              this.sponsors = sponsors;
+              this.sponsorsDataSource.data = this.sponsors;
+            });
+          }
+          this.loading = false;
+        });
+      }
+    });
   }
 }

@@ -671,11 +671,14 @@
       "STATUS": "Status:",
       "EXPIRATION": "Expiration:",
       "PERSONAL": "Personal information",
+      "SPONSORSHIP": "Sponsorship",
       "SPONSORED_BY": "This member is sponsored",
       "SPONSORS": "Sponsors",
       "RESET_PASSWORD": "Reset password",
       "RESET_DISABLED": "Unsupported functionality for user's namespaces",
-      "SEND_REQUEST": "Send request"
+      "SEND_REQUEST": "Send request",
+      "SPONSOR_NAME": "Sponsor name",
+      "EXPIRATION_TABLE": "Expiration"
     },
     "GROUPS": {
       "TITLE": "Member groups",
@@ -1811,12 +1814,12 @@
       "NO_NAMESPACE_PASSWORD_INFO": "Generated members will not have password."
     },
     "EDIT_MEMBER_SPONSORS": {
-      "TITLE": "Edit sponsored member",
+      "TITLE": "Edit sponsors of sponsored member",
       "EXPIRATION": "Sponsorship expiration",
       "TABLE_ID": "id",
       "TABLE_NAME": "name",
       "TABLE_EXPIRATION": "expiration",
-      "CANCEL": "Cancel",
+      "CANCEL": "Close",
       "SUBMIT": "Submit",
       "REMOVE_SPONSOR_DISABLED": "You are not authorized to remove sponsor",
       "SUCCESS": "Sponsors successfully edited"

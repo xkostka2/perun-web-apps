@@ -130,8 +130,10 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
       theme: "vo-theme"
     };
     const dialogRef = this.dialog.open(EditMemberSponsorsDialogComponent, config);
-    dialogRef.afterClosed().subscribe(() => {
-      this.refreshTable.emit();
+    dialogRef.afterClosed().subscribe((edited) => {
+      if(edited) {
+        this.refreshTable.emit();
+      }
     });
   }
 

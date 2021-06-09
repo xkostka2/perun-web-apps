@@ -36,6 +36,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
   dataSource: MatTableDataSource<Sponsor>;
   loading = false;
   vo: Vo;
+  expirationChanged = false;
 
   sponsorsToRemove: Set<number> = new Set<number>();
 
@@ -78,7 +79,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
   }
 
   onCancel(){
-    this.dialogRef.close(false);
+    this.dialogRef.close(this.expirationChanged);
   }
 
   isRemoveAuthorized(sponsor: Sponsor) {
@@ -111,6 +112,7 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         this.loading = true;
+        this.expirationChanged = true;
         this.userService.getSponsorsForMember(this.data.member.id, []).subscribe(sponsors => {
           this.sponsors = sponsors;
           this.dataSource = new MatTableDataSource<Sponsor>(this.sponsors);
