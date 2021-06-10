@@ -31,6 +31,7 @@ import { MemberTreeViewDialogComponent } from './member-tree-view-dialog/member-
 import { RouterModule } from '@angular/router';
 import { MatTreeModule } from '@angular/material/tree';
 import { MailChangeFailedDialogComponent } from './mail-change-failed-dialog/mail-change-failed-dialog.component';
+import { UniversalConfirmationDialogComponent } from './universal-confirmation-dialog/universal-confirmation-dialog.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { MailChangeFailedDialogComponent } from './mail-change-failed-dialog/mai
     ChangeEmailDialogComponent,
     UniversalRemoveItemsDialogComponent,
     MemberTreeViewDialogComponent,
-    MailChangeFailedDialogComponent
+    MailChangeFailedDialogComponent,
+    UniversalConfirmationDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,

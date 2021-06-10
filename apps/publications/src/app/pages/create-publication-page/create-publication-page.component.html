@@ -15,7 +15,7 @@
           <div>
           {{'CREATE_PUBLICATION.IMPORT_HINT' | translate}}
           </div>
-          <button class="align-self-end" mat-flat-button color="accent">
+          <button (click)="importPublications()" class="align-self-end" mat-flat-button color="accent">
             {{'CREATE_PUBLICATION.IMPORT' | translate}}
           </button>
         </mat-card-content>

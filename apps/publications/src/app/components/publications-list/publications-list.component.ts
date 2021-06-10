@@ -57,6 +57,8 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
   disabledRouting = false;
   @Input()
   openInTab = false;
+  @Input()
+  allowAlert = true;
 
   @Output()
   publicationSelector: EventEmitter<PublicationForGUI> = new EventEmitter<PublicationForGUI>();

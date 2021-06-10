@@ -13,6 +13,10 @@ export class CreatePublicationPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  importPublications() {
+    this.router.navigate(["create-publication", "import"]);
+  }
+
   createPublication() {
     this.router.navigate(["create-publication", "create"]);
   }

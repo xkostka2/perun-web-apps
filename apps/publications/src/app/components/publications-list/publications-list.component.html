@@ -123,6 +123,6 @@
   </div>
 </div>
 
-<app-alert *ngIf="publications.length === 0" alert_type="warn">
+<app-alert *ngIf="publications.length === 0 && allowAlert" alert_type="warn">
   {{'PUBLICATIONS_LIST.NO_PUBLICATIONS_FOUND' | translate}}
 </app-alert>
