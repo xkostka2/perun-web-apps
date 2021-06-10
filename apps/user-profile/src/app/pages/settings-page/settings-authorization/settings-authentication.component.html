@@ -17,6 +17,9 @@
 <!--  <mat-slide-toggle #toggle color="primary">{{'AUTHENTICATION.MFA_TOGGLE' | customTranslate | translate}}</mat-slide-toggle>-->
   <div [class.hide-table]="exporting" class="card mt-2">
     <div class="card-body">
+      <mat-paginator
+        [pageSizeOptions]="[5,10,25]">
+      </mat-paginator>
       <div class="overflow-auto">
         <table [dataSource]="dataSource" class="w-100" mat-table>
           <ng-container matColumnDef="type">
@@ -59,7 +62,13 @@
         </table>
       </div>
 
-      <mat-paginator [length]="tokens.length" [pageSizeOptions]="[5,10,25]" [pageSize]="this.pageSize"></mat-paginator>
+      <mat-paginator
+        (page)="pageChanged($event)"
+        [length]="paginator.length"
+        [pageIndex]="paginator.pageIndex"
+        [pageSizeOptions]="paginator.pageSizeOptions"
+        [pageSize]="paginator.pageSize">
+      </mat-paginator>
     </div>
   </div>
 </div>

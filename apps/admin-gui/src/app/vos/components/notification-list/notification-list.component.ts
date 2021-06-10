@@ -62,7 +62,7 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -176,5 +176,12 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     }
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

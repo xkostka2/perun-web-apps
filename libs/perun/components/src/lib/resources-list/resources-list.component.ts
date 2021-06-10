@@ -74,7 +74,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
 
   addAuth = false;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -179,5 +179,12 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   itemSelectionToggle(item: ResourceWithStatus) {
     this.selection.toggle(item);
     this.setAuth();
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

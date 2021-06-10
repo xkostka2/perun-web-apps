@@ -5,7 +5,7 @@ import { AddAuthImgDialogComponent } from '../../../components/dialogs/add-auth-
 import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
 import { AuthService, StoreService } from '@perun-web-apps/perun/services';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { RemoveStringValueDialogComponent } from '../../../components/dialogs/remove-string-value-dialog/remove-string-value-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { UserManager, UserManagerSettings } from 'oidc-client';
@@ -47,7 +47,11 @@ export class SettingsAuthenticationComponent implements OnInit {
     translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_DESC').subscribe(res => this.removeDialogDescription = res);
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   ngOnInit(): void {
     this.authService.manager.getUser().then(user => {
@@ -206,6 +210,12 @@ export class SettingsAuthenticationComponent implements OnInit {
         }
       }
     });
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.page.emit(event);
   }
 }
 

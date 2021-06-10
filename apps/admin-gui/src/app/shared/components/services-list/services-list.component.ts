@@ -61,7 +61,7 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   displayedColumns: string[] = ['select', 'id', 'name', 'enabled', 'script', 'description'];
   dataSource: MatTableDataSource<Service>;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -135,6 +135,9 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

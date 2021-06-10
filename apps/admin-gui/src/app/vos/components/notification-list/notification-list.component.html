@@ -1,4 +1,7 @@
 <div class="card-body">
+  <mat-paginator
+    [pageSizeOptions]="pageSizeOptions">
+  </mat-paginator>
   <div class="overflow-auto">
     <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortDirection="asc" matSortDisableClear>
       <ng-container matColumnDef="select">
@@ -74,9 +77,10 @@
     </table>
   </div>
   <mat-paginator
-    [length]="this.applicationMails.length"
-    [pageSize]="pageSize"
-    (page)="page.emit($event)"
-    [pageSizeOptions]="pageSizeOptions">
+    (page)="pageChanged($event)"
+    [length]="paginator.length"
+    [pageIndex]="paginator.pageIndex"
+    [pageSizeOptions]="paginator.pageSizeOptions"
+    [pageSize]="paginator.pageSize">
   </mat-paginator>
 </div>

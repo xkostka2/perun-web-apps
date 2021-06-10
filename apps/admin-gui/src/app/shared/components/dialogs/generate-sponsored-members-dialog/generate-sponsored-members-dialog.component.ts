@@ -88,7 +88,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit {
       sponsoredMembers: ['', [Validators.required, this.userInputValidator()]]
     });
     this.usersInfoFormGroup.controls['namespace'].valueChanges.subscribe({
-      next: (value) => {
+      next: () => {
         this.usersInfoFormGroup.controls['sponsoredMembers'].updateValueAndValidity();
       }
     });

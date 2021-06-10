@@ -67,7 +67,7 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<PublicationForGUI>;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   buttonPressed = false;
 
@@ -188,5 +188,12 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
 
   emitPublication(publication: PublicationForGUI) {
     return this.publicationSelector.emit(publication)
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

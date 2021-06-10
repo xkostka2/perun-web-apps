@@ -61,7 +61,7 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = ['select', 'task.id', 'service.name', 'status', 'blocked', 'task.startTime', 'task.endTime'];
   dataSource: MatTableDataSource<ServiceState>;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -178,4 +178,10 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.page.emit(event);
+    this.paginator.page.emit(event);
+  }
 }

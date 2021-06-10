@@ -1,6 +1,9 @@
 <div [hidden]="!dataSource.filteredData.length" class="card mt-2">
   <div class="card-body table-theme">
     <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
+    <mat-paginator
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
     <div class="overflow-auto">
       <table
         [dataSource]="dataSource"
@@ -57,10 +60,11 @@
     </div>
 
     <mat-paginator
+      [length]="paginator.length"
+      [pageIndex]="paginator.pageIndex"
+      [pageSizeOptions]="paginator.pageSizeOptions"
       (page)="pageChanged($event)"
-      [length]="owners.length"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageSize]="pageSize">
+      [pageSize]="paginator.pageSize">
     </mat-paginator>
   </div>
 </div>

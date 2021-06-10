@@ -34,7 +34,7 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
   selection = new SelectionModel<Owner>(true, []);
 
   @Output()
-  pageChanged: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
+  page: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
 
   private sort: MatSort;
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
@@ -44,7 +44,7 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<ThanksForGUI>;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -102,5 +102,12 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

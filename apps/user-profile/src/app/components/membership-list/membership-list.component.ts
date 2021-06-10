@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator} from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Attribute, Group, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
@@ -41,7 +41,11 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @Input()
   members: Membership[] = [];
@@ -115,11 +119,13 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.entity.id + 1}`;
   }
 
-  // pageChanged(event: PageEvent) {
-  //   this.page.emit(event);
-  // }
-
   extend(membership: Membership) {
     this.extendMembership.emit(membership);
+  }
+
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.page.emit(event);
   }
 }

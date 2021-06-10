@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -28,8 +27,7 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 export class FacilitiesListComponent implements OnChanges {
 
   constructor(
-    private authResolver: GuiAuthResolver,
-    private cd: ChangeDetectorRef
+    private authResolver: GuiAuthResolver
   ) { }
 
   @Input()
@@ -61,14 +59,12 @@ export class FacilitiesListComponent implements OnChanges {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) set matPaginator(pg: MatPaginator) {
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
-    this.setDataSource();
-    this.cd.detectChanges();
   }
 
   private sort: MatSort;
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   dataSource: MatTableDataSource<EnrichedFacility>;
   disableRouting: boolean;
@@ -152,6 +148,9 @@ export class FacilitiesListComponent implements OnChanges {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

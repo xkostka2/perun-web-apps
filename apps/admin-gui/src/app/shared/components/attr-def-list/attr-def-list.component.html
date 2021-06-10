@@ -3,6 +3,9 @@
     <perun-web-apps-table-options
       (exportData)="exportData($event)">
     </perun-web-apps-table-options>
+    <mat-paginator
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
     <div class="overflow-auto">
       <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
         <ng-container matColumnDef="select">
@@ -59,10 +62,11 @@
       </table>
     </div>
     <mat-paginator
-      [length]="this.definitions.length"
-      [pageSize]="pageSize"
+      [length]="paginator.length"
+      [pageIndex]="paginator.pageIndex"
+      [pageSizeOptions]="paginator.pageSizeOptions"
       (page)="pageChanged($event)"
-      [pageSizeOptions]="pageSizeOptions">
+      [pageSize]="paginator.pageSize">
     </mat-paginator>
   </div>
 </div>

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } 
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { downloadData, getDataForExport } from '@perun-web-apps/perun/utils';
 
 @Component({
@@ -33,7 +33,11 @@ export class StringListComponent implements OnChanges, AfterViewInit {
   dataSource: MatTableDataSource<string>;
   pageSize = 5;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   ngOnChanges(changes: SimpleChanges) {
     this.values = this.values ? this.values : [];
@@ -64,4 +68,9 @@ export class StringListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
+  pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
+    this.paginator.page.emit(event);
+  }
 }

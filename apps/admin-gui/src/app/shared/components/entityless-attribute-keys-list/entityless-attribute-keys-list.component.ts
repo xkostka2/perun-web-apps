@@ -46,7 +46,11 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @Input()
   attDef: AttributeDefinition;
@@ -179,6 +183,9 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

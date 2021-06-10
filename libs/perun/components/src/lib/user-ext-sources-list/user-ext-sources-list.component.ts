@@ -53,8 +53,11 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
 
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -126,6 +129,9 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }

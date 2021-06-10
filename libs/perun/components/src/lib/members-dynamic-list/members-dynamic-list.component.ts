@@ -39,7 +39,12 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
               private tableCheckbox: TableCheckbox,
               private dynamicPaginatingService: DynamicPaginatingService) { }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
+
   @ViewChild(MatSort) sort: MatSort;
 
   @Input()
@@ -145,7 +150,10 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 
   loadMembersPage() {

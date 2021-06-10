@@ -36,6 +36,9 @@
 <div mat-dialog-content class="mt-3">
   <div *ngIf="!(records.length === 0)" class="card mt-3">
     <div class="card-body">
+      <mat-paginator
+        [pageSizeOptions]="pageSizeOptions">
+      </mat-paginator>
       <div class="overflow-auto">
         <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="key"
                matSortDirection="asc"
@@ -95,10 +98,11 @@
       </div>
 
       <mat-paginator
-        [length]="this.records.length"
-        [pageSize]="pageSize"
+        [length]="paginator.length"
+        [pageIndex]="paginator.pageIndex"
+        [pageSizeOptions]="paginator.pageSizeOptions"
         (page)="pageChanged($event)"
-        [pageSizeOptions]="pageSizeOptions">
+        [pageSize]="paginator.pageSize">
       </mat-paginator>
     </div>
   </div>

@@ -4,6 +4,10 @@
     <div class="spinner-container" *ngIf="dataSource.loading$ | async">
       <mat-spinner class="ml-auto mr-auto"></mat-spinner>
     </div>
+    <mat-paginator
+      [length]="dataSource.allMemberCount"
+      [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
     <div class="overflow-auto">
       <table
         [dataSource]="dataSource"
@@ -101,10 +105,11 @@
     </div>
 
     <mat-paginator
-      [length]="this.dataSource.allMemberCount"
+      [length]="paginator.length"
+      [pageIndex]="paginator.pageIndex"
+      [pageSizeOptions]="paginator.pageSizeOptions"
       (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
+      [pageSize]="paginator.pageSize">
     </mat-paginator>
   </div>
 </div>

@@ -123,7 +123,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   removeAuth: boolean;
 
-  private paginator: MatPaginator;
+  public paginator: MatPaginator;
 
   @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
     this.paginator = pg;
@@ -299,7 +299,10 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 
   setAuth(): boolean {

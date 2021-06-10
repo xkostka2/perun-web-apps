@@ -4,6 +4,9 @@
     <div class="overflow-auto">
       <perun-web-apps-table-options
         (exportData)="exportData($event)"></perun-web-apps-table-options>
+      <mat-paginator
+        [pageSizeOptions]="pageSizeOptions">
+      </mat-paginator>
       <table
         [dataSource]="dataSource"
         class="w-100"
@@ -80,9 +83,11 @@
         </tr>
       </table>
       <mat-paginator
-        [pageSize]="pageSize"
-        (page)="page.emit($event)"
-        [pageSizeOptions]="pageSizeOptions">
+        (page)="pageChanged($event)"
+        [length]="paginator.length"
+        [pageIndex]="paginator.pageIndex"
+        [pageSizeOptions]="paginator.pageSizeOptions"
+        [pageSize]="paginator.pageSize">
       </mat-paginator>
     </div>
   </div>

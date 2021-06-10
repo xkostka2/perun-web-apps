@@ -54,7 +54,11 @@ export class ApplicationListDetailsComponent implements OnChanges {
 
   addedColumns = new Set<string>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  public paginator: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
+    this.paginator = pg;
+  };
 
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -185,6 +189,9 @@ export class ApplicationListDetailsComponent implements OnChanges {
   }
 
   pageChanged(event: PageEvent) {
+    this.paginator.pageSize = event.pageSize;
+    this.paginator.pageIndex = event.pageIndex;
     this.page.emit(event);
+    this.paginator.page.emit(event);
   }
 }
