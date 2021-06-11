@@ -287,7 +287,7 @@
       "ADD_MEMBER_DISABLED": "You cannot add members manually into this Vo.",
       "REMOVE_MEMBERS": "Remove",
       "SEARCH_DESCRIPTION": "Search by name, login or email",
-      "FILTER_STATUS": "Select Status",
+      "FILTER_STATUS": "Filter by Status",
       "INVITE": "Invite"
     },
     "OVERVIEW": {
@@ -570,8 +570,8 @@
       "LIST_ALL": "List all members",
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
-      "FILTER_STATUS": "Select VO status",
-      "FILTER_GROUP_STATUS": "Select group status"
+      "FILTER_STATUS": "Filter by organizations status",
+      "FILTER_GROUP_STATUS": "Filter by group status"
     },
     "RESOURCES": {
       "TITLE": "Resources",
