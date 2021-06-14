@@ -182,6 +182,7 @@ import { DeleteEntityDialogComponent } from './components/dialogs/delete-entity-
 import { MatListModule } from '@angular/material/list';
 import { EditApplicationFormItemLineComponent } from './components/dialogs/edit-application-form-item-dialog/edit-application-form-item-line/edit-application-form-item-line.component';
 import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-to-registration/add-group-to-registration.component';
+import { OneEntityAttributePageComponent} from './components/one-entity-attribute-page/one-entity-attribute-page.component';
 
 @NgModule({
   imports: [
@@ -311,7 +312,8 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     EditMemberSponsorsDialogComponent,
     CreateAttributeDialogComponent,
     AttributeFriendlyNamePipe,
-    StatisticsCardComponent
+    StatisticsCardComponent,
+    OneEntityAttributePageComponent
   ],
   declarations: [
     PerunNavComponent,
@@ -435,7 +437,8 @@ import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-
     ApplicationFormItemHiddenPipe,
     DeleteEntityDialogComponent,
     EditApplicationFormItemLineComponent,
-    AddGroupToRegistrationComponent
+    AddGroupToRegistrationComponent,
+    OneEntityAttributePageComponent
   ],
   providers: [
     AnyToStringPipe,

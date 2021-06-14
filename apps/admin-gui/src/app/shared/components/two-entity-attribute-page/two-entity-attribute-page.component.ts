@@ -23,13 +23,12 @@ import { Urns } from '@perun-web-apps/perun/urns';
 })
 export class TwoEntityAttributePageComponent implements OnInit {
 
-  constructor(protected route: ActivatedRoute,
-              private attributesManagerService: AttributesManagerService,
+  constructor(private attributesManagerService: AttributesManagerService,
               private resourcesManagerService: ResourcesManagerService,
               private facilitiesManagerService: FacilitiesManagerService,
               private groupsManagerService: GroupsManagerService,
               private membersManager: MembersManagerService,
-              private dialog:MatDialog) {
+              private dialog: MatDialog) {
   }
 
   @ViewChild('list')

@@ -5,44 +5,8 @@
       <ng-template matTabLabel>
         {{'MEMBER_DETAIL.ENTITY' | translate}}
       </ng-template>
-      <perun-web-apps-refresh-button class="mt-2" (refresh)="refreshTable()"></perun-web-apps-refresh-button>
-      <button
-        *ngIf="!loading"
-        mat-flat-button
-        class="mr-2 mt-2"
-        color="accent"
-        (click)="onCreate()">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
-      </button>
-      <button
-        *ngIf="!loading"
-        mat-flat-button
-        class="mr-2 mt-2"
-        color="accent"
-        (click)="onSave()"
-        [disabled]="selection.selected.length === 0">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
-      </button>
-      <button
-        *ngIf="!loading"
-        mat-flat-button
-        class="mt-2"
-        color="warn"
-        (click)="onDelete()"
-        [disabled]="selection.selected.length === 0">
-        {{'MEMBER_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
-      </button>
-      <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER'"></perun-web-apps-immediate-filter>
-      <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
-      <perun-web-apps-attributes-list
-        (page)="pageChanged($event)"
-        [pageSize]="pageSize"
-        #list
-        *ngIf="!loading"
-        [filterValue]="filterValue"
-        [attributes]="attributes"
-        [selection]="selection">
-      </perun-web-apps-attributes-list>
+      <app-one-entity-attribute-page [entity]="'member'" [entityId]="this.memberId">
+      </app-one-entity-attribute-page>
     </mat-tab>
     <mat-tab *ngIf="memberGroupAttAuth">
       <ng-template matTabLabel>
@@ -52,7 +16,7 @@
       </ng-template>
       <ng-template matTabContent>
         <app-two-entity-attribute-page [firstEntity]="'member'" [firstEntityId]="memberId"
-                                       [secondEntity]="'group'" *ngIf="!loading"></app-two-entity-attribute-page>
+                                       [secondEntity]="'group'"></app-two-entity-attribute-page>
       </ng-template>
     </mat-tab>
     <mat-tab *ngIf="memberResourceAttAuth">
@@ -63,7 +27,25 @@
       </ng-template>
       <ng-template matTabContent>
         <app-two-entity-attribute-page [firstEntity]="'member'" [firstEntityId]="memberId"
-                                       [secondEntity]="'resource'" *ngIf="!loading"></app-two-entity-attribute-page>
+                                       [secondEntity]="'resource'"></app-two-entity-attribute-page>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="mb-2">
+      <ng-template matTabLabel>
+        {{'ADMIN_USER.ENTITY' | translate}}
+      </ng-template>
+      <app-one-entity-attribute-page [entityId]="this.member.userId" [entity]="'user'">
+      </app-one-entity-attribute-page>
+    </mat-tab>
+    <mat-tab *ngIf="userFacilityAttAuth">
+      <ng-template matTabLabel>
+        {{'ADMIN_USER.ENTITY' | translate}}
+        -
+        {{'FACILITY_DETAIL.ENTITY' | translate}}
+      </ng-template>
+      <ng-template matTabContent>
+        <app-two-entity-attribute-page [firstEntity]="'user'" [firstEntityId]="member.userId"
+                                       [secondEntity]="'facility'"></app-two-entity-attribute-page>
       </ng-template>
     </mat-tab>
   </mat-tab-group>
