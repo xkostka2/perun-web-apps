@@ -49,7 +49,6 @@ import { UserSettingsOverviewComponent } from './pages/user-detail-page/user-set
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserRolesComponent } from './pages/user-detail-page/user-settings/user-roles/user-roles.component';
 import { UserSettingsAppConfigurationComponent } from './pages/user-detail-page/user-settings/user-settings-app-configuration/user-settings-app-configuration.component';
-import { UserSettingsFacilityAttributesComponent } from './pages/user-detail-page/user-settings/user-settings-facility-attributes/user-settings-facility-attributes.component';
 import { UserDashboardComponent } from './pages/user-detail-page/user-dashboard/user-dashboard.component';
 import { UserSettingsServiceIdentitiesComponent } from './pages/user-detail-page/user-settings/user-settings-service-identities/user-settings-service-identities.component';
 import { UserIdentitiesComponent } from './pages/user-detail-page/user-identities/user-identities.component';
@@ -73,7 +72,6 @@ import { UserFacilitiesComponent } from './pages/user-detail-page/user-facilitie
     UserProfileComponent,
     UserRolesComponent,
     UserSettingsAppConfigurationComponent,
-    UserSettingsFacilityAttributesComponent,
     UserDashboardComponent,
     UserSettingsServiceIdentitiesComponent,
     UserIdentitiesComponent,

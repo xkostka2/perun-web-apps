@@ -34,10 +34,6 @@ import {
 // tslint:disable-next-line:max-line-length
 import { ApplicationFormPreviewComponent } from './components/application-form-preview/application-form-preview.component';
 // tslint:disable-next-line:max-line-length
-import {MemberSettingsComponent} from './pages/member-detail-page/member-settings/member-settings.component';
-import {
-  MemberSettingsOverviewComponent
-} from './pages/member-detail-page/member-settings/member-settings-overview/member-settings-overview.component';
 import {
   MemberAttributesComponent
 } from './pages/member-detail-page/member-attributes/member-attributes.component';
@@ -62,9 +58,6 @@ import {
 } from './pages/group-detail-page/group-settings/group-settings-notifications/group-settings-notifications.component';
 import { VoSettingsExtsourcesComponent } from './pages/vo-detail-page/vo-settings/vo-settings-extsources/vo-settings-extsources.component';
 import { GroupSettingsRelationsComponent } from './pages/group-detail-page/group-settings/group-settings-relations/group-settings-relations.component';
-import { MemberSettingsResourceAttributesComponent } from './pages/member-detail-page/member-settings/member-settings-resource-attributes/member-settings-resource-attributes.component';
-import { GroupSettingsResourceAttributesComponent } from './pages/group-detail-page/group-settings/group-settings-resource-attributes/group-settings-resource-attributes.component';
-import { MemberSettingsGroupAttributesComponent } from './pages/member-detail-page/member-settings/member-settings-group-attributes/member-settings-group-attributes.component';
 import { MemberApplicationsComponent } from './pages/member-detail-page/member-applications/member-applications.component';
 import { MemberResourcesComponent } from './pages/member-detail-page/member-resources/member-resources.component';
 import { ResourceDetailPageComponent } from '../facilities/pages/resource-detail-page/resource-detail-page.component';
@@ -237,27 +230,6 @@ const routes: Routes = [
         path: 'resources',
         component: MemberResourcesComponent,
         data: {animation: 'MemberResourcesPage'}
-      },
-      {
-        path: 'settings',
-        component: MemberSettingsComponent,
-        children: [
-          {
-            path: '',
-            component: MemberSettingsOverviewComponent,
-            data: {animation: 'MemberSettingsOverviewPage'}
-          },
-          {
-            path: 'resourceAttributes',
-            component: MemberSettingsResourceAttributesComponent,
-            data: {animation: 'MemberSettingsResourceAttributesPage'}
-          },
-          {
-            path: 'groupAttributes',
-            component: MemberSettingsGroupAttributesComponent,
-            data: {animation: 'MemberSettingsGroupAttributesPage'}
-          },
-        ]
       }
     ]
   },
@@ -308,16 +280,6 @@ const routes: Routes = [
             path: '',
             component: GroupSettingsOverviewComponent,
             data: {animation: 'GroupSettingsOverviewPage'}
-          },
-          {
-            path: 'resourceAttributes',
-            component: GroupSettingsResourceAttributesComponent,
-            data: {animation: 'GroupSettingsResourceAttributesPage'}
-          },
-          {
-            path: 'groupAttributes',
-            component: MemberSettingsGroupAttributesComponent,
-            data: {animation: 'MemberSettingsGroupAttributesPage'}
           },
           {
             path: 'expiration',

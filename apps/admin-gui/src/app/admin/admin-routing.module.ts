@@ -26,7 +26,6 @@ import {
 } from '../users/pages/user-detail-page/user-settings/user-settings-overview/user-settings-overview.component';
 import { AdminExtSourcesComponent } from './pages/admin-page/admin-ext-sources/admin-ext-sources.component';
 import { UserRolesComponent } from '../users/pages/user-detail-page/user-settings/user-roles/user-roles.component';
-import { UserSettingsFacilityAttributesComponent } from '../users/pages/user-detail-page/user-settings/user-settings-facility-attributes/user-settings-facility-attributes.component';
 import { UserSettingsServiceIdentitiesComponent } from '../users/pages/user-detail-page/user-settings/user-settings-service-identities/user-settings-service-identities.component';
 import { UserIdentitiesComponent } from '../users/pages/user-detail-page/user-identities/user-identities.component';
 import { AdminServicesComponent } from './pages/admin-page/admin-services/admin-services.component';
@@ -160,11 +159,6 @@ const routes: Routes = [
             path: '',
             component: UserSettingsOverviewComponent,
             data: {animation: 'UserSettingsOverviewPage'}
-          },
-          {
-            path: 'facilityAttributes',
-            component: UserSettingsFacilityAttributesComponent,
-            data: {animation: 'UserSettingsFacilityAttributesPage', showPrincipal: false}
           },
           {
             path: 'service-identities',
