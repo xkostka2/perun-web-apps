@@ -5,7 +5,6 @@ import { UserGroupsComponent } from './pages/user-detail-page/user-groups/user-g
 import { UserSettingsComponent } from './pages/user-detail-page/user-settings/user-settings.component';
 import { UserSettingsOverviewComponent } from './pages/user-detail-page/user-settings/user-settings-overview/user-settings-overview.component';
 import { UserAttributesComponent } from './pages/user-detail-page/user-attributes/user-attributes.component';
-import { UserSettingsFacilityAttributesComponent } from './pages/user-detail-page/user-settings/user-settings-facility-attributes/user-settings-facility-attributes.component';
 import { PasswordResetComponent } from '@perun-web-apps/perun/components';
 import { UserSettingsAppConfigurationComponent } from './pages/user-detail-page/user-settings/user-settings-app-configuration/user-settings-app-configuration.component';
 import { UserOverviewComponent } from './pages/user-detail-page/user-overview/user-overview.component';
@@ -51,11 +50,6 @@ const routes: Routes = [
             path: '',
             component: UserSettingsOverviewComponent,
             data: { animation: 'UserSettingsOverviewPage' }
-          },
-          {
-            path: 'facilityAttributes',
-            component: UserSettingsFacilityAttributesComponent,
-            data: { animation: 'UserSettingsFacilityAttributesPage', showPrincipal: true }
           },
           {
             path: 'passwordReset',

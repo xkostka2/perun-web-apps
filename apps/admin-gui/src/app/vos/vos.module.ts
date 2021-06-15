@@ -39,13 +39,9 @@ import {
 import {ApplicationFormListComponent} from './components/application-form-list/application-form-list.component';
 // tslint:disable-next-line:max-line-length
 import {ApplicationFormPreviewComponent} from './components/application-form-preview/application-form-preview.component';
-import { MemberSettingsComponent } from './pages/member-detail-page/member-settings/member-settings.component';
 import {
   MemberAttributesComponent
 } from './pages/member-detail-page/member-attributes/member-attributes.component';
-import {
-  MemberSettingsOverviewComponent
-} from './pages/member-detail-page/member-settings/member-settings-overview/member-settings-overview.component';
 import {VoResourcesPreviewComponent} from './pages/vo-detail-page/vo-resources/vo-resources-preview/vo-resources-preview.component';
 import {VoResourcesTagsComponent} from './pages/vo-detail-page/vo-resources/vo-resources-tags/vo-resources-tags.component';
 import {VoResourcesStatesComponent} from './pages/vo-detail-page/vo-resources/vo-resources-states/vo-resources-states.component';
@@ -74,9 +70,6 @@ import { GroupSettingsRelationsComponent } from './pages/group-detail-page/group
 import { PerunSharedComponentsModule } from '@perun-web-apps/perun/components';
 import { ApplicationListDetailsComponent } from './components/application-list-details/application-list-details.component';
 import { PerunPipesModule } from '@perun-web-apps/perun/pipes';
-import { MemberSettingsResourceAttributesComponent } from './pages/member-detail-page/member-settings/member-settings-resource-attributes/member-settings-resource-attributes.component';
-import { GroupSettingsResourceAttributesComponent } from './pages/group-detail-page/group-settings/group-settings-resource-attributes/group-settings-resource-attributes.component';
-import { MemberSettingsGroupAttributesComponent } from './pages/member-detail-page/member-settings/member-settings-group-attributes/member-settings-group-attributes.component';
 import { MemberApplicationsComponent } from './pages/member-detail-page/member-applications/member-applications.component';
 import { MemberResourcesComponent } from './pages/member-detail-page/member-resources/member-resources.component';
 import { VoSettingsSponsoredMembersComponent } from './pages/vo-detail-page/vo-settings/vo-settings-sponsored-members/vo-settings-sponsored-members.component';
@@ -129,9 +122,7 @@ import { ApplicationFormManageGroupsComponent } from './components/application-f
     ApplicationFormListComponent,
     ApplicationFormPreviewComponent,
     GroupSettingsOverviewComponent,
-    MemberSettingsComponent,
     MemberAttributesComponent,
-    MemberSettingsOverviewComponent,
     VoResourcesPreviewComponent,
     VoResourcesTagsComponent,
     VoResourcesStatesComponent,
@@ -148,9 +139,6 @@ import { ApplicationFormManageGroupsComponent } from './components/application-f
     VoSettingsExtsourcesComponent,
     GroupSettingsRelationsComponent,
     ApplicationListDetailsComponent,
-    MemberSettingsResourceAttributesComponent,
-    GroupSettingsResourceAttributesComponent,
-    MemberSettingsGroupAttributesComponent,
     MemberApplicationsComponent,
     MemberResourcesComponent,
     MemberApplicationsComponent,
