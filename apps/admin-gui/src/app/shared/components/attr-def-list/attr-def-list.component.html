@@ -1,11 +1,11 @@
 <div [hidden]="dataSource.filteredData.length === 0 || definitions.length === 0" class="card mt-2">
-  <div class="card-body">
-    <perun-web-apps-table-options
-      (exportData)="exportData($event)">
-    </perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
+
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
     <div class="overflow-auto">
       <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
         <ng-container matColumnDef="select">
@@ -61,14 +61,7 @@
         </tr>
       </table>
     </div>
-    <mat-paginator
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="pageChanged($event)"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="definitions.length === 0" alert_type="warn">

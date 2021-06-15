@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -18,7 +18,7 @@ import { ResourcesManagerService, ResourceTag} from '@perun-web-apps/perun/opena
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 
 @Component({
@@ -53,11 +53,7 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   private sort: MatSort;
 
@@ -76,7 +72,7 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getDataForColumn(data: ResourceTag, column: string): string{
@@ -103,17 +99,17 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filter = this.filterValue;
     }
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: ResourceTag): string {
@@ -134,12 +130,5 @@ export class ResourcesTagsListComponent implements OnChanges, AfterViewInit {
 
   edit(row?: ResourceTag) {
     this.isChanging.select(row);
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 }

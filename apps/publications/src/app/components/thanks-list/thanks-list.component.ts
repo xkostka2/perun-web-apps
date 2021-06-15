@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { Owner, ThanksForGUI } from '@perun-web-apps/perun/openapi';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -44,12 +44,7 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<ThanksForGUI>;
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
-
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<ThanksForGUI>(this.thanks);
@@ -58,20 +53,11 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
-  private setDataSource() {
-    if (!!this.dataSource) {
-      this.dataSource.filterPredicate = (data: ThanksForGUI, filter: string) => {
-        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
-      };
-      this.dataSource.sortData = (data: ThanksForGUI[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
-      };
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
+  isAllSelected() {
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   getDataForColumn(data: ThanksForGUI, column: string):string {
@@ -89,12 +75,21 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
     downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
-  isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+  masterToggle() {
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
-  masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+  private setDataSource() {
+    if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: ThanksForGUI, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: ThanksForGUI[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.child.paginator;
+    }
   }
 
   checkboxLabel(row?: Owner): string {
@@ -102,12 +97,5 @@ export class ThanksListComponent implements AfterViewInit, OnChanges {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 }

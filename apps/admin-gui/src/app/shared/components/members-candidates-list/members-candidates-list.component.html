@@ -1,92 +1,84 @@
 <div class="card mt-2">
-  <div class="card-body table-theme" *ngIf="members !== null && members !== undefined">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="fullName"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="checkbox">
-          <th *matHeaderCellDef mat-header-cell>
-          </th>
-          <td *matCellDef="let memberCandidate" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? itemSelectionToggle(memberCandidate) : null"
-                          (click)="$event.stopPropagation()"
-                          [checked]="selection.isSelected(memberCandidate)"
-                          [disabled]="isCheckboxDisabled(memberCandidate)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.STATUS' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            <i *ngIf="memberCandidate.member"
-               class="material-icons {{memberCandidate.member.status | memberStatusIconColor}}"
-               matTooltip="{{memberCandidate.member.status}}"
-               matTooltipPosition="left">
-              {{memberCandidate.member.status | memberStatusIcon}}
-            </i>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="fullName">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{memberCandidate.richUser ? (memberCandidate.richUser | userFullName) : (memberCandidate.candidate | userFullName)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="voExtSource">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.ORGANIZATION' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{memberCandidate.richUser ? (memberCandidate.richUser | userVo) : getOrganization(memberCandidate.candidate)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.EMAIL' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{getEmail(memberCandidate)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="logins">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.LOGINS' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{getLogins(memberCandidate)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="alreadyMember">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.ALREADY_MEMBER' | translate}}</th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{getAlreadyMember(memberCandidate)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="local">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-          <td *matCellDef="let memberCandidate" mat-cell>
-            {{memberCandidate.richUser ? "Local" : "External identity"}}
-          </td>
-        </ng-container>
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let memberCandidate; columns: displayedColumns;"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
 
-    <mat-paginator
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="pageChanged($event)"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="fullName"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="checkbox">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let memberCandidate" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? itemSelectionToggle(memberCandidate) : null"
+                        (click)="$event.stopPropagation()"
+                        [checked]="selection.isSelected(memberCandidate)"
+                        [disabled]="isCheckboxDisabled(memberCandidate)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.STATUS' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          <i *ngIf="memberCandidate.member"
+             class="material-icons {{memberCandidate.member.status | memberStatusIconColor}}"
+             matTooltip="{{memberCandidate.member.status}}"
+             matTooltipPosition="left">
+            {{memberCandidate.member.status | memberStatusIcon}}
+          </i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="fullName">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{memberCandidate.richUser ? (memberCandidate.richUser | userFullName) : (memberCandidate.candidate | userFullName)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="voExtSource">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.ORGANIZATION' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{memberCandidate.richUser ? (memberCandidate.richUser | userVo) : getOrganization(memberCandidate.candidate)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.EMAIL' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{getEmail(memberCandidate)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="logins">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.LOGINS' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{getLogins(memberCandidate)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="alreadyMember">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_CANDIDATES_LIST.ALREADY_MEMBER' | translate}}</th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{getAlreadyMember(memberCandidate)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="local">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <td *matCellDef="let memberCandidate" mat-cell>
+          {{memberCandidate.richUser ? "Local" : "External identity"}}
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let memberCandidate; columns: displayedColumns;"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>

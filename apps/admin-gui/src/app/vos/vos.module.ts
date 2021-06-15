@@ -78,6 +78,7 @@ import { VoStatisticsComponent } from './pages/vo-detail-page/vo-statistics/vo-s
 import { GroupStatisticsComponent } from './pages/group-detail-page/group-statistics/group-statistics.component';
 import { ApplicationFormManageGroupsComponent } from './components/application-form-manage-groups/application-form-manage-groups.component';
 import { MemberOverviewMembershipComponent } from './pages/member-detail-page/member-overview/member-overview-membership/member-overview-membership.component';
+import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import { MemberOverviewMembershipComponent } from './pages/member-detail-page/me
     SharedModule,
     UiAlertsModule,
     PerunSharedComponentsModule,
-    PerunPipesModule
+    PerunPipesModule,
+    PerunUtilsModule
   ],
   exports: [
   ],

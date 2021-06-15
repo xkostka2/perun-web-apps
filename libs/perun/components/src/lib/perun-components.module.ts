@@ -19,7 +19,6 @@ import { VosListComponent } from './vos-list/vos-list.component';
 import { GroupsListComponent } from './groups-list/groups-list.component';
 import { RefreshButtonComponent } from './refresh-button/refresh-button.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
-import { TableOptionsComponent } from './table-options/table-options.component';
 import { BackButtonComponent } from './back-button/back-button.component';
 import { ImmediateFilterComponent } from './immediate-filter/immediate-filter.component';
 import { AttributeValueStringComponent } from './attributes-list/attribute-value/attribute-value-string/attribute-value-string.component';
@@ -81,6 +80,7 @@ import { AppFormItemSearchSelectComponent } from './app-form-item-search-select/
 import { OwnersListComponent } from './owners-list/owners-list.component';
 import { NotificatorComponent } from './notificator/notificator.component';
 import { GroupResourceStatusComponent } from './group-resource-status/group-resource-status.component';
+import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
 
 @Injectable()
 export class AppDateAdapter extends NativeDateAdapter {
@@ -142,12 +142,12 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatSelectModule,
     NgxMatSelectSearchModule,
     ScrollingModule,
-    MatDialogModule
+    MatDialogModule,
+    PerunUtilsModule
   ],
   declarations: [
     VosListComponent,
     GroupsListComponent,
-    TableOptionsComponent,
     GroupMenuComponent,
     RefreshButtonComponent,
     BackButtonComponent,
@@ -197,7 +197,6 @@ export const APP_DATE_FORMATS: MatDateFormats = {
   exports: [
     VosListComponent,
     GroupsListComponent,
-    TableOptionsComponent,
     GroupMenuComponent,
     RefreshButtonComponent,
     BackButtonComponent,

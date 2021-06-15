@@ -9,14 +9,13 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Attribute, Group, Vo } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 
 export interface Membership {
@@ -41,11 +40,7 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @Input()
   members: Membership[] = [];
@@ -73,7 +68,7 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -109,7 +104,7 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filter = this.filterValue;
     }
   }
@@ -121,11 +116,5 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
 
   extend(membership: Membership) {
     this.extendMembership.emit(membership);
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.paginator.page.emit(event);
   }
 }

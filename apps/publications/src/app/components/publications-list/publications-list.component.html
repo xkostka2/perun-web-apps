@@ -1,130 +1,121 @@
 <div [hidden]="dataSource.filteredData.length === 0 || publications.length === 0"
      class="card mt-3">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"
-                                  class="ml-auto"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource"
-             class="w-100"
-             mat-table
-             matSort
-             matSortActive="title"
-             matSortDirection="asc"
-             matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let resource" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? itemSelectionToggle(resource) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(resource)"
-                          [checked]="selection.isSelected(resource)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_ID' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">{{publication.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="lock">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_LOCK' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">
-            <button mat-icon-button
-                    *ngIf="publication.locked"
-                    (click)="lockOrUnlockPublication(publication)"
-                    (mouseenter)="buttonPressed = true"
-                    (mouseleave)="buttonPressed = false"
-                    matTooltip="{{'PUBLICATIONS_LIST.LOCKED' | translate}}">
-              <mat-icon>lock</mat-icon>
-            </button>
-            <button mat-icon-button
-                    *ngIf="!publication.locked"
-                    (click)="lockOrUnlockPublication(publication)"
-                    (mouseenter)="buttonPressed = true"
-                    (mouseleave)="buttonPressed = false"
-                    matTooltip="{{'PUBLICATIONS_LIST.UNLOCKED' | translate}}">
-              <mat-icon>lock_open</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_TITLE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">{{publication.title}}</td>
-        </ng-container>
-        <ng-container matColumnDef="reportedBy">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_REPORTED_BY' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">
+
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource"
+           class="w-100"
+           mat-table
+           matSort
+           matSortActive="title"
+           matSortDirection="asc"
+           matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let resource" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? itemSelectionToggle(resource) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(resource)"
+                        [checked]="selection.isSelected(resource)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_ID' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>{{publication.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="lock">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_LOCK' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>
+          <button (click)="lockOrUnlockPublication(publication)"
+                  (mouseenter)="buttonPressed = true"
+                  (mouseleave)="buttonPressed = false"
+                  *ngIf="publication.locked"
+                  mat-icon-button
+                  matTooltip="{{'PUBLICATIONS_LIST.LOCKED' | translate}}">
+            <mat-icon>lock</mat-icon>
+          </button>
+          <button (click)="lockOrUnlockPublication(publication)"
+                  (mouseenter)="buttonPressed = true"
+                  (mouseleave)="buttonPressed = false"
+                  *ngIf="!publication.locked"
+                  mat-icon-button
+                  matTooltip="{{'PUBLICATIONS_LIST.UNLOCKED' | translate}}">
+            <mat-icon>lock_open</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_TITLE' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>{{publication.title}}</td>
+      </ng-container>
+      <ng-container matColumnDef="reportedBy">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_REPORTED_BY' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>
             <span *ngFor="let author of publication.authors">
               {{author | userFullName}}<br>
             </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="year">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_YEAR' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">{{publication.year}}</td>
-        </ng-container>
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_CATEGORY' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">{{publication.categoryName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="thankedTo">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_THANKEDTO' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="year">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_YEAR' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>{{publication.year}}</td>
+      </ng-container>
+      <ng-container matColumnDef="category">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_CATEGORY' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>{{publication.categoryName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="thankedTo">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'PUBLICATIONS_LIST.TABLE_THANKEDTO' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>
             <span *ngFor="let owner of publication.thanks">
               {{owner.ownerName}}<br>
             </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="cite">
-          <th mat-header-cell *matHeaderCellDef>{{'PUBLICATIONS_LIST.TABLE_CITE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let publication">
-            <button
-              mat-stroked-button
-              (click)="showCite(publication)"
-              (mouseenter)="buttonPressed = true"
-              (mouseleave)="buttonPressed = false">
-              {{'PUBLICATIONS_LIST.SHOW_CITE' | translate}}
-            </button>
-          </td>
-        </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="cite">
+        <th *matHeaderCellDef mat-header-cell>{{'PUBLICATIONS_LIST.TABLE_CITE' | translate}}</th>
+        <td *matCellDef="let publication" class="static-column-size" mat-cell>
+          <button
+            (click)="showCite(publication)"
+            (mouseenter)="buttonPressed = true"
+            (mouseleave)="buttonPressed = false"
+            mat-stroked-button>
+            {{'PUBLICATIONS_LIST.SHOW_CITE' | translate}}
+          </button>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let publication; columns: displayedColumns;"
-          [routerLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
-          [perunWebAppsMiddleClickRouterLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
-          (click)="disabledRouting && openInTab && !buttonPressed ? emitPublication(publication) : null"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
-
-    <mat-paginator
-      (page)="pageChanged($event)"
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        (click)="disabledRouting && openInTab && !buttonPressed ? emitPublication(publication) : null"
+        *matRowDef="let publication; columns: displayedColumns;"
+        [perunWebAppsMiddleClickRouterLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
+        [routerLink]="disabledRouting || buttonPressed ? null : [routerPath, publication.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="publications.length === 0 && allowAlert" alert_type="warn">

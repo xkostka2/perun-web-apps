@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Vo } from '@perun-web-apps/perun/openapi';
@@ -19,6 +19,7 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-vos-list',
@@ -61,11 +62,7 @@ export class VosListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   private sort: MatSort;
 
@@ -80,7 +77,7 @@ export class VosListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getDataForColumn(data: Vo, column: string, otherThis: VosListComponent): string{
@@ -117,18 +114,11 @@ export class VosListComponent implements OnChanges, AfterViewInit {
       };
       this.dataSource.filter = this.filterValue;
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
   checkboxLabel(row?: Vo): string {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 }

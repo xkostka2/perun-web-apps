@@ -1,6 +1,19 @@
 {
   "extends": "../../../tslint.json",
-  "rules": [],
+  "rules": {
+    "directive-selector": [
+      true,
+      "attribute",
+      "perunWebApps",
+      "camelCase"
+    ],
+    "component-selector": [
+      true,
+      "element",
+      "perun-web-apps",
+      "kebab-case"
+    ]
+  },
   "linterOptions": {
     "exclude": ["!**/*"]
   }

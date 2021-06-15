@@ -1,105 +1,97 @@
 <div class="card mt-2 w-100" [class.hide-table]="loading" [hidden]="this.table.length === 0 || (dataSource ? dataSource.filteredData.length === 0 : false)">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table mat-table [dataSource]="dataSource" >
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_ID' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let application">{{application['id']}}</td>
-        </ng-container>
-        <ng-container matColumnDef="voId">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_VO_ID' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let application">{{application['vo'].id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="voName">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_VO_NAME' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let application">{{application['vo'].name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="groupId">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_GROUP_ID' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let application">{{application.group ? application.group.id : '' }}</td>
-        </ng-container>
-        <ng-container matColumnDef="groupName">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_GROUP_NAME' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let application">{{application.group ? application.group.name : '' }}</td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_TYPE' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.type}}</td>
-        </ng-container>
-        <ng-container matColumnDef="state">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_STATE' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.state}}</td>
-        </ng-container>
-        <ng-container matColumnDef="extSourceName">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_EXTSOURCENAME' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.extSourceName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="extSourceType">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_EXTSOURCETYPE' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.extSourceType}}</td>
-        </ng-container>
-        <ng-container matColumnDef="user">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_USER' | translate}}</th>
-          <td mat-cell *matCellDef="let application">
-              {{application.user ? (application.user | userFullName) : 'null'}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_CREATED_BY' | translate}}</th>
-          <td mat-cell *matCellDef="let application">
-            {{application.createdBy.slice(application.createdBy.lastIndexOf('=')+1, application.createdBy.length)}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_CREATED_DATE' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.createdAt | date: 'd.M.y'}}</td>
-        </ng-container>
-        <ng-container matColumnDef="modifiedBy">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_BY' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{getFriendlyName(application.modifiedBy)}}</td>
-        </ng-container>
-        <ng-container matColumnDef="modifiedAt">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_AT' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.modifiedAt | date: 'd.M.y'}}</td>
-        </ng-container>
 
-        <ng-container *ngFor="let disCol of addedColumns; let colIndex = index" [matColumnDef]="disCol">
-          <th mat-header-cell *matHeaderCellDef>{{disCol}}</th>
-          <td mat-cell *matCellDef="let application">{{application[disCol]}}</td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource" mat-table >
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_ID' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application['id']}}</td>
+      </ng-container>
+      <ng-container matColumnDef="voId">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_VO_ID' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application['vo'].id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="voName">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_VO_NAME' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application['vo'].name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="groupId">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_GROUP_ID' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application.group ? application.group.id : '' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="groupName">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_GROUP_NAME' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application.group ? application.group.name : '' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_TYPE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.type}}</td>
+      </ng-container>
+      <ng-container matColumnDef="state">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_STATE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.state}}</td>
+      </ng-container>
+      <ng-container matColumnDef="extSourceName">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_EXTSOURCENAME' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.extSourceName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="extSourceType">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_EXTSOURCETYPE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.extSourceType}}</td>
+      </ng-container>
+      <ng-container matColumnDef="user">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_USER' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          {{application.user ? (application.user | userFullName) : 'null'}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="createdBy">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_CREATED_BY' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          {{application.createdBy.slice(application.createdBy.lastIndexOf('=')+1, application.createdBy.length)}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_CREATED_DATE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.createdAt | date: 'd.M.y'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="modifiedBy">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_BY' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{getFriendlyName(application.modifiedBy)}}</td>
+      </ng-container>
+      <ng-container matColumnDef="modifiedAt">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_AT' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.modifiedAt | date: 'd.M.y'}}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="fedInfo">
-          <th mat-header-cell *matHeaderCellDef >{{'VO_DETAIL.APPLICATION.TABLE_FEDINFO' | translate}}</th>
-          <td mat-cell *matCellDef="let application">{{application.fedInfo}}</td>
-        </ng-container>
+      <ng-container *ngFor="let disCol of addedColumns; let colIndex = index" [matColumnDef]="disCol">
+        <th *matHeaderCellDef mat-header-cell>{{disCol}}</th>
+        <td *matCellDef="let application" mat-cell>{{application[disCol]}}</td>
+      </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          [class.cursor-pointer]="!disableRouting"
-          *matRowDef="let application; columns: displayedColumns;"
-          [routerLink]="selectApplication(application)"
-          [perunWebAppsMiddleClickRouterLink]="selectApplication(application)"
-          class="dark-hover-list-item">
-        </tr>
-      </table>
-    </div>
-    <mat-paginator
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="pageChanged($event)"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+      <ng-container matColumnDef="fedInfo">
+        <th *matHeaderCellDef mat-header-cell >{{'VO_DETAIL.APPLICATION.TABLE_FEDINFO' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.fedInfo}}</td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let application; columns: displayedColumns;"
+        [class.cursor-pointer]="!disableRouting"
+        [perunWebAppsMiddleClickRouterLink]="selectApplication(application)"
+        [routerLink]="selectApplication(application)"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-
 
 <div *ngIf="!loading">
   <app-alert *ngIf="this.dataSource.data.length === 0" alert_type="warn">

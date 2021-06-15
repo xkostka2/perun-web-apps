@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -10,7 +10,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { GuiAuthResolver, NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
 import { ApplicationMail, RegistrarManagerService } from '@perun-web-apps/perun/openapi';
-import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'app-notification-list',
@@ -62,11 +62,7 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   private sort: MatSort;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -80,15 +76,15 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, "", this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, "", this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, "", this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, "", this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: ApplicationMail): string {
@@ -174,14 +170,7 @@ export class NotificationListComponent implements OnChanges, AfterViewInit {
   private setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 }

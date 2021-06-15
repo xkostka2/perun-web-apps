@@ -9,14 +9,14 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Application, Group, Member} from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport, parseFullName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -61,7 +61,8 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
   dataSource: MatTableDataSource<Application>;
 
-  @ViewChild('paginator', {static: false}) paginator: MatPaginator;
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
+
   private sort: MatSort;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -74,6 +75,7 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.dataSource = new MatTableDataSource<Application>(this.applications);
     this.setDataSource();
   }
 
@@ -143,12 +145,11 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
 
   setDataSource() {
     // don't set the data if the paginator was not loaded yet
-    if (!this.paginator) {
+    if (!this.child.paginator) {
       return;
     }
-    if (!this.dataSource) {
-      this.dataSource = new MatTableDataSource<Application>();
-      this.dataSource.paginator = this.paginator;
+    if (!!this.dataSource) {
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.filterPredicate = (data: Application, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
@@ -158,7 +159,6 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
       };
     }
     this.dataSource.filter = this.filterValue;
-    this.dataSource.data = this.applications;
   }
 
 
@@ -185,9 +185,5 @@ export class ApplicationsListComponent implements OnChanges, AfterViewInit {
       }
     }
     return null;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

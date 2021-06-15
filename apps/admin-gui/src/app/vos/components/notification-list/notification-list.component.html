@@ -1,86 +1,80 @@
-<div class="card-body">
-  <mat-paginator
-    [pageSizeOptions]="pageSizeOptions">
-  </mat-paginator>
-  <div class="overflow-auto">
-    <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortDirection="asc" matSortDisableClear>
-      <ng-container matColumnDef="select">
-        <th *matHeaderCellDef mat-header-cell>
-          <mat-checkbox (change)="$event ? masterToggle() : null"
-                        [aria-label]="checkboxLabel()"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                        color="primary">
-          </mat-checkbox>
-        </th>
-        <td *matCellDef="let row" class="static-column-size" mat-cell>
-          <mat-checkbox (change)="$event ? toggle(row) : null"
-                        (click)="$event.stopPropagation()"
-                        [aria-label]="checkboxLabel(row)"
-                        [checked]="selection.isSelected(row)"
-                        color="primary">
-          </mat-checkbox>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="id">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>
-          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_EMAIL_ID' | translate}}
-        </th>
-        <td *matCellDef="let applicationMail" class="static-column-size" mat-cell>{{applicationMail.id}}</td>
-      </ng-container>
-      <ng-container matColumnDef="mailType">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>
-          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_EMAIL_TYPE' | translate}}
-        </th>
-        <td *matCellDef="let applicationMail" mat-cell>{{getMailType(applicationMail)}}</td>
-      </ng-container>
-      <ng-container matColumnDef="appType">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>
-          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE' | translate}}
-        </th>
-        <td *matCellDef="let applicationMail" mat-cell>
-          <div *ngIf="applicationMail.appType == 'INITIAL'; else extension">
-            <mat-icon matTooltip="Initial" matTooltipPosition="above">arrow_right_alt</mat-icon>
-            {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE_INITIAL' | translate}}
-          </div>
-          <ng-template #extension>
-            <mat-icon matTooltip="Extension" matTooltipPosition="above">cached</mat-icon>
-            {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE_EXTENSION' | translate}}
-          </ng-template>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="send">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>
-          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_SENDING_ENABLED' | translate}}
-        </th>
-        <td *matCellDef="let applicationMail" mat-cell>
-          <section>
-            <mat-checkbox (change)="changeSending(applicationMail)"
-                          [disabled]="disableSend"
-                          matTooltip="{{'VO_DETAIL.SETTINGS.NOTIFICATIONS.DISABLED_HINT' | translate}}"
-                          [matTooltipDisabled]="!disableSend"
-                          (click)="$event.stopPropagation()"
-                          [ngModel]="applicationMail.send">
-            </mat-checkbox>
-          </section>
-        </td>
-      </ng-container>
 
-      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr
-        *matRowDef="let applicationMail; columns: displayedColumns;"
-        [class.cursor-pointer]="true"
-        (click)="openApplicationMailDetail(applicationMail)"
-        class="dark-hover-list-item"
-        mat-row>
-      </tr>
-    </table>
-  </div>
-  <mat-paginator
-    (page)="pageChanged($event)"
-    [length]="paginator.length"
-    [pageIndex]="paginator.pageIndex"
-    [pageSizeOptions]="paginator.pageSizeOptions"
-    [pageSize]="paginator.pageSize">
-  </mat-paginator>
-</div>
+<perun-web-apps-table-wrapper
+  (page)="page.emit($event)"
+  [dataLength]="dataSource.filteredData.length"
+  [hideExport]="true"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageSize]="pageSize">
+  <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortDirection="asc" matSortDisableClear>
+    <ng-container matColumnDef="select">
+      <th *matHeaderCellDef mat-header-cell>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [aria-label]="checkboxLabel()"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      color="primary">
+        </mat-checkbox>
+      </th>
+      <td *matCellDef="let row" class="static-column-size" mat-cell>
+        <mat-checkbox (change)="$event ? toggle(row) : null"
+                      (click)="$event.stopPropagation()"
+                      [aria-label]="checkboxLabel(row)"
+                      [checked]="selection.isSelected(row)"
+                      color="primary">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_EMAIL_ID' | translate}}
+      </th>
+      <td *matCellDef="let applicationMail" class="static-column-size" mat-cell>{{applicationMail.id}}</td>
+    </ng-container>
+    <ng-container matColumnDef="mailType">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_EMAIL_TYPE' | translate}}
+      </th>
+      <td *matCellDef="let applicationMail" mat-cell>{{getMailType(applicationMail)}}</td>
+    </ng-container>
+    <ng-container matColumnDef="appType">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE' | translate}}
+      </th>
+      <td *matCellDef="let applicationMail" mat-cell>
+        <div *ngIf="applicationMail.appType == 'INITIAL'; else extension">
+          <mat-icon matTooltip="Initial" matTooltipPosition="above">arrow_right_alt</mat-icon>
+          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE_INITIAL' | translate}}
+        </div>
+        <ng-template #extension>
+          <mat-icon matTooltip="Extension" matTooltipPosition="above">cached</mat-icon>
+          {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_APPLICATION_TYPE_EXTENSION' | translate}}
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="send">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>
+        {{'VO_DETAIL.SETTINGS.NOTIFICATIONS.TABLE_SENDING_ENABLED' | translate}}
+      </th>
+      <td *matCellDef="let applicationMail" mat-cell>
+        <section>
+          <mat-checkbox (change)="changeSending(applicationMail)"
+                        (click)="$event.stopPropagation()"
+                        [disabled]="disableSend"
+                        [matTooltipDisabled]="!disableSend"
+                        [ngModel]="applicationMail.send"
+                        matTooltip="{{'VO_DETAIL.SETTINGS.NOTIFICATIONS.DISABLED_HINT' | translate}}">
+          </mat-checkbox>
+        </section>
+      </td>
+    </ng-container>
+
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr
+      (click)="openApplicationMailDetail(applicationMail)"
+      *matRowDef="let applicationMail; columns: displayedColumns;"
+      [class.cursor-pointer]="true"
+      class="dark-hover-list-item"
+      mat-row>
+    </tr>
+  </table>
+</perun-web-apps-table-wrapper>

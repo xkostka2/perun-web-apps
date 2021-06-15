@@ -3,11 +3,11 @@ import { Author } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport, parseAttribute, parseFullName, parseName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
@@ -50,11 +50,7 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<Author>;
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<Author>(this.authors);
@@ -62,18 +58,8 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
     this.dataSource.filter = this.filterValue;
   }
 
-
-  private setDataSource() {
-    if (!!this.dataSource) {
-      this.dataSource.filterPredicate = (data: Author, filter: string) => {
-        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getFilterDataForColumn, this)
-      };
-      this.dataSource.sortData = (data: Author[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
-      };
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getSortDataForColumn(data: Author, column: string):string {
@@ -156,14 +142,16 @@ export class AuthorsListComponent implements AfterViewInit, OnChanges {
     this.removeAuthor.emit(author);
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
+  private setDataSource() {
+    if (!!this.dataSource) {
+      this.dataSource.filterPredicate = (data: Author, filter: string) => {
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getFilterDataForColumn, this)
+      };
+      this.dataSource.sortData = (data: Author[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
+      };
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.child.paginator;
+    }
   }
 }

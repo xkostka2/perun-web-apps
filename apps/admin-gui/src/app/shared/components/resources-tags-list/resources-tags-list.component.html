@@ -1,89 +1,81 @@
 <div [hidden]="resourceTags.length === 0 || dataSource.filteredData.length === 0" class="card mt-2 ">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let row" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(row) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(row)"
-                          [checked]="selection.isSelected(row)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
 
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.RESOURCES.TAGS.TAG_ID' | translate}}</th>
-          <td *matCellDef="let tag" class="static-column-size" mat-cell>{{tag.id}}</td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let row" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(row)"
+                        [checked]="selection.isSelected(row)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.RESOURCES.TAGS.TAG_NAME' | translate}}</th>
-          <td *matCellDef="let tag" mat-cell>
-            <div *ngIf="!isChanging.isSelected(tag)">
-              {{tag.tagName}}
-            </div>
-            <div *ngIf="isChanging.isSelected(tag)">
-              <mat-form-field>
-                <input
-                  [(ngModel)]="tag.tagName"
-                  matInput>
-              </mat-form-field>
-            </div>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.RESOURCES.TAGS.TAG_ID' | translate}}</th>
+        <td *matCellDef="let tag" class="static-column-size" mat-cell>{{tag.id}}</td>
+      </ng-container>
 
-        <ng-container matColumnDef="edit">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let tag" mat-cell>
-            <div class="d-flex justify-content-end">
-              <button
-                (click)="edit(tag)"
-                *ngIf="!isChanging.isSelected(tag)"
-                mat-icon-button
-                matTooltip="{{'VO_DETAIL.RESOURCES.TAGS.EDIT_BUTTON' | translate}}">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                (click)="save(tag)"
-                *ngIf="isChanging.isSelected(tag)"
-                mat-icon-button
-                matTooltip="{{'VO_DETAIL.RESOURCES.TAGS.SAVE_BUTTON' | translate}}">
-                <mat-icon>save</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell>{{'VO_DETAIL.RESOURCES.TAGS.TAG_NAME' | translate}}</th>
+        <td *matCellDef="let tag" mat-cell>
+          <div *ngIf="!isChanging.isSelected(tag)">
+            {{tag.tagName}}
+          </div>
+          <div *ngIf="isChanging.isSelected(tag)">
+            <mat-form-field>
+              <input
+                [(ngModel)]="tag.tagName"
+                matInput>
+            </mat-form-field>
+          </div>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr *matRowDef="let group; columns: displayedColumns;"
-            class="dark-hover-list-item"
-            mat-row>
-        </tr>
-      </table>
-    </div>
+      <ng-container matColumnDef="edit">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let tag" mat-cell>
+          <div class="d-flex justify-content-end">
+            <button
+              (click)="edit(tag)"
+              *ngIf="!isChanging.isSelected(tag)"
+              mat-icon-button
+              matTooltip="{{'VO_DETAIL.RESOURCES.TAGS.EDIT_BUTTON' | translate}}">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              (click)="save(tag)"
+              *ngIf="isChanging.isSelected(tag)"
+              mat-icon-button
+              matTooltip="{{'VO_DETAIL.RESOURCES.TAGS.SAVE_BUTTON' | translate}}">
+              <mat-icon>save</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="pageChanged($event)"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let group; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="resourceTags.length === 0" alert_type="warn">

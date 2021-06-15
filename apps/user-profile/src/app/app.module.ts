@@ -76,6 +76,7 @@ import { AddTokenInfoDialogComponent } from './components/add-token-info-dialog/
 import { FooterComponent } from './components/footer/footer.component';
 import { PerunLoginModule } from '@perun-web-apps/perun/login';
 import { ProfileLoginScreenBaseComponent } from './components/profile-login-screen-base/profile-login-screen-base.component';
+import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -180,7 +181,8 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     MatSlideToggleModule,
     MatRadioModule,
     FormsModule,
-    PerunLoginModule
+    PerunLoginModule,
+    PerunUtilsModule
   ],
   providers: [
     CustomIconService,

@@ -1,45 +1,35 @@
 <div class="card mt-2" [hidden]="!values.length">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="[5,10,25]">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource" class="w-100" mat-table>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-          </th>
-          <td *matCellDef="let row" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(row) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(row)"
-                          [checked]="selection.isSelected(row)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="value">
-          <th *matHeaderCellDef class="pl-3" mat-header-cell>{{headerColumnText}}</th>
-          <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
-        </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let key; columns: displayedColumns;"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource" class="w-100" mat-table>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let row" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(row)"
+                        [checked]="selection.isSelected(row)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th *matHeaderCellDef class="pl-3" mat-header-cell>{{headerColumnText}}</th>
+        <td *matCellDef="let value" class="truncate pl-3" mat-cell>{{value}}</td>
+      </ng-container>
 
-    <mat-paginator
-      (page)="pageChanged($event)"
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let key; columns: displayedColumns;"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="values.length === 0" alert_type="warn">

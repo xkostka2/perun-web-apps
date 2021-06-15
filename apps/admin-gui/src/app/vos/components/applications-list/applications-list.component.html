@@ -1,91 +1,86 @@
 <div
   [hidden]="this.applications.length === 0 || !dataSource || dataSource.filteredData.length === 0"
   class="card mt-2">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource"
-             class="w-100"
-             mat-table
-             matSort
-             matSortActive="createdAt"
-             matSortDirection="desc"
-             matSortDisableClear>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_ID' | translate}}</th>
-          <td *matCellDef="let application" class="static-column-size" mat-cell>{{application.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="createdAt">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_CREATED_DATE' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>{{application.createdAt | date: 'd.M.y'}}</td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_TYPE' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>
-            <div *ngIf="application.type == 'INITIAL'">
-              <mat-icon matTooltip="Initial" matTooltipPosition="above">arrow_right_alt</mat-icon>
-            </div>
-            <div *ngIf="application.type == 'EXTENSION'">
-              <mat-icon matTooltip="Extension" matTooltipPosition="above">restore</mat-icon>
-            </div>
-            <div *ngIf="application.type == 'EMBEDDED'">
-              <mat-icon matTooltip="Embedded" matTooltipPosition="above">nat</mat-icon>
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="state">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_STATE' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>
-            <span [outerHTML]="application.state | applicationState"></span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="user">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_SUBMITTED_BY' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>
-            <div *ngIf="application.user == null; else name">
-              {{application.createdBy.slice(application.createdBy.lastIndexOf('=')+1, application.createdBy.length)}}
-            </div>
-            <ng-template #name>
-              {{application.user | userFullName}}
-            </ng-template>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="group">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_GROUP_NAME' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>
-            <div *ngIf="application.group == null; else groupName" class="font-italic text-muted">
-              -
-            </div>
-            <ng-template #groupName>
-              {{application.group.name}}
-            </ng-template>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="modifiedBy">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_BY' | translate}}</th>
-          <td *matCellDef="let application" mat-cell>{{getFriendlyName(application.modifiedBy)}}</td>
-        </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          [class.cursor-pointer]="!disableRouting"
-          [routerLink]="selectApplication(application)"
-          [perunWebAppsMiddleClickRouterLink]="selectApplication(application)"
-          *matRowDef="let application; columns: displayedColumns;"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource"
+           class="w-100"
+           mat-table
+           matSort
+           matSortActive="createdAt"
+           matSortDirection="desc"
+           matSortDisableClear>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_ID' | translate}}</th>
+        <td *matCellDef="let application" class="static-column-size" mat-cell>{{application.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_CREATED_DATE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{application.createdAt | date: 'd.M.y'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_TYPE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          <div *ngIf="application.type == 'INITIAL'">
+            <mat-icon matTooltip="Initial" matTooltipPosition="above">arrow_right_alt</mat-icon>
+          </div>
+          <div *ngIf="application.type == 'EXTENSION'">
+            <mat-icon matTooltip="Extension" matTooltipPosition="above">restore</mat-icon>
+          </div>
+          <div *ngIf="application.type == 'EMBEDDED'">
+            <mat-icon matTooltip="Embedded" matTooltipPosition="above">nat</mat-icon>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="state">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_STATE' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          <span [outerHTML]="application.state | applicationState"></span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="user">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_SUBMITTED_BY' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          <div *ngIf="application.user == null; else name">
+            {{application.createdBy.slice(application.createdBy.lastIndexOf('=')+1, application.createdBy.length)}}
+          </div>
+          <ng-template #name>
+            {{application.user | userFullName}}
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="group">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_GROUP_NAME' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>
+          <div *ngIf="application.group == null; else groupName" class="font-italic text-muted">
+            -
+          </div>
+          <ng-template #groupName>
+            {{application.group.name}}
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="modifiedBy">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'VO_DETAIL.APPLICATION.TABLE_MODIFIED_BY' | translate}}</th>
+        <td *matCellDef="let application" mat-cell>{{getFriendlyName(application.modifiedBy)}}</td>
+      </ng-container>
 
-    <mat-paginator
-      #paginator
-      [length]="this.applications.length"
-      [pageSize]="pageSize"
-      (page)="pageChanged($event)"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let application; columns: displayedColumns;"
+        [class.cursor-pointer]="!disableRouting"
+        [perunWebAppsMiddleClickRouterLink]="selectApplication(application)"
+        [routerLink]="selectApplication(application)"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="this.applications.length === 0" alert_type="warn">

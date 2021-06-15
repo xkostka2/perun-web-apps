@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { ServiceState } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {
@@ -20,6 +20,7 @@ import {
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import { formatDate } from '@angular/common';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-services-status-list',
@@ -61,11 +62,8 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
   displayedColumns: string[] = ['select', 'task.id', 'service.name', 'status', 'blocked', 'task.startTime', 'task.endTime'];
   dataSource: MatTableDataSource<ServiceState>;
 
-  public paginator: MatPaginator;
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -152,18 +150,18 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   /** The label for the checkbox on the passed row */
@@ -175,13 +173,6 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
+    this.dataSource.paginator = this.child.paginator;
   }
 }

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
 import { MemberGroupStatus, RichMember, VoMemberStatuses } from '@perun-web-apps/perun/openapi';
 import {
@@ -26,6 +26,7 @@ import {
 } from '@perun-web-apps/perun/services';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-members-dynamic-list',
@@ -39,11 +40,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
               private tableCheckbox: TableCheckbox,
               private dynamicPaginatingService: DynamicPaginatingService) { }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -87,9 +84,9 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => this.child.paginator.pageIndex = 0);
 
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.child.paginator.page)
       .pipe(
         tap(() => this.loadMembersPage())
       )
@@ -109,7 +106,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
   ngOnChanges() {
     if (!!this.dataSource) {
-      this.paginator.pageIndex = 0;
+      this.child.paginator.pageIndex = 0;
       this.loadMembersPage();
     }
   }
@@ -149,18 +146,11 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
     }
   }
 
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
-  }
-
   loadMembersPage() {
     const sortDirection = this.sort.direction === 'asc' ? 'ASCENDING' : 'DESCENDING';
     const sortColumn = this.sort.active === 'fullName' ? 'NAME' : 'ID';
-    this.dataSource.loadMembers(this.voId, this.attrNames, sortDirection, this.paginator.pageIndex,
-      this.paginator.pageSize, sortColumn,  this.selectedStatuses, this.searchString, this.groupId, this.selectedGroupStatuses);
+    this.dataSource.loadMembers(this.voId, this.attrNames, sortDirection, this.child.paginator.pageIndex,
+      this.child.paginator.pageSize, sortColumn,  this.selectedStatuses, this.searchString, this.groupId, this.selectedGroupStatuses);
   }
 
   exportData(format: string) {

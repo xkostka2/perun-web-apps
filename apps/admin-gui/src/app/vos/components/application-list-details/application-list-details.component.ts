@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Application, Group, Member, RegistrarManagerService} from '@perun-web-apps/perun/openapi';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
   downloadData, getDataForExport,
   parseFullName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -54,11 +54,7 @@ export class ApplicationListDetailsComponent implements OnChanges {
 
   addedColumns = new Set<string>();
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -68,6 +64,7 @@ export class ApplicationListDetailsComponent implements OnChanges {
     }
     this.loading = true;
     this.table = [];
+    this.initialize();
     this.getApplicationsData(0);
   }
 
@@ -153,7 +150,7 @@ export class ApplicationListDetailsComponent implements OnChanges {
       this.displayedColumns.push(val);
     }
     this.dataSource = new MatTableDataSource(this.table);
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
     this.dataSource.filter = this.filterValue.trim().toLowerCase();
 
     if (this.dataSource.paginator) {
@@ -186,12 +183,5 @@ export class ApplicationListDetailsComponent implements OnChanges {
       }
     }
     return null;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 }

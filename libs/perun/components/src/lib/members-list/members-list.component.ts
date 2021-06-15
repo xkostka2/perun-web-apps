@@ -11,7 +11,7 @@ import {
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
 import { RichMember } from '@perun-web-apps/perun/openapi';
 import {
@@ -24,6 +24,7 @@ import {
 import { ChangeMemberStatusDialogComponent, MemberTreeViewDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import { ActivatedRoute } from '@angular/router';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-members-list',
@@ -44,11 +45,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  public paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @Input()
   showGroupStatuses: boolean;
@@ -159,12 +156,12 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
       };
       this.dataSource.filter = this.filter;
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -187,11 +184,11 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   }
 
    isAllSelected() {
-    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.child.paginator.hasNextPage(), this.child.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, true, this.canBeSelected);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex, true, this.canBeSelected);
   }
 
   checkboxLabel(row?: RichMember): string {
@@ -215,13 +212,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
         }
       });
     }
-  }
-
-  pageChanged(event: PageEvent) {
-    this.paginator.pageSize = event.pageSize;
-    this.paginator.pageIndex = event.pageIndex;
-    this.page.emit(event);
-    this.paginator.page.emit(event);
   }
 
   viewMemberGroupTree(member: RichMember) {

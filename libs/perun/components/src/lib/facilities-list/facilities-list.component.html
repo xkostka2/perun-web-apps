@@ -1,96 +1,88 @@
 <div class="card mt-3" [hidden]="!dataSource || dataSource.filteredData.length === 0 || facilities.length === 0">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <mat-paginator
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="recent"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let facility" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(facility) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(facility)"
-                          [checked]="selection.isSelected(facility)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.ID' | translate}}</th>
-          <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.facility.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="recent">
-          <th *matHeaderCellDef mat-header-cell>
-          </th>
-          <td *matCellDef="let facility" mat-cell>
-            <perun-web-apps-recently-viewed-icon
-              [recentIds]="recentIds"
-              [id]="facility.facility.id">
-            </perun-web-apps-recently-viewed-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.facility.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="description">
-          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESCRIPTION' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.facility.description}}</td>
-        </ng-container>
-        <ng-container matColumnDef="technicalOwners">
-          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.TECHNICAL_OWNERS' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>{{facility.owners | technicalOwners}}</td>
-        </ng-container>
-        <ng-container matColumnDef="destinations">
-          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESTINATIONS' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>
-            <perun-web-apps-object-list-values
-              (mouseenter)="disableRouting = true"
-              (mouseleave)="disableRouting = false"
-              [paramName]="'destination'"
-              [objects]="facility.destinations | filterUniqueObjects: filterValue:'destination'"></perun-web-apps-object-list-values>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="hosts">
-          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.HOSTS' | translate}}</th>
-          <td *matCellDef="let facility" mat-cell>
-            <perun-web-apps-object-list-values
-              (mouseenter)="disableRouting = true"
-              (mouseleave)="disableRouting = false"
-              [paramName]="'hostname'"
-              [objects]="facility.hosts | filterUniqueObjects: filterValue:'hostname'"></perun-web-apps-object-list-values>
-          </td>
-        </ng-container>
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let facility; columns: displayedColumns;"
-          [routerLink]="disableRouting ? [] : ['/facilities', facility.facility.id]"
-          [perunWebAppsMiddleClickRouterLink]="['/facilities', facility.facility.id]"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
 
-    <mat-paginator
-      [length]="paginator.length"
-      [pageIndex]="paginator.pageIndex"
-      [pageSizeOptions]="paginator.pageSizeOptions"
-      (page)="pageChanged($event)"
-      [pageSize]="paginator.pageSize">
-    </mat-paginator>
-  </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="recent"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let facility" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(facility) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(facility)"
+                        [checked]="selection.isSelected(facility)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.ID' | translate}}</th>
+        <td *matCellDef="let facility" class="static-column-size" mat-cell>{{facility.facility.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="recent">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let facility" mat-cell>
+          <perun-web-apps-recently-viewed-icon
+            [id]="facility.facility.id"
+            [recentIds]="recentIds">
+          </perun-web-apps-recently-viewed-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.FACILITIES_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let facility" mat-cell>{{facility.facility.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESCRIPTION' | translate}}</th>
+        <td *matCellDef="let facility" mat-cell>{{facility.facility.description}}</td>
+      </ng-container>
+      <ng-container matColumnDef="technicalOwners">
+        <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.TECHNICAL_OWNERS' | translate}}</th>
+        <td *matCellDef="let facility" mat-cell>{{facility.owners | technicalOwners}}</td>
+      </ng-container>
+      <ng-container matColumnDef="destinations">
+        <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.DESTINATIONS' | translate}}</th>
+        <td *matCellDef="let facility" mat-cell>
+          <perun-web-apps-object-list-values
+            (mouseenter)="disableRouting = true"
+            (mouseleave)="disableRouting = false"
+            [objects]="facility.destinations | filterUniqueObjects: filterValue:'destination'"
+            [paramName]="'destination'"></perun-web-apps-object-list-values>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="hosts">
+        <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.FACILITIES_LIST.HOSTS' | translate}}</th>
+        <td *matCellDef="let facility" mat-cell>
+          <perun-web-apps-object-list-values
+            (mouseenter)="disableRouting = true"
+            (mouseleave)="disableRouting = false"
+            [objects]="facility.hosts | filterUniqueObjects: filterValue:'hostname'"
+            [paramName]="'hostname'"></perun-web-apps-object-list-values>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let facility; columns: displayedColumns;"
+        [perunWebAppsMiddleClickRouterLink]="['/facilities', facility.facility.id]"
+        [routerLink]="disableRouting ? [] : ['/facilities', facility.facility.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="!!dataSource && dataSource.filteredData.length === 0 && facilities.length !== 0" alert_type="warn">
