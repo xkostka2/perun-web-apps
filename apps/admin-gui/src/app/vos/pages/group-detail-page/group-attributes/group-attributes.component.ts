@@ -71,7 +71,7 @@ export class GroupAttributesComponent implements OnInit {
         this.group = group;
 
         this.groupResourceAttAuth = this.authResolver.isAuthorized('getAssignedResources_Group_policy', [this.group]);
-        this.groupMemberAttAuth = this.authResolver.isAuthorized('getCompleteRichMembers_Group_List<String>_List<String>_boolean_policy', [this.group]);
+        this.groupMemberAttAuth = this.authResolver.isAuthorized('getCompleteRichMembers_Group_List<String>_List<String>_List<String>_boolean_policy', [this.group]);
         this.refreshTable();
       });
     });
