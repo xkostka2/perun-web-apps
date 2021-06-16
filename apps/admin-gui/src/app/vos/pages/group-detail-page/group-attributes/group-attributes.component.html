@@ -5,7 +5,9 @@
       <ng-template matTabLabel>
         {{'GROUP_DETAIL.ENTITY' | translate}}
       </ng-template>
-      <app-one-entity-attribute-page [entity]="'group'" [entityId]="groupId"></app-one-entity-attribute-page>
+      <ng-template matTabContent>
+        <app-one-entity-attribute-page [entity]="'group'" [entityId]="groupId"></app-one-entity-attribute-page>
+      </ng-template>
     </mat-tab>
     <mat-tab *ngIf="groupMemberAttAuth">
       <ng-template matTabLabel>

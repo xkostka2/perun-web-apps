@@ -5,7 +5,9 @@
       <ng-template matTabLabel>
         {{'FACILITY_DETAIL.ENTITY' | translate}}
       </ng-template>
-      <app-one-entity-attribute-page [entity]="'facility'" [entityId]="facilityId"></app-one-entity-attribute-page>
+      <ng-template matTabContent>
+        <app-one-entity-attribute-page [entity]="'facility'" [entityId]="facilityId"></app-one-entity-attribute-page>
+      </ng-template>
     </mat-tab>
     <mat-tab *ngIf="facilityUserAttAuth">
       <ng-template matTabLabel>

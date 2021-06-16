@@ -5,8 +5,10 @@
       <ng-template matTabLabel>
         {{'MEMBER_DETAIL.ENTITY' | translate}}
       </ng-template>
-      <app-one-entity-attribute-page [entity]="'member'" [entityId]="this.memberId">
-      </app-one-entity-attribute-page>
+      <ng-template matTabContent>
+        <app-one-entity-attribute-page [entity]="'member'" [entityId]="this.memberId">
+        </app-one-entity-attribute-page>
+      </ng-template>
     </mat-tab>
     <mat-tab *ngIf="memberGroupAttAuth">
       <ng-template matTabLabel>
@@ -34,8 +36,10 @@
       <ng-template matTabLabel>
         {{'ADMIN_USER.ENTITY' | translate}}
       </ng-template>
-      <app-one-entity-attribute-page [entityId]="this.member.userId" [entity]="'user'">
-      </app-one-entity-attribute-page>
+      <ng-template matTabContent>
+        <app-one-entity-attribute-page [entityId]="this.member.userId" [entity]="'user'">
+        </app-one-entity-attribute-page>
+      </ng-template>
     </mat-tab>
     <mat-tab *ngIf="userFacilityAttAuth">
       <ng-template matTabLabel>

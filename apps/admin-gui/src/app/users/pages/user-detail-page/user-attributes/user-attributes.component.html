@@ -4,7 +4,9 @@
     <ng-template matTabLabel>
       {{'ADMIN_USER.ENTITY' | translate}}
     </ng-template>
-    <app-one-entity-attribute-page [entityId]="userId" [entity]="'user'"></app-one-entity-attribute-page>
+    <ng-template matTabContent>
+      <app-one-entity-attribute-page [entityId]="userId" [entity]="'user'"></app-one-entity-attribute-page>
+    </ng-template>
   </mat-tab>
   <mat-tab *ngIf="userFacilityAttAuth">
     <ng-template matTabLabel>
