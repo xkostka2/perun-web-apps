@@ -6,7 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {
   DeleteNotificationDialogComponent
 } from '../../../../../shared/components/dialogs/delete-notification-dialog/delete-notification-dialog.component';
-import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import {
   EditEmailFooterDialogComponent
 } from '../../../../../shared/components/dialogs/edit-email-footer-dialog/edit-email-footer-dialog.component';
@@ -47,7 +47,8 @@ export class VoSettingsNotificationsComponent implements OnInit {
     private tableConfigService: TableConfigService,
     private notificator: NotificatorService,
     private authResolver: GuiAuthResolver,
-    private voService: VosManagerService) {
+    private voService: VosManagerService,
+    private store: StoreService) {
   }
 
   loading = false;
@@ -93,7 +94,8 @@ export class VoSettingsNotificationsComponent implements OnInit {
   }
 
   add() {
-    const applicationMail: ApplicationMail = createNewApplicationMail();
+    const supportedLangs = this.store.get('supportedLanguages');
+    const applicationMail: ApplicationMail = createNewApplicationMail(supportedLangs);
     applicationMail.formId = this.applicationForm.id;
 
     const config = getDefaultDialogConfig();

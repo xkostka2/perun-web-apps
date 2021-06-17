@@ -142,7 +142,7 @@
             </div>
           </ng-template>
         </mat-tab>
-        <mat-tab label="{{'DIALOGS.NOTIFICATIONS_ADD_EDIT_MAIL.LANG_CS' | translate}}">
+        <mat-tab *ngIf="supportsCsLocalisation" label="{{'DIALOGS.NOTIFICATIONS_ADD_EDIT_MAIL.LANG_CS' | translate}}">
           <ng-template matTabContent>
             <div class="d-flex w-100">
               <div class="pr-2 w-100">

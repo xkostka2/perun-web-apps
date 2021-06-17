@@ -560,13 +560,18 @@ export function translateIdp(name: string): string {
   }
 }
 
-export function createNewApplicationMail(): ApplicationMail {
-  return { appType: 'INITIAL',
-          formId: 0,
-          mailType: 'APP_CREATED_USER',
-          send: true,
-          message: { ['en']: {locale: 'en', subject: '', text: ''},
-            ['cs']: {locale: 'cs', subject: '', text: ''}} };
+export function createNewApplicationMail(langs = ['en', 'cs']): ApplicationMail {
+  const mail: ApplicationMail = {
+    appType: 'INITIAL',
+    formId: 0,
+    mailType: 'APP_CREATED_USER',
+    send: true,
+    message: {}
+  };
+  langs.forEach(lang => {
+    mail.message[lang] = { locale: lang, subject: '', text: '' };
+  });
+  return mail;
 }
 
 
