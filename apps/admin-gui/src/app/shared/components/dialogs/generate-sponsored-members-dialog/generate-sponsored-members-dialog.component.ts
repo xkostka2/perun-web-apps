@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   Attribute,
@@ -10,8 +10,7 @@ import {
 import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { formatDate } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Urns } from '@perun-web-apps/perun/urns';
@@ -28,18 +27,10 @@ export interface GenerateSponsoredMembersDialogData {
   templateUrl: './generate-sponsored-members-dialog.component.html',
   styleUrls: ['./generate-sponsored-members-dialog.component.scss']
 })
-export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterViewInit {
-
-  @Output()
-  page = new EventEmitter<PageEvent>();
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+export class GenerateSponsoredMembersDialogComponent implements OnInit {
 
   theme: string;
   loading = false;
-  dataSource: MatTableDataSource<{name: string, status: string, login: string, passwd: string}> =
-    new MatTableDataSource<{name: string; status: string; login: string; passwd: string}>();
-  outputColumns = ['name', 'status', 'login', 'password'];
   functionalityNotSupported = false;
 
   emailRegx = /^(([^<>+()\[\]\\.,;:\s@"-#$%&=]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
@@ -189,11 +180,6 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     return output;
   }
 
-  exportData(data) {
-    this.dataSource.data = this.createOutputObjects(data);
-    downloadData(this.dataSource.data, 'csv', 'member-logins')
-  }
-
   onGenerate(){
     this.loading = true;
     const listOfMembers = this.usersInfoFormGroup.get('sponsoredMembers').value.split("\n");
@@ -233,7 +219,7 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
     }
 
     this.membersService.createSponsoredMembersFromCSV(inputSponsoredMembersFromCSV).subscribe(logins => {
-      this.exportData(logins);
+      downloadData(this.createOutputObjects(logins), 'csv', 'member-logins')
       this.notificator.showSuccess(this.translate.instant('DIALOGS.GENERATE_SPONSORED_MEMBERS.SUCCESS'));
       this.dialogRef.close(true);
     }, () => this.loading = false);
@@ -290,14 +276,6 @@ export class GenerateSponsoredMembersDialogComponent implements OnInit, AfterVie
 
       return null;
     };
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 
   setExpiration(newExpiration) {

@@ -215,40 +215,4 @@
       </mat-step>
     </mat-horizontal-stepper>
   </div>
-
-  <table
-    [hidden]="true"
-    class="w-100"
-    mat-table>
-    <ng-container matColumnDef="name">
-      <th *matHeaderCellDef mat-header-cell>name</th>
-      <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.name}}</td>
-    </ng-container>
-    <ng-container matColumnDef="status">
-      <th *matHeaderCellDef mat-header-cell>status</th>
-      <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.status}}</td>
-    </ng-container>
-    <ng-container matColumnDef="login">
-      <th *matHeaderCellDef mat-header-cell>login</th>
-      <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.login}}</td>
-    </ng-container>
-    <ng-container matColumnDef="password">
-      <th *matHeaderCellDef mat-header-cell>password</th>
-      <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.password}}</td>
-    </ng-container>
-    <tr *matHeaderRowDef="outputColumns" mat-header-row></tr>
-    <tr
-      *matRowDef="let sponsoredMember; columns: outputColumns;"
-      class="dark-hover-list-item"
-      mat-row
-    >
-    </tr>
-  </table>
-
-  <mat-paginator
-    [hidden]="true"
-    [length]="this.dataSource.data.length"
-    (page)="pageChanged($event)"
-    [pageSize]="100">
-  </mat-paginator>
 </div>
