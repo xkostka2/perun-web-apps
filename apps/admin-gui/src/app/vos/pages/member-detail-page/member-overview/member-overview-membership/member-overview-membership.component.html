@@ -1,0 +1,44 @@
+<mat-card class="mat-elevation-z3 membership-card">
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.MEMBERSHIP' | translate}}</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
+    <div *ngIf="!loading">
+      <table mat-table [dataSource]="voMembershipDataSource" class="ml-auto mr-auto">
+        <ng-container matColumnDef="attName">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
+            {{attribute}}:
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="attValue">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let attribute" class="column-center" mat-cell>
+            <div *ngIf="attribute === 'Status'">
+              <i class="material-icons vert-top mr-1 {{(member.status | memberStatusIconColor)}}">
+                {{member.status | memberStatusIcon}}
+              </i>
+              <b class="vert-top">
+                {{member.status | transformMemberStatus}}
+              </b>
+            </div>
+            <div *ngIf="attribute === 'Expiration'">
+              <i class="column-center">
+                {{voExpiration | parseDate}}
+              </i>
+              <button *ngIf="authResolver.isThisVoAdmin(vo.id)"
+                      (click)="changeVoExpiration()"
+                      mat-icon-button>
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr *matRowDef="let attribute; columns: displayedColumns;" mat-row></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
