@@ -28,61 +28,15 @@
                 {{attributes.get(attribute)[1]}}
               </td>
             </ng-container>
-            <tr
-              *matRowDef="let attribute; columns: displayedColumns;"
-              mat-row
-            >
+            <tr *matRowDef="let attribute; columns: displayedColumns;" mat-row>
             </tr>
           </table>
         </mat-card-content>
       </mat-card>
     </div>
     <div class="align-cards">
-      <mat-card class="mat-elevation-z3">
-        <mat-card-header>
-          <mat-card-title>
-            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.MEMBERSHIP' | translate}}</h1>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <table mat-table [dataSource]="membershipDataSource" class="ml-auto mr-auto">
-            <ng-container matColumnDef="attName">
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
-                {{attribute}}:
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="attValue">
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let attribute" class="column-center" mat-cell>
-                <div *ngIf="attribute === 'Status'">
-                  <mat-icon class="vert-top mr-1" [color]="statusIconColor">
-                    {{statusIcon}}
-                  </mat-icon>
-                  <b class="vert-top">
-                    {{member.status | transformMemberStatus}}
-                  </b>
-                </div>
-                <div *ngIf="attribute === 'Expiration'">
-                  <i class="column-center">
-                    {{expiration | parseDate}}
-                  </i>
-                  <button
-                    *ngIf="authResolver.isThisVoAdmin(vo.id)"
-                    (click)="changeExpiration()"
-                    mat-icon-button>
-                      <mat-icon>edit</mat-icon>
-                  </button>
-                </div>
-              </td>
-            </ng-container>
-            <tr
-              *matRowDef="let attribute; columns: displayedColumns;"
-              mat-row>
-            </tr>
-          </table>
-        </mat-card-content>
-      </mat-card>
+      <app-member-overview-membership [member]="member" [vo]="vo">
+      </app-member-overview-membership>
       <mat-card class="mat-elevation-z3 mt-4" *ngIf="pwdResetAuth">
         <mat-card-header>
           <mat-card-title>

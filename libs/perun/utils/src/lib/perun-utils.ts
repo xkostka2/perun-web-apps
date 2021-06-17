@@ -20,35 +20,6 @@ import { saveAs } from 'file-saver';
 
 export const TABLE_ITEMS_COUNT_OPTIONS = [5, 10, 25, 100, 1000, 10000];
 
-export function parseStatusIcon(richMember: RichMember): string {
-  switch (richMember.status) {
-    case 'VALID':
-      return 'verified_user';
-    case 'INVALID':
-      return 'report';
-    case 'EXPIRED':
-      return 'schedule';
-    case 'DISABLED':
-      return 'delete';
-  }
-}
-
-/**
- * Return color which should be used for icon of given member's status.
- *
- * @param richMember member
- */
-export function parseStatusColor(richMember: RichMember): string {
-  switch (richMember.status) {
-    case 'VALID':
-      return 'accent';
-    case 'INVALID':
-      return 'warn';
-    default:
-      return '';
-  }
-}
-
 /**
  * Gets email of given member. The preferred email has top priority, the vo-email
  * has lower priority. If there are no emails, an empty string is returned.

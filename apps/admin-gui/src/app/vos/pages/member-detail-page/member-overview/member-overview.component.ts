@@ -1,9 +1,7 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuItem} from '@perun-web-apps/perun/models';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
 import { MatTableDataSource } from '@angular/material/table';
 import { PasswordResetRequestDialogComponent } from '../../../../shared/components/dialogs/password-reset-request-dialog/password-reset-request-dialog.component';
 import {
@@ -13,13 +11,10 @@ import {
   UsersManagerService, Vo
 } from '@perun-web-apps/perun/openapi';
 import {
-  ApiRequestConfigurationService,
   GuiAuthResolver,
-  NotificatorService,
   StoreService
 } from '@perun-web-apps/perun/services';
-import { getDefaultDialogConfig, parseFullName, parseStatusColor, parseStatusIcon } from '@perun-web-apps/perun/utils';
-import { Urns } from '@perun-web-apps/perun/urns';
+import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { EditMemberSponsorsDialogComponent } from '../../../../shared/components/dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
 
 @Component({
@@ -36,19 +31,13 @@ export class MemberOverviewComponent implements OnInit {
     private attributesManager: AttributesManagerService,
     private membersService: MembersManagerService,
     private usersManager: UsersManagerService,
-    private translate: TranslateService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     public authResolver: GuiAuthResolver,
-    private storeService: StoreService,
-    private apiRequest: ApiRequestConfigurationService,
-    private notificator: NotificatorService,
+    private storeService: StoreService
   ) {
   }
 
-  fullName = '';
-  statusIcon = '';
-  statusIconColor = '';
   expiration = '';
   logins: Attribute[] = [];
   member: RichMember = null;
@@ -57,14 +46,12 @@ export class MemberOverviewComponent implements OnInit {
   attributeNames: Array<string> = [];
   attributes: Map<string, string[]> = new Map<string, string[]>();
   dataSource = new MatTableDataSource<string>();
-  membershipDataSource = new MatTableDataSource<string>();
   displayedColumns = ['attName', 'attValue'];
   sponsors: Sponsor[] = [];
   sponsorsDataSource = new MatTableDataSource<Sponsor>();
 
   vo: Vo;
   loading = false;
-  expirationAtt: Attribute;
   pwdResetAuth: boolean;
 
   ngOnInit() {
@@ -81,54 +68,33 @@ export class MemberOverviewComponent implements OnInit {
         this.attributesManager.getLogins(member.userId).subscribe(logins => {
           this.logins = logins.filter(login => attUrns.includes(login.friendlyNameParameter));
           this.member = member;
-          this.fullName = parseFullName(this.member.user);
-          this.statusIcon = parseStatusIcon(this.member);
-          this.statusIconColor = parseStatusColor(this.member);
 
-        this.initAttributes();
-        this.dataSource = new MatTableDataSource<string>(Array.from(this.attributes.keys()));
-        this.membershipDataSource = new MatTableDataSource<string>(['Status', 'Expiration']);
+          this.initAttributes();
+          this.dataSource = new MatTableDataSource<string>(Array.from(this.attributes.keys()));
 
-        this.vo = {
-          id: member.voId,
-          beanName: "Vo"
-        };
-        this.pwdResetAuth = this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [this.vo, this.member]);
-        if (this.member.sponsored &&
-          this.authResolver.isAuthorized('getSponsorsForMember_Member_List<String>_policy', [this.member])) {
+          this.vo = {
+            id: member.voId,
+            beanName: "Vo"
+          };
+          this.pwdResetAuth = this.authResolver.isAuthorized('sendPasswordResetLinkEmail_Member_String_String_String_String_policy', [this.vo, this.member]);
+          if (this.member.sponsored &&
+            this.authResolver.isAuthorized('getSponsorsForMember_Member_List<String>_policy', [this.member])) {
 
-          this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
-            this.sponsors = sponsors;
-            this.sponsorsDataSource = new MatTableDataSource<Sponsor>(this.sponsors);
+            this.usersManager.getSponsorsForMember(this.member.id, null).subscribe(sponsors => {
+              this.sponsors = sponsors;
+              this.sponsorsDataSource = new MatTableDataSource<Sponsor>(this.sponsors);
 
+              this.initNavItems();
+              this.refreshData();
+            });
+          } else {
             this.initNavItems();
             this.refreshData();
-          });
-        } else {
-          this.initNavItems();
-          this.refreshData();
-        }
+          }
 
       }, () => this.loading = false);
     });
   });
-  }
-
-  changeExpiration() {
-    const config = getDefaultDialogConfig();
-    config.width = '400px';
-    config.data = {
-      memberId: this.member.id,
-      expirationAttr: this.expirationAtt,
-      mode: 'vo'
-    }
-
-    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
-    dialogRef.afterClosed().subscribe(success => {
-      if (success) {
-        this.refreshData();
-      }
-    });
   }
 
   private initAttributes() {
@@ -203,19 +169,7 @@ export class MemberOverviewComponent implements OnInit {
     this.loading = true;
     this.membersService.getRichMemberWithAttributes(this.member.id).subscribe(member => {
       this.member = member;
-      this.apiRequest.dontHandleErrorForNext();
-      this.attributesManager.getMemberAttributeByName(this.member.id, Urns.MEMBER_DEF_EXPIRATION).subscribe(attr => {
-        this.expirationAtt = attr;
-        this.expiration = !attr.value ? this.translate.instant('MEMBER_DETAIL.OVERVIEW.NEVER_EXPIRES') : attr.value;
-        this.loading = false;
-      }, error => {
-        if (error.error.name !== 'PrivilegeException') {
-          this.notificator.showError(error);
-        } else {
-          this.membershipDataSource = new MatTableDataSource<string>(['Status']);
-        }
-        this.loading = false
-      });
+      this.loading = false;
     }, () => this.loading = false);
   }
 
