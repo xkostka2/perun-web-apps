@@ -66,6 +66,15 @@
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.GROUPS_LIST.TABLE_GROUP_DESCRIPTION' | translate}}</th>
           <td *matCellDef="let group" class="wrap-content" mat-cell>{{group.description}}</td>
         </ng-container>
+        <ng-container matColumnDef="status">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.GROUPS_LIST.TABLE_GROUP_STATUS' | translate}}</th>
+          <td *matCellDef="let group" class="wrap-content" mat-cell>
+            <perun-web-apps-group-resource-status
+              [status]="group.status">
+            </perun-web-apps-group-resource-status>
+          </td>
+        </ng-container>
         <ng-container matColumnDef="expiration">
           <th *matHeaderCellDef mat-header-cell
               mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.GROUPS_LIST.TABLE_GROUP_EXPIRATION' | translate}}</th>

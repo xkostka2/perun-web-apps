@@ -55,7 +55,7 @@
       [authType]="'group-subgroups'"
       [disableMembers]="true"
       [disableRouting]="!routeAuth"
-      [hideColumns]="hideColumns"
+      [displayedColumns]="deleteAuth ? ['select', 'id', 'name', 'description', 'menu'] : ['id', 'name', 'description', 'menu']"
       (moveGroup)="onMoveGroup($event)"
       (refreshTable)="refreshTable()"
       [filter]="filterValue"

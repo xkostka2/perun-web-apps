@@ -37,7 +37,7 @@
   (page)="pageChanged($event)"
   [selection]="selected"
   [pageSize]="pageSize"
-  [hideColumns]="['expiration','vo', 'recent', 'menu']"
+  [displayedColumns]="['select', 'id', 'name', 'description']"
   [disableRouting]="true"
   [filter]="filterValue"
   [authType]="'application-form-manage-groups'"

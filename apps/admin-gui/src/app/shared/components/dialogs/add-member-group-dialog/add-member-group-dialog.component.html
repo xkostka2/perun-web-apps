@@ -11,7 +11,7 @@
       *ngIf="!loading"
       [groups]="groups"
       [selection]="selection"
-      [hideColumns]="hideColumns"
+      [displayedColumns]="['select', 'id', 'name', 'description']"
       [filter]="filterValue"
       [groupsToDisable]="membersGroups"
       [disableGroups]="true"

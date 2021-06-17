@@ -90,7 +90,7 @@
           (page)="pageChanged($event)"
           [pageSize]="pageSize"
           *ngIf="groups"
-          [hideColumns]="manageAuth ? ['menu', 'expiration', 'recent'] : ['select','expiration', 'menu', 'recent']"
+          [displayedColumns]="manageAuth ? ['select', 'id', 'vo', 'name', 'description'] : ['id', 'vo', 'name', 'description']"
           [groups]="groups"
           [selection]="selectionGroups"
           [disableMembers]="false">

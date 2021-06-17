@@ -184,7 +184,7 @@
           <perun-web-apps-groups-list
             [groups]="assignableGroups"
             [selection]="selection"
-            [hideColumns]="['expiration','vo', 'recent', 'menu']"
+            [displayedColumns]="['select', 'id', 'name', 'description']"
             [disableRouting]="true"
             [pageSize]="pageSize"
             (page)="groupTablePageChanged($event)"

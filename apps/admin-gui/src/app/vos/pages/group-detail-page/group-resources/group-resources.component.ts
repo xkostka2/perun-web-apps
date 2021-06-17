@@ -1,7 +1,11 @@
-import { AfterViewInit, Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Group, GroupsManagerService, ResourcesManagerService, RichResource } from '@perun-web-apps/perun/openapi';
+import {
+  Group,
+  GroupsManagerService,
+  ResourcesManagerService,
+} from '@perun-web-apps/perun/openapi';
 import { PageEvent } from '@angular/material/paginator';
 import { TableConfigService, TABLE_GROUP_RESOURCES_LIST } from '@perun-web-apps/config/table-config';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +13,7 @@ import { AddGroupResourceDialogComponent } from '../../../../shared/components/d
 import { RemoveGroupResourceDialogComponent } from '../../../../shared/components/dialogs/remove-group-resource-dialog/remove-group-resource-dialog.component';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
-import { ResourcesListComponent } from '@perun-web-apps/perun/components';
+import { ResourcesListComponent, ResourceWithStatus } from '@perun-web-apps/perun/components';
 
 @Component({
   selector: 'app-group-resources',
@@ -32,8 +36,8 @@ export class GroupResourcesComponent implements OnInit {
   }
 
   group: Group;
-  resources: RichResource[] = null;
-  selected = new SelectionModel<RichResource>(true, []);
+  resources: ResourceWithStatus[] = null;
+  selected = new SelectionModel<ResourceWithStatus>(true, []);
 
   loading: boolean;
   filterValue = '';
@@ -75,8 +79,13 @@ export class GroupResourcesComponent implements OnInit {
 
   refreshTable() {
     this.loading = true;
-    this.resourcesManager.getAssignedRichResourcesWithGroup(this.group.id).subscribe(resources => {
-      this.resources = resources;
+    this.resourcesManager.getResourceAssignments(this.group.id).subscribe(resources => {
+      this.resources = <ResourceWithStatus[]>resources.map(r =>{
+        const resWithStatus: ResourceWithStatus = r.enrichedResource.resource;
+        resWithStatus.facility = r.facility;
+        resWithStatus.status = r.status;
+        return resWithStatus;
+      });
       this.selected.clear();
       this.setAuthorization();
       this.loading = false;

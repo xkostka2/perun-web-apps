@@ -2254,6 +2254,7 @@
           "TABLE_SEARCH": "Filter by name, description or ID",
           "TABLE_GROUP_DESCRIPTION": "Description",
           "TABLE_GROUP_EXPIRATION": "Expiration",
+          "TABLE_GROUP_STATUS": "Status",
           "DISABLED_HINT": "You cannot add members to this group or user is already member.",
           "ALREADY_MEMBER_TOOLTIP": "User is already member of group",
           "CREATE_RELATION_AUTH_TOOLTIP": "You don't have permission to create relation with this group.",
@@ -2289,6 +2290,7 @@
           "TABLE_RESOURCE_TAGS": "Tags",
           "TABLE_SEARCH": "Filter",
           "TABLE_RESOURCE_DESCRIPTION": "Description",
+          "TABLE_GROUP_RESOURCE_STATUS": "Status",
           "NO_RESOURCES_WARNING": "No resources assigned."
         },
         "RESOURCE_SEARCH_SELECT": {
@@ -2476,6 +2478,12 @@
           "TITLE": "Preferred mail change failed",
           "INFO": "Preferred email change request does not exist or is not valid anymore",
           "CLOSE": "Close"
+        },
+        "GROUP_RESOURCE_STATUS": {
+          "ACTIVE": "Active",
+          "INACTIVE": "Inactive",
+          "FAILED": "Failed",
+          "PROCESSING": "Processing"
         }
       },
       "ORGANIZATIONS": {

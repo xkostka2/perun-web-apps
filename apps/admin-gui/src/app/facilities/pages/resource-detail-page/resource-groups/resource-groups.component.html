@@ -30,7 +30,7 @@
     [selection]="selected"
     [disableMembers]="false"
     [disableRouting]="!guiAuthResolver.isAuthorized('getGroupById_int_policy', [assignedGroups[0]])"
-    [hideColumns]="['vo', 'recent', 'expiration','menu']">
+    [displayedColumns]="['select', 'id', 'name', 'description', 'status']">
   </perun-web-apps-groups-list>
 </div>
 <app-alert *ngIf="assignedGroups.length === 0 && !loading" alert_type="warn">
