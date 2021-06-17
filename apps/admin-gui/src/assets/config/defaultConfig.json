@@ -27,7 +27,6 @@
     "urn:perun:user:attribute-def:def:login-namespace:cesnet",
     "urn:perun:user:attribute-def:def:login-namespace:mu"
   ],
-  "sponsor_namespace_attributes": [],
   "password_namespace_attributes": [
     "urn:perun:user:attribute-def:def:login-namespace:einfra",
     "urn:perun:user:attribute-def:def:login-namespace:einfra-services",
