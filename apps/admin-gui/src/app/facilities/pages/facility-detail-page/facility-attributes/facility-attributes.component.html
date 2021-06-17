@@ -5,29 +5,9 @@
       <ng-template matTabLabel>
         {{'FACILITY_DETAIL.ENTITY' | translate}}
       </ng-template>
-      <perun-web-apps-refresh-button class="mt-2" (refresh)="refreshTable()"></perun-web-apps-refresh-button>
-      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onCreate()">
-        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.CREATE' | translate}}
-      </button>
-
-      <button mat-flat-button class="mr-2 mt-2" color="accent" (click)="onSave()" [disabled]="selection.selected.length === 0">
-        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.SAVE' | translate}}
-      </button>
-
-      <button mat-flat-button class="mt-2" color="warn" (click)="onDelete()" [disabled]="selection.selected.length === 0">
-        {{'FACILITY_DETAIL.SETTINGS.ATTRIBUTES.DELETE' | translate}}
-      </button>
-      <perun-web-apps-immediate-filter (filter)="applyFilter($event)" [placeholder]="'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.FILTER' | translate"></perun-web-apps-immediate-filter>
-      <mat-spinner class="ml-auto mr-auto" *ngIf="loading"></mat-spinner>
-      <perun-web-apps-attributes-list
-        #list
-        *ngIf="!loading"
-        (page)="pageChanged($event)"
-        [pageSize]="pageSize"
-        [filterValue]="filterValue"
-        [attributes]="attributes"
-        [selection]="selection">
-      </perun-web-apps-attributes-list>
+      <ng-template matTabContent>
+        <app-one-entity-attribute-page [entity]="'facility'" [entityId]="facilityId"></app-one-entity-attribute-page>
+      </ng-template>
     </mat-tab>
     <mat-tab *ngIf="facilityUserAttAuth">
       <ng-template matTabLabel>
@@ -37,7 +17,7 @@
       </ng-template>
       <ng-template matTabContent>
         <app-two-entity-attribute-page [firstEntity]="'facility'" [firstEntityId]="facilityId"
-                                       [secondEntity]="'user'" *ngIf="!loading"></app-two-entity-attribute-page>
+                                       [secondEntity]="'user'"></app-two-entity-attribute-page>
       </ng-template>
     </mat-tab>
   </mat-tab-group>
