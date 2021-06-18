@@ -71,20 +71,6 @@ export class PublicationFilterComponent implements OnInit {
     });
   }
 
-  chosenStartYearHandler(normalizedYear: Moment, datepicker: any) {
-    const ctrlValue = this.startYear.value;
-    ctrlValue.year(normalizedYear.year());
-    this.startYear.setValue(ctrlValue);
-    datepicker.close();
-  }
-
-  chosenEndYearHandler(normalizedYear: Moment, datepicker: any) {
-    const ctrlValue = this.endYear.value;
-    ctrlValue.year(normalizedYear.year());
-    this.endYear.setValue(ctrlValue);
-    datepicker.close();
-  }
-
   filter() {
     const filter = {
       title: this.title.value,

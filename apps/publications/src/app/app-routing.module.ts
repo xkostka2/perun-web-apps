@@ -10,6 +10,7 @@ import { AuthorDetailComponent } from './pages/author-detail/author-detail.compo
 import { PublicationDetailComponent } from './pages/publication-detail/publication-detail.component';
 import { LoginScreenComponent } from '@perun-web-apps/perun/login';
 import { CreateSinglePublicationPageComponent } from './pages/create-publication-page/create-single-publication-page/create-single-publication-page.component';
+import { ImportPublicationsPageComponent } from './pages/create-publication-page/import-publications-page/import-publications-page.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'create-publication',
     component: CreatePublicationPageComponent
+  },
+  {
+    path: 'create-publication/import',
+    component: ImportPublicationsPageComponent
   },
   {
     path: 'create-publication/create',

@@ -73,6 +73,10 @@ export class PublicationDetailComponent implements OnInit {
       this.mode = 'my';
     } else if(url.includes('all')){
       this.mode = 'all';
+    } else if(url.includes('import')){
+      this.mode = 'import';
+    } else if(url.includes('create')){
+      this.mode = 'create';
     } else {
       this.mode = 'authors';
     }

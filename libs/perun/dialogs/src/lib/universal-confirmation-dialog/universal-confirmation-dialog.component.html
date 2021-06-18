@@ -1,0 +1,18 @@
+<div class="{{theme}}">
+  <h1 mat-dialog-title>{{message | translate}}</h1>
+  <div mat-dialog-actions>
+    <button
+      mat-flat-button
+      class="ml-auto"
+      (click)="onCancel()">
+      {{'SHARED_LIB.PERUN.COMPONENTS.UNIVERSAL_CONFIRMATION_DIALOG.CANCEL_BUTTON' | translate}}
+    </button>
+    <button
+      mat-flat-button
+      class="ml-2"
+      color="accent"
+      (click)="onSubmit()">
+      {{'SHARED_LIB.PERUN.COMPONENTS.UNIVERSAL_CONFIRMATION_DIALOG.SUBMIT_BUTTON' | translate}}
+    </button>
+  </div>
+</div>

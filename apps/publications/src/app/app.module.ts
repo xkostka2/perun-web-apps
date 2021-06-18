@@ -44,6 +44,8 @@ import { CreateSinglePublicationPageComponent } from './pages/create-publication
 import { MatTabsModule } from '@angular/material/tabs';
 import { AddAuthorsComponent } from './components/add-authors/add-authors.component';
 import { AddThanksComponent } from './components/add-thanks/add-thanks.component';
+import { ImportPublicationsPageComponent } from './pages/create-publication-page/import-publications-page/import-publications-page.component';
+import { YearRangeComponent } from './components/year-range/year-range.component';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -97,7 +99,9 @@ const loadConfigs = (appConfig: PublicationsConfigService) => {
     AddAuthorsDialogComponent,
     CreateSinglePublicationPageComponent,
     AddAuthorsComponent,
-    AddThanksComponent
+    AddThanksComponent,
+    ImportPublicationsPageComponent,
+    YearRangeComponent
   ],
   imports: [
     BrowserModule,

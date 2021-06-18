@@ -58,6 +58,26 @@
     "CREATE_HINT": "Use when you want to add custom publication or report publication created by other user.",
     "CREATE": "Create"
   },
+  "IMPORT_PUBLICATIONS": {
+    "TITLE": "Import publications",
+    "EXT_PUB_SYSTEM": "External publication system",
+    "START_DATE": "Start date",
+    "END_DATE": "End date",
+    "SEARCH": "Search",
+    "IMPORT": "Import",
+    "ADD_MYSELF": "Add yourself as an author",
+    "INFO": "Please select external publication system and year range to search for publications for import.",
+    "SUCCESS": "Publications successfully imported",
+    "IMPORTED_INFO": "Please add category, authors, acknowledgements, eventually other information to all imported publications and mark them as checked.",
+    "NOT_CHECKED": "(Not checked)",
+    "CHECKED_BUTTON": "Checked",
+    "NOT_CHECKED_BUTTON": "Not checked",
+    "CHECK_ALL": "Mark all publications as checked",
+    "CHECK_ALL_MESSAGE": "Do you want to mark all publications as checked and finish import?",
+    "SUBMIT_TOOLTIP": "You must mark all publications as complete",
+    "FINISH": "Finish",
+    "SHOW_FINISH": "All publications successfully completed"
+  },
   "CREATE_SINGLE_PUBLICATION": {
     "TITLE": "Create publication",
     "PUBLICATION": "Publication",
@@ -440,6 +460,10 @@
         },
         "UNIVERSAL_REMOVE_ITEMS_DIALOG": {
           "ASK": "Do you want to proceed?",
+          "CANCEL_BUTTON": "Cancel",
+          "SUBMIT_BUTTON": "Submit"
+        },
+        "UNIVERSAL_CONFIRMATION_DIALOG": {
           "CANCEL_BUTTON": "Cancel",
           "SUBMIT_BUTTON": "Submit"
         }

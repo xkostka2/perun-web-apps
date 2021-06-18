@@ -1,0 +1,21 @@
+<mat-form-field class="year-field mr-2" (click)="sdp.open()">
+  <mat-label>{{'PUBLICATION_FILTER.START_YEAR' | translate}}</mat-label>
+  <input matInput [matDatepicker]="sdp" [max]="startMaxYear" [formControl]="startYear" class="disable" readonly>
+  <mat-datepicker-toggle matSuffix [for]="sdp"></mat-datepicker-toggle>
+  <mat-datepicker #sdp
+                  startView="multi-year"
+                  (yearSelected)="chosenYearHandler(startYear, $event, sdp)"
+                  panelClass="example-month-picker">
+  </mat-datepicker>
+</mat-form-field>
+
+<mat-form-field class="year-field mr-2" (click)="edp.open()">
+  <mat-label>{{'PUBLICATION_FILTER.END_YEAR' | translate}}</mat-label>
+  <input matInput [matDatepicker]="edp" [min]="endMinYear" [max]="endMaxYear" [formControl]="endYear">
+  <mat-datepicker-toggle matSuffix [for]="edp"></mat-datepicker-toggle>
+  <mat-datepicker #edp
+                  startView="multi-year"
+                  (yearSelected)="chosenYearHandler(endYear, $event, edp)"
+                  panelClass="example-month-picker">
+  </mat-datepicker>
+</mat-form-field>
