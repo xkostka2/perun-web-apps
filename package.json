@@ -73,7 +73,7 @@
     "graphql-tag": "^2.11.0",
     "moment-timezone": "^0.5.31",
     "ng2-charts": "^2.4.2",
-    "ngx-mat-select-search": "^3.1.0",
+    "ngx-mat-select-search": "^3.3.0",
     "ngx-perfect-scrollbar": "^9.0.0",
     "oidc-client": "^1.10.1",
     "rxjs": "~6.5.5",
