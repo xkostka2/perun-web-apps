@@ -8,88 +8,76 @@
     "tsconfig.base.json": "*"
   },
   "projects": {
-    "consolidator-e2e": {
-      "tags": [],
-      "implicitDependencies": ["consolidator"]
-    },
-    "consolidator": {
-      "tags": []
-    },
-    "ui": {
-      "tags": []
-    },
-    "ui-material": {
-      "tags": []
-    },
-    "perun-services": {
-      "tags": []
-    },
-    "perun-models": {
-      "tags": []
-    },
-    "perun-tokens": {
-      "tags": []
-    },
-    "perun-utils": {
-      "tags": []
-    },
-    "perun-urns": {
-      "tags": []
-    },
-    "ui-alerts": {
+    "admin-gui": {
       "tags": []
     },
     "admin-gui-e2e": {
       "tags": [],
       "implicitDependencies": ["admin-gui"]
     },
-    "admin-gui": {
-      "tags": []
-    },
-    "perun-openapi": {
-      "tags": []
-    },
-    "statistics": {
-      "tags": []
-    },
-    "statistics-e2e": {
-      "tags": [],
-      "implicitDependencies": ["statistics"]
-    },
     "config": {
-      "tags": []
-    },
-    "general": {
-      "tags": []
-    },
-    "perun-components": {
-      "tags": []
-    },
-    "perun-facility-services-config": {
-      "tags": []
-    },
-    "user-profile": {
-      "tags": []
-    },
-    "user-profile-e2e": {
       "tags": []
     },
     "config-table-config": {
       "tags": []
     },
-    "perun-pipes": {
+    "consolidator": {
       "tags": []
+    },
+    "consolidator-e2e": {
+      "tags": [],
+      "implicitDependencies": ["consolidator"]
+    },
+    "general": {
+      "tags": []
+    },
+    "password-reset": {
+      "tags": []
+    },
+    "password-reset-e2e": {
+      "tags": [],
+      "implicitDependencies": ["password-reset"]
     },
     "perun-animations": {
       "tags": []
     },
-    "perun-directives": {
+    "perun-components": {
       "tags": []
     },
     "perun-dialogs": {
       "tags": []
     },
+    "perun-directives": {
+      "tags": []
+    },
+    "perun-facility-services-config": {
+      "tags": []
+    },
+    "perun-login": {
+      "tags": []
+    },
+    "perun-models": {
+      "tags": []
+    },
+    "perun-openapi": {
+      "tags": []
+    },
+    "perun-pipes": {
+      "tags": []
+    },
+    "perun-services": {
+      "tags": []
+    },
     "perun-session-expiration": {
+      "tags": []
+    },
+    "perun-tokens": {
+      "tags": []
+    },
+    "perun-urns": {
+      "tags": []
+    },
+    "perun-utils": {
       "tags": []
     },
     "publications": {
@@ -99,14 +87,26 @@
       "tags": [],
       "implicitDependencies": ["publications"]
     },
-    "password-reset": {
+    "statistics": {
       "tags": []
     },
-    "password-reset-e2e": {
+    "statistics-e2e": {
       "tags": [],
-      "implicitDependencies": ["password-reset"]
+      "implicitDependencies": ["statistics"]
     },
-    "perun-login": {
+    "ui": {
+      "tags": []
+    },
+    "ui-alerts": {
+      "tags": []
+    },
+    "ui-material": {
+      "tags": []
+    },
+    "user-profile": {
+      "tags": []
+    },
+    "user-profile-e2e": {
       "tags": []
     }
   },

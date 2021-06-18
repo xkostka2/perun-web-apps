@@ -17,39 +17,39 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "paths": {
-      "@perun-web-apps/ui": ["libs/ui/src/index.ts"],
-      "@perun-web-apps/ui/material": ["libs/ui/material/src/index.ts"],
-      "@perun-web-apps/perun/services": ["libs/perun/services/src/index.ts"],
-      "@perun-web-apps/perun/models": ["libs/perun/models/src/index.ts"],
-      "@perun-web-apps/perun/tokens": ["libs/perun/tokens/src/index.ts"],
-      "@perun-web-apps/perun/utils": ["libs/perun/utils/src/index.ts"],
-      "@perun-web-apps/perun/urns": ["libs/perun/urns/src/index.ts"],
-      "@perun-web-apps/ui/alerts": ["libs/ui/alerts/src/index.ts"],
-      "@perun-web-apps/perun/openapi": ["libs/perun/openapi/src/index.ts"],
       "@perun-web-apps/config": ["libs/config/src/index.ts"],
+      "@perun-web-apps/config/table-config": [
+        "libs/config/table-config/src/index.ts"
+      ],
+      "@perun-web-apps/dialogs": ["libs/dialogs/src/index.ts"],
       "@perun-web-apps/general": ["libs/general/src/index.ts"],
+      "@perun-web-apps/perun/animations": [
+        "libs/perun/animations/src/index.ts"
+      ],
       "@perun-web-apps/perun/components": [
         "libs/perun/components/src/index.ts"
+      ],
+      "@perun-web-apps/perun/dialogs": ["libs/perun/dialogs/src/index.ts"],
+      "@perun-web-apps/perun/directives": [
+        "libs/perun/directives/src/index.ts"
       ],
       "@perun-web-apps/perun/facility-services-config": [
         "libs/perun/facility-services-config/src/index.ts"
       ],
-      "@perun-web-apps/config/table-config": [
-        "libs/config/table-config/src/index.ts"
-      ],
+      "@perun-web-apps/perun/login": ["libs/perun/login/src/index.ts"],
+      "@perun-web-apps/perun/models": ["libs/perun/models/src/index.ts"],
+      "@perun-web-apps/perun/openapi": ["libs/perun/openapi/src/index.ts"],
       "@perun-web-apps/perun/pipes": ["libs/perun/pipes/src/index.ts"],
-      "@perun-web-apps/perun/animations": [
-        "libs/perun/animations/src/index.ts"
-      ],
-      "@perun-web-apps/perun/directives": [
-        "libs/perun/directives/src/index.ts"
-      ],
-      "@perun-web-apps/dialogs": ["libs/dialogs/src/index.ts"],
-      "@perun-web-apps/perun/dialogs": ["libs/perun/dialogs/src/index.ts"],
+      "@perun-web-apps/perun/services": ["libs/perun/services/src/index.ts"],
       "@perun-web-apps/perun/session-expiration": [
         "libs/perun/session-expiration/src/index.ts"
       ],
-      "@perun-web-apps/perun/login": ["libs/perun/login/src/index.ts"]
+      "@perun-web-apps/perun/tokens": ["libs/perun/tokens/src/index.ts"],
+      "@perun-web-apps/perun/urns": ["libs/perun/urns/src/index.ts"],
+      "@perun-web-apps/perun/utils": ["libs/perun/utils/src/index.ts"],
+      "@perun-web-apps/ui": ["libs/ui/src/index.ts"],
+      "@perun-web-apps/ui/alerts": ["libs/ui/alerts/src/index.ts"],
+      "@perun-web-apps/ui/material": ["libs/ui/material/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

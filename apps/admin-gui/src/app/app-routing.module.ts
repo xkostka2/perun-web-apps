@@ -50,8 +50,9 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     preloadingStrategy: NoPreloading,
-    scrollPositionRestoration: 'enabled'
-  })],
+    scrollPositionRestoration: 'enabled',
+    relativeLinkResolution: 'legacy'
+})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
