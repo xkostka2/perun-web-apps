@@ -3,8 +3,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { RPCError } from '@perun-web-apps/perun/models';
-import { version } from '../../../../../../package.json';
 import { RTMessagesManagerService } from '@perun-web-apps/perun/openapi';
+declare var require: any;
 
 
 export interface BugReportData {
@@ -80,7 +80,7 @@ export class BugReportDialogComponent implements OnInit {
         this.data.error.payload + '\n\n');
     }
 
-    text = text.concat('Sended from new Perun Gui, version: ' + version);
+    text = text.concat('Sended from new Perun Gui, version: ' + require( '../../../../../../package.json').version);
     return text.split('\n').join('\n ');          //add space after each new line
   }
 

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportIssueDialogComponent } from '../report-issue-dialog/report-issue-dialog.component';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { version } from '../../../../../../package.json';
+declare var require: any;
 
 @Component({
   selector: 'perun-web-apps-footer',
@@ -41,7 +41,7 @@ export class PerunFooterComponent implements OnInit {
     this.userDocumentationWebpage = this.storeService.get('footer_users_documentation_web');
     this.administratorDocumentationWebpage = this.storeService.get('footer_administrator_documentation');
     this.supportMail = this.storeService.get('footer_support_mail');
-    this.version = version;
+    this.version = require( '../../../../../../package.json').version;
     this.copyright = this.storeService.get('footer_copyright');
   }
 

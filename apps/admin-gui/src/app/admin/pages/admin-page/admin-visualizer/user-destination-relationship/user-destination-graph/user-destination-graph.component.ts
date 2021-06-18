@@ -343,7 +343,7 @@ export class UserDestinationGraphComponent implements OnInit {
   }
 
   async delay(ms: number) {
-    await new Promise(resolve => setTimeout(() => resolve(), ms)).then(() => console.log('fired'));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), ms)).then(() => console.log('fired'));
   }
 
   @HostListener('window:resize', ['$event'])
