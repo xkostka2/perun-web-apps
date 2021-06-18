@@ -57,7 +57,6 @@
     "@nrwl/angular": "12.4.0",
     "@swimlane/ngx-charts": "^13.0.2",
     "@swimlane/ngx-graph": "^7.2.0",
-    "angular-crumbs": "^3.0.1",
     "apollo": "^2.31.0",
     "apollo-angular": "^1.10.0",
     "apollo-angular-link-http": "^1.11.0",
