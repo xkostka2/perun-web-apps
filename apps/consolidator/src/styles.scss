@@ -1,34 +1,34 @@
+@use '~@angular/material' as mat;
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$consolidator-primary: mat-palette($mat-gray, 900);
-$consolidator-accent: mat-palette($mat-indigo, A400);
+$consolidator-primary: mat.define-palette(mat.$gray-palette, 900);
+$consolidator-accent: mat.define-palette(mat.$indigo-palette, A400);
 
 // The warn palette is optional (defaults to red).
-$consolidator-warn: mat-palette($mat-red);
+$consolidator-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$consolidator-theme: mat-light-theme($consolidator-primary, $consolidator-accent, $consolidator-warn);
+$consolidator-theme: mat.define-light-theme($consolidator-primary, $consolidator-accent, $consolidator-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($consolidator-theme);
+@include mat.all-component-themes($consolidator-theme);
 
 .all-accent-theme {
-  $aa-theme: mat-light-theme($consolidator-accent, $consolidator-accent);
+  $aa-theme: mat.define-light-theme($consolidator-accent, $consolidator-accent);
 
-  @include angular-material-theme($aa-theme);
+  @include mat.all-component-themes($aa-theme);
 }
 
 button {

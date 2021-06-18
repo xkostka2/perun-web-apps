@@ -1,11 +1,11 @@
+@use '~@angular/material' as mat;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 
-@function mat-color($palette, $hue: default, $opacity: null) {
+@function mat-color-from-palette($palette, $hue: default, $opacity: null) {
   @if type-of($hue) == number and $hue >= 0 and $hue <= 1 {
-    @return mat-color($palette, default, $hue);
+    @return mat-color-from-palette($palette, default, $hue);
   }
 
   $color: map-get($palette, $hue);
@@ -30,24 +30,24 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$perun-primary: mat-palette($mat-gray, 900);
-$perun-accent: mat-palette($mat-green, 600);
+$perun-primary: mat.define-palette(mat.$gray-palette, 900);
+$perun-accent: mat.define-palette(mat.$green-palette, 600);
 
 // The warn palette is optional (defaults to red).
-$perun-warn: mat-palette($mat-red);
+$perun-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
+$perun-theme: mat.define-light-theme($perun-primary, $perun-accent, $perun-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($perun-theme);
+@include mat.all-component-themes($perun-theme);
 
 :root {
   //--vo-color: #ff0000;
@@ -131,20 +131,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $vo-primary: mat-palette($vo-dynamic-colors, 500);
-  $vo-accent: mat-palette($mat-green, 600);
+  $vo-primary: mat.define-palette($vo-dynamic-colors, 500);
+  $vo-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $vo-theme: mat-light-theme($vo-primary, $vo-accent);
+  $vo-theme: mat.define-light-theme($vo-primary, $vo-accent);
 
-  @include angular-material-theme($vo-theme);
+  @include mat.all-component-themes($vo-theme);
 }
 
 //.facility-theme {
-//  $vo-primary: mat-palette($mat-deep-orange, 800);
-//  $vo-accent: mat-palette($mat-green, 600);
-//  $vo-theme: mat-light-theme($vo-primary, $vo-accent);
+//  $vo-primary: mat.define-palette(mat.$deep-orange-palette, 800);
+//  $vo-accent: mat.define-palette(mat.$green-palette, 600);
+//  $vo-theme: mat.define-light-theme($vo-primary, $vo-accent);
 //
-//  @include angular-material-theme($vo-theme);
+//  @include mat.all-component-themes($vo-theme);
 //}
 
 .facility-theme {
@@ -181,20 +181,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $facility-primary: mat-palette($facility-dynamic-colors, 500);
-  $facility-accent: mat-palette($mat-green, 600);
+  $facility-primary: mat.define-palette($facility-dynamic-colors, 500);
+  $facility-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $facility-theme: mat-light-theme($facility-primary, $facility-accent);
+  $facility-theme: mat.define-light-theme($facility-primary, $facility-accent);
 
-  @include angular-material-theme($facility-theme);
+  @include mat.all-component-themes($facility-theme);
 }
 
 //.resource-theme {
-//  $vo-primary: mat-palette($mat-purple, 800);
-//  $vo-accent: mat-palette($mat-green, 600);
-//  $vo-theme: mat-light-theme($vo-primary, $vo-accent);
+//  $vo-primary: mat.define-palette(mat.$purple-palette, 800);
+//  $vo-accent: mat.define-palette(mat.$green-palette, 600);
+//  $vo-theme: mat.define-light-theme($vo-primary, $vo-accent);
 //
-//  @include angular-material-theme($vo-theme);
+//  @include mat.all-component-themes($vo-theme);
 //}
 
 .resource-theme {
@@ -231,20 +231,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $resource-primary: mat-palette($resource-dynamic-colors, 500);
-  $resource-accent: mat-palette($mat-green, 600);
+  $resource-primary: mat.define-palette($resource-dynamic-colors, 500);
+  $resource-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $resource-theme: mat-light-theme($resource-primary, $resource-accent);
+  $resource-theme: mat.define-light-theme($resource-primary, $resource-accent);
 
-  @include angular-material-theme($resource-theme);
+  @include mat.all-component-themes($resource-theme);
 }
 
 //.group-theme {
-//  $group-primary: mat-palette($mat-light-green, 900);
-//  $group-accent: mat-palette($mat-green, 600);
-//  $group-theme: mat-light-theme($group-primary, $group-accent);
+//  $group-primary: mat.define-palette(mat.$light-green-palette, 900);
+//  $group-accent: mat.define-palette(mat.$green-palette, 600);
+//  $group-theme: mat.define-light-theme($group-primary, $group-accent);
 //
-//  @include angular-material-theme($group-theme);
+//  @include mat.all-component-themes($group-theme);
 //}
 
 .group-theme {
@@ -281,20 +281,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $group-primary: mat-palette($group-dynamic-colors, 500);
-  $group-accent: mat-palette($mat-green, 600);
+  $group-primary: mat.define-palette($group-dynamic-colors, 500);
+  $group-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $group-theme: mat-light-theme($group-primary, $group-accent);
+  $group-theme: mat.define-light-theme($group-primary, $group-accent);
 
-  @include angular-material-theme($group-theme);
+  @include mat.all-component-themes($group-theme);
 }
 
 //.member-theme {
-//  $member-primary: mat-palette($mat-pink, 800);
-//  $member-accent: mat-palette($mat-green, 600);
-//  $member-theme: mat-light-theme($member-primary, $member-accent);
+//  $member-primary: mat.define-palette(mat.$pink-palette, 800);
+//  $member-accent: mat.define-palette(mat.$green-palette, 600);
+//  $member-theme: mat.define-light-theme($member-primary, $member-accent);
 //
-//  @include angular-material-theme($member-theme);
+//  @include mat.all-component-themes($member-theme);
 //}
 
 .member-theme {
@@ -331,20 +331,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $member-primary: mat-palette($member-dynamic-colors, 500);
-  $member-accent: mat-palette($mat-green, 600);
+  $member-primary: mat.define-palette($member-dynamic-colors, 500);
+  $member-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $member-theme: mat-light-theme($member-primary, $member-accent);
+  $member-theme: mat.define-light-theme($member-primary, $member-accent);
 
-  @include angular-material-theme($member-theme);
+  @include mat.all-component-themes($member-theme);
 }
 
 //.admin-theme {
-//  $admin-primary: mat-palette($mat-red, 800);
-//  $admin-accent: mat-palette($mat-green, 600);
-//  $admin-theme: mat-light-theme($admin-primary, $admin-accent);
+//  $admin-primary: mat.define-palette(mat.$red-palette, 800);
+//  $admin-accent: mat.define-palette(mat.$green-palette, 600);
+//  $admin-theme: mat.define-light-theme($admin-primary, $admin-accent);
 //
-//  @include angular-material-theme($admin-theme);
+//  @include mat.all-component-themes($admin-theme);
 //}
 
 .admin-theme {
@@ -381,20 +381,20 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $admin-primary: mat-palette($admin-dynamic-colors, 500);
-  $admin-accent: mat-palette($mat-green, 600);
+  $admin-primary: mat.define-palette($admin-dynamic-colors, 500);
+  $admin-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $admin-theme: mat-light-theme($admin-primary, $admin-accent);
+  $admin-theme: mat.define-light-theme($admin-primary, $admin-accent);
 
-  @include angular-material-theme($admin-theme);
+  @include mat.all-component-themes($admin-theme);
 }
 
 //.user-theme {
-//  $user-primary: mat-palette($mat-teal, 700);
-//  $user-accent: mat-palette($mat-green, 600);
-//  $user-theme: mat-light-theme($user-primary, $user-accent);
+//  $user-primary: mat.define-palette(mat.$teal-palette, 700);
+//  $user-accent: mat.define-palette(mat.$green-palette, 600);
+//  $user-theme: mat.define-light-theme($user-primary, $user-accent);
 //
-//  @include angular-material-theme($user-theme);
+//  @include mat.all-component-themes($user-theme);
 //}
 
 .user-theme {
@@ -431,12 +431,12 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $user-primary: mat-palette($user-dynamic-colors, 500);
-  $user-accent: mat-palette($mat-green, 600);
+  $user-primary: mat.define-palette($user-dynamic-colors, 500);
+  $user-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $user-theme: mat-light-theme($user-primary, $user-accent);
+  $user-theme: mat.define-light-theme($user-primary, $user-accent);
 
-  @include angular-material-theme($user-theme);
+  @include mat.all-component-themes($user-theme);
 }
 
 .service-theme {
@@ -473,12 +473,12 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $service-primary: mat-palette($service-dynamic-colors, 500);
-  $service-accent: mat-palette($mat-green, 600);
+  $service-primary: mat.define-palette($service-dynamic-colors, 500);
+  $service-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $service-theme: mat-light-theme($service-primary, $service-accent);
+  $service-theme: mat.define-light-theme($service-primary, $service-accent);
 
-  @include angular-material-theme($service-theme);
+  @include mat.all-component-themes($service-theme);
 }
 
 body {
@@ -731,7 +731,7 @@ textarea.cdk-textarea-autosize-measuring {
 }
 
 .base-item-color {
-  background-color: mat-color($mat-blue-grey, 900);
+  background-color: mat.get-color-from-palette(mat.$blue-grey-palette, 900);
 }
 .base-item-color-activated {
   background-color: #62727b;
@@ -1302,7 +1302,7 @@ textarea.cdk-textarea-autosize-measuring {
 }
 
 .mat-drawer-inner-container {
-  //background-color: mat-color($mat-blue-grey, 900);
+  //background-color: mat.get-color-from-palette(mat.$blue-grey-palette, 900);
 }
 
 .align-inline {

@@ -1,10 +1,10 @@
+@use '~@angular/material' as mat;
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 
-@function mat-color($palette, $hue: default, $opacity: null) {
+@function mat-color-from-palette($palette, $hue: default, $opacity: null) {
   @if type-of($hue) == number and $hue >= 0 and $hue <= 1 {
-    @return mat-color($palette, default, $hue);
+    @return mat-color-from-palette($palette, default, $hue);
   }
 
   $color: map-get($palette, $hue);
@@ -29,24 +29,24 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$perun-primary: mat-palette($mat-gray, 900);
-$perun-accent: mat-palette($mat-green, 600);
+$perun-primary: mat.define-palette(mat.$gray-palette, 900);
+$perun-accent: mat.define-palette(mat.$green-palette, 600);
 
 // The warn palette is optional (defaults to red).
-$perun-warn: mat-palette($mat-red);
+$perun-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
+$perun-theme: mat.define-light-theme($perun-primary, $perun-accent, $perun-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($perun-theme);
+@include mat.all-component-themes($perun-theme);
 
 .user-theme {
   $user-dynamic-colors:(
@@ -82,12 +82,12 @@ $perun-theme: mat-light-theme($perun-primary, $perun-accent, $perun-warn);
     )
   );
 
-  $user-primary: mat-palette($user-dynamic-colors, 500);
-  $user-accent: mat-palette($mat-green, 600);
+  $user-primary: mat.define-palette($user-dynamic-colors, 500);
+  $user-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $user-theme: mat-light-theme($user-primary, $user-accent);
+  $user-theme: mat.define-light-theme($user-primary, $user-accent);
 
-  @include angular-material-theme($user-theme);
+  @include mat.all-component-themes($user-theme);
 }
 
 button {
