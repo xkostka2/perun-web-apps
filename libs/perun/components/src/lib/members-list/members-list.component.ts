@@ -92,7 +92,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
         return data.id.toString();
       case 'fullName':
         if(data.user){
-          return data.user.lastName ? data.user.lastName : data.user.firstName ?? ''
+          return data.user.lastName ? data.user.lastName : data.user.firstName ?? '';
         }
         return ''
       case 'status':
@@ -110,7 +110,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     switch (column) {
       case 'fullName':
         if(data.user){
-          return data.user.lastName ? data.user.lastName : data.user.firstName ?? ''
+          return parseFullName(data.user);
         }
         return ''
       case 'email':
@@ -128,7 +128,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
         return data.id.toString();
       case 'fullName':
         if(data.user){
-          return parseFullName(data.user)
+          return parseFullName(data.user);
         }
         return ''
       case 'status':

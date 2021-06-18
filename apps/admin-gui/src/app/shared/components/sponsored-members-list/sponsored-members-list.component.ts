@@ -85,13 +85,29 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
     this.routingStrategy = this.disableRouting;
   }
 
-  getDataForColumn(data: MemberWithSponsors, column: string): string{
+  getSortDataForColumn(data: MemberWithSponsors, column: string): string{
     switch (column) {
       case 'id':
         return data.member.id.toString();
       case 'name':
         if(data.member.user){
           return data.member.user.lastName ? data.member.user.lastName : data.member.user.firstName ?? ''
+        }
+        return ''
+      case 'sponsors':
+        return data.sponsors.length.toString();
+      default:
+        return '';
+    }
+  }
+
+  getDataForColumn(data: MemberWithSponsors, column: string): string{
+    switch (column) {
+      case 'id':
+        return data.member.id.toString();
+      case 'name':
+        if(data.member.user){
+          return parseFullName(data.member.user);
         }
         return ''
       case 'sponsors':
@@ -113,7 +129,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
       this.dataSource.sortData = (data: MemberWithSponsors[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+        return customDataSourceSort(data, sort, this.getSortDataForColumn, this);
       };
       this.dataSource.filter = this.filterValue;
 
