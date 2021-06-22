@@ -3,6 +3,10 @@
   pointer-events: none;
 }
 
+.bottom-padding {
+  padding-bottom: 20px;
+}
+
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-underline {
   display: none;
 }

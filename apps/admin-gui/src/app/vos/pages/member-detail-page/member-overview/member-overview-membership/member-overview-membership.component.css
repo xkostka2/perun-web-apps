@@ -1,3 +1,7 @@
 .membership-card {
   max-width: 300px;
 }
+
+.vert-center {
+  vertical-align: middle !important;
+}

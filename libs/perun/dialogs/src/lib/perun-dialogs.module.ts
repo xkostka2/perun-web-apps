@@ -32,6 +32,7 @@ import { RouterModule } from '@angular/router';
 import { MatTreeModule } from '@angular/material/tree';
 import { MailChangeFailedDialogComponent } from './mail-change-failed-dialog/mail-change-failed-dialog.component';
 import { UniversalConfirmationDialogComponent } from './universal-confirmation-dialog/universal-confirmation-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { UniversalConfirmationDialogComponent } from './universal-confirmation-d
     PerunPipesModule,
     UiAlertsModule,
     RouterModule,
-    MatTreeModule
+    MatTreeModule,
+    MatSelectModule
   ],
   declarations: [
     BugReportDialogComponent,

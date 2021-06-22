@@ -10,10 +10,16 @@
         <mat-radio-button value="{{expirationControl.value}}">
           <mat-form-field color="primary" class="cursor-pointer" (click)="picker.open()">
             <mat-label>{{'DIALOGS.CHANGE_EXPIRATION.DATE_LABEL'|translate}}</mat-label>
-            <input (dateChange)="setExpiration()" [min]="minDate" [formControl]="expirationControl" [matDatepicker]="picker" class="disable" readonly matInput>
+            <input (dateChange)="setExpiration()" [min]="minDate" [max]="maxDate" [formControl]="expirationControl" [matDatepicker]="picker" class="disable" readonly matInput>
             <mat-datepicker-toggle [for]="picker" [disabled]="false" matSuffix></mat-datepicker-toggle>
             <mat-datepicker #picker [disabled]="false"></mat-datepicker>
           </mat-form-field>
+        </mat-radio-button>
+        <mat-radio-button class="bottom-padding" value="voRules" *ngIf="canExtendMembershipByEntityRules && mode === 'vo'">
+          {{'DIALOGS.CHANGE_EXPIRATION.VO_RULES'|translate}}
+        </mat-radio-button>
+        <mat-radio-button class="bottom-padding" value="groupRules" *ngIf="canExtendMembershipByEntityRules && mode === 'group'">
+          {{'DIALOGS.CHANGE_EXPIRATION.GROUP_RULES'|translate}}
         </mat-radio-button>
         <mat-radio-button value="never">
           {{'DIALOGS.CHANGE_EXPIRATION.EXPIRATION_NEVER'|translate}}

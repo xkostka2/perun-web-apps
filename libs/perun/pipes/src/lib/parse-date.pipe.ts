@@ -7,7 +7,11 @@ import { formatDate } from '@angular/common';
 export class ParseDatePipe implements PipeTransform {
 
   transform(value: string, showTime?: boolean): string {
-    if(!value || value.toLowerCase() === 'never'){
+    if(value === 'voRules'){
+      return 'Vo rules'
+    } else if(value === 'groupRules') {
+      return 'Group rules'
+    } else if(!value || value.toLowerCase() === 'never'){
       return 'never';
     }
     return formatDate(value.replace(" ", "T"), `d.M.yyyy ${showTime ? 'H:mm:ss': ''}`, 'en');

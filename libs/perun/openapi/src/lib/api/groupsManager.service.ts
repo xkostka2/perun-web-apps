@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { Group } from '../model/group';
 import { InputUpdateGroup } from '../model/inputUpdateGroup';
+import { Member } from '../model/member';
 import { PerunException } from '../model/perunException';
 import { RichGroup } from '../model/richGroup';
 
@@ -178,6 +179,71 @@ export class GroupsManagerService {
 
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/groupsManager/addMembers`,
             null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Returns true if member in given group can extend membership or if no rules were set for the membershipExpiration, otherwise false.
+     * @param member id of Member
+     * @param group id of Group
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public canExtendMembershipInGroup(member: number, group: number, observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public canExtendMembershipInGroup(member: number, group: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public canExtendMembershipInGroup(member: number, group: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public canExtendMembershipInGroup(member: number, group: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (member === null || member === undefined) {
+            throw new Error('Required parameter member was null or undefined when calling canExtendMembershipInGroup.');
+        }
+        if (group === null || group === undefined) {
+            throw new Error('Required parameter group was null or undefined when calling canExtendMembershipInGroup.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (member !== undefined && member !== null) {
+            queryParameters = queryParameters.set('member', <any>member);
+        }
+        if (group !== undefined && group !== null) {
+            queryParameters = queryParameters.set('group', <any>group);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<boolean>(`${this.configuration.basePath}/json/groupsManager/canExtendMembershipInGroup`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -520,6 +586,72 @@ export class GroupsManagerService {
 
 
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/groupsManager/deleteGroups`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Extend member membership in given group using membershipExpirationRules attribute defined in Group.
+     * @param member id of Member
+     * @param group id of Group
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public extendMembershipInGroup(member: number, group: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public extendMembershipInGroup(member: number, group: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public extendMembershipInGroup(member: number, group: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public extendMembershipInGroup(member: number, group: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (member === null || member === undefined) {
+            throw new Error('Required parameter member was null or undefined when calling extendMembershipInGroup.');
+        }
+        if (group === null || group === undefined) {
+            throw new Error('Required parameter group was null or undefined when calling extendMembershipInGroup.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (member !== undefined && member !== null) {
+            queryParameters = queryParameters.set('member', <any>member);
+        }
+        if (group !== undefined && group !== null) {
+            queryParameters = queryParameters.set('group', <any>group);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/groupsManager/extendMembershipInGroup`,
             null,
             {
                 params: queryParameters,
@@ -1955,6 +2087,79 @@ export class GroupsManagerService {
 
 
         return this.httpClient.post<any>(`${this.configuration.basePath}/urlinjsonout/groupsManager/removeMembers`,
+            null,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set membership status of a member in a group. Please note, that resulting Status after change is calculated from all members sub-groups and groups in relation sourcing this member. If in any of them is VALID, resulting status is still VALID.
+     * @param member id of Member
+     * @param group id of Group
+     * @param status status (VALID | EXPIRED)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public setGroupsMemberStatus(member: number, group: number, status: string, observe?: 'body', reportProgress?: boolean): Observable<Member>;
+    public setGroupsMemberStatus(member: number, group: number, status: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Member>>;
+    public setGroupsMemberStatus(member: number, group: number, status: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Member>>;
+    public setGroupsMemberStatus(member: number, group: number, status: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (member === null || member === undefined) {
+            throw new Error('Required parameter member was null or undefined when calling setGroupsMemberStatus.');
+        }
+        if (group === null || group === undefined) {
+            throw new Error('Required parameter group was null or undefined when calling setGroupsMemberStatus.');
+        }
+        if (status === null || status === undefined) {
+            throw new Error('Required parameter status was null or undefined when calling setGroupsMemberStatus.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (member !== undefined && member !== null) {
+            queryParameters = queryParameters.set('member', <any>member);
+        }
+        if (group !== undefined && group !== null) {
+            queryParameters = queryParameters.set('group', <any>group);
+        }
+        if (status !== undefined && status !== null) {
+            queryParameters = queryParameters.set('status', <any>status);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKeyAuth) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // authentication (BasicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // authentication (BearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.post<Member>(`${this.configuration.basePath}/urlinjsonout/groupsManager/setGroupsMemberStatus`,
             null,
             {
                 params: queryParameters,

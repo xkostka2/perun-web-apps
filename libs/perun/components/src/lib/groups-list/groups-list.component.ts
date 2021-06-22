@@ -102,6 +102,9 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   memberId: number;
 
   @Input()
+  memberGroupStatus: string;
+
+  @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   @Input()
@@ -365,7 +368,8 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       memberId: this.memberId,
       groupId: group.id,
       expirationAttr: expirationAtt,
-      mode: 'group'
+      mode: 'group',
+      status: this.memberGroupStatus
     }
 
     const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
