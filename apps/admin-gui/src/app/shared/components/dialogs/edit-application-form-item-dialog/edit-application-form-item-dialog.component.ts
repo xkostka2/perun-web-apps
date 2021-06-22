@@ -7,6 +7,7 @@ import { createNewApplicationFormItem } from '@perun-web-apps/perun/utils';
 import DisabledEnum = ApplicationFormItem.DisabledEnum;
 import HiddenEnum = ApplicationFormItem.HiddenEnum;
 import { NO_FORM_ITEM } from '@perun-web-apps/perun/components';
+import { StoreService } from '@perun-web-apps/perun/services';
 
 export interface EditApplicationFormItemDialogComponentData {
   theme: string;
@@ -33,10 +34,7 @@ export class SelectionItem {
 })
 export class EditApplicationFormItemDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<EditApplicationFormItemDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: EditApplicationFormItemDialogComponentData,
-              private attributesManager: AttributesManagerService,
-              private translateService: TranslateService) { }
+  supportsCsLocalisation: boolean;
 
   applicationFormItem: ApplicationFormItem;
   attributeDefinitions: AttributeDefinition[];
@@ -59,7 +57,15 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
   disabledDependencyItem: ApplicationFormItem = null;
   private dependencyTypes: Type[] = ['PASSWORD', 'VALIDATED_EMAIL', 'TEXTFIELD', 'TEXTAREA', 'CHECKBOX', 'RADIO', 'SELECTIONBOX', 'COMBOBOX', 'USERNAME'];
 
+  constructor(private dialogRef: MatDialogRef<EditApplicationFormItemDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: EditApplicationFormItemDialogComponentData,
+              private attributesManager: AttributesManagerService,
+              private translateService: TranslateService,
+              private store: StoreService) { }
+
   ngOnInit() {
+    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
+
     this.hiddenDependencyItem = this.data.allItems.find(item => item.id === this.data.applicationFormItem.hiddenDependencyItemId);
     if (!this.hiddenDependencyItem) {
       this.hiddenDependencyItem = NO_FORM_ITEM;
@@ -210,47 +216,54 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     this.optionsCs.push(['', '']);
   }
 
-  updateOptions() {
-    let enOptions = '';
+  updateOption(lang: string){
+    let options = '';
     for (const item of this.optionsEn) {
       if (item[0] !== '' && item[1] !== '') {
-        if (enOptions === '') {
-          enOptions = item[0] + '#' + item[1];
+        if (options === '') {
+          options = item[0] + '#' + item[1];
         } else {
-          enOptions = enOptions + '|' + item[0] + '#' + item[1];
+          options = options + '|' + item[0] + '#' + item[1];
         }
       }
     }
-    this.applicationFormItem.i18n['en'].options = enOptions;
-
-    let csOptions = '';
-    for (const item of this.optionsCs) {
-      if (item[0] !== '' && item[1] !== '') {
-        if (csOptions === '') {
-          csOptions = item[0] + '#' + item[1];
-        } else {
-          csOptions = csOptions + '|' + item[0] + '#' + item[1];
-        }
-      }
-    }
-    this.applicationFormItem.i18n['cs'].options = csOptions;
+    this.applicationFormItem.i18n[lang].options = options;
   }
 
-  private getOptions() {
-    if (this.applicationFormItem.i18n['en'].options) {
-      const tempen = this.applicationFormItem.i18n['en'].options.split('|');
-      for (const item of tempen) {
-        const line = item.split('#');
-        this.optionsEn.push([line[0], line[1]]);
-      }
+  updateOptions() {
+    this.updateOption('en');
+    if(this.supportsCsLocalisation){
+     this.updateOption('cs');
     }
-    if (this.applicationFormItem.i18n['cs'].options) {
-      const tempcs = this.applicationFormItem.i18n['cs'].options.split('|');
-      for (const item of tempcs) {
-        const line = item.split('#');
-        this.optionsCs.push([line[0], line[1]]);
-      }
+  }
+
+  copy(from: ApplicationFormItem, to: ApplicationFormItem) {
+    to.applicationTypes = from.applicationTypes;
+    to.federationAttribute = from.federationAttribute;
+    to.forDelete = from.forDelete;
+    if(this.supportsCsLocalisation){
+      to.i18n['cs'].errorMessage = from.i18n['cs'].errorMessage;
+      to.i18n['cs'].help = from.i18n['cs'].help;
+      to.i18n['cs'].label = from.i18n['cs'].label;
+      to.i18n['cs'].options = from.i18n['cs'].options;
     }
+    to.i18n['en'].errorMessage = from.i18n['en'].errorMessage;
+    to.i18n['en'].help = from.i18n['en'].help;
+    to.i18n['en'].label = from.i18n['en'].label;
+    to.i18n['en'].options = from.i18n['en'].options;
+    to.id = from.id;
+    to.ordnum = from.ordnum;
+    to.perunDestinationAttribute = from.perunDestinationAttribute;
+    to.perunSourceAttribute = from.perunSourceAttribute;
+    to.regex = from.regex;
+    to.required = from.required;
+    to.shortname = from.shortname;
+    to.type = from.type;
+    to.updatable = from.updatable;
+    to.disabled = from.disabled;
+    to.hidden = from.hidden;
+    to.disabledDependencyItemId = from.disabledDependencyItemId;
+    to.hiddenDependencyItemId = from.hiddenDependencyItemId;
   }
 
   sortEnOptionsAZ() {
@@ -309,31 +322,23 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     });
   }
 
-  copy(from: ApplicationFormItem, to: ApplicationFormItem) {
-    to.applicationTypes = from.applicationTypes;
-    to.federationAttribute = from.federationAttribute;
-    to.forDelete = from.forDelete;
-    to.i18n['cs'].errorMessage = from.i18n['cs'].errorMessage;
-    to.i18n['cs'].help = from.i18n['cs'].help;
-    to.i18n['cs'].label = from.i18n['cs'].label;
-    to.i18n['cs'].options = from.i18n['cs'].options;
-    to.i18n['en'].errorMessage = from.i18n['en'].errorMessage;
-    to.i18n['en'].help = from.i18n['en'].help;
-    to.i18n['en'].label = from.i18n['en'].label;
-    to.i18n['en'].options = from.i18n['en'].options;
-    to.id = from.id;
-    to.ordnum = from.ordnum;
-    to.perunDestinationAttribute = from.perunDestinationAttribute;
-    to.perunSourceAttribute = from.perunSourceAttribute;
-    to.regex = from.regex;
-    to.required = from.required;
-    to.shortname = from.shortname;
-    to.type = from.type;
-    to.updatable = from.updatable;
-    to.disabled = from.disabled;
-    to.hidden = from.hidden;
-    to.disabledDependencyItemId = from.disabledDependencyItemId;
-    to.hiddenDependencyItemId = from.hiddenDependencyItemId;
+  private getOptions() {
+    if (this.applicationFormItem.i18n['en'].options) {
+      const tempen = this.applicationFormItem.i18n['en'].options.split('|');
+      for (const item of tempen) {
+        const line = item.split('#');
+        this.optionsEn.push([line[0], line[1]]);
+      }
+    }
+    if(this.supportsCsLocalisation){
+      if (this.applicationFormItem.i18n['cs'].options) {
+        const tempcs = this.applicationFormItem.i18n['cs'].options.split('|');
+        for (const item of tempcs) {
+          const line = item.split('#');
+          this.optionsCs.push([line[0], line[1]]);
+        }
+      }
+    }
   }
 
   isApplicationFormItemOfType(types: string[]):boolean {

@@ -33,7 +33,7 @@
     </button>
     <button
       mat-stroked-button
-      *ngIf="language === 'en'"
+      *ngIf="supportsCsLocalisation && language === 'en'"
       class="mr-2"
       (click)="switchToCzech()">
       <i class="material-icons">public</i>

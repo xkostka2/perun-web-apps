@@ -230,7 +230,7 @@
 
         </mat-tab>
 
-        <mat-tab label="{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LANGUAGE_CS' | translate}}">
+        <mat-tab *ngIf="supportsCsLocalisation" label="{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LANGUAGE_CS' | translate}}">
           <div *ngIf="isApplicationFormItemOfType(['HEADING', 'HTML_COMMENT'])">
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT_DESCRIPTION' | translate">

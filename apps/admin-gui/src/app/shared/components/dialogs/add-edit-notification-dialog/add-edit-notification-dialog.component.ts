@@ -6,7 +6,7 @@ import {
   GroupsManagerService,
   RegistrarManagerService
 } from '@perun-web-apps/perun/openapi';
-import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, StoreService } from '@perun-web-apps/perun/services';
 
 export interface ApplicationFormAddEditMailDialogData {
   theme: string;
@@ -28,23 +28,26 @@ export interface ApplicationFormAddEditMailDialogData {
 })
 export class AddEditNotificationDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<AddEditNotificationDialogComponent>,
-              private registrarService: RegistrarManagerService,
-              @Inject(MAT_DIALOG_DATA) public data: ApplicationFormAddEditMailDialogData,
-              private authResolver: GuiAuthResolver,
-              private groupsService: GroupsManagerService) {
-  }
+  supportsCsLocalisation: boolean;
 
   applicationMail: ApplicationMail;
   showTags = false;
   isTextFocused = true;
   invalidNotification = false;
-  language = 'en';
   loading = false;
   theme: string;
   editAuth: boolean;
 
+  constructor(private dialogRef: MatDialogRef<AddEditNotificationDialogComponent>,
+              private registrarService: RegistrarManagerService,
+              @Inject(MAT_DIALOG_DATA) public data: ApplicationFormAddEditMailDialogData,
+              private authResolver: GuiAuthResolver,
+              private groupsService: GroupsManagerService,
+              private store: StoreService) {
+  }
+
   ngOnInit() {
+    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
     this.applicationMail = this.data.applicationMail;
     this.theme = this.data.theme;
 

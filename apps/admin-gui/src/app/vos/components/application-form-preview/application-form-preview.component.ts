@@ -2,6 +2,7 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import { ApplicationFormItem } from '@perun-web-apps/perun/openapi';
 import { TranslateService } from '@ngx-translate/core';
+import { StoreService } from '@perun-web-apps/perun/services';
 
 @Component({
   selector: 'app-application-form-preview',
@@ -12,8 +13,7 @@ export class ApplicationFormPreviewComponent implements OnInit {
 
   @HostBinding('class.router-component') true;
 
-  constructor(protected route: ActivatedRoute,
-              private translate: TranslateService) { }
+  supportsCsLocalisation: boolean;
 
   loading = true;
   applicationFormItems: ApplicationFormItem[] = [];
@@ -21,7 +21,12 @@ export class ApplicationFormPreviewComponent implements OnInit {
   initialPage = true;
   mapForCombobox: Map<number, string> = new Map();
 
+  constructor(protected route: ActivatedRoute,
+              private translate: TranslateService,
+              private store: StoreService) { }
+
   ngOnInit() {
+    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
     this.route.queryParamMap.subscribe( params => {
       this.applicationFormItems = JSON.parse(params.get('applicationFormItems'));
       this.loading = false;
