@@ -51,7 +51,7 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
   possibleDependencyItems: ApplicationFormItem[] = [];
 
   typesWithUpdatable: Type[] = ['VALIDATED_EMAIL', 'TEXTFIELD', 'TEXTAREA', 'CHECKBOX', 'RADIO', 'SELECTIONBOX', 'COMBOBOX', 'TIMEZONE'];
-  typesWithDisabled: Type[] = ['PASSWORD', 'VALIDATED_EMAIL', 'TEXTFIELD', 'TEXTAREA', 'CHECKBOX', 'RADIO', 'SELECTIONBOX', 'COMBOBOX'];
+  typesWithDisabled: Type[] = ['USERNAME', 'PASSWORD', 'VALIDATED_EMAIL', 'TEXTFIELD', 'TEXTAREA', 'CHECKBOX', 'RADIO', 'SELECTIONBOX', 'COMBOBOX'];
 
   hiddenDependencyItem: ApplicationFormItem = null;
   disabledDependencyItem: ApplicationFormItem = null;
