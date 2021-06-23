@@ -1,63 +1,59 @@
 <div [hidden]="!dataSource.filteredData.length" class="card mt-2">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        class="w-100"
-        mat-table
-        matSort matSortActive="expirationAttribute"
-        matSortDirection="desc"
-        matSortDisableClear
-        [dataSource]="dataSource">
-        <ng-container matColumnDef="checkbox">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
-          <td mat-cell *matCellDef="let membership" class="static-column-size">
-            <mat-checkbox color="primary"
-                          [disabled]="(membership.expirationAttribute | validateExpiration) === 'never'"
-                          (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(membership) : null"
-                          [checked]="selection.isSelected(membership)"
-                          [aria-label]="checkboxLabel(membership)">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell>{{'MEMBERSHIP_LIST.NAME' | customTranslate | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let member">{{member.entity.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="description">
-          <th *matHeaderCellDef mat-header-cell>{{'MEMBERSHIP_LIST.DESCRIPTION' | customTranslate | translate}}</th>
-          <td mat-cell *matCellDef="let membership">{{membership.entity.description}}</td>
-        </ng-container>
-        <ng-container matColumnDef="expirationAttribute">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'MEMBERSHIP_LIST.EXPIRATION' | customTranslate | translate}}</th>
-          <td mat-cell *matCellDef="let membership">
-            {{membership.expirationAttribute | validateExpiration}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="extend">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let membership">
-            <button (click)="extend(membership)" color="accent" mat-flat-button
-                    [disabled]="(membership.expirationAttribute | validateExpiration) === 'never'">{{'MEMBERSHIP_LIST.EXTEND' | customTranslate | translate}}</button>
-          </td>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          class="dark-hover-list-item"
-          *matRowDef="let member; columns: displayedColumns;">
-        </tr>
-      </table>
-    </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table matSort
+      matSortActive="expirationAttribute"
+      matSortDirection="desc"
+      matSortDisableClear>
+      <ng-container matColumnDef="checkbox">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let membership" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(membership) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(membership)"
+                        [checked]="selection.isSelected(membership)"
+                        [disabled]="(membership.expirationAttribute | validateExpiration) === 'never'"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell>{{'MEMBERSHIP_LIST.NAME' | customTranslate | translate}}</th>
+        <td *matCellDef="let member" class="static-column-size" mat-cell>{{member.entity.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th *matHeaderCellDef mat-header-cell>{{'MEMBERSHIP_LIST.DESCRIPTION' | customTranslate | translate}}</th>
+        <td *matCellDef="let membership" mat-cell>{{membership.entity.description}}</td>
+      </ng-container>
+      <ng-container matColumnDef="expirationAttribute">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERSHIP_LIST.EXPIRATION' | customTranslate | translate}}</th>
+        <td *matCellDef="let membership" mat-cell>
+          {{membership.expirationAttribute | validateExpiration}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="extend">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let membership" mat-cell>
+          <button (click)="extend(membership)" [disabled]="(membership.expirationAttribute | validateExpiration) === 'never'" color="accent"
+                  mat-flat-button>{{'MEMBERSHIP_LIST.EXTEND' | customTranslate | translate}}</button>
+        </td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="this.members.length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let member; columns: displayedColumns;"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 <app-alert *ngIf="!dataSource.filteredData.length" alert_type="warn">{{'MEMBERSHIP_LIST.NO_MEMBERSHIPS' | customTranslate | translate}}</app-alert>

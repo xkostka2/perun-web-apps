@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
@@ -9,7 +9,7 @@ import {
   parseLogins,
   parseUserEmail,
   parseVo,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
@@ -28,11 +28,7 @@ export class UsersListComponent implements OnChanges {
     this.setDataSource();
   }
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @Input()
   users: RichUser[];
@@ -127,17 +123,17 @@ export class UsersListComponent implements OnChanges {
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
     this.dataSource = new MatTableDataSource<RichUser>(this.users);
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
     this.setDataSource();
   }
 
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filter, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: RichUser): string {
@@ -145,9 +141,5 @@ export class UsersListComponent implements OnChanges {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

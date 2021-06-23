@@ -1,67 +1,63 @@
 <div [hidden]="dataSource.filteredData.length === 0 || bansOnFacilitiesWithUsers.length === 0" class="card mt-3">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort matSortActive="id"
-        matSortDirection="asc" matSortDisableClear>
 
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let banOnFacilityWithUser" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(banOnFacilityWithUser) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(banOnFacilityWithUser)"
-                          [checked]="selection.isSelected(banOnFacilityWithUser)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort matSortActive="id"
+      matSortDirection="asc" matSortDisableClear>
 
-        <ng-container matColumnDef="userId">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.USER_ID' | translate}}</th>
-          <td *matCellDef="let banOnFacilityWithUser" class="static-column-size"
-              mat-cell>{{banOnFacilityWithUser[1].id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let banOnFacilityWithUser" mat-cell>{{banOnFacilityWithUser[1] | userFullName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="reason">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.REASON' | translate}}</th>
-          <td *matCellDef="let banOnFacilityWithUser" mat-cell>{{banOnFacilityWithUser[0].description}}</td>
-        </ng-container>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let banOnFacilityWithUser" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(banOnFacilityWithUser) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(banOnFacilityWithUser)"
+                        [checked]="selection.isSelected(banOnFacilityWithUser)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let banOnFacilityWithUser; columns: displayedColumns;"
-          class="dark-hover-list-item"
-          mat-row
-        >
-        </tr>
-      </table>
-    </div>
+      <ng-container matColumnDef="userId">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.USER_ID' | translate}}</th>
+        <td *matCellDef="let banOnFacilityWithUser" class="static-column-size"
+            mat-cell>{{banOnFacilityWithUser[1].id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let banOnFacilityWithUser" mat-cell>{{banOnFacilityWithUser[1] | userFullName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="reason">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.BLACKLIST_LIST.REASON' | translate}}</th>
+        <td *matCellDef="let banOnFacilityWithUser" mat-cell>{{banOnFacilityWithUser[0].description}}</td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="this.bansOnFacilitiesWithUsers.length"
-      [pageSize]="pageSize"
-      (page)="page.emit($event)"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let banOnFacilityWithUser; columns: displayedColumns;"
+        class="dark-hover-list-item"
+        mat-row
+      >
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && bansOnFacilitiesWithUsers.length !== 0" alert_type="warn">

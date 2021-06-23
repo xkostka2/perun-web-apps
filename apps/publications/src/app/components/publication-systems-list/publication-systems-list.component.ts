@@ -4,9 +4,9 @@ import { PublicationSystem } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate,
   customDataSourceSort, downloadData, getDataForExport,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -41,11 +41,7 @@ export class PublicationSystemsListComponent implements AfterViewInit, OnChanges
 
   dataSource: MatTableDataSource<PublicationSystem>;
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   ngOnChanges() {
     this.dataSource = new MatTableDataSource<PublicationSystem>(this.publicationSystems);
@@ -83,12 +79,11 @@ export class PublicationSystemsListComponent implements AfterViewInit, OnChanges
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
-
 }

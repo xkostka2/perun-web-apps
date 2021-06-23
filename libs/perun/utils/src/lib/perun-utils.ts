@@ -18,7 +18,7 @@ import { MatSort } from '@angular/material/sort';
 import { saveAs } from 'file-saver';
 
 
-export const TABLE_ITEMS_COUNT_OPTIONS = [5, 10, 25, 100, 1000, 10000];
+export const TABLE_ITEMS_COUNT_OPTIONS = [5, 10, 25, 100];
 
 /**
  * Gets email of given member. The preferred email has top priority, the vo-email

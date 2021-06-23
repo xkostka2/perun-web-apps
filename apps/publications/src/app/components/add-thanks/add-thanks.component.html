@@ -26,6 +26,6 @@
     [pageSize]="pageSize"
     [displayedColumns]="publication.locked ? ['id', 'name', 'createdBy'] : ['select', 'id', 'name', 'createdBy']"
     [selection]="selection"
-    (pageChanged)="pageChanged($event)">
+    (page)="pageChanged($event)">
   </perun-web-apps-thanks-list>
 </div>

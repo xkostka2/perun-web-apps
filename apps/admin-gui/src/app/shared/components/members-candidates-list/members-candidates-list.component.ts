@@ -8,7 +8,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -22,7 +22,7 @@ import {
   customDataSourceFilterPredicate,
   customDataSourceSort,
   downloadData,
-  getDataForExport, parseFullName
+  getDataForExport, parseFullName, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 
@@ -43,7 +43,7 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @Input()
   members: MemberCandidate[];
@@ -125,6 +125,9 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
   }
 
   setDataSource() {
+    if (this.child === null || this.child === undefined || !this.child.paginator) {
+      return;
+    }
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
 
@@ -134,7 +137,7 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
       this.dataSource.sortData = (data: MemberCandidate[], sort: MatSort) => {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
@@ -265,10 +268,6 @@ export class MembersCandidatesListComponent implements OnChanges, AfterViewInit 
       }
     }
     return false;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 
   setAddAuth() {

@@ -6,11 +6,11 @@ import {
   RichResource
 } from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   customDataSourceSort, downloadData, getDataForExport, getDefaultDialogConfig, parseFullName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { NotificatorService, TableCheckbox } from '@perun-web-apps/perun/services';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,32 +66,20 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
   private sort: MatSort;
 
   dataSource: MatTableDataSource<PublicationForGUI>;
-
-  private paginator: MatPaginator;
-
   buttonPressed = false;
-
   changeLockMessage: string;
   locked: string;
   unlocked: string;
 
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   ngOnChanges(): void {
     this.dataSource = new MatTableDataSource<PublicationForGUI>(this.publications);
     this.setDataSource();
   }
 
-  private setDataSource() {
-    if (!!this.dataSource) {
-      this.dataSource.sortData = (data: PublicationForGUI[], sort: MatSort) => {
-        return customDataSourceSort(data, sort, this.getDataForColumn, this);
-      };
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getDataForColumn(data: PublicationForGUI, column: string): string {
@@ -123,18 +111,24 @@ export class PublicationsListComponent implements OnChanges, AfterViewInit {
     downloadData(getDataForExport(this.dataSource.filteredData, this.displayedColumns, this.getDataForColumn, this), format);
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, '', this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, '', this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, '', this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, '', this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex, false);
+  }
+
+  private setDataSource() {
+    if (!!this.dataSource) {
+      this.dataSource.sortData = (data: PublicationForGUI[], sort: MatSort) => {
+        return customDataSourceSort(data, sort, this.getDataForColumn, this);
+      };
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.child.paginator;
+    }
   }
 
   /** The label for the checkbox on the passed row */

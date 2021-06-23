@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Owner} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,6 +19,7 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-owners-list',
@@ -27,11 +28,7 @@ import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 })
 export class OwnersListComponent implements OnChanges, AfterViewInit {
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   constructor(private authResolver: GuiAuthResolver,
               private tableCheckbox: TableCheckbox) {
@@ -99,7 +96,7 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filter = this.filterValue;
     }
   }
@@ -114,11 +111,11 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: Owner): string {
@@ -127,9 +124,4 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
-  }
-
 }

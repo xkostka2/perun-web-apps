@@ -1,103 +1,98 @@
 <div [hidden]="dataSource.filteredData.length === 0 || taskResults.length === 0"
      class="card mt-3">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"
-                                  class="ml-auto"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource"
-             class="w-100"
-             mat-table
-             matSort
-             matSortActive="time"
-             matSortDirection="desc"
-             matSortDisableClear>
 
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let taskResult" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(taskResult) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(taskResult)"
-                          [checked]="selection.isSelected(taskResult)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource"
+           class="w-100"
+           mat-table
+           matSort
+           matSortActive="time"
+           matSortDirection="desc"
+           matSortDisableClear>
 
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.RESULT_ID' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="destination">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.DESTINATION' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.destination.destination}}</td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.TYPE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.destination.type.toUpperCase()}}</td>
-        </ng-container>
-        <ng-container matColumnDef="service">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.SERVICE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.service.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.STATUS' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.status}}</td>
-        </ng-container>
-        <ng-container matColumnDef="time">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.TIME' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.timestamp | date:'d.M.y H:mm:ss'}}</td>
-        </ng-container>
-        <ng-container matColumnDef="returnCode">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.RETURN_CODE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.returnCode}}</td>
-        </ng-container>
-        <ng-container matColumnDef="standardMessage">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.STANDARD_MESSAGE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">
-            <span *ngFor="let res of taskResult.standardMessage.split('\n')">{{res}}<br></span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="errorMessage">
-          <th mat-header-cell *matHeaderCellDef
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.ERROR_MESSAGE' | translate}}</th>
-          <td mat-cell class="static-column-size" *matCellDef="let taskResult">{{taskResult.errorMessage}}</td>
-        </ng-container>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(taskResult) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(taskResult)"
+                        [checked]="selection.isSelected(taskResult)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let taskResult; columns: displayedColumns;"
-          [class.yellowTableItem]="taskResult.status === 'WARNING'"
-          [class.greenTableItem]="taskResult.status === 'DONE'"
-          [class.redTableItem]="taskResult.status === 'ERROR' || taskResult.status === 'DENIED'"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.RESULT_ID' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="destination">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.DESTINATION' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.destination.destination}}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.TYPE' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.destination.type.toUpperCase()}}</td>
+      </ng-container>
+      <ng-container matColumnDef="service">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.SERVICE' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.service.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.STATUS' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.status}}</td>
+      </ng-container>
+      <ng-container matColumnDef="time">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.TIME' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.timestamp | date:'d.M.y H:mm:ss'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="returnCode">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.RETURN_CODE' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.returnCode}}</td>
+      </ng-container>
+      <ng-container matColumnDef="standardMessage">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.STANDARD_MESSAGE' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>
+          <span *ngFor="let res of taskResult.standardMessage.split('\n')">{{res}}<br></span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="errorMessage">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.TASK_RESULTS_LIST.ERROR_MESSAGE' | translate}}</th>
+        <td *matCellDef="let taskResult" class="static-column-size" mat-cell>{{taskResult.errorMessage}}</td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="this.taskResults.length"
-      [pageSize]="pageSize"
-      (page)="page.emit($event)"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let taskResult; columns: displayedColumns;"
+        [class.greenTableItem]="taskResult.status === 'DONE'"
+        [class.redTableItem]="taskResult.status === 'ERROR' || taskResult.status === 'DENIED'"
+        [class.yellowTableItem]="taskResult.status === 'WARNING'"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && taskResults.length !== 0" alert_type="warn">

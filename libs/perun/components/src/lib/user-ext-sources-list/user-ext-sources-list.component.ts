@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { RichUserExtSource, UserExtSource} from '@perun-web-apps/perun/openapi';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
@@ -20,6 +20,7 @@ import {
   customDataSourceSort, downloadData, getDataForExport,
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-user-ext-sources-list',
@@ -53,8 +54,7 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
 
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
@@ -116,16 +116,12 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filter = this.filterValue;
     }
   }
 
   checkboxLabel(row?: RichUserExtSource): string {
     return `${this.selection.isSelected(row.userExtSource) ? 'deselect' : 'select'} row ${row.userExtSource.id + 1}`;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

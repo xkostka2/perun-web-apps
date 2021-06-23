@@ -1,11 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
+import { getDefaultDialogConfig, TableWrapperComponent } from '@perun-web-apps/perun/utils';
 import { AddAuthImgDialogComponent } from '../../../components/dialogs/add-auth-img-dialog/add-auth-img-dialog.component';
 import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
 import { AuthService, StoreService } from '@perun-web-apps/perun/services';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
 import { RemoveStringValueDialogComponent } from '../../../components/dialogs/remove-string-value-dialog/remove-string-value-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
 import { UserManager, UserManagerSettings } from 'oidc-client';
@@ -18,7 +24,7 @@ import { AddTokenInfoDialogComponent } from '../../../components/add-token-info-
   templateUrl: './settings-authentication.component.html',
   styleUrls: ['./settings-authentication.component.scss']
 })
-export class SettingsAuthenticationComponent implements OnInit {
+export class SettingsAuthenticationComponent implements OnInit, AfterViewInit {
 
   removeDialogTitle: string;
 
@@ -28,11 +34,11 @@ export class SettingsAuthenticationComponent implements OnInit {
   removeDialogDescription: string;
 
   displayedColumns: string[] = ['type', 'nickname', 'added'];
-  dataSource: MatTableDataSource<MFAToken>;
+  dataSource: MatTableDataSource<MFAToken> = new MatTableDataSource<MFAToken>();
   @ViewChild('toggle')
   toggle: MatSlideToggle;
   pageSize = 5;
-  exporting = false;
+  loading: boolean;
   mfaAtt: Attribute;
   accessToken: string;
   idToken: string;
@@ -47,7 +53,9 @@ export class SettingsAuthenticationComponent implements OnInit {
     translate.get('AUTHENTICATION.DELETE_IMG_DIALOG_DESC').subscribe(res => this.removeDialogDescription = res);
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(TableWrapperComponent) children: QueryList<TableWrapperComponent>;
+
+  child: TableWrapperComponent;
 
   ngOnInit(): void {
     this.authService.manager.getUser().then(user => {
@@ -111,20 +119,6 @@ export class SettingsAuthenticationComponent implements OnInit {
     });
   }
 
-  private loadImage() {
-    const imgAttributeName = this.store.get('mfa', 'security_image_attribute')
-    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, imgAttributeName).subscribe(attr => {
-      if (!attr) {
-        this.attributesManagerService.getAttributeDefinitionByName(imgAttributeName).subscribe(att => {
-          this.imgAtt = att as Attribute;
-        });
-      } else {
-        this.imgAtt = attr;
-        this.imageSrc = this.imgAtt.value as unknown as string;
-      }
-    });
-  }
-
   getClientSettings(): UserManagerSettings {
     return {
       authority: this.store.get('oidc_client', 'oauth_authority'),
@@ -137,8 +131,15 @@ export class SettingsAuthenticationComponent implements OnInit {
       loadUserInfo: this.store.get('oidc_client', 'oauth_load_user_info'),
       automaticSilentRenew: true,
       silent_redirect_uri: this.store.get('oidc_client', 'oauth_silent_redirect_uri'),
-      extraQueryParams: { 'max_age': 0, 'acr_values': 'https://refeds.org/profile/mfa'}
+      extraQueryParams: { 'max_age': 0, 'acr_values': 'https://refeds.org/profile/mfa' }
     };
+  }
+
+  ngAfterViewInit(): void {
+    this.children.changes.subscribe(childs => {
+      this.child = childs.first;
+      this.dataSource.paginator = this.child.paginator;
+    })
   }
 
   addTOTP() {
@@ -152,10 +153,25 @@ export class SettingsAuthenticationComponent implements OnInit {
     window.open('https://id.muni.cz/simplesaml/module.php/muni/register-webauthn.php', '_blank');
   }
 
-    private loadMFA() {
-      const enforceMfaAttributeName = this.store.get('mfa', 'enforce_mfa_attribute')
-      const tokensAttributeName = this.store.get('mfa', 'tokens_attribute')
-      this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, enforceMfaAttributeName).subscribe(attr => {
+  private loadImage() {
+    const imgAttributeName = this.store.get('mfa', 'security_image_attribute');
+    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, imgAttributeName).subscribe(attr => {
+      if (!attr) {
+        this.attributesManagerService.getAttributeDefinitionByName(imgAttributeName).subscribe(att => {
+          this.imgAtt = att as Attribute;
+        });
+      } else {
+        this.imgAtt = attr;
+        this.imageSrc = this.imgAtt.value as unknown as string;
+      }
+    });
+  }
+
+  private loadMFA() {
+    this.loading = true;
+    const enforceMfaAttributeName = this.store.get('mfa', 'enforce_mfa_attribute');
+    const tokensAttributeName = this.store.get('mfa', 'tokens_attribute');
+    this.attributesManagerService.getUserAttributeByName(this.store.getPerunPrincipal().userId, enforceMfaAttributeName).subscribe(attr => {
       if (sessionStorage.getItem('mfa_route')) {
         sessionStorage.removeItem('mfa_route');
         this.mfaService.enableMfa(!attr || !attr.value, this.idToken).subscribe(() => {
@@ -202,6 +218,7 @@ export class SettingsAuthenticationComponent implements OnInit {
               }
             }
             this.dataSource = new MatTableDataSource<MFAToken>(this.tokens);
+            this.loading = false;
           });
         }
       }

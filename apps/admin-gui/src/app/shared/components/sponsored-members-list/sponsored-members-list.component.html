@@ -1,69 +1,73 @@
 <div [hidden]="dataSource.filteredData.length === 0 || sponsoredMembers.length === 0" class="card mt-3">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort matSortActive="name"
-        matSortDirection="asc" matSortDisableClear>
 
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let sponsoredMember" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(sponsoredMember) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(sponsoredMember)"
-                          [checked]="selection.isSelected(sponsoredMember)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort matSortActive="name"
+      matSortDirection="asc" matSortDisableClear>
 
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.ID' | translate}}</th>
-          <td *matCellDef="let sponsoredMember" class="static-column-size" mat-cell>{{sponsoredMember.member.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.member.user | userFullName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="sponsors">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.SPONSORS' | translate}}</th>
-          <td *matCellDef="let sponsoredMember" mat-cell>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let sponsoredMember" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(sponsoredMember) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(sponsoredMember)"
+                        [checked]="selection.isSelected(sponsoredMember)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.ID' | translate}}</th>
+        <td *matCellDef="let sponsoredMember" class="static-column-size" mat-cell>{{sponsoredMember.member.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let sponsoredMember" mat-cell>{{sponsoredMember.member.user | userFullName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="sponsors">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.SPONSORS' | translate}}</th>
+        <td *matCellDef="let sponsoredMember" mat-cell>
             <span *ngFor="let sponsor of sponsoredMember.sponsors">
               {{sponsor.user | userFullName}}<br>
             </span>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="menu">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-          <td *matCellDef="let sponsoredMember" mat-cell>
-            <button
-              (mouseenter)="disableRouting = true"
-              (mouseleave)="disableRouting = routingStrategy"
-              class="dark-hover-list-item"
-              aria-label="sponsors of member"
-              (click)="showSponsors(sponsoredMember)"
-              mat-icon-button>
-              <mat-icon>edit</mat-icon>
-            </button>
-            <span
-              *ngIf="passwdResetAuth(sponsoredMember)"
-              [matTooltip]="'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.PASSWORD_RESET' | translate"
-              [matTooltipPosition]="'above'"
-            >
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="menu">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <td *matCellDef="let sponsoredMember" mat-cell>
+          <button
+            (click)="showSponsors(sponsoredMember)"
+            (mouseenter)="disableRouting = true"
+            (mouseleave)="disableRouting = routingStrategy"
+            aria-label="sponsors of member"
+            class="dark-hover-list-item"
+            mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <span
+            *ngIf="passwdResetAuth(sponsoredMember)"
+            [matTooltipPosition]="'above'"
+            [matTooltip]="'SHARED.COMPONENTS.SPONSORED_MEMBERS_LIST.PASSWORD_RESET' | translate"
+          >
               <button
                 (mouseenter)="disableRouting = true"
                 (mouseleave)="disableRouting = routingStrategy"
@@ -75,30 +79,22 @@
                 <mat-icon>vpn_key</mat-icon>
             </button>
             </span>
-          </td>
-        </ng-container>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let sponsoredMember; columns: displayedColumns;"
-          [routerLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
-          [class.disable-outline]="disableRouting"
-          [class.cursor-pointer]="!disableRouting"
-          class="dark-hover-list-item"
-          mat-row
-        >
-        </tr>
-      </table>
-    </div>
-
-    <mat-paginator
-      [length]="this.sponsoredMembers.length"
-      [pageSize]="pageSize"
-      (page)="page.emit($event)"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let sponsoredMember; columns: displayedColumns;"
+        [class.cursor-pointer]="!disableRouting"
+        [class.disable-outline]="disableRouting"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
+        [routerLink]="disableRouting ? null : ['/organizations', sponsoredMember.member.voId, 'members', sponsoredMember.member.id]"
+        class="dark-hover-list-item"
+        mat-row
+      >
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && sponsoredMembers.length !== 0" alert_type="warn">

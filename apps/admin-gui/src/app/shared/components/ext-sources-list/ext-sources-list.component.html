@@ -1,60 +1,56 @@
 <div class="card mt-2"
      [hidden]="extSources.length === 0 || dataSource.filteredData.length === 0">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id"
-             matSortDirection="asc" matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let row" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(row) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(row)"
-                          [checked]="selection.isSelected(row)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.ID' | translate}}</th>
-          <td *matCellDef="let extSource" class="static-column-size" mat-cell>{{extSource.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let extSource" mat-cell>{{extSource.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.TYPE' | translate}}</th>
-          <td *matCellDef="let extSource" mat-cell>{{extSource.type | extSourceType}}</td>
-        </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let extSource; columns: displayedColumns;"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="id"
+           matSortDirection="asc" matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let row" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(row)"
+                        [checked]="selection.isSelected(row)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.ID' | translate}}</th>
+        <td *matCellDef="let extSource" class="static-column-size" mat-cell>{{extSource.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let extSource" mat-cell>{{extSource.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.EXT_SOURCES_LIST.TYPE' | translate}}</th>
+        <td *matCellDef="let extSource" mat-cell>{{extSource.type | extSourceType}}</td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="this.extSources.length"
-      (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let extSource; columns: displayedColumns;"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="extSources.length === 0" alert_type="warn">

@@ -1,69 +1,66 @@
 <div [hidden]="dataSource.filteredData.length === 0 || vos.length === 0" class="card mt-3">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table [dataSource]="dataSource"
-             class="w-100"
-             mat-table
-             matSort
-             matSortActive="recent"
-             matSortDirection="asc"
-             matSortDisableClear>
-        <ng-container matColumnDef="checkbox">
-          <th *matHeaderCellDef mat-header-cell>
-          </th>
-          <td *matCellDef="let member" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(member) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(member)"
-                          [checked]="selection.isSelected(member)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.ID' | translate}}</th>
-          <td *matCellDef="let vo" class="static-column-size" mat-cell>{{vo.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="recent">
-          <th *matHeaderCellDef mat-header-cell>
-          </th>
-          <td *matCellDef="let vo" mat-cell>
-            <perun-web-apps-recently-viewed-icon
+
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table [dataSource]="dataSource"
+           class="w-100"
+           mat-table
+           matSort
+           matSortActive="recent"
+           matSortDirection="asc"
+           matSortDisableClear>
+      <ng-container matColumnDef="checkbox">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let member" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(member) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(member)"
+                        [checked]="selection.isSelected(member)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.ID' | translate}}</th>
+        <td *matCellDef="let vo" class="static-column-size" mat-cell>{{vo.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="recent">
+        <th *matHeaderCellDef mat-header-cell>
+        </th>
+        <td *matCellDef="let vo" mat-cell>
+          <perun-web-apps-recently-viewed-icon
             [recentIds]="recentIds"
             [id]="vo.id">
-            </perun-web-apps-recently-viewed-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="shortName">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.SHORTNAME' | translate}}</th>
-          <td *matCellDef="let vo" mat-cell>{{vo.shortName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let vo" mat-cell>{{vo.name}}</td>
-        </ng-container>
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let vo; columns: displayedColumns;"
-          [class.disable-outline]="disableRouting"
-          [routerLink]="disableRouting ? null : ['/organizations', vo.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', vo.id]"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
-    <mat-paginator
-      (page)="page.emit($event)"
-      [length]="this.vos.length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+          </perun-web-apps-recently-viewed-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="shortName">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.SHORTNAME' | translate}}</th>
+        <td *matCellDef="let vo" mat-cell>{{vo.shortName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.VOS_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let vo" mat-cell>{{vo.name}}</td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let vo; columns: displayedColumns;"
+        [class.disable-outline]="disableRouting"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', vo.id]"
+        [routerLink]="disableRouting ? null : ['/organizations', vo.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && vos.length !== 0" alert_type="warn">

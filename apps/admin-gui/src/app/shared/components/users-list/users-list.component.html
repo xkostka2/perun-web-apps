@@ -1,93 +1,89 @@
 <div class="card mt-2" [hidden]="dataSource.filteredData.length === 0">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="id"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox *ngIf="selection.isMultipleSelection()"
-                          (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let row" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(row) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(row)"
-                          [checked]="selection.isSelected(row)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="user">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let user" class="static-column-size">
-            <mat-icon
-              class="align-bottom"
-              *ngIf="!user.serviceUser"
-              matTooltip="{{'MANAGERS_LIST.PERSON' | translate}}">
-              account_circle
-            </mat-icon>
-            <mat-icon
-              class="align-bottom"
-              *ngIf="user.serviceUser"
-              matTooltip="{{'MANAGERS_LIST.SERVICE' | translate}}">
-              traffic
-            </mat-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.ID' | translate}}</th>
-          <td *matCellDef="let user" class="static-column-size" mat-cell>
-            {{user.id}}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let manager" mat-cell>{{manager | userFullName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="organization">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.ORGANIZATION' | translate}}</th>
-          <td *matCellDef="let manager" mat-cell>{{manager | userVo}}</td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.EMAIL' | translate}}</th>
-          <td *matCellDef="let manager" mat-cell>{{manager | userEmail}}</td>
-        </ng-container>
-        <ng-container matColumnDef="logins">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.LOGINS' | translate}}</th>
-          <td *matCellDef="let manager" mat-cell>{{manager | userLogins}}</td>
-        </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let user; columns: displayedColumns;"
-          [perunWebAppsForceRouterLink]="disableRouting ? null : ['/admin/users', user.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/admin/users', user.id]"
-          [class.cursor-pointer]="!disableRouting"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="id"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        *ngIf="selection.isMultipleSelection()"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let row" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(row) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(row)"
+                        [checked]="selection.isSelected(row)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="user">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let user" class="static-column-size" mat-cell>
+          <mat-icon
+            *ngIf="!user.serviceUser"
+            class="align-bottom"
+            matTooltip="{{'MANAGERS_LIST.PERSON' | translate}}">
+            account_circle
+          </mat-icon>
+          <mat-icon
+            *ngIf="user.serviceUser"
+            class="align-bottom"
+            matTooltip="{{'MANAGERS_LIST.SERVICE' | translate}}">
+            traffic
+          </mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.ID' | translate}}</th>
+        <td *matCellDef="let user" class="static-column-size" mat-cell>
+          {{user.id}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let manager" mat-cell>{{manager | userFullName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="organization">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.ORGANIZATION' | translate}}</th>
+        <td *matCellDef="let manager" mat-cell>{{manager | userVo}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.EMAIL' | translate}}</th>
+        <td *matCellDef="let manager" mat-cell>{{manager | userEmail}}</td>
+      </ng-container>
+      <ng-container matColumnDef="logins">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MANAGERS_LIST.LOGINS' | translate}}</th>
+        <td *matCellDef="let manager" mat-cell>{{manager | userLogins}}</td>
+      </ng-container>
 
-    <mat-paginator
-      [length]="this.users.length"
-      [pageSize]="pageSize"
-      (page)="pageChanged($event)"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let user; columns: displayedColumns;"
+        [class.cursor-pointer]="!disableRouting"
+        [perunWebAppsForceRouterLink]="disableRouting ? null : ['/admin/users', user.id]"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/admin/users', user.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="users.length === 0" alert_type="warn">

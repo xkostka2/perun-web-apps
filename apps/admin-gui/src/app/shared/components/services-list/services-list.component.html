@@ -1,91 +1,88 @@
 <div class="card mt-3"
      [hidden]="this.services === undefined || this.services.length === 0 || this.dataSource.filteredData.length === 0">
-  <div class="card-body">
-    <div class="overflow-auto">
-      <perun-web-apps-table-options
-        (exportData)="exportData($event)"></perun-web-apps-table-options>
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="id"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let service" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(service) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(service)"
-                          [checked]="selection.isSelected(service)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
 
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.ID' | translate}}</th>
-          <td *matCellDef="let service" class="static-column-size" mat-cell>{{service.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let service" mat-cell>{{service.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="enabled">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let service" mat-cell>
-            <mat-icon
-              class="align-bottom"
-              *ngIf="service.enabled"
-              matTooltip="{{'SHARED.COMPONENTS.SERVICES_LIST.ENABLED' | translate}}">
-              check_circle_outline
-            </mat-icon>
-            <mat-icon
-              class="align-bottom"
-              *ngIf="!service.enabled"
-              matTooltip="{{'SHARED.COMPONENTS.SERVICES_LIST.DISABLED' | translate}}">
-              block
-            </mat-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="script">
-          <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.SERVICES_LIST.SCRIPT' | translate}}</th>
-          <td *matCellDef="let service" mat-cell>{{service.script}}</td>
-        </ng-container>
-        <ng-container matColumnDef="description">
-          <th *matHeaderCellDef mat-header-cell
-              mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.DESCRIPTION' | translate}}</th>
-          <td *matCellDef="let service" mat-cell>{{service.description}}</td>
-        </ng-container>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="id"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let service" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(service) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(service)"
+                        [checked]="selection.isSelected(service)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let service; columns: displayedColumns;"
-          [routerLink]="disableRouting ? null : ['/admin/services', service.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/admin/services', service.id]"
-          [class.cursor-pointer]="!disableRouting"
-          [class.disable-outline]="disableRouting"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-      <mat-paginator
-        [pageSize]="pageSize"
-        (page)="page.emit($event)"
-        [pageSizeOptions]="pageSizeOptions">
-      </mat-paginator>
-    </div>
-  </div>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.ID' | translate}}</th>
+        <td *matCellDef="let service" class="static-column-size" mat-cell>{{service.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let service" mat-cell>{{service.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="enabled">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let service" mat-cell>
+          <mat-icon
+            *ngIf="service.enabled"
+            class="align-bottom"
+            matTooltip="{{'SHARED.COMPONENTS.SERVICES_LIST.ENABLED' | translate}}">
+            check_circle_outline
+          </mat-icon>
+          <mat-icon
+            *ngIf="!service.enabled"
+            class="align-bottom"
+            matTooltip="{{'SHARED.COMPONENTS.SERVICES_LIST.DISABLED' | translate}}">
+            block
+          </mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="script">
+        <th *matHeaderCellDef mat-header-cell>{{'SHARED.COMPONENTS.SERVICES_LIST.SCRIPT' | translate}}</th>
+        <td *matCellDef="let service" mat-cell>{{service.script}}</td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th *matHeaderCellDef mat-header-cell
+            mat-sort-header>{{'SHARED.COMPONENTS.SERVICES_LIST.DESCRIPTION' | translate}}</th>
+        <td *matCellDef="let service" mat-cell>{{service.description}}</td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let service; columns: displayedColumns;"
+        [class.cursor-pointer]="!disableRouting"
+        [class.disable-outline]="disableRouting"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/admin/services', service.id]"
+        [routerLink]="disableRouting ? null : ['/admin/services', service.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && (this.services !== undefined && this.services.length !== 0)"

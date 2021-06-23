@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -17,7 +17,7 @@ import { AttributeDefinition} from '@perun-web-apps/perun/openapi';
 import { EditAttributeDefinitionDialogComponent } from '../dialogs/edit-attribute-definition-dialog/edit-attribute-definition-dialog.component';
 import {
   customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
-  getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS
+  getDefaultDialogConfig, TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 
@@ -55,11 +55,7 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
     this.setDataSource();
   }
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   displayedColumns: string[] = ['select', 'id', 'friendlyName', 'entity', 'namespace', 'type', 'unique'];
   dataSource: MatTableDataSource<AttributeDefinition>;
@@ -76,7 +72,7 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getDataForColumn(data: AttributeDefinition, column: string): string{
@@ -121,16 +117,16 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
       this.dataSource.sortData = (data: AttributeDefinition[], sort: MatSort) => {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex, false);
   }
 
   checkboxLabel(row?: AttributeDefinition): string {
@@ -157,9 +153,5 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
         }
       });
     }
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

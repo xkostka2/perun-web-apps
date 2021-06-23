@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Inject,
@@ -10,7 +11,7 @@ import {
   ViewChild, ViewChildren
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotificatorService } from '@perun-web-apps/perun/services';
@@ -19,7 +20,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AttributeDefinition } from '@perun-web-apps/perun/openapi';
 import { AttributeValueComponent } from '@perun-web-apps/perun/components';
 import { Attribute, AttributesManagerService } from '@perun-web-apps/perun/openapi';
-import { TABLE_ITEMS_COUNT_OPTIONS } from '@perun-web-apps/perun/utils';
+import { TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 export interface EntitylessAttributeKeysListData {
   attDef: AttributeDefinition;
@@ -31,7 +32,7 @@ export interface EntitylessAttributeKeysListData {
   styleUrls: ['./entityless-attribute-keys-list.component.scss']
 })
 
-export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
+export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit, AfterViewInit {
 
   constructor(public dialogRef: MatDialogRef<EntitylessAttributeKeysListComponent>,
               @Inject(MAT_DIALOG_DATA) public data: EntitylessAttributeKeysListData,
@@ -43,10 +44,11 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
 
   @ViewChild(MatSort, { static: true }) set matSort(ms: MatSort) {
     this.sort = ms;
-    this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(TableWrapperComponent) children: QueryList<TableWrapperComponent>;
+
+  child: TableWrapperComponent;
 
   @Input()
   attDef: AttributeDefinition;
@@ -72,13 +74,14 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
 
   isAddButtonDisabled = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
-
+  loading: boolean;
 
   ngOnChanges(changes: SimpleChanges) {
     this.ngOnInit();
   }
 
   ngOnInit() {
+    this.loading = true;
     this.attDef = this.data.attDef;
     this.attributesManager.getEntitylessKeys(this.attDef.id).subscribe(keys => {
       this.attributesManager.getEntitylessAttributesByName(`${this.attDef.namespace}:${this.attDef.friendlyName}`).subscribe(att => {
@@ -90,14 +93,18 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
         }
         this.dataSource = new MatTableDataSource<[string, Attribute]>(this.records);
         this.setDataSource();
+        this.loading = false;
       });
     });
   }
 
   setDataSource() {
+    if(!this.child || !this.child.paginator){
+      return
+    }
     if (!!this.dataSource) {
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
@@ -178,7 +185,10 @@ export class EntitylessAttributeKeysListComponent implements OnChanges, OnInit {
     }
   }
 
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
+  ngAfterViewInit(): void {
+    this.children.changes.subscribe(childs => {
+      this.child = childs.first;
+      this.dataSource.paginator = this.child.paginator;
+    });
   }
 }

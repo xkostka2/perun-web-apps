@@ -12,12 +12,12 @@ import { AttributesManagerService, MemberWithSponsors, Vo } from '@perun-web-app
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import {
   customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
   getDefaultDialogConfig,
   parseFullName,
-  TABLE_ITEMS_COUNT_OPTIONS
+  TABLE_ITEMS_COUNT_OPTIONS, TableWrapperComponent
 } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
 import {  EditMemberSponsorsDialogComponent } from '../dialogs/edit-member-sponsors-dialog/edit-member-sponsors-dialog.component';
@@ -72,7 +72,8 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
 
   routingStrategy = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
+
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
   ngOnChanges(changes: SimpleChanges) {
@@ -133,7 +134,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
       };
       this.dataSource.filter = this.filterValue;
 
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
@@ -154,11 +155,11 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.dataSource);
+    return this.tableCheckbox.isAllSelected(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.dataSource);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,false);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,false);
   }
 
   checkboxLabel(row?: MemberWithSponsors): string {
@@ -169,7 +170,7 @@ export class SponsoredMembersListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   resetPassword(sponsoredMember: MemberWithSponsors) {

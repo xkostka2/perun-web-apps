@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -8,7 +7,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EnrichedFacility} from '@perun-web-apps/perun/openapi';
@@ -19,6 +18,7 @@ import {
 } from '@perun-web-apps/perun/utils';
 import { SelectionModel } from '@angular/cdk/collections';
 import { GuiAuthResolver } from '@perun-web-apps/perun/services';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-facilities-list',
@@ -28,8 +28,7 @@ import { GuiAuthResolver } from '@perun-web-apps/perun/services';
 export class FacilitiesListComponent implements OnChanges {
 
   constructor(
-    private authResolver: GuiAuthResolver,
-    private cd: ChangeDetectorRef
+    private authResolver: GuiAuthResolver
   ) { }
 
   @Input()
@@ -61,14 +60,9 @@ export class FacilitiesListComponent implements OnChanges {
     this.setDataSource();
   }
 
-  @ViewChild(MatPaginator) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-    this.setDataSource();
-    this.cd.detectChanges();
-  }
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   private sort: MatSort;
-  private paginator: MatPaginator;
 
   dataSource: MatTableDataSource<EnrichedFacility>;
   disableRouting: boolean;
@@ -111,13 +105,13 @@ export class FacilitiesListComponent implements OnChanges {
   }
 
   setDataSource() {
-    if (!this.paginator) {
+    if (this.child === null || this.child === undefined || !this.child.paginator) {
       return;
     }
     if (!this.dataSource) {
       this.dataSource = new MatTableDataSource<EnrichedFacility>();
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filterPredicate = (data: EnrichedFacility, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
       };
@@ -149,9 +143,5 @@ export class FacilitiesListComponent implements OnChanges {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.facility.id + 1}`;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

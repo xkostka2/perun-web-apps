@@ -33,76 +33,74 @@
   </button>
 </div>
 
-<div mat-dialog-content class="mt-3">
-  <div *ngIf="!(records.length === 0)" class="card mt-3">
-    <div class="card-body">
-      <div class="overflow-auto">
-        <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="key"
-               matSortDirection="asc"
-               matSortDisableClear>
+<div [hidden]="loading" class="mt-3" mat-dialog-content>
+  <div *ngIf="records && records.length" class="card mt-3">
 
-          <ng-container matColumnDef="select">
-            <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [aria-label]="checkboxLabel()"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()"
-                            color="primary">
-              </mat-checkbox>
-            </th>
-            <td *matCellDef="let record" class="static-column-size" mat-cell>
-              <mat-checkbox (change)="$event ? selection.toggle(record) : null"
-                            (click)="$event.stopPropagation()"
-                            [aria-label]="checkboxLabel(record)"
-                            [checked]="selection.isSelected(record)"
-                            color="primary">
-              </mat-checkbox>
-            </td>
-          </ng-container>
+    <perun-web-apps-table-wrapper
+      (page)="page.emit($event)"
+      [dataLength]="dataSource.filteredData.length"
+      [hideExport]="true"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="pageSize">
+      <table [dataSource]="dataSource" class="w-100" mat-table matSort matSortActive="key"
+             matSortDirection="asc"
+             matSortDisableClear>
 
-          <ng-container matColumnDef="key">
-            <th *matHeaderCellDef mat-header-cell
-                mat-sort-header>
-              {{'SHARED.COMPONENTS.ENTITYLESS_ATTRIBUTES_LIST.KEY' | translate}}
-            </th>
-            <td *matCellDef="let record" mat-cell>
-              <label>
-                <input (ngModelChange)="this.onValueChange(record)" [(ngModel)]="record[0]" class="mt-2" matInput
-                       placeholder="New key">
-              </label>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="value">
-            <th *matHeaderCellDef mat-header-cell
-                mat-sort-header>
-              {{'SHARED.COMPONENTS.ENTITYLESS_ATTRIBUTES_LIST.VALUE' | translate}}
-            </th>
-            <td *matCellDef="let record" mat-cell>
-              <perun-web-apps-attribute-value
-                (sendEventToParent2)="onValueChange(record)"
-                [attribute]="record[1]">
-              </perun-web-apps-attribute-value>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [aria-label]="checkboxLabel()"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          color="primary">
+            </mat-checkbox>
+          </th>
+          <td *matCellDef="let record" class="static-column-size" mat-cell>
+            <mat-checkbox (change)="$event ? selection.toggle(record) : null"
+                          (click)="$event.stopPropagation()"
+                          [aria-label]="checkboxLabel(record)"
+                          [checked]="selection.isSelected(record)"
+                          color="primary">
+            </mat-checkbox>
+          </td>
+        </ng-container>
 
-          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-          <tr
-            *matRowDef="let record; columns: displayedColumns;"
-            class="dark-hover-list-item"
-            mat-row>
-          </tr>
-        </table>
-      </div>
+        <ng-container matColumnDef="key">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>
+            {{'SHARED.COMPONENTS.ENTITYLESS_ATTRIBUTES_LIST.KEY' | translate}}
+          </th>
+          <td *matCellDef="let record" mat-cell>
+            <label>
+              <input (ngModelChange)="this.onValueChange(record)" [(ngModel)]="record[0]" class="mt-2" matInput
+                     placeholder="New key">
+            </label>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th *matHeaderCellDef mat-header-cell
+              mat-sort-header>
+            {{'SHARED.COMPONENTS.ENTITYLESS_ATTRIBUTES_LIST.VALUE' | translate}}
+          </th>
+          <td *matCellDef="let record" mat-cell>
+            <perun-web-apps-attribute-value
+              (sendEventToParent2)="onValueChange(record)"
+              [attribute]="record[1]">
+            </perun-web-apps-attribute-value>
+          </td>
+        </ng-container>
 
-      <mat-paginator
-        [length]="this.records.length"
-        [pageSize]="pageSize"
-        (page)="pageChanged($event)"
-        [pageSizeOptions]="pageSizeOptions">
-      </mat-paginator>
-    </div>
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr
+          *matRowDef="let record; columns: displayedColumns;"
+          class="dark-hover-list-item"
+          mat-row>
+        </tr>
+      </table>
+    </perun-web-apps-table-wrapper>
   </div>
 
+  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
 <!--  <div *ngIf="records.length === 0" class="perun-alert warn-alert mt-3">-->
 <!--    {{'SHARED.COMPONENTS.ENTITYLESS_ATTRIBUTES_LIST.NO_KEYS_WARNING' | translate}}-->
 <!--  </div>-->

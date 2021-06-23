@@ -1,7 +1,11 @@
 <div [hidden]="dataSource.filteredData.length === 0" class="card mt-3">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-  <div class="overflow-auto">
+
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
     <table
       mat-table
       [dataSource]="dataSource"
@@ -68,15 +72,7 @@
         class="dark-hover-list-item">
       </tr>
     </table>
-  </div>
-
-    <mat-paginator
-      [length]="this.attributes.length"
-      (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert *ngIf="dataSource.filteredData.length === 0 && dataSource.data.length !== 0" alert_type="warn">

@@ -1,0 +1,22 @@
+<div class="card-body pt-0">
+  <div class="row justify-content-end align-items-center">
+    <mat-paginator
+      (page)="page.emit($event)"
+      [length]="dataLength"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="pageSize">
+    </mat-paginator>
+    <perun-web-apps-table-options (exportData)="exportData.emit($event)" *ngIf="!hideExport"></perun-web-apps-table-options>
+  </div>
+  <div class="overflow-auto border-top">
+    <ng-content></ng-content>
+  </div>
+
+  <mat-paginator
+    (page)="pageChanged($event)"
+    [length]="paginator.length"
+    [pageIndex]="paginator.pageIndex"
+    [pageSizeOptions]="paginator.pageSizeOptions"
+    [pageSize]="paginator.pageSize">
+  </mat-paginator>
+</div>

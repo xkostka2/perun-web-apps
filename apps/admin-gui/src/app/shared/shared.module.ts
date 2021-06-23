@@ -183,6 +183,7 @@ import { MatListModule } from '@angular/material/list';
 import { EditApplicationFormItemLineComponent } from './components/dialogs/edit-application-form-item-dialog/edit-application-form-item-line/edit-application-form-item-line.component';
 import { AddGroupToRegistrationComponent } from './components/dialogs/add-group-to-registration/add-group-to-registration.component';
 import { OneEntityAttributePageComponent} from './components/one-entity-attribute-page/one-entity-attribute-page.component';
+import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
 
 @NgModule({
   imports: [
@@ -230,7 +231,8 @@ import { OneEntityAttributePageComponent} from './components/one-entity-attribut
     ConfigTableConfigModule,
     PerunPipesModule,
     NgxMatSelectSearchModule,
-    MatListModule
+    MatListModule,
+    PerunUtilsModule
   ],
   exports: [
     NgxMatSelectSearchModule,

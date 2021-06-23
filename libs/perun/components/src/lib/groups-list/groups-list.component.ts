@@ -11,7 +11,7 @@ import {
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { Group, GroupResourceStatus, RichGroup, Vo, VosManagerService } from '@perun-web-apps/perun/openapi';
 import {
   customDataSourceFilterPredicate, customDataSourceSort, downloadData, getDataForExport,
@@ -28,6 +28,7 @@ import {
   EditFacilityResourceGroupVoDialogOptions
 } from '@perun-web-apps/perun/dialogs';
 import { formatDate } from '@angular/common';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 
 export interface GroupWithStatus extends RichGroup {
@@ -123,11 +124,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   removeAuth: boolean;
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @HostListener('window:resize', ['$event'])
   shouldHideButtons() {
@@ -227,7 +224,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       };
       this.dataSource.sort = this.sort;
       this.dataSource.filter = this.filter;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
     }
   }
 
@@ -236,11 +233,11 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filter, this.pageSize, this.child.paginator.hasNextPage(), this.child.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex,true, this.canBeSelected);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filter, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex,true, this.canBeSelected);
 
     if(this.authType){
       this.removeAuth = this.setAuth();
@@ -266,7 +263,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       };
     }
 
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   onMoveGroup(group: GroupWithStatus) {
@@ -296,10 +293,6 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
         this.refreshTable.emit();
       }
     });
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 
   setAuth(): boolean {

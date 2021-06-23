@@ -10,7 +10,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -26,6 +26,7 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
+import { TableWrapperComponent } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-attributes-list',
@@ -46,11 +47,7 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
   @ViewChildren(AttributeValueComponent)
   items: QueryList<AttributeValueComponent>;
 
-  private paginator: MatPaginator;
-
-  @ViewChild(MatPaginator, { static: true }) set matPaginator(pg: MatPaginator) {
-    this.paginator = pg;
-  };
+  @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
   @Input()
   attributes: Attribute[] = [];
@@ -93,7 +90,7 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.child.paginator;
   }
 
   getDataForColumn(data: Attribute, column: string): string{
@@ -125,17 +122,17 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
       };
       this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator = this.child.paginator;
       this.dataSource.filter = this.filterValue;
     }
   }
 
   isAllSelected() {
-    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filterValue, this.pageSize, this.paginator.hasNextPage(), this.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
+    return this.tableCheckbox.isAllSelectedWithDisabledCheckbox(this.selection.selected.length, this.filterValue, this.pageSize, this.child.paginator.hasNextPage(), this.child.paginator.pageIndex, this.dataSource, this.sort, this.canBeSelected);
   }
 
   masterToggle() {
-    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.paginator.pageIndex, true, this.canBeSelected);
+    this.tableCheckbox.masterToggle(this.isAllSelected(), this.selection, this.filterValue, this.dataSource, this.sort, this.pageSize, this.child.paginator.pageIndex, true, this.canBeSelected);
   }
 
   checkboxLabel(row?: Attribute): string {
@@ -161,9 +158,5 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
 
   canBeSelected(attribute: Attribute): boolean{
     return !isVirtualAttribute(attribute) && attribute.writable;
-  }
-
-  pageChanged(event: PageEvent) {
-    this.page.emit(event);
   }
 }

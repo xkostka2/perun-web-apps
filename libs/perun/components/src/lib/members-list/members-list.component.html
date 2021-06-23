@@ -1,122 +1,118 @@
 <div [hidden]="this.members.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
-  <div class="card-body table-theme">
-    <perun-web-apps-table-options (exportData)="exportData($event)" ></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="fullName"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="checkbox">
-          <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                          [aria-label]="checkboxLabel()"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          color="primary">
-            </mat-checkbox>
-          </th>
-          <td *matCellDef="let member" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(member) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(member)"
-                          [checked]="selection.isSelected(member)"
-                          [disabled]="member.membershipType !== 'DIRECT'"
-                          [matTooltip]="member.membershipType !== 'DIRECT' ? ('MEMBERS_LIST.CHECKBOX_TOOLTIP' | translate):''"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ID' | translate}}</th>
-          <td *matCellDef="let member" class="static-column-size" mat-cell>{{member.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-          <td *matCellDef="let member" mat-cell>
-            <mat-icon *ngIf="member.membershipType !== 'DIRECT'"
-                      [matTooltip]="'MEMBERS_LIST.INDIRECT_MEMBER' | translate"
-                      (click)="viewMemberGroupTree(member)"
-                      (mouseenter)="disableRouting = true"
-                      (mouseleave)="disableRouting = disabledRouting">transfer_within_a_station</mat-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="fullName">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>{{member.user | userFullName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="status">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>
-            <i (click)="changeStatus($event, member)"
-               class="material-icons {{(member.status | memberStatusIconColor)}}"
-               matTooltip="{{member | memberStatusTooltip: false}}"
-               matTooltipClass="status-tooltip"
-               matTooltipPosition="left">
+
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="fullName"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="checkbox">
+        <th *matHeaderCellDef mat-header-cell>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [aria-label]="checkboxLabel()"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        color="primary">
+          </mat-checkbox>
+        </th>
+        <td *matCellDef="let member" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(member) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(member)"
+                        [checked]="selection.isSelected(member)"
+                        [disabled]="member.membershipType !== 'DIRECT'"
+                        [matTooltip]="member.membershipType !== 'DIRECT' ? ('MEMBERS_LIST.CHECKBOX_TOOLTIP' | translate):''"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ID' | translate}}</th>
+        <td *matCellDef="let member" class="static-column-size" mat-cell>{{member.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+        <td *matCellDef="let member" mat-cell>
+          <mat-icon (click)="viewMemberGroupTree(member)"
+                    (mouseenter)="disableRouting = true"
+                    (mouseleave)="disableRouting = disabledRouting"
+                    *ngIf="member.membershipType !== 'DIRECT'"
+                    [matTooltip]="'MEMBERS_LIST.INDIRECT_MEMBER' | translate">transfer_within_a_station</mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="fullName">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>{{member.user | userFullName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.STATUS' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>
+          <i (click)="changeStatus($event, member)"
+             class="material-icons {{(member.status | memberStatusIconColor)}}"
+             matTooltip="{{member | memberStatusTooltip: false}}"
+             matTooltipClass="status-tooltip"
+             matTooltipPosition="left">
               <span>
                 {{member.status | memberStatusIcon}}
               </span>
-            </i>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="groupStatus">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>
-            <i (click)="changeStatus($event, member)"
-               class="material-icons {{member.groupStatus | memberStatusIconColor}}"
-               matTooltip="{{member | memberStatusTooltip: true}}"
-               matTooltipClass="status-tooltip"
-               matTooltipPosition="left">
+          </i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="groupStatus">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.GROUP_STATUS' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>
+          <i (click)="changeStatus($event, member)"
+             class="material-icons {{member.groupStatus | memberStatusIconColor}}"
+             matTooltip="{{member | memberStatusTooltip: true}}"
+             matTooltipClass="status-tooltip"
+             matTooltipPosition="left">
               <span>
                 {{member.groupStatus | memberStatusIcon}}
               </span>
-            </i>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="sponsored">
-          <th *matHeaderCellDef mat-header-cell class="center new-line">{{'MEMBERS_LIST.ALREADY_SPONSORED' | translate}}</th>
-          <td *matCellDef="let member" mat-cell class="center">
-            <mat-icon *ngIf="member.sponsored">check_circle_outline</mat-icon>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="organization">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>{{member | memberOrganization}}</td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.EMAIL' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>{{member | memberEmail}}</td>
-        </ng-container>
-        <ng-container matColumnDef="logins">
-          <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.LOGINS' | translate}}</th>
-          <td *matCellDef="let member" mat-cell>{{member | memberLogins}}</td>
-        </ng-container>
+          </i>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="sponsored">
+        <th *matHeaderCellDef class="center new-line" mat-header-cell>{{'MEMBERS_LIST.ALREADY_SPONSORED' | translate}}</th>
+        <td *matCellDef="let member" class="center" mat-cell>
+          <mat-icon *ngIf="member.sponsored">check_circle_outline</mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="organization">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.ORGANIZATION' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>{{member | memberOrganization}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'MEMBERS_LIST.EMAIL' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>{{member | memberEmail}}</td>
+      </ng-container>
+      <ng-container matColumnDef="logins">
+        <th *matHeaderCellDef mat-header-cell>{{'MEMBERS_LIST.LOGINS' | translate}}</th>
+        <td *matCellDef="let member" mat-cell>{{member | memberLogins}}</td>
+      </ng-container>
 
 
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let member; columns: displayedColumns;"
-          [class.disable-outline]="disableRouting"
-          [class.cursor-pointer]="!disabledRouting"
-          [class.italic_font]="member.membershipType !== 'DIRECT'"
-          [routerLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
-
-    <mat-paginator
-      [length]="this.members.length"
-      (page)="pageChanged($event)"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let member; columns: displayedColumns;"
+        [class.cursor-pointer]="!disabledRouting"
+        [class.disable-outline]="disableRouting"
+        [class.italic_font]="member.membershipType !== 'DIRECT'"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
+        [routerLink]="disableRouting ? null : ['/organizations', member.voId, 'members', member.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert

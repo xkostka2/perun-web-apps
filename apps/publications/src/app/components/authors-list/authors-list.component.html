@@ -1,88 +1,84 @@
 <div [hidden]="authors.length === 0 || dataSource.filteredData.length === 0" class="card mt-2">
-  <div class="card-body">
-    <perun-web-apps-table-options (exportData)="exportData($event)"></perun-web-apps-table-options>
-    <div class="overflow-auto">
-      <table
-        [dataSource]="dataSource"
-        class="w-100"
-        mat-table
-        matSort
-        matSortActive="name"
-        matSortDirection="asc"
-        matSortDisableClear>
-        <ng-container matColumnDef="select">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let author" class="static-column-size" mat-cell>
-            <mat-checkbox (change)="$event ? selection.toggle(author) : null"
-                          (click)="$event.stopPropagation()"
-                          [aria-label]="checkboxLabel(author)"
-                          [checked]="selection.isSelected(author)"
-                          color="primary">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.ID' | translate}}</th>
-          <td *matCellDef="let author" class="static-column-size" mat-cell>{{author.id}}</td>
-        </ng-container>
-        <ng-container matColumnDef="name">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.NAME' | translate}}</th>
-          <td *matCellDef="let author" mat-cell>{{author | userFullName}}</td>
-        </ng-container>
-        <ng-container matColumnDef="organization">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.ORGANIZATION' | translate}}</th>
-          <td *matCellDef="let author" mat-cell>{{this.parseAttribute(author, 'organization')}}</td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.EMAIL' | translate}}</th>
-          <td *matCellDef="let author" mat-cell>{{this.parseAttribute(author, 'preferredMail')}}</td>
-        </ng-container>
-        <ng-container matColumnDef="numberOfPublications">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.NUMBER_OF_PUBLICATIONS' | translate}}</th>
-          <td *matCellDef="let author" mat-cell>{{author.authorships.length.toString()}}</td>
-        </ng-container>
-        <ng-container matColumnDef="add">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let author" class="static-column-size" mat-cell>
-            <button
-              (click)="onAddClick(author)"
-              class="ml-2"
-              color="accent"
-              mat-flat-button>
-              {{'AUTHORS_LIST.ADD' | translate}}
-            </button>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="remove">
-          <th *matHeaderCellDef mat-header-cell></th>
-          <td *matCellDef="let author" class="static-column-size" mat-cell>
-            <button
-              (click)="onRemoveClick(author)"
-              class="ml-2"
-              color="warn"
-              mat-flat-button>
-              {{'AUTHORS_LIST.REMOVE' | translate}}
-            </button>
-          </td>
-        </ng-container>
-        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-        <tr
-          *matRowDef="let author; columns: displayedColumns;"
-          [routerLink]="disableRouting ? null : ['/authors', author.id]"
-          [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/authors', author.id]"
-          class="dark-hover-list-item"
-          mat-row>
-        </tr>
-      </table>
-    </div>
 
-    <mat-paginator
-      [length]="this.authors.length"
-      (page)="page.emit($event)"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions">
-    </mat-paginator>
-  </div>
+  <perun-web-apps-table-wrapper
+    (exportData)="exportData($event)"
+    (page)="page.emit($event)"
+    [dataLength]="dataSource.filteredData.length"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="pageSize">
+    <table
+      [dataSource]="dataSource"
+      class="w-100"
+      mat-table
+      matSort
+      matSortActive="name"
+      matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="select">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let author" class="static-column-size" mat-cell>
+          <mat-checkbox (change)="$event ? selection.toggle(author) : null"
+                        (click)="$event.stopPropagation()"
+                        [aria-label]="checkboxLabel(author)"
+                        [checked]="selection.isSelected(author)"
+                        color="primary">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.ID' | translate}}</th>
+        <td *matCellDef="let author" class="static-column-size" mat-cell>{{author.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.NAME' | translate}}</th>
+        <td *matCellDef="let author" mat-cell>{{author | userFullName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="organization">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.ORGANIZATION' | translate}}</th>
+        <td *matCellDef="let author" mat-cell>{{this.parseAttribute(author, 'organization')}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.EMAIL' | translate}}</th>
+        <td *matCellDef="let author" mat-cell>{{this.parseAttribute(author, 'preferredMail')}}</td>
+      </ng-container>
+      <ng-container matColumnDef="numberOfPublications">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'AUTHORS_LIST.NUMBER_OF_PUBLICATIONS' | translate}}</th>
+        <td *matCellDef="let author" mat-cell>{{author.authorships.length.toString()}}</td>
+      </ng-container>
+      <ng-container matColumnDef="add">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let author" class="static-column-size" mat-cell>
+          <button
+            (click)="onAddClick(author)"
+            class="ml-2"
+            color="accent"
+            mat-flat-button>
+            {{'AUTHORS_LIST.ADD' | translate}}
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="remove">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let author" class="static-column-size" mat-cell>
+          <button
+            (click)="onRemoveClick(author)"
+            class="ml-2"
+            color="warn"
+            mat-flat-button>
+            {{'AUTHORS_LIST.REMOVE' | translate}}
+          </button>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr
+        *matRowDef="let author; columns: displayedColumns;"
+        [perunWebAppsMiddleClickRouterLink]="disableRouting ? null : ['/authors', author.id]"
+        [routerLink]="disableRouting ? null : ['/authors', author.id]"
+        class="dark-hover-list-item"
+        mat-row>
+      </tr>
+    </table>
+  </perun-web-apps-table-wrapper>
 </div>
 
 <app-alert
