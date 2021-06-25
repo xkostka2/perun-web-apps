@@ -3,11 +3,21 @@
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
   <div *ngIf="!loading" class="dialog-container" mat-dialog-content>
     <div class="font-weight-bold pb-1">{{'DIALOGS.CHANGE_STATUS.CURRENT_STATUS' | translate}}
-      : {{data.member.status}}</div>
-    <div class="text-muted pb-3">{{'DIALOGS.CHANGE_STATUS.INVALID_DESCRIPTION' | translate}}</div>
+      {{data.member.status}}</div>
+    <div class="text-muted pb-3">{{description}}</div>
 
-    <div class="font-weight-bold pb-1">{{'DIALOGS.CHANGE_STATUS.NEW_STATUS' | translate}}: VALID</div>
-    <div class="text-muted">{{'DIALOGS.CHANGE_STATUS.CHANGE_VALID' | translate}}</div>
+    <div class="font-weight-bold pb-1">
+      {{'DIALOGS.CHANGE_STATUS.NEW_STATUS' | translate}}
+      <mat-form-field *ngIf="!loading" class="mr-2 mt-2">
+        <mat-label>{{'DIALOGS.CHANGE_STATUS.SELECT_STATUS' | translate}}</mat-label>
+        <mat-select (selectionChange)="changeStatus($event)">
+          <mat-option *ngFor="let status of allStatuses" [value]="status">{{status}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="text-muted new-line">
+      <i [innerHTML]=changeMessage></i>
+    </div>
   </div>
   <div mat-dialog-actions>
     <button
@@ -18,11 +28,11 @@
     </button>
     <button
       (click)="submit()"
-      [disabled]="loading"
+      [disabled]="loading || !selectedStatus"
       class="ml-2"
       color="accent"
       mat-flat-button>
-      {{'DIALOGS.CHANGE_STATUS.TITLE' | translate}}
+      {{submitButtonText}}
     </button>
   </div>
 </div>

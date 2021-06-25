@@ -6,7 +6,10 @@ import {
   Vo
 } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
+import {
+  ChangeMemberStatusDialogComponent,
+  ChangeVoExpirationDialogComponent
+} from '@perun-web-apps/perun/dialogs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiRequestConfigurationService, GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
@@ -44,16 +47,35 @@ export class MemberOverviewMembershipComponent implements OnChanges {
     this.refreshVoExpiration();
   }
 
-  changeVoExpiration() {
+  changeStatus() {
+    const config = getDefaultDialogConfig();
+    config.width = '600px';
+    config.data = {member: this.member, voId: this.vo.id};
+    const oldStatus = this.member.status;
+
+    const dialogRef = this.dialog.open(ChangeMemberStatusDialogComponent, config);
+    dialogRef.afterClosed().subscribe( member => {
+      if (member) {
+        this.member = member;
+        if ((oldStatus === 'VALID' && (member.status === 'EXPIRED' || member.status === 'DISABLED')) || member.status === 'VALID') {
+          this.changeVoExpiration(true);
+        }
+      }
+    });
+  }
+
+  changeVoExpiration(statusChanged: boolean) {
     const config = getDefaultDialogConfig();
     config.width = '400px';
     config.data = {
+      voId: this.vo.id,
       memberId: this.member.id,
       expirationAttr: this.voExpirationAtt,
-      mode: 'vo'
+      status: this.member.status,
+      statusChanged: statusChanged,
     }
 
-    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
+    const dialogRef = this.dialog.open(ChangeVoExpirationDialogComponent, config);
     dialogRef.afterClosed().subscribe(success => {
       if (success) {
         this.refreshVoExpiration();

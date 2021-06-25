@@ -21,7 +21,10 @@ import {
   TABLE_ITEMS_COUNT_OPTIONS
 } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { ChangeExpirationDialogComponent, GroupSyncDetailDialogComponent } from '@perun-web-apps/perun/dialogs';
+import {
+  ChangeGroupExpirationDialogComponent,
+  GroupSyncDetailDialogComponent
+} from '@perun-web-apps/perun/dialogs';
 import { GuiAuthResolver, TableCheckbox } from '@perun-web-apps/perun/services';
 import {
   EditFacilityResourceGroupVoDialogComponent,
@@ -101,6 +104,9 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   memberId: number;
+
+  @Input()
+  memberGroupStatus: string;
 
   @Input()
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -358,10 +364,11 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
       memberId: this.memberId,
       groupId: group.id,
       expirationAttr: expirationAtt,
-      mode: 'group'
+      mode: 'group',
+      status: this.memberGroupStatus
     }
 
-    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
+    const dialogRef = this.dialog.open(ChangeGroupExpirationDialogComponent, config);
     dialogRef.afterClosed().subscribe(success => {
       if (success){
         this.refreshTable.emit();

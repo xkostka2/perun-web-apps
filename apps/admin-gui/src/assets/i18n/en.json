@@ -1355,12 +1355,24 @@
     },
     "CHANGE_STATUS": {
       "TITLE": "Change status",
-      "CANCEL": "Cancel",
-      "CURRENT_STATUS": "Current status",
-      "NEW_STATUS": "New status",
-      "CHANGE_VALID": "Changing status to VALID will trigger automatic configuration for provided resources. \nIf successful, member will have access on provided resources. \nIf not, see displayed error message and do manual configuration on 'settings' tab on members detail.",
+      "CURRENT_STATUS": "Current status: ",
+      "VALID_DESCRIPTION": "Member is properly configured and has access to all provided resources.",
       "INVALID_DESCRIPTION": "Member have configuration error and DON'T have access on provided resources. You can check what is wrong by changing member's status to VALID. If possible, procedure will configure all necessary settings by itself.",
-      "SUCCESS": "Member status was changed"
+      "EXPIRED_DESCRIPTION": "Member didn't extend membership and might NOT have access to all services.",
+      "DISABLED_DESCRIPTION": "Member was manually disabled and DON'T have access on provided resources.",
+      "NEW_STATUS": "New status: ",
+      "SELECT_STATUS": "Select status",
+      "CHANGE_VALID_TO_INVALID": "Changing status to INVALID will <b>prevent the member from accessing all services.</b>\n\nINVALID members might not have correct configuration (required by services) and have to be validated before accessing them.",
+      "CHANGE_VALID_TO_EXPIRED": "Changing status to EXPIRED <b>might prevent the member from accessing some of the services (based on provided service's rules).</b>\n\nEXPIRED status means, that member didn't extend his membership in VO, but it's still possible for him to do so.",
+      "CHANGE_VALID_TO_DISABLED": "Changing status to DISABLED will <b>prevent the member from accessing all of the services. </b>\n\nDISABLED status means that the member is archived and is not allowed to any services.",
+      "CHANGE_NO_VALID_TO_VALID": "Changing status to VALID <b>will trigger attribute validation</b>. \n\n<b>If successful</b>, member will have access on all services. \n\n<b>If not</b>, see displayed error message and do manual configuration of invalid attributes.",
+      "CHANGE_NO_VALID_TO_INVALID": "INVALID status means there is a configuration error, which prevents the member from accessing provided services.",
+      "CHANGE_NO_VALID_TO_EXPIRED": "EXPIRED status means, that member didn't extend his membership in VO, but it's still possible for him to do so.",
+      "CHANGE_NO_VALID_TO_DISABLED": "DISABLED status means that the member is archived and is not allowed to any services. Member can't enable/extend membership by himself.",
+      "SUCCESS": "Member status was changed",
+      "CANCEL": "Cancel",
+      "CHANGE_STATUS": "Change status",
+      "CHANGE_STATUS_WITH_EXPIRATION": "Change status and set expiration"
     },
     "REMOVE_GROUP_FROM_RESOURCE": {
       "TITLE": "Confirm delete action",
@@ -1618,12 +1630,11 @@
       "SUCCESS": "Required attributes were removed."
     },
     "CHANGE_EXPIRATION": {
-      "TITLE_VO": "Change member expiration",
-      "TITLE_GROUP": "Change member's group expiration",
-      "TITLE_SPONSORSHIP": "Change sponsorship expiration",
       "CURRENT_EXPIRATION": "Current expiration: ",
       "NEW_EXPIRATION": "New expiration:         ",
       "DATE_LABEL": "Expire to a date",
+      "VO_RULES": "Set by Vo rules",
+      "GROUP_RULES": "Set by Group rules",
       "EXPIRATION_NEVER": "Never expire",
       "WRONG_FORMAT": "The date has to be in format yyyy-mm-dd",
       "CANCEL": "Cancel",
@@ -1893,6 +1904,15 @@
       "CONTROL": "Type \"DELETE\" to confirm",
       "ASK": "Are you sure you want to permanently delete following",
       "WARN": "This action will also delete all"
+    },
+    "CHANGE_VO_EXPIRATION": {
+      "TITLE": "Change member expiration"
+    },
+    "CHANGE_GROUP_EXPIRATION": {
+      "TITLE": "Change member's group expiration"
+    },
+    "CHANGE_SPONSORSHIP_EXPIRATION": {
+      "TITLE": "Change sponsorship expiration"
     }
   },
   "MEMBERS_LIST": {

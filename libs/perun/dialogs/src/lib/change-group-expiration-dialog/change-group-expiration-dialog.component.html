@@ -1,0 +1,14 @@
+<div class="member-theme">
+  <h1 mat-dialog-title>{{'DIALOGS.CHANGE_GROUP_EXPIRATION.TITLE' | translate}}</h1>
+  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
+  <perun-web-apps-change-expiration-dialog
+    *ngIf="!loading"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [currentExpiration]="currentExpiration"
+    [newExpiration]="newExpiration"
+    [canExtendMembership]="canExtendMembership"
+    [mode]="'group'"
+    (expirationChanged)="onExpirationChanged($event)">
+  </perun-web-apps-change-expiration-dialog>
+</div>

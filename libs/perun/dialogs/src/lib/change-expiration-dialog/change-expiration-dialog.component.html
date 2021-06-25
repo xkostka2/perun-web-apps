@@ -1,7 +1,4 @@
 <div class="member-theme">
-  <h1 mat-dialog-title>{{title}}</h1>
-  <mat-spinner *ngIf="loading" class="ml-auto mr-auto"></mat-spinner>
-  <div *ngIf="!loading">
     <div mat-dialog-content>
       <p><strong>{{'DIALOGS.CHANGE_EXPIRATION.CURRENT_EXPIRATION'|translate}}</strong> {{currentExpiration | parseDate}}</p>
       <p><strong>{{'DIALOGS.CHANGE_EXPIRATION.NEW_EXPIRATION'|translate}}</strong> {{newExpiration ? (newExpiration | parseDate) : 'never'}}</p>
@@ -10,10 +7,16 @@
         <mat-radio-button value="{{expirationControl.value}}">
           <mat-form-field color="primary" class="cursor-pointer" (click)="picker.open()">
             <mat-label>{{'DIALOGS.CHANGE_EXPIRATION.DATE_LABEL'|translate}}</mat-label>
-            <input (dateChange)="setExpiration()" [min]="minDate" [formControl]="expirationControl" [matDatepicker]="picker" class="disable" readonly matInput>
+            <input (dateChange)="setExpiration()" [min]="minDate" [max]="maxDate" [formControl]="expirationControl" [matDatepicker]="picker" class="disable" readonly matInput>
             <mat-datepicker-toggle [for]="picker" [disabled]="false" matSuffix></mat-datepicker-toggle>
             <mat-datepicker #picker [disabled]="false"></mat-datepicker>
           </mat-form-field>
+        </mat-radio-button>
+        <mat-radio-button class="bottom-padding" value="voRules" *ngIf="canExtendMembership && mode === 'vo'">
+          {{'DIALOGS.CHANGE_EXPIRATION.VO_RULES'|translate}}
+        </mat-radio-button>
+        <mat-radio-button class="bottom-padding" value="groupRules" *ngIf="canExtendMembership && mode === 'group'">
+          {{'DIALOGS.CHANGE_EXPIRATION.GROUP_RULES'|translate}}
         </mat-radio-button>
         <mat-radio-button value="never">
           {{'DIALOGS.CHANGE_EXPIRATION.EXPIRATION_NEVER'|translate}}
@@ -36,6 +39,4 @@
         {{'DIALOGS.CHANGE_EXPIRATION.SAVE' | translate}}
       </button>
     </div>
-  </div>
-
 </div>

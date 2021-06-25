@@ -32,6 +32,10 @@ import { RouterModule } from '@angular/router';
 import { MatTreeModule } from '@angular/material/tree';
 import { MailChangeFailedDialogComponent } from './mail-change-failed-dialog/mail-change-failed-dialog.component';
 import { UniversalConfirmationDialogComponent } from './universal-confirmation-dialog/universal-confirmation-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
+import { ChangeGroupExpirationDialogComponent } from './change-group-expiration-dialog/change-group-expiration-dialog.component';
+import { ChangeVoExpirationDialogComponent } from './change-vo-expiration-dialog/change-vo-expiration-dialog.component';
+import { ChangeSponsorshipExpirationDialogComponent } from './change-sponsorship-expiration-dialog/change-sponsorship-expiration-dialog.component';
 
 @NgModule({
   imports: [
@@ -52,7 +56,8 @@ import { UniversalConfirmationDialogComponent } from './universal-confirmation-d
     PerunPipesModule,
     UiAlertsModule,
     RouterModule,
-    MatTreeModule
+    MatTreeModule,
+    MatSelectModule
   ],
   declarations: [
     BugReportDialogComponent,
@@ -70,7 +75,10 @@ import { UniversalConfirmationDialogComponent } from './universal-confirmation-d
     UniversalRemoveItemsDialogComponent,
     MemberTreeViewDialogComponent,
     MailChangeFailedDialogComponent,
-    UniversalConfirmationDialogComponent
+    UniversalConfirmationDialogComponent,
+    ChangeGroupExpirationDialogComponent,
+    ChangeVoExpirationDialogComponent,
+    ChangeSponsorshipExpirationDialogComponent
   ],
   exports: [
     ChangeExpirationDialogComponent,
@@ -86,7 +94,9 @@ import { UniversalConfirmationDialogComponent } from './universal-confirmation-d
     ChangeEmailDialogComponent,
     UniversalRemoveItemsDialogComponent,
     MemberTreeViewDialogComponent,
-    MailChangeFailedDialogComponent
+    MailChangeFailedDialogComponent,
+    ChangeGroupExpirationDialogComponent,
+    ChangeVoExpirationDialogComponent
   ]
 })
 export class PerunDialogsModule {
