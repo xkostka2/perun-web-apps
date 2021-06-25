@@ -10,6 +10,9 @@ export * from './lib/edit-attribute-dialog/edit-attribute-dialog.component';
 export * from './lib/attribute-value-list-edit-dialog/attribute-value-list-edit-dialog.component';
 export * from './lib/attribute-value-list-delete-dialog/attribute-value-list-delete-dialog.component';
 export * from './lib/change-email-dialog/change-email-dialog.component';
-export * from './lib/universal-remove-items-dialog/universal-remove-items-dialog.component'
-export * from './lib/member-tree-view-dialog/member-tree-view-dialog.component'
-export * from './lib/mail-change-failed-dialog/mail-change-failed-dialog.component'
+export * from './lib/universal-remove-items-dialog/universal-remove-items-dialog.component';
+export * from './lib/member-tree-view-dialog/member-tree-view-dialog.component';
+export * from './lib/mail-change-failed-dialog/mail-change-failed-dialog.component';
+export * from './lib/change-group-expiration-dialog/change-group-expiration-dialog.component';
+export * from './lib/change-vo-expiration-dialog/change-vo-expiration-dialog.component';
+export * from './lib/change-sponsorship-expiration-dialog/change-sponsorship-expiration-dialog.component';

@@ -36,7 +36,7 @@
                 {{voExpiration | parseDate}}
               </i>
               <button *ngIf="authResolver.isThisVoAdmin(vo.id)"
-                      (click)="changeVoExpiration()"
+                      (click)="changeVoExpiration(false)"
                       mat-icon-button>
                 <mat-icon>edit</mat-icon>
               </button>

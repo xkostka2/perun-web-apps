@@ -5,7 +5,9 @@ import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/servi
 import { TranslateService } from '@ngx-translate/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { ChangeExpirationDialogComponent } from '@perun-web-apps/perun/dialogs';
+import {
+  ChangeSponsorshipExpirationDialogComponent
+} from '@perun-web-apps/perun/dialogs';
 import { formatDate } from '@angular/common';
 
 export interface EditMemberSponsorsDialogComponent {
@@ -104,10 +106,9 @@ export class EditMemberSponsorsDialogComponent implements OnInit {
     config.data = {
       memberId: this.data.member.id,
       sponsor: sponsor,
-      mode: 'sponsor'
     };
 
-    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
+    const dialogRef = this.dialog.open(ChangeSponsorshipExpirationDialogComponent, config);
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){

@@ -1363,7 +1363,7 @@
       "NEW_STATUS": "New status: ",
       "SELECT_STATUS": "Select status",
       "CHANGE_VALID_TO_INVALID": "Changing status to INVALID will <b>prevent the member from accessing all services.</b>\n\nINVALID members might not have correct configuration (required by services) and have to be validated before accessing them.",
-      "CHANGE_VALID_TO_EXPIRED": "Changing status to EXPIRED will <b>might prevent the member from accessing some of the services (based on provided service's rules).</b>\n\nEXPIRED status means, that member didn't extend his membership in VO, but it's still possible for him to do so.",
+      "CHANGE_VALID_TO_EXPIRED": "Changing status to EXPIRED <b>might prevent the member from accessing some of the services (based on provided service's rules).</b>\n\nEXPIRED status means, that member didn't extend his membership in VO, but it's still possible for him to do so.",
       "CHANGE_VALID_TO_DISABLED": "Changing status to DISABLED will <b>prevent the member from accessing all of the services. </b>\n\nDISABLED status means that the member is archived and is not allowed to any services.",
       "CHANGE_NO_VALID_TO_VALID": "Changing status to VALID <b>will trigger attribute validation</b>. \n\n<b>If successful</b>, member will have access on all services. \n\n<b>If not</b>, see displayed error message and do manual configuration of invalid attributes.",
       "CHANGE_NO_VALID_TO_INVALID": "INVALID status means there is a configuration error, which prevents the member from accessing provided services.",
@@ -1630,9 +1630,6 @@
       "SUCCESS": "Required attributes were removed."
     },
     "CHANGE_EXPIRATION": {
-      "TITLE_VO": "Change member expiration",
-      "TITLE_GROUP": "Change member's group expiration",
-      "TITLE_SPONSORSHIP": "Change sponsorship expiration",
       "CURRENT_EXPIRATION": "Current expiration: ",
       "NEW_EXPIRATION": "New expiration:         ",
       "DATE_LABEL": "Expire to a date",
@@ -1907,6 +1904,15 @@
       "CONTROL": "Type \"DELETE\" to confirm",
       "ASK": "Are you sure you want to permanently delete following",
       "WARN": "This action will also delete all"
+    },
+    "CHANGE_VO_EXPIRATION": {
+      "TITLE": "Change member expiration"
+    },
+    "CHANGE_GROUP_EXPIRATION": {
+      "TITLE": "Change member's group expiration"
+    },
+    "CHANGE_SPONSORSHIP_EXPIRATION": {
+      "TITLE": "Change sponsorship expiration"
     }
   },
   "MEMBERS_LIST": {

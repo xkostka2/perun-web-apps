@@ -6,7 +6,10 @@ import {
   Vo
 } from '@perun-web-apps/perun/openapi';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
-import { ChangeExpirationDialogComponent, ChangeMemberStatusDialogComponent } from '@perun-web-apps/perun/dialogs';
+import {
+  ChangeMemberStatusDialogComponent,
+  ChangeVoExpirationDialogComponent
+} from '@perun-web-apps/perun/dialogs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiRequestConfigurationService, GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
@@ -39,9 +42,6 @@ export class MemberOverviewMembershipComponent implements OnChanges {
   loading: boolean;
   displayedColumns = ['attName', 'attValue'];
 
-  memberStatusChanged = false;
-  statusNotChangedToValid = false;
-
   ngOnChanges(): void {
     this.voMembershipDataSource = new MatTableDataSource<string>(['Status', 'Expiration']);
     this.refreshVoExpiration();
@@ -57,33 +57,27 @@ export class MemberOverviewMembershipComponent implements OnChanges {
     dialogRef.afterClosed().subscribe( member => {
       if (member) {
         this.member = member;
-        if ((oldStatus === 'VALID' && member.status === 'EXPIRED') || (oldStatus === 'VALID' && member.status === 'DISABLED') || member.status === 'VALID') {
-          this.memberStatusChanged = true;
-          this.statusNotChangedToValid = member.status !== 'VALID';
-          this.changeVoExpiration();
+        if ((oldStatus === 'VALID' && (member.status === 'EXPIRED' || member.status === 'DISABLED')) || member.status === 'VALID') {
+          this.changeVoExpiration(true);
         }
       }
     });
   }
 
-  changeVoExpiration() {
+  changeVoExpiration(statusChanged: boolean) {
     const config = getDefaultDialogConfig();
     config.width = '400px';
     config.data = {
       voId: this.vo.id,
       memberId: this.member.id,
       expirationAttr: this.voExpirationAtt,
-      mode: 'vo',
       status: this.member.status,
-      memberStatusChanged: this.memberStatusChanged,
-      statusNotChangedToValid: this.statusNotChangedToValid
+      statusChanged: statusChanged,
     }
 
-    const dialogRef = this.dialog.open(ChangeExpirationDialogComponent, config);
+    const dialogRef = this.dialog.open(ChangeVoExpirationDialogComponent, config);
     dialogRef.afterClosed().subscribe(success => {
       if (success) {
-        this.memberStatusChanged = false;
-        this.statusNotChangedToValid = false;
         this.refreshVoExpiration();
       }
     });
