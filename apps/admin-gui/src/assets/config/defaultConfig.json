@@ -3,8 +3,7 @@
   "api_url": "http://localhost/krb/rpc",
   "document_title": "Perun Web Gui",
   "supportedLanguages": [
-    "en",
-    "cs"
+    "en"
   ],
   "isDevel": false,
   "display_warning": false,
