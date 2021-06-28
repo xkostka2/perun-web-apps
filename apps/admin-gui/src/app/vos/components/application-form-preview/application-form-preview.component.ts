@@ -123,7 +123,7 @@ export class ApplicationFormPreviewComponent implements OnInit {
   }
 
   getLocalizedLabel(applicationFormItem: ApplicationFormItem): string {
-    if (applicationFormItem.i18n[this.language]) {
+    if (applicationFormItem.i18n[this.language] && applicationFormItem.i18n[this.language].label) {
       return applicationFormItem.i18n[this.language].label;
     }
     return applicationFormItem.shortname;
