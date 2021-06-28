@@ -3,8 +3,7 @@
   "api_url": "http://localhost/krb/rpc",
   "auto_auth_redirect": true,
   "supportedLanguages": [
-    "en",
-    "cs"
+    "en"
   ],
   "oidc_client": {
     "oauth_authority": "https://login.cesnet.cz/oidc/",
