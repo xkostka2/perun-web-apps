@@ -159,4 +159,8 @@ export class AttributesListComponent implements OnChanges, AfterViewInit {
   canBeSelected(attribute: Attribute): boolean{
     return !isVirtualAttribute(attribute) && attribute.writable;
   }
+
+  getAttributeFullName(attribute: Attribute) {
+    return `${attribute.namespace}:${attribute.friendlyName}`;
+  }
 }

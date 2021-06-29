@@ -28,3 +28,7 @@ table {
 th, td {
   padding: 0.25rem !important;
 }
+
+::ng-deep .urn-tooltip {
+  max-width: 800px !important;
+}

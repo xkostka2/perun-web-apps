@@ -43,7 +43,14 @@
       <ng-container matColumnDef="displayName">
         <th *matHeaderCellDef mat-header-cell
             mat-sort-header>{{'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.NAME' | translate}}</th>
-        <td mat-cell *matCellDef="let attribute">{{attribute.displayName}}</td>
+        <td mat-cell
+            *matCellDef="let attribute">
+          <div
+            matTooltipClass='urn-tooltip'
+            matTooltip='{{getAttributeFullName(attribute)}}'>
+            {{attribute.displayName}}
+          </div>
+        </td>
       </ng-container>
       <ng-container matColumnDef="value">
         <th *matHeaderCellDef mat-header-cell>{{'SHARED_LIB.PERUN.COMPONENTS.ATTRIBUTES_LIST.VALUE' | translate}}</th>
