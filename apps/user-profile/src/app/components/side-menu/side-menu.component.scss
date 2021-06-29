@@ -3,6 +3,10 @@
   padding-left: 6px;
 }
 
+.side-menu-item-height {
+  height: 40px !important;
+}
+
 mat-list-item:hover{
   background: var(--side-hover) !important;
 }
