@@ -175,9 +175,9 @@
   },
   "theme": {
     "content_bg_color": "",
-    "header_bg_color": "#102027",
-    "header_text_color": "#ffffff",
-    "header_icon_color": "#ffffff",
+    "nav_bg_color": "#102027",
+    "nav_text_color": "#ffffff",
+    "nav_icon_color": "#ffffff",
     "footer_bg_color": "#263238",
     "footer_headers_text_color": "#ffffff",
     "footer_links_text_color": "#e0e0e0",
@@ -186,8 +186,8 @@
     "sidemenu_bg_color": "#263238",
     "sidemenu_border_color": "#071e24",
     "sidemenu_item_icon_color": "#ffffff",
-    "sidemenu_hover_color": "#00796b",
-    "sidemenu_active_color": "#005048",
+    "sidemenu_hover_color": "#566268",
+    "sidemenu-link-active": "#465258",
     "sidemenu_active_text_color": "#ffffff",
     "user_color": "#00796b"
   }
