@@ -644,12 +644,15 @@ export function customDataSourceSort(data: any[], sort: MatSort, getDataForColum
   });
 }
 
-export function customDataSourceFilterPredicate(data: any, filter: string, columns: string[], getDataForColumn: (data: any, column: string, outerThis: any) => string, outerThis: any){
+export function customDataSourceFilterPredicate(data: any, filter: string, columns: string[], getDataForColumn: (data: any, column: string, outerThis: any) => string, outerThis: any, filterByUUID?: boolean){
   filter = filter.toLowerCase();
   let dataStr = '';
   columns.forEach(col => {
     dataStr+= ';' + getDataForColumn(data, col, outerThis);
   });
+  if (filterByUUID) {
+    dataStr+= ';' + getDataForColumn(data, 'uuid', outerThis);
+  }
   return dataStr.toLowerCase().indexOf(filter) !== -1;
 }
 

@@ -181,6 +181,8 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
         return '';
       case 'status':
         return data.status;
+      case 'uuid':
+        return data.uuid;
       default:
         return data[column];
     }
@@ -223,7 +225,7 @@ export class GroupsListComponent implements OnInit, AfterViewInit, OnChanges {
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: Group|RichGroup, filter: string) => {
-        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this, true);
       };
       this.dataSource.sortData = (data: Group[] | RichGroup[], sort: MatSort) => {
         return customDataSourceSort(data, sort, this.getSortDataForColumn, this);

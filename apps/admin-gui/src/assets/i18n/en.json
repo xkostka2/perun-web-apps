@@ -190,6 +190,7 @@
   "RESOURCE_DETAIL": {
     "ENTITY": "Resource",
     "DESCRIPTION": "Description",
+    "UUID": "UUID",
     "VO": "Organization",
     "FACILITY": "Facility",
     "ASSIGNED_GROUPS": {
@@ -546,6 +547,7 @@
     "ENTITY": "Group",
     "VO_NAME": "Organization",
     "DESCRIPTION": "Description",
+    "UUID": "UUID",
     "SYNCHRONIZATION": "Synchronization",
     "SUBGROUPS": {
       "TITLE": "Subgroups",
@@ -1948,7 +1950,8 @@
   },
   "ADMIN_USER": {
     "ENTITY": "User",
-    "USER_TYPE": "User type"
+    "USER_TYPE": "User type",
+    "UUID": "UUID"
   },
   "ADMIN": {
     "TITLE": "Perun admin",

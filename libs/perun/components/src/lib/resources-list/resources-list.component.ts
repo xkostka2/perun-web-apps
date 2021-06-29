@@ -118,6 +118,8 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
         return result;
       case 'status':
         return data.status;
+      case 'uuid':
+        return data.uuid;
       default:
         return data[column];
     }
@@ -130,7 +132,7 @@ export class ResourcesListComponent implements AfterViewInit, OnChanges {
   setDataSource() {
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: RichResource, filter: string) => {
-        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)
+        return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this, true);
       };
       this.dataSource.sortData = (data: RichResource[], sort: MatSort) => {
         return customDataSourceSort(data, sort, this.getDataForColumn, this);
