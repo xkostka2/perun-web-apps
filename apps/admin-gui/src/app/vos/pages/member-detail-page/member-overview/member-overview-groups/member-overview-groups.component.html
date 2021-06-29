@@ -1,13 +1,14 @@
-<mat-card class="mat-elevation-z3 membership-card">
+<mat-card class="mat-elevation-z3 groups-card mt-4">
   <mat-card-header>
     <mat-card-title>
-      <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.ORGANIZATION_MEMBERSHIP' | translate}}</h1>
+      <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.GROUP_MEMBERSHIP' | translate}}</h1>
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
-    <mat-spinner *ngIf="loading" class="mr-auto ml-auto"></mat-spinner>
+  <mat-card-content class="column-center">
+    <perun-web-apps-group-search-select *ngIf="!initLoading" [groups]="groups" (groupSelected)="groupIsSelected($event)"></perun-web-apps-group-search-select>
+    <mat-spinner *ngIf="loading || initLoading" class="mr-auto ml-auto"></mat-spinner>
     <div *ngIf="!loading">
-      <table mat-table [dataSource]="voMembershipDataSource" class="ml-auto mr-auto">
+      <table mat-table [dataSource]="groupMembershipDataSource" class="ml-auto mr-auto">
         <ng-container matColumnDef="attName">
           <th *matHeaderCellDef mat-header-cell></th>
           <td *matCellDef="let attribute" class="font-weight-bold" mat-cell>
@@ -18,14 +19,14 @@
           <th *matHeaderCellDef mat-header-cell></th>
           <td *matCellDef="let attribute" class="column-center" mat-cell>
             <div *ngIf="attribute === 'Status'">
-              <i class="material-icons vert-center mr-1 {{(member.status | memberStatusIconColor)}}">
-                {{member.status | memberStatusIcon}}
+              <i class="material-icons vert-center mr-1 {{(selectedMember.groupStatus | memberStatusIconColor)}}">
+                {{selectedMember.groupStatus | memberStatusIcon}}
               </i>
               <b class="vert-top">
-                {{member.status | transformMemberStatus}}
+                {{selectedMember.groupStatus | transformMemberStatus}}
               </b>
               <button
-                *ngIf="authResolver.isThisVoAdmin(vo.id)"
+                *ngIf="authResolver.isThisVoAdmin(vo.id) || authResolver.isThisGroupAdmin(this.selectedGroup.id)"
                 (click)="changeStatus()"
                 mat-icon-button>
                 <mat-icon>edit</mat-icon>
@@ -33,10 +34,10 @@
             </div>
             <div *ngIf="attribute === 'Expiration'">
               <i class="column-center">
-                {{voExpiration | parseDate}}
+                {{expiration | parseDate}}
               </i>
-              <button *ngIf="authResolver.isThisVoAdmin(vo.id)"
-                      (click)="changeVoExpiration(false)"
+              <button *ngIf="authResolver.isThisVoAdmin(vo.id) || authResolver.isThisGroupAdmin(this.selectedGroup.id)"
+                      (click)="changeExpiration()"
                       mat-icon-button>
                 <mat-icon>edit</mat-icon>
               </button>

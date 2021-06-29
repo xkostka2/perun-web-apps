@@ -37,7 +37,10 @@
     <div class="align-cards">
       <app-member-overview-membership [member]="member" [vo]="vo">
       </app-member-overview-membership>
-      <mat-card class="mat-elevation-z3 mt-4" *ngIf="pwdResetAuth">
+      <app-member-overview-groups [member]="member" [vo]="vo"></app-member-overview-groups>
+    </div>
+    <div class="align-cards">
+      <mat-card class="mat-elevation-z3" *ngIf="pwdResetAuth">
         <mat-card-header>
           <mat-card-title>
             <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.RESET_PASSWORD' | translate}}</h1>
@@ -52,47 +55,48 @@
           </div>
         </mat-card-content>
       </mat-card>
+      <div *ngIf="member.sponsored">
+        <mat-card class="mat-elevation-z3 mt-4">
+          <mat-card-header>
+            <mat-card-title>
+              <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.SPONSORSHIP' | translate}}</h1>
+            </mat-card-title>
+            <mat-card-subtitle class="mt-n3">
+              {{'MEMBER_DETAIL.OVERVIEW.SPONSORED_BY' | translate}}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content *ngIf="sponsors.length !== 0">
+            <h6 class="d-flex">
+              {{'MEMBER_DETAIL.OVERVIEW.SPONSORS' | translate}}:
+              <button
+                class="ml-auto mt-n2"
+                (click)="changeSponsors()"
+                mat-icon-button>
+                <mat-icon>edit</mat-icon>
+              </button>
+            </h6>
+            <table class="w-100" mat-table [dataSource]="sponsorsDataSource">
+              <ng-container matColumnDef="sponsors">
+                <th *matHeaderCellDef mat-header-cell>{{'MEMBER_DETAIL.OVERVIEW.SPONSOR_NAME' | translate}}</th>
+                <td *matCellDef="let sponsor" mat-cell>
+                  {{sponsor.user | userFullName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="expiration">
+                <th *matHeaderCellDef mat-header-cell>{{'MEMBER_DETAIL.OVERVIEW.EXPIRATION_TABLE' | translate}}</th>
+                <td *matCellDef="let sponsor" mat-cell>
+                  <span class="font-italic">{{sponsor.validityTo | parseDate}}</span>
+                </td>
+              </ng-container>
+              <tr *matHeaderRowDef="['sponsors', 'expiration']" mat-header-row></tr>
+              <tr *matRowDef="let sponsor; columns: ['sponsors', 'expiration'];" mat-row>
+              </tr>
+            </table>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
-    <div class="align-cards" *ngIf="member.sponsored">
-      <mat-card class="mat-elevation-z3">
-        <mat-card-header>
-          <mat-card-title>
-            <h1 class="page-subtitle">{{'MEMBER_DETAIL.OVERVIEW.SPONSORSHIP' | translate}}</h1>
-          </mat-card-title>
-          <mat-card-subtitle class="mt-n3">
-            {{'MEMBER_DETAIL.OVERVIEW.SPONSORED_BY' | translate}}
-          </mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content *ngIf="sponsors.length !== 0">
-          <h6 class="d-flex">
-            {{'MEMBER_DETAIL.OVERVIEW.SPONSORS' | translate}}:
-            <button
-              class="ml-auto mt-n2"
-              (click)="changeSponsors()"
-              mat-icon-button>
-              <mat-icon>edit</mat-icon>
-            </button>
-          </h6>
-          <table class="w-100" mat-table [dataSource]="sponsorsDataSource">
-            <ng-container matColumnDef="sponsors">
-              <th *matHeaderCellDef mat-header-cell>{{'MEMBER_DETAIL.OVERVIEW.SPONSOR_NAME' | translate}}</th>
-              <td *matCellDef="let sponsor" mat-cell>
-                {{sponsor.user | userFullName}}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="expiration">
-            <th *matHeaderCellDef mat-header-cell>{{'MEMBER_DETAIL.OVERVIEW.EXPIRATION_TABLE' | translate}}</th>
-            <td *matCellDef="let sponsor" mat-cell>
-              <span class="font-italic">{{sponsor.validityTo | parseDate}}</span>
-            </td>
-            </ng-container>
-            <tr *matHeaderRowDef="['sponsors', 'expiration']" mat-header-row></tr>
-            <tr *matRowDef="let sponsor; columns: ['sponsors', 'expiration'];" mat-row>
-            </tr>
-          </table>
-        </mat-card-content>
-      </mat-card>
-    </div>
+
   </div>
 
   <div>
