@@ -286,7 +286,7 @@
       "ADD_MEMBER": "Add",
       "ADD_MEMBER_DISABLED": "You cannot add members manually into this Vo.",
       "REMOVE_MEMBERS": "Remove",
-      "SEARCH_DESCRIPTION": "Search by name, login or email",
+      "SEARCH_DESCRIPTION": "Search by name, login, email or UUID",
       "FILTER_STATUS": "Filter by Status",
       "INVITE": "Invite"
     },
@@ -566,7 +566,7 @@
       "ADD_MEMBER": "Add",
       "ADD_MEMBER_DISABLED": "You cannot add members manually into this group.",
       "REMOVE_MEMBERS": "Remove",
-      "SEARCH_DESCRIPTION": "Search by name, login or email",
+      "SEARCH_DESCRIPTION": "Search by name, login, email or UUID",
       "LIST_ALL": "List all members",
       "INVITE_MEMBER": "Invite",
       "SYNCHRONIZED": "Action is disabled on this group, group is filled with members from external source.",
@@ -1968,7 +1968,7 @@
     },
     "USERS": {
       "TITLE": "Users",
-      "SEARCH_PLACEHOLDER": "Search by name, email or login",
+      "SEARCH_PLACEHOLDER": "Search by name, email, login or UUID",
       "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
       "NO_USERS_FOUND": "No users found.",
       "EMPTY_SEARCH": "Search field cannot be empty",
