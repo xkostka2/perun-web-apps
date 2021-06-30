@@ -1,30 +1,30 @@
+@use '~@angular/material' as mat;
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$password-reset-primary: mat-palette($mat-indigo);
-$password-reset-accent: mat-palette($mat-green, 600);
+$password-reset-primary: mat.define-palette(mat.$indigo-palette);
+$password-reset-accent: mat.define-palette(mat.$green-palette, 600);
 
 // The warn palette is optional (defaults to red).
-$password-reset-warn: mat-palette($mat-red);
+$password-reset-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$password-reset-theme: mat-light-theme($password-reset-primary, $password-reset-accent, $password-reset-warn);
+$password-reset-theme: mat.define-light-theme($password-reset-primary, $password-reset-accent, $password-reset-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($password-reset-theme);
+@include mat.all-component-themes($password-reset-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -62,12 +62,12 @@ $password-reset-theme: mat-light-theme($password-reset-primary, $password-reset-
     )
   );
 
-  $user-primary: mat-palette($user-dynamic-colors, 500);
-  $user-accent: mat-palette($mat-green, 600);
+  $user-primary: mat.define-palette($user-dynamic-colors, 500);
+  $user-accent: mat.define-palette(mat.$green-palette, 600);
 
-  $user-theme: mat-light-theme($user-primary, $user-accent);
+  $user-theme: mat.define-light-theme($user-primary, $user-accent);
 
-  @include angular-material-theme($user-theme);
+  @include mat.all-component-themes($user-theme);
 }
 
 .mat-flat-button {

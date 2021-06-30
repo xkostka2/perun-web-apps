@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { NotificatorService, StoreService } from '@perun-web-apps/perun/services';
-import { version } from '../../../../../../package.json';
 import { RTMessagesManagerService } from '@perun-web-apps/perun/openapi';
+declare var require: any;
 
 @Component({
   selector: 'perun-web-apps-report-issue-dialog',
@@ -38,7 +38,7 @@ export class ReportIssueDialogComponent implements OnInit {
     return this.message + '\n ' +
       '------------------------\n ' +
       'Perun instance: ' + this.instanceName + '\n ' +
-      'Sended from new Perun Gui, version: ' + version;
+      'Sended from new Perun Gui, version: ' + require( '../../../../../../package.json').version;
 
   }
 

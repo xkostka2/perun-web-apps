@@ -128,7 +128,7 @@ export class AdminGuiConfigService {
    *  We need to set basePath for authzService before loading principal, otherwise authzService uses its default basePath
    */
   private setApiUrl() {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       this.authzSevice.configuration.basePath = this.store.get('api_url');
       this.titleService.setTitle(this.store.get('document_title'));
       resolve();

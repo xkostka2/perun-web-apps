@@ -7,9 +7,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { NewVersionDialogComponent } from './shared/components/dialogs/new-version-dialog/new-version-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { version } from '../../../../package.json';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Params, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+declare var require: any;
 
 @Component({
   selector: 'app-root',
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
   displayWarning: boolean = this.store.get('display_warning');
   warningMessage: string = this.store.get('warning_message');
 
-  version = version;
+  version: string = require( '../../../../package.json').version;
 
   @HostListener('window:resize', ['$event'])
   getScreenSize(event?) {
