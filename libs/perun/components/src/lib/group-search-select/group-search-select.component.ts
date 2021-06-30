@@ -17,5 +17,8 @@ export class GroupSearchSelectComponent {
   @Input()
   disableAutoSelect = false;
 
+  @Input()
+  firstSelectedGroup: Group;
+
   nameFunction = (group: Group) => group.name;
 }

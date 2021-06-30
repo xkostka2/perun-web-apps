@@ -5,8 +5,13 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="column-center">
-    <perun-web-apps-group-search-select *ngIf="!initLoading" [groups]="groups" (groupSelected)="groupIsSelected($event)"></perun-web-apps-group-search-select>
-    <mat-spinner *ngIf="loading || initLoading" class="mr-auto ml-auto"></mat-spinner>
+    <perun-web-apps-group-search-select *ngIf="!initLoading"
+                                        [groups]="groups"
+                                        (groupSelected)="groupIsSelected($event)"
+                                        [firstSelectedGroup]="selectedGroup">
+    </perun-web-apps-group-search-select>
+    <mat-spinner *ngIf="(loading || initLoading) && !noGroups" class="mr-auto ml-auto"></mat-spinner>
+    <app-alert alert_type="info" *ngIf="noGroups">{{'MEMBER_DETAIL.OVERVIEW.NO_GROUPS_FOUND' | translate}}</app-alert>
     <div *ngIf="!loading">
       <table mat-table [dataSource]="groupMembershipDataSource" class="ml-auto mr-auto">
         <ng-container matColumnDef="attName">

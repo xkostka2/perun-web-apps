@@ -671,6 +671,7 @@
       "NEVER_EXPIRES": "never",
       "ORGANIZATION_MEMBERSHIP": "Organization membership",
       "GROUP_MEMBERSHIP": "Group membership",
+      "NO_GROUPS_FOUND": "No Groups found",
       "STATUS": "Status:",
       "EXPIRATION": "Expiration:",
       "PERSONAL": "Personal information",
