@@ -686,7 +686,7 @@ export class ResourcesManagerService {
 
     /**
      * Assigns ResourceRag to resource. The ResourceTag must contain its id, voId and tagName.
-     * @param inputAssignResourceTagToResource
+     * @param inputAssignResourceTagToResource 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -947,8 +947,8 @@ export class ResourcesManagerService {
     }
 
     /**
-     * Copy \&quot;template\&quot; settings from user\&#39;s another existing resource and create new resource with this template. The settings are attributes, services, tags (if exists), groups and their members (if the resources are from the same VO and withGroups is true) Template Resource can be from any of user\&#39;s facilities.
-     * @param inputCopyResource
+     * Copy \&quot;template\&quot; settings from user\&#39;s another existing resource and create new resource with this template. The settings are attributes, services, tags (if exists), groups and their members (if the resources are from the same VO and withGroups is true) Template Resource can be from any of user\&#39;s facilities. 
+     * @param inputCopyResource 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1087,7 +1087,7 @@ export class ResourcesManagerService {
 
     /**
      * Create new resource tag in VO
-     * @param inputCreateResourceTagWithResourceTag
+     * @param inputCreateResourceTagWithResourceTag 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1458,7 +1458,7 @@ export class ResourcesManagerService {
 
     /**
      * Delete resource tag by it\&#39;s id and VO_ID
-     * @param inputDeleteResourceTag
+     * @param inputDeleteResourceTag 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -1644,7 +1644,7 @@ export class ResourcesManagerService {
 
     /**
      * Get all resources with the specific tag assigned.
-     * @param inputGetAllResourcesByResourceTag
+     * @param inputGetAllResourcesByResourceTag 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -3766,7 +3766,7 @@ export class ResourcesManagerService {
     }
 
     /**
-     * Get list of all richUser administrators for the resource and supported role with specific attributes. Supported roles: ResourceAdmin, VOAdmin If \&quot;onlyDirectAdmins\&quot; is true, return only direct admins of the resource for supported role with specific attributes. If \&quot;allUserAttributes\&quot; is true, do not specify attributes through list and return them all in objects richUser. Ignoring list of specific attributes.
+     * Get list of all richUser administrators for the resource and supported role with specific attributes. Supported roles: ResourceAdmin, VOAdmin If \&quot;onlyDirectAdmins\&quot; is true, return only direct admins of the resource for supported role with specific attributes. If \&quot;allUserAttributes\&quot; is true, do not specify attributes through list and return them all in objects richUser. Ignoring list of specific attributes. 
      * @param resource id of Resource
      * @param specificAttributes list of specified attributes which are needed in object richUser
      * @param allUserAttributes if &#x3D;&#x3D; true, get all possible user attributes and ignore list of specificAttributes (if false, get only specific attributes)
@@ -4666,7 +4666,7 @@ export class ResourcesManagerService {
 
     /**
      * Removes ResourceRag from a resource. The ResourceTag must contain its id, voId and tagName.
-     * @param inputRemoveResourceTagFromResource
+     * @param inputRemoveResourceTagFromResource 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -4994,7 +4994,7 @@ export class ResourcesManagerService {
 
     /**
      * Set ban for member on resource.
-     * @param inputSetBan
+     * @param inputSetBan 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -5126,7 +5126,7 @@ export class ResourcesManagerService {
 
     /**
      * Updates a resource.
-     * @param inputUpdateResource
+     * @param inputUpdateResource 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -5188,7 +5188,7 @@ export class ResourcesManagerService {
 
     /**
      * Update existing ban (description, validation timestamp)
-     * @param inputUpdateBan
+     * @param inputUpdateBan 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -5250,7 +5250,7 @@ export class ResourcesManagerService {
 
     /**
      * Update resource tag name by it\&#39;s id and VO_ID
-     * @param inputUpdateResourceTag
+     * @param inputUpdateResourceTag 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */

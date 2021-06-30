@@ -20,6 +20,7 @@ export interface User extends Auditable {
     titleAfter?: string;
     serviceUser?: boolean;
     sponsoredUser?: boolean;
+    uuid?: string;
     specificUser?: boolean;
     majorSpecificType?: string;
 }

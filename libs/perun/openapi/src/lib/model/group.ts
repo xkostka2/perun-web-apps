@@ -18,5 +18,6 @@ export interface Group extends Auditable {
     description?: string;
     voId?: number;
     parentGroupId?: number;
+    uuid?: string;
 }
 

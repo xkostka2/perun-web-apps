@@ -17,5 +17,6 @@ export interface Resource extends Auditable {
     description?: string;
     voId?: number;
     facilityId?: number;
+    uuid?: string;
 }
 

@@ -21,6 +21,9 @@
           <mat-icon>edit</mat-icon>
         </button>
       </div>
+      <div>
+        {{'ADMIN_USER.UUID' | translate}}: {{user.uuid}}
+      </div>
       <span class="mt-1 entity-info">
         {{'ADMIN_USER.ENTITY' | translate}},
         {{'ADMIN_USER.USER_TYPE' | translate}}: {{getUserType()}}
