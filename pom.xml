@@ -12,7 +12,7 @@
   <name>Perun web apps</name>
 
   <properties>
-    <frontend-plugin.version>1.7.6</frontend-plugin.version>
+    <frontend-plugin.version>1.12.0</frontend-plugin.version>
   </properties>
 
   <build>
@@ -22,8 +22,8 @@
         <artifactId>frontend-maven-plugin</artifactId>
         <version>${frontend-plugin.version}</version>
         <configuration>
-          <nodeVersion>v12.13.0</nodeVersion>
-          <npmVersion>6.12.0</npmVersion>
+          <nodeVersion>v14.17.0</nodeVersion>
+          <npmVersion>6.14.13</npmVersion>
           <workingDirectory>src/main/web/</workingDirectory>
         </configuration>
         <executions>
