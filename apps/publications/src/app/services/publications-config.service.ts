@@ -68,7 +68,7 @@ export class PublicationsConfigService {
       });
   }
 
-  private setApiUrl() {
+  private setApiUrl(): Promise<void> {
     return new Promise((resolve) => {
       this.authzSevice.configuration.basePath = this.storeService.get('api_url');
       resolve();
