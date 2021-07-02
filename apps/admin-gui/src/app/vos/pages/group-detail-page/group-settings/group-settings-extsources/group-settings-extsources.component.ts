@@ -39,7 +39,7 @@ export class GroupSettingsExtsourcesComponent implements OnInit {
   successMessage: string;
   pageSize: number;
   tableId = TABLE_GROUP_EXTSOURCES_SETTINGS;
-  hideColumns = [];
+  displayedColumns = [];
 
   addAuth: boolean;
   removeAuth: boolean;
@@ -60,8 +60,7 @@ export class GroupSettingsExtsourcesComponent implements OnInit {
   setAuthRights(){
     this.addAuth = this.authResolver.isAuthorized('addExtSource_Group_ExtSource_policy', [this.group]);
     this.removeAuth = this.authResolver.isAuthorized('removeExtSource_Group_ExtSource_policy', [this.group]);
-    this.hideColumns = this.removeAuth ? [] : ['select'];
-
+    this.displayedColumns = this.removeAuth ? ['select', 'id', 'name', 'type'] : ['id', 'name', 'type'];
   }
 
   refreshTable() {

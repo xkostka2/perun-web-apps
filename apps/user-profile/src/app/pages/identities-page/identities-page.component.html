@@ -7,7 +7,7 @@
     <perun-web-apps-user-ext-sources-list
       [userExtSources]="idpExtSources"
       [selection]="idpSelection"
-      [hideColumns]="hiddenColumnsIdp"
+      [displayedColumns]="displayedColumnsIdp"
       [loginHeader]="loginIdp"
       [disableRouting]="true"
     ></perun-web-apps-user-ext-sources-list>
@@ -21,7 +21,7 @@
         [selection]="certSelection"
         [extSourceNameHeader]="extSourceNameCert"
         [loginHeader]="loginCert"
-        [hideColumns]="hiddenColumnsCert"
+        [displayedColumns]="displayedColumnsCert"
         [disableRouting]="true"
       ></perun-web-apps-user-ext-sources-list>
     </div>
@@ -37,7 +37,7 @@
       [userExtSources]="otherExtSources"
       [selection]="otherSelection"
       [extSourceNameHeader]="extSourceNameOther"
-      [hideColumns]="hiddenColumnsOther"
+      [displayedColumns]="displayedColumnsOther"
       [disableRouting]="true"
     ></perun-web-apps-user-ext-sources-list>
   </div>

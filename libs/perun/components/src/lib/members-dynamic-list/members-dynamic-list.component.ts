@@ -48,7 +48,7 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
   selection: SelectionModel<RichMember>;
 
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
 
   @Input()
   pageSize = 10;
@@ -79,7 +79,6 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
 
   exporting = false;
 
-  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
   dataSource: MembersDataSource;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -97,7 +96,6 @@ export class MembersDynamicListComponent implements AfterViewInit, OnInit, OnCha
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
 
     this.dataSource = new MembersDataSource(this.dynamicPaginatingService, this.authResolver);
     this.dataSource.loadMembers(this.voId, this.attrNames,'ASCENDING', 0, this.pageSize,

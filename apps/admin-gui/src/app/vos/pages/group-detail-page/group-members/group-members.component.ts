@@ -80,7 +80,7 @@ export class GroupMembersComponent implements OnInit {
   removeAuth: boolean;
   inviteAuth: boolean;
   blockManualMemberAdding: boolean;
-  hideColumns = [];
+  displayedColumns = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
 
   statuses = new FormControl();
   statusList = ['VALID', 'INVALID', 'EXPIRED', 'DISABLED'];
@@ -122,7 +122,7 @@ export class GroupMembersComponent implements OnInit {
   setAuthRights() {
     this.addAuth = this.guiAuthResolver.isAuthorized('addMembers_Group_List<Member>_policy', [this.group]);
     this.removeAuth = this.guiAuthResolver.isAuthorized('removeMembers_Group_List<Member>_policy', [this.group]);
-    this.hideColumns = this.removeAuth ? [] : ['checkbox'];
+    this.displayedColumns = this.removeAuth ? this.displayedColumns : ['id', 'type', 'fullName', 'status', 'groupStatus', 'organization', 'email', 'logins'];
     this.inviteAuth = this.guiAuthResolver.isAuthorized('group-sendInvitation_Vo_Group_String_String_String_policy', [this.group]);
   }
 

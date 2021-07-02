@@ -41,7 +41,7 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
   @Input()
   servicesStatus: ServiceState[] = [];
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'task.id', 'service.name', 'status', 'blocked', 'task.startTime', 'task.endTime'];
   @Input()
   selection = new SelectionModel<ServiceState>(true, []);
   @Input()
@@ -59,7 +59,6 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
 
   private sort: MatSort;
 
-  displayedColumns: string[] = ['select', 'task.id', 'service.name', 'status', 'blocked', 'task.startTime', 'task.endTime'];
   dataSource: MatTableDataSource<ServiceState>;
 
   @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
@@ -70,7 +69,6 @@ export class ServicesStatusListComponent implements OnChanges, AfterViewInit {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'task.id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<ServiceState>(this.servicesStatus);
     this.setDataSource();
     this.dataSource.filterPredicate = (data, filter) => {

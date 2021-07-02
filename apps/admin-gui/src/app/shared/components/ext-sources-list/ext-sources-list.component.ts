@@ -38,7 +38,7 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
   @Input()
   filterValue = '';
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'id', 'name', 'type'];
   @Input()
   pageSize = 5;
 
@@ -54,7 +54,6 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
 
   private sort: MatSort;
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'type'];
   dataSource: MatTableDataSource<ExtSource>;
   exporting = false;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
@@ -67,7 +66,6 @@ export class ExtSourcesListComponent implements AfterViewInit, OnChanges {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<ExtSource>(this.extSources);
     this.setDataSource();
   }

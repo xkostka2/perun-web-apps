@@ -60,7 +60,7 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   selection: SelectionModel<RichMember> = new SelectionModel<RichMember>();
 
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
 
   @Input()
   pageSize = 10;
@@ -77,7 +77,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   @Output()
   updateTable = new EventEmitter<boolean>();
 
-  displayedColumns: string[] = ['checkbox', 'id', 'type', 'fullName', 'status', 'groupStatus', 'sponsored', 'organization', 'email', 'logins'];
   dataSource: MatTableDataSource<RichMember>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
   disabledRouting: boolean;
@@ -146,7 +145,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
   }
 
   setDataSource() {
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: RichMember, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getFilterDataForColumn, this);
@@ -168,7 +166,6 @@ export class MembersListComponent implements OnChanges, AfterViewInit {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<RichMember>(this.members);
     this.setDataSource();
     this.disabledRouting = this.disableRouting;

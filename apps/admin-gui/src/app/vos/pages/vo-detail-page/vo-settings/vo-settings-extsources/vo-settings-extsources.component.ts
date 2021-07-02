@@ -41,7 +41,7 @@ export class VoSettingsExtsourcesComponent implements OnInit {
   successMessage: string;
   pageSize: number;
   tableId = TABLE_VO_EXTSOURCES_SETTINGS;
-  hideColumns = [];
+  displayedColumns = [];
 
   addAuth: boolean;
   removeAuth: boolean;
@@ -61,7 +61,7 @@ export class VoSettingsExtsourcesComponent implements OnInit {
   setAuthRights(){
     this.addAuth = this.authResolver.isAuthorized('addExtSource_Vo_ExtSource_policy', [this.vo]);
     this.removeAuth = this.authResolver.isAuthorized('removeExtSource_Vo_ExtSource_policy', [this.vo]);
-    this.hideColumns = this.removeAuth ? [] : ['select'];
+    this.displayedColumns = this.removeAuth ? ['select', 'id', 'name', 'type'] : ['id', 'name', 'type'];
   }
 
   refreshTable() {

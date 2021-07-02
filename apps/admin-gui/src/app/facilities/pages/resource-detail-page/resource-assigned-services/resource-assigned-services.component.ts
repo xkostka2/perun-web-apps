@@ -32,6 +32,7 @@ export class ResourceAssignedServicesComponent implements OnInit {
   assignServiceAuth: boolean;
   removeServiceAuth: boolean;
   serviceRoutingAuth: boolean;
+  displayedColumns = ['select', 'id', 'name', 'enabled', 'script', 'description'];
 
   constructor(private route: ActivatedRoute,
               private resourcesManager: ResourcesManagerService,
@@ -101,6 +102,7 @@ export class ResourceAssignedServicesComponent implements OnInit {
   getDataForAuthorization() {
     this.assignServiceAuth = this.guiAuthResolver.isAuthorized('assignServices_Resource_List<Service>_policy', [this.resource]);
     this.removeServiceAuth = this.guiAuthResolver.isAuthorized('removeServices_Resource_List<Service>_policy', [this.resource]);
+    this.displayedColumns = this.removeServiceAuth ? ['select', 'id', 'name', 'enabled', 'script', 'description'] : ['id', 'name', 'enabled', 'script', 'description'];
     this.serviceRoutingAuth = this.guiAuthResolver.isPerunAdmin();
   }
 }

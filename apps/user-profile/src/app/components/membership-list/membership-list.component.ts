@@ -52,7 +52,7 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
   selection: SelectionModel<Membership> = new SelectionModel<Membership>(false, []);
 
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['checkbox', 'name', 'description', 'expirationAttribute', 'extend'];
 
   @Input()
   pageSize = 10;
@@ -63,7 +63,6 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
   @Output()
   extendMembership: EventEmitter<Membership> = new EventEmitter<Membership>();
 
-  displayedColumns: string[] = ['checkbox', 'name', 'description', 'expirationAttribute', 'extend'];
   dataSource: MatTableDataSource<Membership>;
   pageSizeOptions = TABLE_ITEMS_COUNT_OPTIONS;
 
@@ -72,7 +71,6 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<Membership>(this.members);
     this.setDataSource();
   }
@@ -95,7 +93,6 @@ export class MembershipListComponent implements OnChanges, AfterViewInit {
   }
 
   setDataSource() {
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     if (!!this.dataSource) {
       this.dataSource.filterPredicate = (data: Membership, filter: string) => {
         return customDataSourceFilterPredicate(data, filter, this.displayedColumns, this.getDataForColumn, this)

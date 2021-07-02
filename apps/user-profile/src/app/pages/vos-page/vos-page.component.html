@@ -7,11 +7,13 @@
   <div *ngIf="!loading" class="mt-5">
     <h1 class="page-subtitle">{{'ORGANIZATIONS.IS_MEMBER' | customTranslate | translate}}</h1>
     <div *ngIf="userMemberships.length !== 0">
-      <perun-web-apps-membership-list [members]="userMemberships"
-                                      [selection]="selection"
-                                      [filterValue]="filterValue"
-                                      [hideColumns]="['checkbox','description']"
-                                      (extendMembership)="extendMembership($event)"></perun-web-apps-membership-list>
+      <perun-web-apps-membership-list
+        [members]="userMemberships"
+        [selection]="selection"
+        [filterValue]="filterValue"
+        [displayedColumns]="['name', 'expirationAttribute', 'extend']"
+        (extendMembership)="extendMembership($event)">
+      </perun-web-apps-membership-list>
     </div>
     <app-alert alert_type="warn"
                *ngIf="userMemberships.length === 0">{{'ORGANIZATIONS.NO_VOS_ALERT' | customTranslate | translate}}</app-alert>
@@ -22,9 +24,11 @@
     <h1 class="page-subtitle">{{'ORGANIZATIONS.IS_ADMIN' | customTranslate | translate}}</h1>
     <app-alert *ngIf="!adminMemberships.length"
                alert_type="warn">{{'ORGANIZATIONS.NO_VOS_ALERT' | customTranslate | translate}}</app-alert>
-    <perun-web-apps-membership-list [members]="adminMemberships"
-                                    *ngIf="adminMemberships.length"
-                                    [filterValue]="filterValue"
-                                    [hideColumns]="['checkbox', 'description', 'expirationAttribute', 'extend']"></perun-web-apps-membership-list>
+    <perun-web-apps-membership-list
+      [members]="adminMemberships"
+      *ngIf="adminMemberships.length"
+      [filterValue]="filterValue"
+      [displayedColumns]="['name']">
+    </perun-web-apps-membership-list>
   </div>
 </div>

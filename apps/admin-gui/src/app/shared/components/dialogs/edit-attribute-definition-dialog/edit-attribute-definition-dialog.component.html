@@ -99,7 +99,7 @@
             <p>{{'DIALOGS.EDIT_ATTRIBUTE_DEFINITION.SERVICES' | translate}}</p>
             <app-services-list
               [services]="this.services"
-              [hideColumns]="['select', 'description']"
+              [displayedColumns]="['id', 'name', 'enabled', 'script']"
               [disableRouting]="true">
             </app-services-list>
           </div>

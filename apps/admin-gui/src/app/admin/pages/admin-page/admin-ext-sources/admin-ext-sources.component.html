@@ -14,7 +14,7 @@
     *ngIf="!loading"
     [extSources]="extSources"
     [filterValue]="filterValue"
-    [hideColumns]="['select']"
+    [displayedColumns]="['id', 'name', 'type']"
     (page)="pageChanged($event)"
     [pageSize]="pageSize">
   </app-ext-sources-list>

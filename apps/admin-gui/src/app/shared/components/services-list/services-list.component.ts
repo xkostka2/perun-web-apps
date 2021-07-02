@@ -45,7 +45,7 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
   pageSize = 10;
 
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'id', 'name', 'enabled', 'script', 'description'];
 
   @Input()
   selection = new SelectionModel<Service>(true, []);
@@ -58,7 +58,6 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
 
   private sort: MatSort;
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'enabled', 'script', 'description'];
   dataSource: MatTableDataSource<Service>;
 
   @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
@@ -69,7 +68,6 @@ export class ServicesListComponent implements AfterViewInit, OnChanges {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<Service>(this.services);
     this.setDataSource();
   }
