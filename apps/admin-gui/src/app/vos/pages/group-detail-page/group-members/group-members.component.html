@@ -3,6 +3,7 @@
   {{'GROUP_DETAIL.MEMBERS.ACTIONS_DISABLED' | translate}}
 </app-alert>
 <div class="align-elements">
+  <perun-web-apps-refresh-button (click)="updateTable = !updateTable"></perun-web-apps-refresh-button>
   <span
     [matTooltipDisabled]="!synchEnabled"
     [matTooltipPosition]="'above'"
@@ -66,23 +67,11 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="mr-2 search-field no-border-mat-input">
-    <label>
-      <input
-        matInput
-        autocomplete="false"
-        (keyup.enter)="onSearchByString()"
-        placeholder="{{'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
-        [formControl]="searchControl">
-    </label>
-  </mat-form-field>
-  <button mat-flat-button
-          color="primary"
-          class="mr-2"
-          [disabled]="loading"
-          (click)="onSearchByString()">
-    <mat-icon>search</mat-icon>
-  </button>
+  <perun-web-apps-debounce-filter
+    class="mt-2 search-field"
+    [placeholder]="'GROUP_DETAIL.MEMBERS.SEARCH_DESCRIPTION'"
+    (filter)="onSearchByString($event)">
+  </perun-web-apps-debounce-filter>
 </div>
 <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
 </mat-spinner>

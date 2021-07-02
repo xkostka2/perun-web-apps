@@ -51,7 +51,6 @@ export class VoMembersComponent implements OnInit {
   members: RichMember[] = null;
 
   selection = new SelectionModel<RichMember>(true, []);
-  searchControl: FormControl;
   loading = false;
 
   attrNames = [
@@ -79,7 +78,6 @@ export class VoMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.searchControl = new FormControl('');
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.statuses.setValue(this.selectedStatuses);
     this.attrNames = this.attrNames.concat(this.storeService.getLoginAttributeNames());
@@ -111,8 +109,9 @@ export class VoMembersComponent implements OnInit {
     this.inviteAuth = this.authzService.isAuthorized('vo-sendInvitation_Vo_Group_String_String_String_policy', [this.vo]);
   }
 
-  onSearchByString() {
-    this.searchString = this.searchControl.value;
+  onSearchByString(filter: string) {
+    this.searchString = filter;
+    this.updateTable = !this.updateTable;
   }
 
   onAddMember() {

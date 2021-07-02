@@ -1,6 +1,7 @@
 <div class="vo-theme">
   <h1 class="page-subtitle">{{'VO_DETAIL.MEMBERS.TITLE' | translate}}</h1>
   <div class="align-elements">
+    <perun-web-apps-refresh-button (click)="updateTable = !updateTable"></perun-web-apps-refresh-button>
     <div matTooltip="{{'VO_DETAIL.MEMBERS.ADD_MEMBER_DISABLED' | translate}}" [matTooltipDisabled]="!blockManualMemberAdding">
       <button
         *ngIf="addAuth"
@@ -40,22 +41,11 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="mr-2 search-field">
-      <label>
-        <input matInput
-               autocomplete="false"
-               placeholder="{{'VO_DETAIL.MEMBERS.SEARCH_DESCRIPTION' | translate}}"
-               (keyup.enter)="onSearchByString()"
-               [formControl]="searchControl">
-      </label>
-    </mat-form-field>
-    <button
-      mat-flat-button
-      color="primary"
-      class="mr-2"
-      (click)="onSearchByString()">
-      <mat-icon>search</mat-icon>
-    </button>
+    <perun-web-apps-debounce-filter
+      class="mt-2 search-field"
+      [placeholder]="'VO_DETAIL.MEMBERS.SEARCH_DESCRIPTION'"
+      (filter)="onSearchByString($event)">
+    </perun-web-apps-debounce-filter>
   </div>
   <mat-spinner *ngIf="loading" class="ml-auto mr-auto">
   </mat-spinner>
