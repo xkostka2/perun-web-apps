@@ -66,17 +66,9 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit() {
     const params = this.route.snapshot.queryParamMap;
     const token = params.get('token');
-    const i = params.get('i');
-    const m = params.get('m');
     const u = params.get('u');
     this.loading = true;
-    if (i && m && u) {
-        this.usersManagerService.validatePreferredEmailChange(i, m, Number.parseInt(u, 10)).subscribe(() => {
-          this.notificator.showSuccess(this.successMessage);
-          this.router.navigate([], { replaceUrl: true });
-          this.getData();
-        });
-    } else if (token && u) {
+    if (token && u) {
       this.apiRequestConfiguration.dontHandleErrorForNext();
       this.usersManagerService.validatePreferredEmailChangeWithToken(token, Number.parseInt(u, 10)).subscribe(() => {
         this.notificator.showSuccess(this.successMessage);
