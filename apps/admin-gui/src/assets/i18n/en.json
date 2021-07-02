@@ -669,7 +669,9 @@
     "USER_LINK": "See user detail",
     "OVERVIEW": {
       "NEVER_EXPIRES": "never",
-      "MEMBERSHIP": "Membership",
+      "ORGANIZATION_MEMBERSHIP": "Organization membership",
+      "GROUP_MEMBERSHIP": "Group membership",
+      "NO_GROUPS_FOUND": "No Groups found",
       "STATUS": "Status:",
       "EXPIRATION": "Expiration:",
       "PERSONAL": "Personal information",

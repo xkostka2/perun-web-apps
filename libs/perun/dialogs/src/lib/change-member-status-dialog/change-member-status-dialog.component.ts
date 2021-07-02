@@ -7,7 +7,6 @@ import {
 } from '@perun-web-apps/perun/openapi';
 import { NotificatorService } from '@perun-web-apps/perun/services';
 import { TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
 import { MatSelectChange } from '@angular/material/select';
 
 export interface ChangeMemberStatusDialogData {
@@ -28,8 +27,7 @@ export class ChangeMemberStatusDialogComponent implements OnInit {
               private memberManager: MembersManagerService,
               private groupsManager: GroupsManagerService,
               private notificatorService: NotificatorService,
-              private translate: TranslateService,
-              private route: ActivatedRoute) { }
+              private translate: TranslateService) { }
 
   loading = false;
   theme: string;
@@ -44,14 +42,13 @@ export class ChangeMemberStatusDialogComponent implements OnInit {
   changeStatusWithExpButton: string;
 
   ngOnInit() {
-    this.route.params.subscribe(parentParams => {
-      if (parentParams['groupId']) {
-        this.theme = 'group-theme';
-      } else {
-        this.theme = 'vo-theme';
-      }
-    });
-    this.actualStatus = this.data.member.status;
+    if (this.data.groupId) {
+      this.theme = 'group-theme';
+      this.actualStatus = this.data.member.groupStatus;
+    } else {
+      this.theme = 'vo-theme';
+      this.actualStatus = this.data.member.status;
+    }
 
     if (this.data.groupId) {
       this.allStatuses = this.actualStatus === 'VALID' ? ['EXPIRED'] : ['VALID'];

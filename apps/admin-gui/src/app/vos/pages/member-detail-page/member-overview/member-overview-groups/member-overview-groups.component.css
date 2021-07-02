@@ -1,0 +1,13 @@
+.groups-card {
+  max-width: 400px;
+}
+
+.align-cards {
+  margin: 1rem 1rem 1rem 1rem;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.vert-center {
+  vertical-align: middle !important;
+}

@@ -79,6 +79,7 @@ import { GroupStatisticsComponent } from './pages/group-detail-page/group-statis
 import { ApplicationFormManageGroupsComponent } from './components/application-form-manage-groups/application-form-manage-groups.component';
 import { MemberOverviewMembershipComponent } from './pages/member-detail-page/member-overview/member-overview-membership/member-overview-membership.component';
 import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
+import { MemberOverviewGroupsComponent } from './pages/member-detail-page/member-overview/member-overview-groups/member-overview-groups.component';
 
 @NgModule({
   imports: [
@@ -150,7 +151,8 @@ import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
     VoStatisticsComponent,
     GroupStatisticsComponent,
     ApplicationFormManageGroupsComponent,
-    MemberOverviewMembershipComponent
+    MemberOverviewMembershipComponent,
+    MemberOverviewGroupsComponent
   ],
 })
 export class VosModule {
