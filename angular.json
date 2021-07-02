@@ -1420,7 +1420,7 @@
             "main": "apps/user-profile/src/main.ts",
             "polyfills": "apps/user-profile/src/polyfills.ts",
             "tsConfig": "apps/user-profile/tsconfig.app.json",
-            "aot": true,
+            "aot": false,
             "assets": [
               "apps/user-profile/src/favicon.ico",
               "apps/user-profile/src/assets"
