@@ -38,9 +38,6 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
   owners: Owner[] = [];
 
   @Input()
-  hideColumns: string[] = [];
-
-  @Input()
   selection = new SelectionModel<Owner>(true, []);
 
   @Input()
@@ -105,7 +102,6 @@ export class OwnersListComponent implements OnChanges, AfterViewInit {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<Owner>(this.owners);
     this.setDataSource();
   }

@@ -37,7 +37,7 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
   @Input()
   selection = new SelectionModel<AttributeDefinition>(true, []);
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'id', 'friendlyName', 'entity', 'namespace', 'type', 'unique'];
   @Input()
   filterValue: string;
   @Input()
@@ -57,7 +57,6 @@ export class AttrDefListComponent implements OnChanges, AfterViewInit {
 
   @ViewChild(TableWrapperComponent, {static: true}) child: TableWrapperComponent;
 
-  displayedColumns: string[] = ['select', 'id', 'friendlyName', 'entity', 'namespace', 'type', 'unique'];
   dataSource: MatTableDataSource<AttributeDefinition>;
 
   private sort: MatSort;

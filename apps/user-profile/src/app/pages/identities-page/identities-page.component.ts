@@ -41,9 +41,9 @@ export class IdentitiesPageComponent implements OnInit {
   loading: boolean;
   displayCertificates: boolean;
 
-  hiddenColumnsIdp = ['id', 'mail'];
-  hiddenColumnsCert = ['id', 'mail'];
-  hiddenColumnsOther = ['mail', 'id'];
+  displayedColumnsIdp = ['select', 'extSourceName', 'login', 'lastAccess']
+  displayedColumnsCert= ['select', 'extSourceName', 'login', 'lastAccess']
+  displayedColumnsOther = ['select', 'extSourceName', 'login', 'lastAccess']
 
   ngOnInit() {
     this.userId = this.storage.getPerunPrincipal().userId;

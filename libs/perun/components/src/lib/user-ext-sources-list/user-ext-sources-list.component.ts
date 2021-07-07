@@ -40,7 +40,7 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   @Input()
   filterValue = '';
   @Input()
-  hideColumns: string[] = [];
+  displayedColumns: string[] = ['select', 'id', 'mail', 'extSourceName', 'login', 'lastAccess'];
   @Input()
   pageSize = 5;
   @Input()
@@ -62,8 +62,6 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
   }
 
   private sort: MatSort;
-
-  displayedColumns: string[] = ['select', 'id', 'mail', 'extSourceName', 'login', 'lastAccess'];
   dataSource: MatTableDataSource<RichUserExtSource>;
   userId: number;
 
@@ -80,7 +78,6 @@ export class UserExtSourcesListComponent implements AfterViewInit, OnChanges {
     if (!this.authResolver.isPerunAdmin()){
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'id');
     }
-    this.displayedColumns = this.displayedColumns.filter(x => !this.hideColumns.includes(x));
     this.dataSource = new MatTableDataSource<RichUserExtSource>(this.userExtSources);
     this.setDataSource();
   }

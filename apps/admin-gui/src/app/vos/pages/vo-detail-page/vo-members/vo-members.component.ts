@@ -67,7 +67,7 @@ export class VoMembersComponent implements OnInit {
   selectedStatuses: string[] = [];
   pageSize: number;
   tableId = TABLE_VO_MEMBERS;
-  hideColumns = [];
+  displayedColumns = ['checkbox', 'id', 'fullName', 'status', 'organization', 'email', 'logins'];
   searchString: string;
   updateTable = false;
 
@@ -102,7 +102,7 @@ export class VoMembersComponent implements OnInit {
 
     this.removeAuth = this.authzService.isAuthorized('deleteMembers_List<Member>_policy', [this.vo]);
 
-    this.hideColumns = this.removeAuth ? ['type', 'groupStatus'] : ['checkbox', 'type', 'groupStatus'];
+    this.displayedColumns = this.removeAuth ? this.displayedColumns : ['id', 'fullName', 'status', 'organization', 'email', 'logins'];
 
     if(this.members !== null && this.members.length !== 0){
       this.routeAuth = this.authzService.isAuthorized('getMemberById_int_policy', [this.vo, this.members[0]]);

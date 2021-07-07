@@ -21,14 +21,14 @@
     <h4 class="page-subtitle">{{'GROUPS.MEMBER_GROUPS' | customTranslate | translate}}</h4>
     <perun-web-apps-membership-list [members]="userMemberships"
                                     [selection]="selection"
-                                    [hideColumns]="['checkbox']"
+                                    [displayedColumns]="['name', 'description', 'expirationAttribute', 'extend'];"
                                     (extendMembership)="extendMembership($event)"></perun-web-apps-membership-list>
   </div>
 
   <div *ngIf="!loading && adminMemberships.length !== 0" class="mt-5">
     <h4 class="page-subtitle">{{'GROUPS.ADMINS_GROUPS' | customTranslate | translate}}</h4>
     <perun-web-apps-membership-list [members]="adminMemberships"
-                                    [hideColumns]="['checkbox', 'expirationAttribute', 'extend']"></perun-web-apps-membership-list>
+                                    [displayedColumns]="['name', 'description']"></perun-web-apps-membership-list>
   </div>
 
 </div>

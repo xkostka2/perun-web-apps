@@ -25,7 +25,7 @@ export class UserIdentitiesComponent implements OnInit {
   userExtSources: RichUserExtSource[] = [];
   selection: SelectionModel<UserExtSource> = new SelectionModel<UserExtSource>(false, []);
   userId: number;
-  hiddenColumns = ['mail'];
+  displayedColumns = ['select', 'id', 'extSourceName', 'login', 'lastAccess'];
   loading: boolean;
   pageSize: number;
   tableId = TABLE_USER_IDENTITIES;
