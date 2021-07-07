@@ -3,7 +3,6 @@ import { InitAuthService, StoreService } from '@perun-web-apps/perun/services';
 import { AppConfigService, ColorConfig, EntityColorConfig } from '@perun-web-apps/config';
 import { AuthzResolverService } from '@perun-web-apps/perun/openapi';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +35,7 @@ export class UserProfileConfigService {
       cssVariable: '--side-hover'
     },
     {
-      configValue: 'sidemenu_active_color',
+      configValue: 'sidemenu-link-active',
       cssVariable: '--side-active'
     },
     {

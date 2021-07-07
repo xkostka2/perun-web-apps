@@ -1,9 +1,9 @@
-<mat-nav-list>
+<mat-nav-list class="pt-0">
   <mat-list-item (click)="item.external ? goToURL(item.link):shouldHideMenu()" *ngFor="let item of items"
                  [class.activated]="isActive(item.activatedRegex)" [ngStyle]="{'color': textColor}" disableRipple
-                 routerLink="{{item.external ? null: item.link}}">
+                 class="side-menu-item-height" routerLink="{{item.external ? null: item.link}}">
     <mat-icon [ngStyle]="{'color': iconColor}">{{item.icon}}</mat-icon>
-    <span class="nav-caption">{{item.external ? (lang | localizationLabel: item) : item.label | customTranslate: lang | translate}}</span>
+    <span class="nav-caption ml-3">{{item.external ? (lang | localizationLabel: item) : item.label | customTranslate: lang | translate}}</span>
   </mat-list-item>
 </mat-nav-list>
 

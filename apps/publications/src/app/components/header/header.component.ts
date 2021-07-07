@@ -20,9 +20,9 @@ export class HeaderComponent implements OnInit {
 
   principal: PerunPrincipal;
 
-  bgColor = this.storeService.get('theme', 'header_bg_color');
-  textColor = this.storeService.get('theme', 'header_text_color');
-  iconColor = this.storeService.get('theme', 'header_icon_color');
+  bgColor = this.storeService.get('theme', 'nav_bg_color');
+  textColor = this.storeService.get('theme', 'nav_text_color');
+  iconColor = this.storeService.get('theme', 'nav_icon_color');
 
   logo: any;
 

@@ -36,7 +36,7 @@ export class PublicationsConfigService {
       cssVariable: '--side-hover'
     },
     {
-      configValue: 'sidemenu_active_color',
+      configValue: 'sidemenu-link-active',
       cssVariable: '--side-active'
     },
     {
