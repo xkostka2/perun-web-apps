@@ -5,40 +5,33 @@
 </mat-spinner>
 <div *ngIf="!loading">
 
-  <div class="w-100 d-flex mb-2">
+  <div class="w-100 mb-2">
     <button
-      mat-stroked-button
       *ngIf="!initialPage"
       class="mr-2"
+      mat-stroked-button
       (click)="switchToInitial()">
       <i class="material-icons">arrow_right_alt</i>
       {{'VO_DETAIL.SETTINGS.APPLICATION_FORM.PREVIEW_PAGE.SWITCH_INITIAL' | translate}}
     </button>
     <button
-      mat-stroked-button
       *ngIf="initialPage"
       class="mr-2"
+      mat-stroked-button
       (click)="switchToExtension()">
       <i class="material-icons">cached</i>
       {{'VO_DETAIL.SETTINGS.APPLICATION_FORM.PREVIEW_PAGE.SWITCH_EXTENSION' | translate}}
     </button>
 
-    <button
-      mat-stroked-button
-      *ngIf="language === 'cs'"
-      class="mr-2"
-      (click)="switchToEnglish()">
-      <i class="material-icons">public</i>
-      {{'VO_DETAIL.SETTINGS.APPLICATION_FORM.PREVIEW_PAGE.SWITCH_ENGLISH' | translate}}
-    </button>
-    <button
-      mat-stroked-button
-      *ngIf="supportsCsLocalisation && language === 'en'"
-      class="mr-2"
-      (click)="switchToCzech()">
-      <i class="material-icons">public</i>
-      {{'VO_DETAIL.SETTINGS.APPLICATION_FORM.PREVIEW_PAGE.SWITCH_CZECH' | translate}}
-    </button>
+    <mat-form-field>
+      <mat-label>{{'DIALOGS.PASSWORD_RESET_REQUEST.LANGUAGE'|translate}}</mat-label>
+      <mat-select [(value)]="currentLanguage">
+        <mat-option *ngFor="let lang of languages" [value]="lang">
+          {{'SHARED_LIB.LANGUAGES.' + lang | uppercase | translate}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </div>
   <div class="card mb-4 p-5">
     <div *ngFor="let applicationFormItem of applicationFormItems">

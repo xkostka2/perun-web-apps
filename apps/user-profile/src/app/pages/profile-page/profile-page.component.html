@@ -8,14 +8,14 @@
     </tr>
     <tr *ngFor="let attribute of additionalAttributes">
       <td class="font-weight-bold att-name-width">
-        <div [matTooltip]="translateService.currentLang === 'en' ? attribute.tooltip_en : attribute.tooltip_cz"
-             matTooltipPosition="above">{{translateService.currentLang === 'en' ? attribute.displayName_en : attribute.displayName_cz}}</div>
+        <div [matTooltip]="attribute['tooltip_' + currentLang]"
+             matTooltipPosition="above">{{attribute['displayName_' + currentLang]}}</div>
       </td>
       <td [ngSwitch]="attribute.attribute.friendlyName" class="w-100">
-        <mat-form-field *ngSwitchCase="'preferredLanguage'" class="lang-field-width center-self">
+        <mat-form-field *ngSwitchCase="'preferredLanguage'" class="center-self">
           <mat-select [(value)]="currentLang" class="mb-auto ">
             <mat-option (click)="changeLanguage(lang)" *ngFor="let lang of languages" [value]="lang">
-              {{lang}}
+              {{'SHARED_LIB.LANGUAGES.'+ lang | uppercase | translate}}
             </mat-option>
           </mat-select>
         </mat-form-field>

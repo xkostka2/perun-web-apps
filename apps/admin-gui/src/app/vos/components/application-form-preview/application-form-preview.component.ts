@@ -13,11 +13,10 @@ export class ApplicationFormPreviewComponent implements OnInit {
 
   @HostBinding('class.router-component') true;
 
-  supportsCsLocalisation: boolean;
-
   loading = true;
   applicationFormItems: ApplicationFormItem[] = [];
-  language = 'en';
+  currentLanguage = 'en';
+  languages = ['en']
   initialPage = true;
   mapForCombobox: Map<number, string> = new Map();
 
@@ -26,7 +25,7 @@ export class ApplicationFormPreviewComponent implements OnInit {
               private store: StoreService) { }
 
   ngOnInit() {
-    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
+    this.languages = this.store.get('supportedLanguages')
     this.route.queryParamMap.subscribe( params => {
       this.applicationFormItems = JSON.parse(params.get('applicationFormItems'));
       this.loading = false;
@@ -41,17 +40,9 @@ export class ApplicationFormPreviewComponent implements OnInit {
     this.initialPage = false;
   }
 
-  switchToEnglish() {
-    this.language = 'en';
-  }
-
-  switchToCzech() {
-    this.language = 'cs';
-  }
-
   getLocalizedOptions(applicationFormItem: ApplicationFormItem): string[] {
-    if (applicationFormItem.i18n[this.language]) {
-      const options = applicationFormItem.i18n[this.language].options;
+    if (applicationFormItem.i18n[this.currentLanguage]) {
+      const options = applicationFormItem.i18n[this.currentLanguage].options;
       if (options !== null && options !== '') {
         const labels: string[] = [];
         for (const item of options.split('|')) {
@@ -123,15 +114,15 @@ export class ApplicationFormPreviewComponent implements OnInit {
   }
 
   getLocalizedLabel(applicationFormItem: ApplicationFormItem): string {
-    if (applicationFormItem.i18n[this.language] && applicationFormItem.i18n[this.language].label) {
-      return applicationFormItem.i18n[this.language].label;
+    if (applicationFormItem.i18n[this.currentLanguage] && applicationFormItem.i18n[this.currentLanguage].label) {
+      return applicationFormItem.i18n[this.currentLanguage].label;
     }
     return applicationFormItem.shortname;
   }
 
   getLocalizedHint(applicationFormItem: ApplicationFormItem) {
-    if (applicationFormItem.i18n[this.language]) {
-      return applicationFormItem.i18n[this.language].help;
+    if (applicationFormItem.i18n[this.currentLanguage]) {
+      return applicationFormItem.i18n[this.currentLanguage].help;
     }
     return '';
   }

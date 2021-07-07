@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StoreService } from '@perun-web-apps/perun/services';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'perun-web-apps-header',
@@ -9,8 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor( private storeService: StoreService,
-               private sanitizer: DomSanitizer) { }
+  label = this.storeService.get('header_label_en');
 
   @Output()
   sidenavToggle = new EventEmitter();
@@ -25,10 +25,15 @@ export class HeaderComponent implements OnInit {
   textColor = this.storeService.get('theme', 'nav_text_color');
   iconColor = this.storeService.get('theme', 'nav_icon_color');
 
-  label = this.storeService.get('header_label');
+  constructor( private storeService: StoreService,
+               private sanitizer: DomSanitizer,
+               private translate: TranslateService) { }
   logo: any;
 
   ngOnInit() {
+    this.translate.onLangChange.subscribe(lang => {
+      this.label = this.storeService.get(`header_label_${lang.lang}`)
+    })
     this.logo = this.sanitizer.bypassSecurityTrustHtml(this.storeService.get('logo'));
   }
 

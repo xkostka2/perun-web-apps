@@ -30,8 +30,7 @@ export class PasswordResetRequestDialogComponent implements OnInit {
               private notificator: NotificatorService) {
     translate.get('DIALOGS.PASSWORD_RESET_REQUEST.SUCCESS').subscribe(res => this.successMessage = res);
   }
-
-  languages = ['en', 'cz'];
+  languages = this.store.get('supportedLanguages');
   selectedLang = 'en';
   pwdMails = new Map<string, string>();
   logins: Attribute[] = [];

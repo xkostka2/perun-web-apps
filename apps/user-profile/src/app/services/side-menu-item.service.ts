@@ -80,26 +80,27 @@ export class SideMenuItemService {
     })
     const externalServices = this.store.get('external_services');
     externalServices.forEach(service => {
-      items.push( {
-        label: service['label_en'],
-        label_cz: service['label_cz'],
+      const item = {
         icon: 'insert_link',
         link: service['url'],
         activatedRegex: '^/profile/external',
         tabName: 'external',
         external: true
+      }
+      this.store.get('supportedLanguages').forEach(lang => {
+        item[`label_${lang}`] = service[`label_${lang}`] ?? service[`label_en`];
       })
+      items.push(item)
     })
     return items;
   }
 }
 
 export interface SideMenuItem {
-  label: string;
   icon: string;
   link: string;
   activatedRegex: string;
   tabName: string;
   external?: boolean;
-  label_cz?: string;
+  [key:string]: string | boolean;
 }

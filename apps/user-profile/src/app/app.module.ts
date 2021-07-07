@@ -67,7 +67,6 @@ import { PERUN_API_SERVICE } from '@perun-web-apps/perun/tokens';
 import { ApiService } from '@perun-web-apps/perun/services';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
-import { LocalizationLabelPipe } from './pipes/localization-label.pipe';
 import { SettingsAuthenticationComponent } from './pages/settings-page/settings-authorization/settings-authentication.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddAuthImgDialogComponent } from './components/dialogs/add-auth-img-dialog/add-auth-img-dialog.component';
@@ -77,6 +76,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PerunLoginModule } from '@perun-web-apps/perun/login';
 import { ProfileLoginScreenBaseComponent } from './components/profile-login-screen-base/profile-login-screen-base.component';
 import { PerunUtilsModule } from '@perun-web-apps/perun/utils';
+import { LocalisedTextPipe } from './pipes/localised-text.pipe';
 
 export const API_INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -133,12 +133,12 @@ const loadConfigs = (appConfig: UserProfileConfigService) => {
     ValidateExpirationPipe,
     ShowSshDialogComponent,
     BreadcrumbsComponent,
-    LocalizationLabelPipe,
     SettingsAuthenticationComponent,
     AddAuthImgDialogComponent,
     AddTokenInfoDialogComponent,
     FooterComponent,
-    ProfileLoginScreenBaseComponent
+    ProfileLoginScreenBaseComponent,
+    LocalisedTextPipe
   ],
   imports: [
     BrowserModule,

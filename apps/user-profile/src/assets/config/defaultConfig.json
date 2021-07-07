@@ -31,30 +31,30 @@
     {
       "friendly_name": "organization",
       "display_name_en": "Organization",
-      "display_name_cz": "Organizace",
+      "display_name_cs": "Organizace",
       "tooltip_en": "",
-      "tooltip_cz": ""
+      "tooltip_cs": ""
     },
     {
       "friendly_name": "preferredLanguage",
       "display_name_en": "Preferred language",
-      "display_name_cz": "Preferovaný jazyk",
+      "display_name_cs": "Preferovaný jazyk",
       "tooltip_en": "",
-      "tooltip_cz": ""
+      "tooltip_cs": ""
     },
     {
       "friendly_name": "preferredMail",
       "display_name_en": "Preferred mail",
-      "display_name_cz": "Preferovaný mail",
+      "display_name_cs": "Preferovaný mail",
       "tooltip_en": "",
-      "tooltip_cz": ""
+      "tooltip_cs": ""
     },
     {
       "friendly_name": "timezone",
       "display_name_en": "Timezone",
-      "display_name_cz": "Časová zóna",
+      "display_name_cs": "Časová zóna",
       "tooltip_en": "",
-      "tooltip_cz": "",
+      "tooltip_cs": "",
       "is_virtual": false
     }
   ],
@@ -70,12 +70,12 @@
     {
       "url": "https://google.com",
       "label_en": "Google (custom link)",
-      "label_cz": "Google (vlastni stitek)"
+      "label_cs": "Google (vlastni stitek)"
     },
     {
       "url": "https://github.com",
       "label_en": "GitHub (custom link)",
-      "label_cz": "GitHub (vlastni stitek)"
+      "label_cs": "GitHub (vlastni stitek)"
     }
   ],
   "displayed_tabs": [
@@ -102,15 +102,16 @@
     {
       "label": "PREFERRED_SHELLS.TITLE",
       "en": "Preferred shells (custom label)",
-      "cz": "Preferované shelly (custom label)"
+      "cs": "Preferované shelly (custom label)"
     },
     {
       "label": "MENU_ITEMS.PROFILE",
       "en": "Profile (custom label)",
-      "cz": "Profil (vlastní štítek)"
+      "cs": "Profil (vlastní štítek)"
     }
   ],
-  "header_label": "Generic user profile",
+  "header_label_en": "Generic user profile",
+  "header_label_cs": "Generický profil uživatele",
   "preferred_unix_group_names": [
     "einfra",
     "ncbr",
@@ -120,44 +121,44 @@
     "columns": [
       {
         "title_en": "ABOUT",
-        "title_cz": "O NÁS",
+        "title_cs": "O NÁS",
         "elements": [
           {
             "link": "https://perun-aai.org/",
             "label_en": "Perun web",
-            "label_cz": "Perun web"
+            "label_cs": "Perun web"
           },
           {
             "link": "https://perun-aai.org/team",
             "label_en": "Perun team",
-            "label_cz": "Perun tým"
+            "label_cs": "Perun tým"
           },
           {
             "link": "https://perun-aai.org/",
             "label_en": "Privacy policy",
-            "label_cz": "Ochrana osobních údajů"
+            "label_cs": "Ochrana osobních údajů"
           }
         ]
       },
       {
         "title_en": "HELP",
-        "title_cz": "POMOC",
+        "title_cs": "POMOC",
         "elements": [
           {
             "link": "https://perun-aai.org/documentation/users-documentation",
             "label_en": "Documentation",
-            "label_cz": "Dokumentace"
+            "label_cs": "Dokumentace"
           }
         ]
       },
       {
         "title_en": "SUPPORT",
-        "title_cz": "PODPORA",
+        "title_cs": "PODPORA",
         "elements": [
           {
             "link": "",
             "label_en": "perun@cesnet.cz",
-            "label_cz": "perun@cesnet.cz"
+            "label_cs": "perun@cesnet.cz"
           }
         ]
       }

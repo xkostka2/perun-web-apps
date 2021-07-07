@@ -26,9 +26,8 @@
     </mat-form-field>
     <mat-form-field class="w-100">
       <mat-label>{{'DIALOGS.INVITE_MEMBER.LANGUAGE' | translate}}</mat-label>
-      <mat-select [(value)]="language">
-        <mat-option value="en">{{'DIALOGS.INVITE_MEMBER.LANGUAGE_ENGLISH' | translate}}</mat-option>
-        <mat-option value="cs">{{'DIALOGS.INVITE_MEMBER.LANGUAGE_CZECH' | translate}}</mat-option>
+      <mat-select [(value)]="currentLanguage">
+        <mat-option *ngFor="let lang of languages" value="{{lang}}">{{'SHARED_LIB.LANGUAGES.'+lang | uppercase | translate}}</mat-option>
       </mat-select>
     </mat-form-field>
 

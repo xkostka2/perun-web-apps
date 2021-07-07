@@ -34,16 +34,13 @@ export class SelectionItem {
 })
 export class EditApplicationFormItemDialogComponent implements OnInit {
 
-  supportsCsLocalisation: boolean;
-
   applicationFormItem: ApplicationFormItem;
   attributeDefinitions: AttributeDefinition[];
   federationAttributes: SelectionItem[] = [];
   federationAttribute = '';
   sourceAttributes: SelectionItem[] = [];
   destinationAttributes: SelectionItem[] = [];
-  optionsEn: [string, string][] = [];
-  optionsCs: [string, string][] = [];
+  options: {[key:string]:[string, string][]};
   theme: string;
   loading = false;
   hiddenValues: HiddenEnum[] = ['NEVER', 'ALWAYS', 'IF_EMPTY', 'IF_PREFILLED'];
@@ -57,6 +54,8 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
   disabledDependencyItem: ApplicationFormItem = null;
   private dependencyTypes: Type[] = ['PASSWORD', 'VALIDATED_EMAIL', 'TEXTFIELD', 'TEXTAREA', 'CHECKBOX', 'RADIO', 'SELECTIONBOX', 'COMBOBOX', 'USERNAME'];
 
+  languages = ['en'];
+
   constructor(private dialogRef: MatDialogRef<EditApplicationFormItemDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: EditApplicationFormItemDialogComponentData,
               private attributesManager: AttributesManagerService,
@@ -64,8 +63,7 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
               private store: StoreService) { }
 
   ngOnInit() {
-    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
-
+    this.languages = this.store.get('supportedLanguages');
     this.hiddenDependencyItem = this.data.allItems.find(item => item.id === this.data.applicationFormItem.hiddenDependencyItemId);
     if (!this.hiddenDependencyItem) {
       this.hiddenDependencyItem = NO_FORM_ITEM;
@@ -76,7 +74,7 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     }
     this.theme = this.data.theme;
     this.possibleDependencyItems = this.getPossibleDepItems();
-    this.applicationFormItem = createNewApplicationFormItem();
+    this.applicationFormItem = createNewApplicationFormItem(this.languages);
     this.copy(this.data.applicationFormItem, this.applicationFormItem);
     this.loading = true;
     this.attributesManager.getAllAttributeDefinitions().subscribe( attributeDefinitions => {
@@ -208,22 +206,20 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     return temp[4];
   }
 
-  addEnOption() {
-    this.optionsEn.push(['', '']);
-  }
-
-  addCsOption() {
-    this.optionsCs.push(['', '']);
+  addOption(lang: string) {
+    this.options[lang].push(['', '']);
   }
 
   updateOption(lang: string){
     let options = '';
-    for (const item of this.optionsEn) {
-      if (item[0] !== '' && item[1] !== '') {
-        if (options === '') {
-          options = item[0] + '#' + item[1];
-        } else {
-          options = options + '|' + item[0] + '#' + item[1];
+    if (this.options && this.options[lang]){
+      for (const item of this.options[lang]) {
+        if (item[0] !== '' && item[1] !== '') {
+          if (options === '') {
+            options = item[0] + '#' + item[1];
+          } else {
+            options = options + '|' + item[0] + '#' + item[1];
+          }
         }
       }
     }
@@ -231,9 +227,8 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
   }
 
   updateOptions() {
-    this.updateOption('en');
-    if(this.supportsCsLocalisation){
-     this.updateOption('cs');
+    for (const lang of this.languages) {
+      this.updateOption(lang);
     }
   }
 
@@ -241,16 +236,12 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     to.applicationTypes = from.applicationTypes;
     to.federationAttribute = from.federationAttribute;
     to.forDelete = from.forDelete;
-    if(this.supportsCsLocalisation){
-      to.i18n['cs'].errorMessage = from.i18n['cs'].errorMessage;
-      to.i18n['cs'].help = from.i18n['cs'].help;
-      to.i18n['cs'].label = from.i18n['cs'].label;
-      to.i18n['cs'].options = from.i18n['cs'].options;
+    for (const lang of this.languages) {
+      to.i18n[lang].errorMessage = from.i18n[lang].errorMessage;
+      to.i18n[lang].help = from.i18n[lang].help;
+      to.i18n[lang].label = from.i18n[lang].label;
+      to.i18n[lang].options = from.i18n[lang].options;
     }
-    to.i18n['en'].errorMessage = from.i18n['en'].errorMessage;
-    to.i18n['en'].help = from.i18n['en'].help;
-    to.i18n['en'].label = from.i18n['en'].label;
-    to.i18n['en'].options = from.i18n['en'].options;
     to.id = from.id;
     to.ordnum = from.ordnum;
     to.perunDestinationAttribute = from.perunDestinationAttribute;
@@ -266,8 +257,8 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     to.hiddenDependencyItemId = from.hiddenDependencyItemId;
   }
 
-  sortEnOptionsAZ() {
-    this.optionsEn = this.optionsEn.sort((n1, n2) => {
+  sortOptionsAZ(lang: string) {
+    this.options[lang] = this.options[lang].sort((n1, n2) => {
       if (n1[1] > n2[1]) {
         return 1;
       }
@@ -280,42 +271,14 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
     });
   }
 
-  sortEnOptionsZA() {
-    this.optionsEn = this.optionsEn.sort((n1, n2) => {
+  sortOptionsZA(lang: string) {
+    this.options[lang] = this.options[lang].sort((n1, n2) => {
       if (n1[1] > n2[1]) {
         return -1;
       }
 
       if (n1[1] < n2[1]) {
         return 1;
-      }
-
-      return 0;
-    });
-  }
-
-  sortCsOptionsZA() {
-    this.optionsCs = this.optionsCs.sort((n1, n2) => {
-      if (n1[1] > n2[1]) {
-        return -1;
-      }
-
-      if (n1[1] < n2[1]) {
-        return 1;
-      }
-
-      return 0;
-    });
-  }
-
-  sortCsOptionsAZ() {
-    this.optionsCs = this.optionsCs.sort((n1, n2) => {
-      if (n1[1] > n2[1]) {
-        return 1;
-      }
-
-      if (n1[1] < n2[1]) {
-        return -1;
       }
 
       return 0;
@@ -323,19 +286,12 @@ export class EditApplicationFormItemDialogComponent implements OnInit {
   }
 
   private getOptions() {
-    if (this.applicationFormItem.i18n['en'].options) {
-      const tempen = this.applicationFormItem.i18n['en'].options.split('|');
-      for (const item of tempen) {
-        const line = item.split('#');
-        this.optionsEn.push([line[0], line[1]]);
-      }
-    }
-    if(this.supportsCsLocalisation){
-      if (this.applicationFormItem.i18n['cs'].options) {
-        const tempcs = this.applicationFormItem.i18n['cs'].options.split('|');
-        for (const item of tempcs) {
+    for (const lang of this.languages) {
+      if (this.applicationFormItem.i18n[lang].options) {
+        const temp = this.applicationFormItem.i18n[lang].options.split('|');
+        for (const item of temp) {
           const line = item.split('#');
-          this.optionsCs.push([line[0], line[1]]);
+          this.options[lang].push([line[0], line[1]]);
         }
       }
     }

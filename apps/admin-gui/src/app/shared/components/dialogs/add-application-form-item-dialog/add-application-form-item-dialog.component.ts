@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
-import {NotificatorService} from '@perun-web-apps/perun/services';
+import { StoreService } from '@perun-web-apps/perun/services';
 import { ApplicationFormItem, Type } from '@perun-web-apps/perun/openapi';
 import { createNewApplicationFormItem } from '@perun-web-apps/perun/utils';
 import { FormControl, Validators } from '@angular/forms';
@@ -18,10 +18,7 @@ export interface AddApplicationFormItemDialogComponentData {
 })
 export class AddApplicationFormItemDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<AddApplicationFormItemDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: AddApplicationFormItemDialogComponentData,
-              private translateService: TranslateService,
-              private notificationService: NotificatorService) { }
+  languages = this.store.get('supportedLanguages');
 
   items: string[] = [];
   selectedItem: string;
@@ -29,6 +26,11 @@ export class AddApplicationFormItemDialogComponent implements OnInit {
   widgets = ['HEADING', 'FROM_FEDERATION_HIDDEN', 'HTML_COMMENT', 'TEXTFIELD', 'FROM_FEDERATION_SHOW', 'VALIDATED_EMAIL', 'USERNAME',
             'PASSWORD', 'SELECTIONBOX', 'TEXTAREA', 'COMBOBOX', 'CHECKBOX', 'SUBMIT_BUTTON', 'RADIO', 'TIMEZONE', 'AUTO_SUBMIT_BUTTON', 'EMBEDDED_GROUP_APPLICATION'];
   nameCtrl: FormControl;
+
+  constructor(private dialogRef: MatDialogRef<AddApplicationFormItemDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: AddApplicationFormItemDialogComponentData,
+              private translateService: TranslateService,
+              private store: StoreService) { }
 
   ngOnInit() {
     this.translateService.get('DIALOGS.APPLICATION_FORM_ADD_ITEM.INSERT_TO_BEGINNING').subscribe( text => {
@@ -55,7 +57,7 @@ export class AddApplicationFormItemDialogComponent implements OnInit {
   }
 
   createApplicationItem(): ApplicationFormItem {
-    const newApplicationItem = createNewApplicationFormItem();
+    const newApplicationItem = createNewApplicationFormItem(this.languages);
     newApplicationItem.id = this.data.fakeId;
     newApplicationItem.shortname = this.nameCtrl.value;
     newApplicationItem.type = this.selectedWidget as Type;

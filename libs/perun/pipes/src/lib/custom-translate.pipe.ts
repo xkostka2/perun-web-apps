@@ -11,14 +11,14 @@ export class CustomTranslatePipe implements PipeTransform {
               private storage: StoreService) {
   }
 
-  transform(value: string, lang?: string): any {
+  transform(value: string, lang='en'): any {
     const customLabelElements = this.storage.get('custom_labels');
     if(customLabelElements){
       const keys = Object.keys(customLabelElements);
       for (const key of keys) {
         const element = this.storage.get('custom_labels', key);
         if (element.label === value) {
-          return this.translate.currentLang === 'en' ? element.en : element.cz;
+          return element[lang];
         }
       }
     }

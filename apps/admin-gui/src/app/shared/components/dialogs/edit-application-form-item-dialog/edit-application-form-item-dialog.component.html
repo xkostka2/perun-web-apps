@@ -142,101 +142,13 @@
           <!-- END of TAB 1 -->
         </mat-tab>
 
-        <mat-tab label="{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LANGUAGE_EN' | translate}}">
-          <div *ngIf="isApplicationFormItemOfType(['HEADING', 'HTML_COMMENT'])">
-            <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT' | translate"
-                                                 [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT_DESCRIPTION' | translate">
-              <mat-form-field class="w-100">
-                <textarea matInput [cdkTextareaAutosize]="true"
-                          [(ngModel)]="applicationFormItem.i18n['en'].label"></textarea>
-              </mat-form-field>
-            </app-edit-application-form-item-line>
-          </div>
-
-          <div *ngIf="isApplicationFormItemOfType(['TEXTFIELD', 'FROM_FEDERATION_HIDDEN', 'FROM_FEDERATION_SHOW', 'VALIDATED_EMAIL', 'USERNAME',
-                                                         'PASSWORD', 'RADIO', 'TEXTAREA', 'COMBOBOX', 'CHECKBOX', 'TIMEZONE', 'SELECTIONBOX',
-                                                         'EMBEDDED_GROUP_APPLICATION'])">
-            <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL' | translate"
-                                                 [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL_DESCRIPTION' | translate">
-              <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['en'].label"></textarea>
-              </mat-form-field>
-            </app-edit-application-form-item-line>
-            <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.HELP' | translate"
-                                                 [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.HELP_DESCRIPTION' | translate">
-              <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['en'].help"></textarea>
-              </mat-form-field>
-            </app-edit-application-form-item-line>
-            <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ERROR' | translate"
-                                                 [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ERROR_DESCRIPTION' | translate">
-              <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['en'].errorMessage"></textarea>
-              </mat-form-field>
-            </app-edit-application-form-item-line>
-          </div>
-          <div *ngIf="isApplicationFormItemOfType(['SUBMIT_BUTTON', 'AUTO_SUBMIT_BUTTON'])">
-            <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL' | translate"
-                                                 [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL_BUTTON_DESCRIPTION' | translate">
-              <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['en'].label"></textarea>
-              </mat-form-field>
-            </app-edit-application-form-item-line>
-          </div>
-
-          <div *ngIf="isApplicationFormItemOfType(['RADIO', 'COMBOBOX', 'CHECKBOX', 'SELECTIONBOX'])">
-            <div class="font-weight-bold">{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.OPTIONS' | translate}}:</div>
-            <div class="text-muted font-italic">
-              {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.OPTIONS_DESCRIPTION' | translate}}
-            </div>
-
-            <div class="d-flex mt-2 mb-2">
-              <button
-                mat-flat-button
-                class="ml-auto mr-2"
-                (click)="sortEnOptionsAZ()">
-                <i class="material-icons">arrow_downward</i>
-                {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.SORT_BY_LABEL_AZ' | translate}}
-              </button>
-
-              <button
-                mat-flat-button
-                class="mr-auto"
-                (click)="sortEnOptionsZA()">
-                <i class="material-icons">arrow_upward</i>
-                {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.SORT_BY_LABEL_ZA' | translate}}
-              </button>
-            </div>
-
-            <div *ngFor="let option of optionsEn">
-              {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.VALUE' | translate}}:
-              <mat-form-field>
-                <input matInput [(ngModel)]="option[0]">
-              </mat-form-field>
-              {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL' | translate}}:
-              <mat-form-field>
-                <input matInput [(ngModel)]="option[1]">
-              </mat-form-field>
-            </div>
-
-            <button
-              mat-flat-button
-              color="accent"
-              class="mr-2"
-              (click)="addEnOption()">
-              {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ADD_OPTION' | translate}}
-            </button>
-          </div>
-
-        </mat-tab>
-
-        <mat-tab *ngIf="supportsCsLocalisation" label="{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LANGUAGE_CS' | translate}}">
+        <mat-tab *ngFor="let lang of languages" label="{{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LANGUAGE_'+lang | uppercase | translate}}">
           <div *ngIf="isApplicationFormItemOfType(['HEADING', 'HTML_COMMENT'])">
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.CONTENT_DESCRIPTION' | translate">
               <mat-form-field class="w-100">
                 <textarea [cdkTextareaAutosize]="true" matInput
-                          [(ngModel)]="applicationFormItem.i18n['cs'].label"></textarea>
+                          [(ngModel)]="applicationFormItem.i18n[lang].label"></textarea>
               </mat-form-field>
             </app-edit-application-form-item-line>
           </div>
@@ -247,19 +159,19 @@
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL_DESCRIPTION' | translate">
               <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['cs'].label"></textarea>
+                <textarea [(ngModel)]="applicationFormItem.i18n[lang].label" matInput></textarea>
               </mat-form-field>
             </app-edit-application-form-item-line>
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.HELP' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.HELP_DESCRIPTION' | translate">
               <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['cs'].help"></textarea>
+                <textarea [(ngModel)]="applicationFormItem.i18n[lang].help" matInput></textarea>
               </mat-form-field>
             </app-edit-application-form-item-line>
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ERROR' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ERROR_DESCRIPTION' | translate">
               <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['cs'].errorMessage"></textarea>
+                <textarea [(ngModel)]="applicationFormItem.i18n[lang].errorMessage" matInput></textarea>
               </mat-form-field>
             </app-edit-application-form-item-line>
           </div>
@@ -267,7 +179,7 @@
             <app-edit-application-form-item-line [label]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL' | translate"
                                                  [description]="'DIALOGS.APPLICATION_FORM_EDIT_ITEM.LABEL_BUTTON_DESCRIPTION' | translate">
               <mat-form-field class="w-100">
-                <textarea matInput [(ngModel)]="applicationFormItem.i18n['cs'].label"></textarea>
+                <textarea [(ngModel)]="applicationFormItem.i18n[''].label" matInput></textarea>
               </mat-form-field>
             </app-edit-application-form-item-line>
           </div>
@@ -282,7 +194,7 @@
               <button
                 mat-flat-button
                 class="ml-auto mr-2"
-                (click)="sortCsOptionsAZ()">
+                (click)="sortOptionsAZ(lang)">
                 <i class="material-icons">arrow_downward</i>
                 {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.SORT_BY_LABEL_AZ' | translate}}
               </button>
@@ -290,13 +202,13 @@
               <button
                 mat-flat-button
                 class="mr-auto"
-                (click)="sortCsOptionsZA()">
+                (click)="sortOptionsZA(lang)">
                 <i class="material-icons">arrow_upward</i>
                 {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.SORT_BY_LABEL_ZA' | translate}}
               </button>
             </div>
 
-            <div *ngFor="let option of optionsCs">
+            <div *ngFor="let option of options[lang]">
               {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.VALUE' | translate}}:
               <mat-form-field>
                 <input matInput [(ngModel)]="option[0]">
@@ -312,7 +224,7 @@
               mat-flat-button
               color="accent"
               class="mr-2"
-              (click)="addCsOption()">
+              (click)="addOption(lang)">
               {{'DIALOGS.APPLICATION_FORM_EDIT_ITEM.ADD_OPTION' | translate}}
             </button>
           </div>

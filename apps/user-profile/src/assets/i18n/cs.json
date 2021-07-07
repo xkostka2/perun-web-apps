@@ -355,6 +355,10 @@
         "SAVE": "Uložit"
       }
     },
+    "LANGUAGES": {
+      "EN": "Anglicky",
+      "CS": "Česky"
+    },
     "UI": {
       "ALERTS": {
         "NO_GROUPS": "Nebyly nalezeny žádné skupiny.",

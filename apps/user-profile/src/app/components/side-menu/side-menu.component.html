@@ -3,7 +3,7 @@
                  [class.activated]="isActive(item.activatedRegex)" [ngStyle]="{'color': textColor}" disableRipple
                  class="side-menu-item-height" routerLink="{{item.external ? null: item.link}}">
     <mat-icon [ngStyle]="{'color': iconColor}">{{item.icon}}</mat-icon>
-    <span class="nav-caption ml-3">{{item.external ? (lang | localizationLabel: item) : item.label | customTranslate: lang | translate}}</span>
+    <span class="nav-caption ml-3">{{item.external ? (item | localisedText: lang:'label') : item.label | customTranslate: lang | translate}}</span>
   </mat-list-item>
 </mat-nav-list>
 

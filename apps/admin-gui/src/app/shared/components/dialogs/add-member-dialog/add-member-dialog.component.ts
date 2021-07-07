@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { GuiAuthResolver, NotificatorService } from '@perun-web-apps/perun/services';
+import { GuiAuthResolver, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -37,22 +37,7 @@ export interface AddMemberDialogData {
 })
 export class AddMemberDialogComponent implements OnInit {
 
-  constructor(
-    private dialogRef: MatDialogRef<AddMemberDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AddMemberDialogData,
-    private membersManagerService: MembersManagerService,
-    private groupService: GroupsManagerService,
-    private voService: VosManagerService,
-    private registrarManager: RegistrarManagerService,
-    private translate: TranslateService,
-    private notificator: NotificatorService,
-    protected route: ActivatedRoute,
-    private tableConfigService: TableConfigService,
-    protected router: Router,
-    private guiAuthResolver: GuiAuthResolver
-  ) {
-    translate.get('DIALOGS.ADD_MEMBERS.TITLE').subscribe(value => this.title = value);
-  }
+  languages = ['en'];
 
   title: string;
 
@@ -72,6 +57,24 @@ export class AddMemberDialogComponent implements OnInit {
 
   inviteAuth = false;
   searchCtrl: FormControl;
+
+  constructor(
+    private dialogRef: MatDialogRef<AddMemberDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: AddMemberDialogData,
+    private membersManagerService: MembersManagerService,
+    private groupService: GroupsManagerService,
+    private voService: VosManagerService,
+    private registrarManager: RegistrarManagerService,
+    private translate: TranslateService,
+    private notificator: NotificatorService,
+    protected route: ActivatedRoute,
+    private tableConfigService: TableConfigService,
+    protected router: Router,
+    private guiAuthResolver: GuiAuthResolver,
+    private store: StoreService
+  ) {
+    translate.get('DIALOGS.ADD_MEMBERS.TITLE').subscribe(value => this.title = value);
+  }
 
   onCancel(): void {
     this.dialogRef.close(false);
@@ -99,7 +102,7 @@ export class AddMemberDialogComponent implements OnInit {
     }
   }
 
-  onInvite(): void {
+  onInvite(lang: string): void {
     this.processing = true;
     // TODO Was not tested properly. Need to be tested on devel.
     if (this.selection.selected[0].richUser) {
@@ -115,13 +118,11 @@ export class AddMemberDialogComponent implements OnInit {
     } else {
       if (this.data.type === 'vo') {
         this.registrarManager.sendInvitation(
-          // TODO allow to choose language
-          getCandidateEmail(this.selection.selected[0].candidate), 'en', this.data.voId).subscribe(() => {
+          getCandidateEmail(this.selection.selected[0].candidate), lang, this.data.voId).subscribe(() => {
           this.onInviteSuccess();
         }, () => this.onError());
       } else if (this.data.type === 'group') {
-        // TODO allow to choose language
-        this.registrarManager.sendInvitationForGroup(getCandidateEmail(this.selection.selected[0].candidate), 'en',
+        this.registrarManager.sendInvitationForGroup(getCandidateEmail(this.selection.selected[0].candidate), lang,
           this.data.voId, this.data.group.id).subscribe(() => {
           this.onInviteSuccess();
         }, () => this.onError());
@@ -160,6 +161,7 @@ export class AddMemberDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.languages = this.store.get('supportedLanguages');
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.theme = this.data.theme;
     if (this.data.type === 'group') {

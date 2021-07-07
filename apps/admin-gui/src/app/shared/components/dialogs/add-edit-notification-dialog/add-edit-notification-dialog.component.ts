@@ -28,8 +28,6 @@ export interface ApplicationFormAddEditMailDialogData {
 })
 export class AddEditNotificationDialogComponent implements OnInit {
 
-  supportsCsLocalisation: boolean;
-
   applicationMail: ApplicationMail;
   showTags = false;
   isTextFocused = true;
@@ -37,6 +35,7 @@ export class AddEditNotificationDialogComponent implements OnInit {
   loading = false;
   theme: string;
   editAuth: boolean;
+  languages = ['en'];
 
   constructor(private dialogRef: MatDialogRef<AddEditNotificationDialogComponent>,
               private registrarService: RegistrarManagerService,
@@ -47,7 +46,7 @@ export class AddEditNotificationDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.supportsCsLocalisation = this.store.get('supportedLanguages').includes('cs');
+    this.languages = this.store.get('supportedLanguages');
     this.applicationMail = this.data.applicationMail;
     this.theme = this.data.theme;
 

@@ -426,6 +426,10 @@
         "SAVE": "Save"
       }
     },
+    "LANGUAGES": {
+      "EN": "English",
+      "CS": "Czech"
+    },
     "UI": {
       "ALERTS": {
         "NO_GROUPS": "No groups found.",

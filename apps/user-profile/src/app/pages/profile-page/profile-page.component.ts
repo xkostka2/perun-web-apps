@@ -4,7 +4,7 @@ import * as moment from 'moment-timezone';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeEmailDialogComponent } from '@perun-web-apps/perun/dialogs';
 import {
-  Attribute,
+  Attribute, AttributeDefinition,
   AttributesManagerService,
   AuthzResolverService,
   UsersManagerService
@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiRequestConfigurationService, NotificatorService, StoreService } from '@perun-web-apps/perun/services';
 import { MailChangeFailedDialogComponent } from '@perun-web-apps/perun/dialogs';
 
-interface AdditionalAttribute {
+interface DisplayedAttribute {
   attribute: Attribute;
   displayName_en: string;
   displayName_cz: string;
@@ -31,14 +31,14 @@ interface AdditionalAttribute {
 export class ProfilePageComponent implements OnInit {
 
   currentLang = 'en';
-  languages = ['en', 'cs'];
+  languages = this.storeService.get('supportedLanguages');
   timeZones = moment.tz.names().filter(name => !name.startsWith('Etc/'));
 
   successMessage: string;
 
   userId: number;
   loading: boolean;
-  additionalAttributes: AdditionalAttribute[] = [];
+  additionalAttributes: DisplayedAttribute[] = [];
 
   languageAttribute: Attribute;
   timezoneAttribute: Attribute;
@@ -108,35 +108,35 @@ export class ProfilePageComponent implements OnInit {
         this.currentTimezone = this.timezoneAttribute && this.timezoneAttribute.value ? this.timezoneAttribute.value : '-';
 
         const additionalAttributesSpecs = this.storeService.get('profile_page_attributes');
+        const langs = this.storeService.get('supportedLanguages');
         let count = 0;
         additionalAttributesSpecs.forEach(spec => {
           const attribute = richUser.userAttributes.find(att => att.friendlyName === spec.friendly_name);
           if (!attribute) {
             this.attributesManagerService.getAttributeDefinitionByName(`urn:perun:user:attribute-def:${spec.is_virtual ? 'virt' : 'def'}:${spec.friendly_name}`).subscribe(att => {
-              this.additionalAttributes.push(<AdditionalAttribute>{
-                attribute: att,
-                displayName_en: spec.display_name_en && spec.display_name_en.length ? spec.display_name_en : att.displayName,
-                displayName_cz: spec.display_name_cz && spec.display_name_cz.length ? spec.display_name_cz : att.displayName,
-                tooltip_en: spec.tooltip_en ?? '',
-                tooltip_cz: spec.tooltip_cz ?? ''
-              });
+              this.addAttribute(att, spec, langs);
               count++;
               this.loading = count !== additionalAttributesSpecs.length;
             });
           } else {
             count++;
-            this.additionalAttributes.push(<AdditionalAttribute>{
-              attribute: attribute,
-              displayName_en: spec.display_name_en && spec.display_name_en.length ? spec.display_name_en : attribute.displayName,
-              displayName_cz: spec.display_name_cz && spec.display_name_cz.length ? spec.display_name_cz : attribute.displayName,
-              tooltip_en: spec.tooltip_en ?? '',
-              tooltip_cz: spec.tooltip_cz ?? ''
-            });
+            this.addAttribute(attribute, spec, langs);
           }
           this.loading = count !== additionalAttributesSpecs.length;
         });
       });
     });
+  }
+
+  private addAttribute(att: AttributeDefinition, spec: any, langs: string[]) {
+    const displayedAttribute = {
+      attribute: att
+    }
+    for (const lang of langs) {
+      displayedAttribute[`displayName_${lang}`] = spec[`display_name_${lang}`] && spec[`display_name_${lang}`].length ? spec[`display_name_${lang}`] : att.displayName;
+      displayedAttribute[`tooltip_${lang}`] = spec[`tooltip_${lang}`] ?? '';
+    }
+    this.additionalAttributes.push(<DisplayedAttribute>displayedAttribute);
   }
 
   changeLanguage(lang: string) {

@@ -553,24 +553,29 @@ export function getDefaultDialogConfig(): MatDialogConfig {
   return config
 }
 
-export function createNewApplicationFormItem(): ApplicationFormItem {
-  return { applicationTypes:['INITIAL', 'EXTENSION'],
-          federationAttribute: '',
-          i18n: { ['en']: {locale: 'en', errorMessage: '', help: '', label: '', options: ''},
-            ['cs']: {locale: 'cs', errorMessage: '', help: '', label: '', options: ''}},
-          id: 0,
-          ordnum: 0,
-          perunDestinationAttribute: null,
-          perunSourceAttribute: null,
-          regex: '',
-          required: false,
-          updatable: true,
-          disabled: 'NEVER',
-          hidden: 'NEVER',
-          disabledDependencyItemId: null,
-          hiddenDependencyItemId: null,
-          shortname: '',
-          type: null };
+export function createNewApplicationFormItem(languages: string[]): ApplicationFormItem {
+  const newItem: ApplicationFormItem = {
+    applicationTypes:['INITIAL', 'EXTENSION'],
+    federationAttribute: '',
+    i18n: {},
+    id: 0,
+    ordnum: 0,
+    perunDestinationAttribute: null,
+    perunSourceAttribute: null,
+    regex: '',
+    required: false,
+    updatable: true,
+    disabled: 'NEVER',
+    hidden: 'NEVER',
+    disabledDependencyItemId: null,
+    hiddenDependencyItemId: null,
+    shortname: '',
+    type: null
+  };
+  for (const lang of languages) {
+    newItem.i18n[lang] = {locale: lang, errorMessage: '', help: '', label: '', options: ''}
+  }
+  return newItem;
 }
 
 export function isVirtualAttribute(attribute: Attribute): boolean {

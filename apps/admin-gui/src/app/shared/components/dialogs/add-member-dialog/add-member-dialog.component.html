@@ -55,15 +55,20 @@
     matTooltip="{{'DIALOGS.ADD_MEMBERS.ADD_MEMBER_PERMISSION_TOOLTIP' | translate}}"
     matTooltipPosition="above"
     [matTooltipDisabled]="selection.selected.length === 0 || this.data.type !== 'group' || (list !== undefined && list.addAuth)">
-    <button
-      *ngIf="this.data.type !== 'group' || (this.data.type === 'group' && inviteAuth)"
-      mat-flat-button
-      class="ml-2"
-      color="accent"
-      (click)="onInvite()"
-      [disabled]="selection.selected.length === 0 || loading">
-      {{'DIALOGS.ADD_MEMBERS.INVITE' | translate}}
-    </button>
+       <button
+         *ngIf="this.data.type !== 'group' || (this.data.type === 'group' && inviteAuth)"
+         [disabled]="selection.selected.length === 0 || loading"
+         [matMenuTriggerFor]="menu"
+         class="ml-2 dropdown-toggle"
+         color="accent"
+         mat-flat-button>
+          {{'DIALOGS.ADD_MEMBERS.INVITE' | translate}}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button (click)="onInvite(lang)" *ngFor="let lang of languages" mat-menu-item>
+          {{'SHARED_LIB.LANGUAGES.'+lang | uppercase | translate}}
+        </button>
+      </mat-menu>
     </span>
     <button
       mat-flat-button
