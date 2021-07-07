@@ -53,7 +53,6 @@ export class GroupMembersComponent implements OnInit {
   searchString: string;
   updateTable = false;
   loading = false;
-  searchControl: FormControl;
 
   tableId = TABLE_GROUP_MEMBERS;
 
@@ -92,7 +91,6 @@ export class GroupMembersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.searchControl = new FormControl('', [Validators.pattern('.*[\\S]+.*')]);
     this.pageSize = this.tableConfigService.getTablePageSize(this.tableId);
     this.selection = new SelectionModel<RichMember>(true, []);
     this.statuses.setValue(this.selectedStatuses);
@@ -127,8 +125,9 @@ export class GroupMembersComponent implements OnInit {
   }
 
 
-  onSearchByString() {
-    this.searchString = this.searchControl.value;
+  onSearchByString(filter: string) {
+    this.searchString = filter;
+    this.updateTable = !this.updateTable;
   }
 
   onAddMember() {
@@ -150,12 +149,6 @@ export class GroupMembersComponent implements OnInit {
         this.updateTable = !this.updateTable;
       }
     });
-  }
-
-  onKeyInput(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.onSearchByString();
-    }
   }
 
   onRemoveMembers() {
