@@ -21,7 +21,7 @@
     <h4 class="page-subtitle">{{'GROUPS.MEMBER_GROUPS' | customTranslate | translate}}</h4>
     <perun-web-apps-membership-list [members]="userMemberships"
                                     [selection]="selection"
-                                    [displayedColumns]="['name', 'description', 'expirationAttribute', 'extend'];"
+                                    [displayedColumns]="['name', 'description', 'expirationAttribute', 'extend']"
                                     (extendMembership)="extendMembership($event)"></perun-web-apps-membership-list>
   </div>
 
