@@ -695,3 +695,19 @@ export function downloadData(data: any, format = 'csv', filename = 'export') {
       saveAs(blob, `${filename}.${format}`);
   }
 }
+
+export function compareFnName(a,b) {
+  return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : (a.name.toLowerCase() === b.name.toLowerCase() ? 0 : -1)
+}
+
+export function compareFnUser(a,b) {
+  let first, second;
+  if(a.user){
+    first =  a.user.lastName ? a.user.lastName : a.user.firstName ?? '';
+    second =  b.user.lastName ? b.user.lastName : b.user.firstName ?? '';
+  } else {
+    first =  a.lastName ? a.lastName : a.firstName ?? '';
+    second =  b.lastName ? b.lastName : b.firstName ?? '';
+  }
+  return first >second ? 1 : (first === second ? 0 : -1);
+}

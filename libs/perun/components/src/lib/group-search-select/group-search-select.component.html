@@ -1,7 +1,7 @@
 <perun-web-apps-entity-search-select
   class="long-input"
   [entities]="groups"
-  [entity]="firstSelectedGroup"
+  [entity]="firstSelectedGroup ?? null"
   (entitySelected)="this.groupSelected.emit($event)"
   [disableAutoSelect]="disableAutoSelect"
   [mainTextFunction]="nameFunction"

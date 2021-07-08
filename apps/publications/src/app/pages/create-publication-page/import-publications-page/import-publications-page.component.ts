@@ -20,7 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { getDefaultDialogConfig } from '@perun-web-apps/perun/utils';
 import { MatDialog } from '@angular/material/dialog';
-import { UniversalConfirmationDialogComponent } from '../../../../../../../libs/perun/dialogs/src/lib/universal-confirmation-dialog/universal-confirmation-dialog.component';
+import { UniversalConfirmationDialogComponent } from '@perun-web-apps/perun/dialogs';
 
 const moment =  _moment;
 

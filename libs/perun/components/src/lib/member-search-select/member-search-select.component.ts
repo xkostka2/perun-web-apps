@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RichMember } from '@perun-web-apps/perun/openapi';
-import { parseFullName } from '@perun-web-apps/perun/utils';
+import { compareFnUser, parseFullName } from '@perun-web-apps/perun/utils';
 
 @Component({
   selector: 'perun-web-apps-member-search-select',
   templateUrl: './member-search-select.component.html',
   styleUrls: ['./member-search-select.component.css']
 })
-export class MemberSearchSelectComponent {
+export class MemberSearchSelectComponent implements OnInit{
 
   constructor() { }
 
@@ -17,4 +17,8 @@ export class MemberSearchSelectComponent {
   @Output()
   memberSelected = new EventEmitter<RichMember>();
   memberFullNameFunction = (member: RichMember) => parseFullName(member.user);
+
+  ngOnInit(): void {
+    this.members = this.members.sort(compareFnUser);
+  }
 }

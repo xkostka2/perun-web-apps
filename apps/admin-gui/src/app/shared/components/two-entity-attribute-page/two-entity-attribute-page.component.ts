@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import {
   Attribute,
   AttributesManagerService, FacilitiesManagerService,
@@ -39,9 +38,6 @@ export class TwoEntityAttributePageComponent implements OnInit {
 
   @Input()
   firstEntity: string;
-
-  // @Input()
-  // secondEntityId: number;
 
   @Input()
   secondEntity: string;
@@ -280,7 +276,9 @@ export class TwoEntityAttributePageComponent implements OnInit {
   }
 
   specifySecondEntity (entity: Group | Facility | Resource | RichMember | User){
-    this.specificSecondEntity = entity;
-    this.getAttributes(this.specificSecondEntity.id);
+    if(entity){
+      this.specificSecondEntity = entity;
+      this.getAttributes(this.specificSecondEntity.id);
+    }
   }
 }

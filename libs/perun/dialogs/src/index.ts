@@ -16,3 +16,4 @@ export * from './lib/mail-change-failed-dialog/mail-change-failed-dialog.compone
 export * from './lib/change-group-expiration-dialog/change-group-expiration-dialog.component';
 export * from './lib/change-vo-expiration-dialog/change-vo-expiration-dialog.component';
 export * from './lib/change-sponsorship-expiration-dialog/change-sponsorship-expiration-dialog.component';
+export * from './lib/universal-confirmation-dialog/universal-confirmation-dialog.component';
